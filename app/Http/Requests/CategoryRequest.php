@@ -28,13 +28,13 @@ class CategoryRequest extends FormRequest
             'title' => 'required|string',
             'slug' => 'nullable|string',
             'icon' => 'nullable|string',
-            'cover' => 'nullable|image',
+            'cover' => 'nullable|url',
             'description' => 'nullable|string',
             'meta_title' => 'nullable|string',
             'meta_description' => 'nullable|string',
             'og_title' => 'nullable|string',
             'og_description' => 'nullable|string',
-            'og_image' => 'nullable|image',
+            'og_image' => 'nullable|url',
         ];
     }
 }

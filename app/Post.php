@@ -2,18 +2,13 @@
 
 namespace App;
 
-use Carbon\Carbon;
-use Debugbar;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Post extends Model
 {
     use HasSlug;
-    use SoftDeletes;
 
     protected $table = 'posts';
 
@@ -37,17 +32,7 @@ class Post extends Model
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug')
-            ->doNotGenerateSlugsOnCreate();
-    }
-
-    public function getCloudUrl($attr)
-    {
-        if (empty($this->$attr)) return null;
-
-        if (filter_var($this->$attr, FILTER_VALIDATE_URL)) return $this->$attr;
-
-        return Storage::cloud()->url($this->$attr);
+            ->saveSlugsTo('slug');
     }
 
     public static function booted()
@@ -58,26 +43,6 @@ class Post extends Model
 
         static::updating(function ($post) {
             $post->updated_by = auth()->user()->id ?? null;
-
-            $deletePaths = [];
-
-            if ($post->isDirty('thumbnail')) {
-                $deletePaths[] = $post->getOriginal('thumbnail');
-            }
-
-            if ($post->isDirty('cover')) {
-                $deletePaths[] = $post->getOriginal('cover');
-            }
-
-            if ($post->isDirty('og_image')) {
-                $deletePaths[] = $post->getOriginal('og_image');
-            }
-
-            Storage::cloud()->delete($deletePaths);
-        });
-
-        static::deleting(function ($post) {
-            Storage::cloud()->deleteDirectory('posts/' . $post->id);
         });
     }
 }

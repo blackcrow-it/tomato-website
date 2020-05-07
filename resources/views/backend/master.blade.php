@@ -20,13 +20,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         .custom-file {
             height: auto;
         }
-        .custom-file .custom-file-preview {
-            max-height: 200px;
+        .image-preview {
+            max-height: 250px;
             margin: 10px auto 0;
             display: block;
+            max-width: 100%;
+            border: solid 3px #fff;
+            box-shadow: 0px 0px 1px #000;
         }
 
-        .custom-file .custom-file-preview[src=""] {
+        .image-preview[src=""] {
             display: none;
         }
     </style>
@@ -206,6 +209,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
     <!-- CKEditor -->
     <script src="{{ asset('adminlte/plugins/ckeditor/ckeditor.js') }}"></script>
+    <!-- CKFinder -->
+    <script type="text/javascript" src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
+    <script>
+        CKFinder.config({
+            connectorPath: '{{ route('ckfinder_connector') }}'
+        });
+    </script>
     <!-- User Script -->
     <script>
         $.ajaxSetup({
@@ -213,6 +223,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover({
@@ -232,7 +243,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 var objectUrl = URL.createObjectURL(file);
                 $(imgTag).attr('src', objectUrl);
             });
+
+            $('.editor').each(function() {
+                var id = Math.random().toString(36).substring(7);
+                $(this).attr('id', id);
+                CKEDITOR.replace(id, {
+                    filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}',
+                    filebrowserUploadUrl: '{{ route('ckfinder_connector') }}?command=QuickUpload&type=Files'
+                });
+            });
         });
+
+        function selectFileWithCKFinder(inputId, previewId) {
+            CKFinder.modal({
+                chooseFiles: true,
+                width: 800,
+                height: 600,
+                onInit: function (finder) {
+                    finder.on('files:choose', function (evt) {
+                        var file = evt.data.files.first();
+                        var url = file.getUrl();
+                        $('#' + inputId).val(url);
+                        $('#' + previewId).attr('src', url);
+                    });
+
+                    finder.on('file:choose:resizedImage', function (evt) {
+                        var url = evt.data.resizedUrl;
+                        $('#' + inputId).val(url);
+                        $('#' + previewId).attr('src', url);
+                    });
+                }
+            });
+        }
     </script>
     @yield('script')
 </body>

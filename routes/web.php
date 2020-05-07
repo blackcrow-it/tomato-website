@@ -37,6 +37,7 @@ Route::prefix('admin')
 
             Route::get('post', 'PostController@list')->name('post.list');
             Route::get('post/add', 'PostController@add')->name('post.add');
+            Route::post('post/add', 'PostController@submitAdd')->name('post.add');
             Route::get('post/edit/{id}', 'PostController@edit')->name('post.edit');
             Route::post('post/edit/{id}', 'PostController@submitEdit')->name('post.edit');
             Route::post('post/enabled/{id}', 'PostController@submitEnabled')->name('post.enabled');

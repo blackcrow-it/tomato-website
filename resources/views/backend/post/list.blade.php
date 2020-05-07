@@ -58,7 +58,7 @@ Bài viết
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>
-                        <img src="{{ $item->getCloudUrl('thumbnail') }}" class="img-thumbnail">
+                        <img src="{{ $item->thumbnail }}" class="img-thumbnail">
                     </td>
                     <td>
                         {{ $item->title }}

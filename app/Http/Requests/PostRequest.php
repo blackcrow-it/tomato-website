@@ -27,8 +27,8 @@ class PostRequest extends FormRequest
         return [
             'title' => 'required|string',
             'slug' => 'nullable|string',
-            'thumbnail' => 'nullable|image',
-            'cover' => 'nullable|image',
+            'thumbnail' => 'nullable|url',
+            'cover' => 'nullable|url',
             'description' => 'nullable|string',
             'content' => 'nullable|string',
             'enabled' => 'required|boolean',
@@ -36,7 +36,7 @@ class PostRequest extends FormRequest
             'meta_description' => 'nullable|string',
             'og_title' => 'nullable|string',
             'og_description' => 'nullable|string',
-            'og_image' => 'nullable|image',
+            'og_image' => 'nullable|url',
         ];
     }
 }

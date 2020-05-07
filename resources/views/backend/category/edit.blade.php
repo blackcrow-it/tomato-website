@@ -53,7 +53,7 @@
 @endif
 
 <div class="card">
-    <form action="" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST">
         @csrf
         <div class="card-body">
             <div class="form-group">
@@ -100,14 +100,16 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Ảnh bìa (cover)</label>
-                        <div class="custom-file">
-                            <input type="file" name="cover" class="custom-file-input @error('cover') is-invalid @enderror" accept="image/*" id="cf-cover">
+                        <div class="input-group">
+                            <input type="text" name="cover" placeholder="Ảnh bìa" value="{{ $data->cover ?? old('cover') }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
                             @error('cover')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
-                            <label class="custom-file-label" for="cf-cover">Chọn file ảnh</label>
-                            <img class="custom-file-preview" src="{{ isset($data) ? $data->getCloudUrl('cover') : '' }}" for="cf-cover">
+                            <div class="input-group-append">
+                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-cover', 'ck-cover-preview')">Chọn file</button>
+                            </div>
                         </div>
+                        <img class="image-preview" src="{{ $data->cover ?? old('cover') }}" id="ck-cover-preview">
                     </div>
                 </div>
             </div>
@@ -156,14 +158,16 @@
                     <div class="form-group">
                         <label>OG Image</label>
                         <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hình ảnh hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo ảnh bìa."></i></small>
-                        <div class="custom-file">
-                            <input type="file" name="og_image" class="custom-file-input @error('og_image') is-invalid @enderror" accept="image/*" id="cf-og-image">
+                        <div class="input-group">
+                            <input type="text" name="og_image" placeholder="OG Image" value="{{ $data->og_image ?? old('og_image') }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
                             @error('og_image')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
-                            <label class="custom-file-label" for="cf-og-image">Chọn file ảnh</label>
-                            <img class="custom-file-preview" src="{{ isset($data) ? $data->getCloudUrl('og_image') : '' }}" for="cf-og-image">
+                            <div class="input-group-append">
+                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-og-image', 'ck-og-image-preview')">Chọn file</button>
+                            </div>
                         </div>
+                        <img class="image-preview" src="{{ $data->og_image ?? old('og_image') }}" id="ck-og-image-preview">
                     </div>
                 </div>
             </div>

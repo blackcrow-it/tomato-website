@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2.5",
         "aws/aws-php-sns-message-validator": "^1.6",
+        "ckfinder/ckfinder-laravel-package": "v3.5.1.4",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
@@ -74,5 +75,9 @@
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models --nowrite"
         ]
-    }
+    },
+    "repositories": [{
+        "url": "https://github.com/mrcyclo/ckfinder-laravel-package.git",
+        "type": "git"
+    }]
 }

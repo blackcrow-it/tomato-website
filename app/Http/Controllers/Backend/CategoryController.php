@@ -42,10 +42,10 @@ class CategoryController extends Controller
     {
         $category = new Category;
 
-        $this->processPostFromRequest($request, $category);
+        $this->processCategoryFromRequest($request, $category);
 
         return redirect()
-            ->route('admin.category.edit', [ 'id' => $category->id ])
+            ->route('admin.category.edit', ['id' => $category->id])
             ->with('success', 'Thêm danh mục mới thành công.');
     }
 
@@ -71,20 +71,17 @@ class CategoryController extends Controller
             return redirect()->route('admin.category.list')->withErrors('Danh mục không tồn tại hoặc đã bị xóa.');
         }
 
-        $this->processPostFromRequest($request, $category);
+        $this->processCategoryFromRequest($request, $category);
 
         return redirect()
-            ->route('admin.category.edit', [ 'id' => $category->id ])
+            ->route('admin.category.edit', ['id' => $category->id])
             ->with('success', 'Thay đổi danh mục thành công.');
     }
 
-    public function processPostFromRequest(Request $request, Category $category)
+    public function processCategoryFromRequest(Request $request, Category $category)
     {
         $data = $request->input();
         $category->fill($data);
-
-        $uploadResult = $this->uploadImages($request);
-        $category->fill($uploadResult);
 
         $category->save();
     }
@@ -101,20 +98,5 @@ class CategoryController extends Controller
         return redirect()
             ->route('admin.category.list')
             ->with('success', 'Xóa danh mục thành công.');
-    }
-
-    public function uploadImages(Request $request)
-    {
-        $result = [];
-
-        if ($request->file('cover')) {
-            $result['cover'] = Storage::cloud()->putFile('categories', $request->file('cover'), 'public');
-        }
-
-        if ($request->file('og_image')) {
-            $result['og_image'] = Storage::cloud()->putFile('categories', $request->file('og_image'), 'public');
-        }
-
-        return $result;
     }
 }

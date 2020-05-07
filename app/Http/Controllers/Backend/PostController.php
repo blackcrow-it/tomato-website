@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CkEditorImageUploadRequest;
 use App\Http\Requests\PostRequest;
 use App\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -26,16 +24,25 @@ class PostController extends Controller
 
     public function add()
     {
-        $post = new Post;
-        $post->save();
-        $post->delete();
+        return view('backend.post.edit', [
+            'categories' => $this->getCategoriesTraverse()
+        ]);
+    }
 
-        return redirect()->route('admin.post.edit', ['id' => $post->id]);
+    public function submitAdd(PostRequest $request)
+    {
+        $post = new Post;
+
+        $this->processPostFromRequest($request, $post);
+
+        return redirect()
+            ->route('admin.post.edit', ['id' => $post->id])
+            ->with('success', 'Thêm bài viết mới thành công.');
     }
 
     public function edit($id)
     {
-        $post = Post::withTrashed()->find($id);
+        $post = Post::find($id);
         if ($post == null) {
             return redirect()->route('admin.post.list')->withErrors('Bài viết không tồn tại hoặc đã bị xóa.');
         }
@@ -48,26 +55,24 @@ class PostController extends Controller
 
     public function submitEdit(PostRequest $request, $id)
     {
-        $post = Post::withTrashed()->find($id);
+        $post = Post::find($id);
         if ($post == null) {
             return redirect()->route('admin.post.list')->withErrors('Bài viết không tồn tại hoặc đã bị xóa.');
         }
 
-        // Fill dữ liệu cơ bản
-        $data = $request->input();
-        $post->fill($data);
-
-        // Upload ảnh và fill vào trường ảnh
-        $uploadResult = $this->uploadImages($request, $post->id);
-        $post->fill($uploadResult);
-
-        // Lưu post object
-        $post->save();
-        $post->restore();
+        $this->processPostFromRequest($request, $post);
 
         return redirect()
             ->route('admin.post.edit', ['id' => $post->id])
             ->with('success', 'Thay đổi bài viết thành công.');
+    }
+
+    public function processPostFromRequest(Request $request, Post $post)
+    {
+        $data = $request->all();
+        $post->fill($data);
+
+        $post->save();
     }
 
     public function submitDelete($id)
@@ -91,25 +96,6 @@ class PostController extends Controller
         $post->save();
     }
 
-    public function uploadImages(Request $request, $id)
-    {
-        $result = [];
-
-        if ($request->file('thumbnail')) {
-            $result['thumbnail'] = Storage::cloud()->putFile('posts/' . $id, $request->file('thumbnail'), 'public');
-        }
-
-        if ($request->file('cover')) {
-            $result['cover'] = Storage::cloud()->putFile('posts/' . $id, $request->file('cover'), 'public');
-        }
-
-        if ($request->file('og_image')) {
-            $result['og_image'] = Storage::cloud()->putFile('posts/' . $id, $request->file('og_image'), 'public');
-        }
-
-        return $result;
-    }
-
     public function getCategoriesTraverse()
     {
         return categories_traverse(
@@ -117,19 +103,5 @@ class PostController extends Controller
                 ->get()
                 ->toTree()
         );
-    }
-
-    public function submitImage(CkEditorImageUploadRequest $request, $id)
-    {
-        $post = Post::withTrashed()->findOrFail($id);
-
-        $file = $request->file('upload');
-        $path = Storage::cloud()->putFile('posts/' . $post->id, $file, 'public');
-
-        return [
-            'uploaded' => 1,
-            'fileName' => $file->getClientOriginalName(),
-            'url' => Storage::cloud()->url($path)
-        ];
     }
 }

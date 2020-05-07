@@ -6,7 +6,7 @@
 
 @section('page_header')
 <div id="post-header" class="page-header">
-    <div class="page-header-bg" style="background-image: url('{{ $post->getCloudUrl('cover') ?? 'https://bing.biturl.top/?resolution=1920&format=image' }}');" data-stellar-background-ratio="0.5"></div>
+    <div class="page-header-bg" style="background-image: url('{{ $post->cover ?? 'https://bing.biturl.top/?resolution=1920&format=image' }}');" data-stellar-background-ratio="0.8"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-10">
