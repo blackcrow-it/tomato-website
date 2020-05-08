@@ -78,7 +78,7 @@ class CategoryController extends Controller
             ->with('success', 'Thay đổi danh mục thành công.');
     }
 
-    public function processCategoryFromRequest(Request $request, Category $category)
+    private function processCategoryFromRequest(Request $request, Category $category)
     {
         $data = $request->input();
         $category->fill($data);

@@ -211,17 +211,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('adminlte/plugins/ckeditor/ckeditor.js') }}"></script>
     <!-- CKFinder -->
     <script type="text/javascript" src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
-    <script>
-        CKFinder.config({
-            connectorPath: '{{ route('ckfinder_connector') }}'
-        });
-    </script>
+    <!-- Input Mask -->
+    <script type="text/javascript" src="{{ asset('js/imask/imask.js') }}"></script>
     <!-- User Script -->
     <script>
+        var __imask = [];
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        CKFinder.config({
+            connectorPath: '{{ route('ckfinder_connector') }}'
         });
 
         $(document).ready(function () {
@@ -244,13 +247,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 $(imgTag).attr('src', objectUrl);
             });
 
-            $('.editor').each(function() {
+            $('.editor').each(function () {
                 var id = Math.random().toString(36).substring(7);
                 $(this).attr('id', id);
                 CKEDITOR.replace(id, {
                     filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}',
                     filebrowserUploadUrl: '{{ route('ckfinder_connector') }}?command=QuickUpload&type=Files'
                 });
+            });
+
+            $('.currency').each(function() {
+                var id = Math.random().toString(36).substring(7);
+                __imask[id] = IMask(this, {
+                    mask: Number,
+                    thousandsSeparator: ' ',
+                    signed: false,
+                    scale: 0
+                });
+                $(this).data('imask', id);
+            });
+        });
+
+        $('form').submit(function() {
+            $(this).find('.currency').each(function() {
+                var id = $(this).data('imask');
+                var unmaskedValue = __imask[id].unmaskedValue;
+                __imask[id].destroy();
+                __imask[id] = undefined;
+                $(this).val(unmaskedValue);
             });
         });
 

@@ -86,6 +86,10 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
+            <div class="form-group">
+                <label>Số tiền trong tài khoản</label>
+                <input type="text" name="money" placeholder="Số tiền trong tài khoản" value="{{ $data->money ?? old('money') }}" class="form-control currency">
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>

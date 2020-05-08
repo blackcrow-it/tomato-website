@@ -24,27 +24,28 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        $user = $this->route('user');
+        $userId = $this->route('id');
 
         return [
             'username' => [
                 'required',
                 'string',
                 'between:5,255',
-                Rule::unique('users', 'username')->ignore($user->id ?? null)
+                Rule::unique('users', 'username')->ignore($userId ?? null)
             ],
             'name' => 'nullable|string',
             'email' => [
                 'nullable',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($user->id ?? null)
+                Rule::unique('users', 'email')->ignore($userId ?? null)
             ],
             'password' => [
-                $user ? 'nullable' : 'required',
+                $userId ? 'nullable' : 'required',
                 'string',
                 'min:6'
-            ]
+            ],
+            'money' => 'nullable|numeric|min:0'
         ];
     }
 }

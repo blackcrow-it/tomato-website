@@ -67,7 +67,7 @@ class PostController extends Controller
             ->with('success', 'Thay đổi bài viết thành công.');
     }
 
-    public function processPostFromRequest(Request $request, Post $post)
+    private function processPostFromRequest(Request $request, Post $post)
     {
         $data = $request->all();
         $post->fill($data);

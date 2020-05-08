@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Repositories\UserRepo;
 use App\User;
 use Hash;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    private $userRepo;
+
+    public function __construct(UserRepo $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
+
     public function list()
     {
         return view('backend.user.list', [
@@ -33,8 +41,12 @@ class UserController extends Controller
         $user->fill($data);
         $user->save();
 
+        if ($request->input('money') !== null) {
+            $this->userRepo->setMoney($user->id, $request->input('money'));
+        }
+
         return redirect()
-            ->route('admin.user.edit', [ 'id' => $user->id ])
+            ->route('admin.user.edit', ['id' => $user->id])
             ->with('success', 'Thêm thành viên mới thành công.');
     }
 
@@ -75,8 +87,12 @@ class UserController extends Controller
 
         $user->save();
 
+        if ($request->input('money') !== null) {
+            $this->userRepo->setMoney($user->id, $request->input('money'));
+        }
+
         return redirect()
-            ->route('admin.user.edit', [ 'id' => $user->id ])
+            ->route('admin.user.edit', ['id' => $user->id])
             ->with('success', 'Thông tin thành viên thay đổi thành công.');
     }
 

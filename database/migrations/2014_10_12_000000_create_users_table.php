@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration
             'username' => 'mrcyclo',
             'email' => 'vipboysanhdieu@gmail.com',
             'email_verified_at' => Carbon::now(),
-            'password' => Hash::make('Thuycuteso1!'),
+            'password' => '$2y$10$UxIKFPSDSnPJgztOfuLeqeoK0JNccKYzO4nKB1BOnCexLErvk6bm6',
         ]);
     }
 
