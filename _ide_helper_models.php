@@ -61,11 +61,11 @@ namespace App{
 
 namespace App{
 /**
- * App\Post
+ * App\Course
  *
  * @property int $id
- * @property string|null $title
- * @property string|null $slug
+ * @property string $title
+ * @property string $slug
  * @property string|null $thumbnail
  * @property string|null $cover
  * @property string|null $description
@@ -83,19 +83,69 @@ namespace App{
  * @property int|null $updated_by
  * @property int|null $category_id
  * @property int $order_in_category
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\User|null $last_editor
+ * @property-read \App\User|null $owner
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereCover($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOrderInCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereThumbnail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereView($value)
+ */
+	class Course extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Post
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $thumbnail
+ * @property string|null $cover
+ * @property string|null $description
+ * @property string|null $content
+ * @property int $view
+ * @property bool $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property string|null $og_title
+ * @property string|null $og_description
+ * @property string|null $og_image
+ * @property int|null $created_by
+ * @property int|null $updated_by
+ * @property int|null $category_id
+ * @property int $order_in_category
  * @property-read \App\User|null $last_editor
  * @property-read \App\User|null $owner
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\Post onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCategoryId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCover($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereId($value)
@@ -111,8 +161,6 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereView($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Post withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Post withoutTrashed()
  */
 	class Post extends \Eloquent {}
 }
@@ -131,6 +179,7 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $money
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newModelQuery()
@@ -142,6 +191,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereMoney($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereRememberToken($value)

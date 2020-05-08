@@ -167,6 +167,7 @@ return [
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        GrahamCampbell\GitHub\GitHubServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -230,6 +231,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'GitHub' => GrahamCampbell\GitHub\Facades\GitHub::class,
 
     ],
 

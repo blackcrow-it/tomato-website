@@ -14,11 +14,13 @@
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
+        "graham-campbell/github": "^9.2",
         "guzzlehttp/guzzle": "^6.3",
         "kalnoy/nestedset": "^5.0",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "php-http/guzzle6-adapter": "^2.0",
         "spatie/laravel-sluggable": "^2.4"
     },
     "require-dev": {
@@ -75,9 +77,5 @@
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:models --nowrite"
         ]
-    },
-    "repositories": [{
-        "url": "https://github.com/mrcyclo/ckfinder-laravel-package.git",
-        "type": "git"
-    }]
+    }
 }
