@@ -21,7 +21,7 @@
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.category.list', [ 'category' => $data->parent ?? request()->input('parent_id') ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
+            <a href="{{ route('admin.category.list', [ 'id' => $data->parent_id ?? request()->input('parent_id') ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
         </div>
     </div><!-- /.col -->
 </div>

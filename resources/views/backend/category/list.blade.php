@@ -95,7 +95,7 @@ Danh mục
                         @endswitch
                     </td>
                     <td class="text-nowrap">
-                        <form action="{{ route('admin.category.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">
+                        <form action="{{ route('admin.category.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Các danh mục con cũng sẽ bị xóa. Các bài viết trong danh mục sẽ không nằm trong danh mục nào nữa. Bạn có chắc chắn muốn xóa danh mục này?')">
                             @csrf
                             <a href="{{ route('admin.category.edit', [ 'id' => $item->id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
                             <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>

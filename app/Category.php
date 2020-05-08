@@ -32,11 +32,26 @@ class Category extends Model
 
     public static function booted()
     {
-        static::deleting(function ($category) {
-            Post::where('category_id', $category->id)->update([
+        static::updating(function ($category) {
+            if (!$category->isDirty('type')) return;
+
+            Post::whereIn('category_id', $category->descendants()->pluck('id'))->update([
                 'category_id' => null,
                 'order_in_category' => 0
             ]);
+
+            $category->descendants()->update([
+                'type' => $category->type
+            ]);
+        });
+
+        static::deleting(function ($category) {
+            Post::whereIn('category_id', $category->descendants()->pluck('id'))->update([
+                'category_id' => null,
+                'order_in_category' => 0
+            ]);
+
+            $category->descendants()->delete();
         });
     }
 }
