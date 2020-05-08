@@ -10,5 +10,5 @@ ssh -i "web-ssh-key-private.pem" root@45.124.94.148 "
     php artisan config:cache &&
     php artisan migrate --force &&
     chown -R apache ./storage/ &&
-	chown -R apache:www ./bootstrap/cache/ &&
+	chown -R apache ./bootstrap/cache/
 "
