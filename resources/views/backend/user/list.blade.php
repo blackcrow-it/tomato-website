@@ -47,10 +47,11 @@ Thành viên
         <thead class="bg-lightblue">
             <tr>
                 <th>ID</th>
-                <th>Username</th>
+                <th>Tài khoản</th>
                 <th>Email</th>
-                <th>Name</th>
-                <th>Action</th>
+                <th>Họ tên</th>
+                <th>Số tiền</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -66,6 +67,7 @@ Thành viên
                         @endif
                     </td>
                     <td>{{ $item->name }}</td>
+                    <td>{{ currency($item->money) }}</td>
                     <td class="text-nowrap">
                         <form action="{{ route('admin.user.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa thành viên này?')">
                             @csrf

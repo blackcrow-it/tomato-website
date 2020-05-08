@@ -20,3 +20,10 @@ if (!function_exists('categories_traverse')) {
         return $traverse($nodes, $prefix);
     }
 }
+
+if (!function_exists('currency')) {
+    function currency($money)
+    {
+        return number_format(intval($money), 0, '.', ' ');
+    }
+}
