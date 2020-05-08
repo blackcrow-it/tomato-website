@@ -82,7 +82,7 @@ class PostController extends Controller
             return redirect()->route('admin.post.list')->withErrors('Bài viết không tồn tại hoặc đã bị xóa.');
         }
 
-        $post->forceDelete();
+        $post->delete();
 
         return redirect()
             ->route('admin.post.list')

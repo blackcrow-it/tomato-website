@@ -18,6 +18,8 @@ Route::namespace('Frontend')
         Route::get('/', 'HomeController@index')->name('home');
 
         Route::get('post/{slug}.html', 'PostController@detail')->name('post.detail');
+
+        Route::get('course/{slug}.html', 'CourseController@detail')->name('course.detail');
     });
 
 Route::prefix('admin')
@@ -41,7 +43,6 @@ Route::prefix('admin')
             Route::get('post/edit/{id}', 'PostController@edit')->name('post.edit');
             Route::post('post/edit/{id}', 'PostController@submitEdit')->name('post.edit');
             Route::post('post/enabled/{id}', 'PostController@submitEnabled')->name('post.enabled');
-            Route::post('post/upload/{id}', 'PostController@submitImage')->name('post.upload');
             Route::post('post/delete/{id}', 'PostController@submitDelete')->name('post.delete');
 
             Route::get('category/list/{id?}', 'CategoryController@list')->name('category.list');
@@ -50,6 +51,14 @@ Route::prefix('admin')
             Route::get('category/edit/{id}', 'CategoryController@edit')->name('category.edit');
             Route::post('category/edit/{id}', 'CategoryController@submitEdit')->name('category.edit');
             Route::post('category/delete/{id}', 'CategoryController@submitDelete')->name('category.delete');
+
+            Route::get('course', 'CourseController@list')->name('course.list');
+            Route::get('course/add', 'CourseController@add')->name('course.add');
+            Route::post('course/add', 'CourseController@submitAdd')->name('course.add');
+            Route::get('course/edit/{id}', 'CourseController@edit')->name('course.edit');
+            Route::post('course/edit/{id}', 'CourseController@submitEdit')->name('course.edit');
+            Route::post('course/enabled/{id}', 'CourseController@submitEnabled')->name('course.enabled');
+            Route::post('course/delete/{id}', 'CourseController@submitDelete')->name('course.delete');
         });
 
         Route::get('login', 'LoginController@index')->name('login');

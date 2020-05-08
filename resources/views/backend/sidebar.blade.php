@@ -6,6 +6,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-chalkboard"></i>
+        <p>Khóa học</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('admin.post.list') }}" class="nav-link {{ request()->routeIs('admin.post.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-newspaper"></i>
         <p>Bài viết</p>

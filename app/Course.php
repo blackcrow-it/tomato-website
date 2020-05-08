@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Post extends Model
+class Course extends Model
 {
     use HasSlug;
 
-    protected $table = 'posts';
+    protected $table = 'courses';
 
     protected $fillable = [
         'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'view', 'enabled',
