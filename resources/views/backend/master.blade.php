@@ -32,6 +32,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         .image-preview[src=""] {
             display: none;
         }
+
+        .invalid-feedback {
+            display: block;
+        }
     </style>
     @yield('style')
 </head>

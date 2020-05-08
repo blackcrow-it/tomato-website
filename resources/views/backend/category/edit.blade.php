@@ -69,6 +69,23 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label>Loại danh mục</label>
+                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Loại của danh mục con sẽ tự động theo loại của danh mục cha."></i></small>
+                <div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-1" name="type" value="{{ \App\Category::TYPE_COURSE }}" {{ ($data->type ?? old('type')) == \App\Category::TYPE_COURSE ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-type-1">Khóa học</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-2" name="type" value="{{ \App\Category::TYPE_POST }}" {{ ($data->type ?? old('type')) == \App\Category::TYPE_POST ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-type-2">Bài viết</label>
+                    </div>
+                </div>
+                @error('type')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Tiêu đề</label>
                 <input type="text" name="title" placeholder="Tiêu đề" value="{{ $data->title ?? old('title') }}" class="form-control @error('title') is-invalid @enderror">
                 @error('title')

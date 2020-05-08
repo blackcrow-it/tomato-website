@@ -13,11 +13,25 @@ Danh mục
         <div class="float-sm-right">
             <a href="{{ route('admin.category.add') }}?parent_id={{ $category->id ?? '' }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
             @if ($category != null)
-                <a href="{{ route('admin.category.list', [ 'category' => $category->parent ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
+                <a href="{{ route('admin.category.list', [ 'id' => $category->parent_id ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
             @endif
         </div>
     </div><!-- /.col -->
 </div>
+
+<nav>
+    <ol class="breadcrumb">
+        @if ($category)
+            <li class="breadcrumb-item"><a href="{{ route('admin.category.list') }}">Danh mục gốc</a></li>
+            @foreach ($category->ancestors as $item)
+                <li class="breadcrumb-item"><a href="{{ route('admin.category.list', [ 'id' => $item->id ]) }}">{{ $item->title }}</a></li>
+            @endforeach
+            <li class="breadcrumb-item active">{{ $category->title }}</li>
+        @else
+            <li class="breadcrumb-item active">Danh mục gốc</li>
+        @endif
+    </ol>
+</nav>
 @endsection
 
 @section('content')
@@ -51,8 +65,9 @@ Danh mục
             <tr>
                 <th>ID</th>
                 <th>Icon</th>
-                <th>Title</th>
-                <th>Action</th>
+                <th>Tiêu đề</th>
+                <th>Loại</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -66,6 +81,18 @@ Danh mục
                         {{ $item->title }}
                         <br>
                         <a href="{{ route('admin.category.list', [ 'id' => $item->id ]) }}" class="text-primary"><small>Xem {{ $item->descendants->count() }} danh mục con</small></a>
+                    </td>
+                    <td>
+                        @switch ($item->type)
+                            @case (\App\Category::TYPE_COURSE)
+                                <i class="fas fa-graduation-cap"></i>
+                                Khóa học
+                                @break
+                            @case (\App\Category::TYPE_POST)
+                                <i class="fas fa-newspaper"></i>
+                                Bài viết
+                                @break
+                        @endswitch
                     </td>
                     <td class="text-nowrap">
                         <form action="{{ route('admin.category.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">

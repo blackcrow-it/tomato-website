@@ -7,7 +7,7 @@
 </li>
 <li class="nav-item">
     <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-chalkboard"></i>
+        <i class="nav-icon fas fa-graduation-cap"></i>
         <p>Khóa học</p>
     </a>
 </li>

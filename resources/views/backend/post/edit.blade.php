@@ -129,13 +129,15 @@
             <div class="form-group">
                 <label>Hiển thị bài viết</label>
                 <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
-                <div class="custom-control custom-radio">
-                    <input class="custom-control-input @error('enabled') is-invalid @enderror" type="radio" id="cr-enabled-1" name="enabled" value="1" {{ $enabled == true ? 'checked' : '' }}>
-                    <label for="cr-enabled-1" class="custom-control-label">Hiển thị</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input class="custom-control-input @error('enabled') is-invalid @enderror" type="radio" id="cr-enabled-0" name="enabled" value="0" {{ $enabled == false ? 'checked' : '' }}>
-                    <label for="cr-enabled-0" class="custom-control-label">Ẩn</label>
+                <div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="radio" id="cr-enabled-1" name="type" @error('enabled') is-invalid @enderror value="1" {{ $enabled == true ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-enabled-1">Hiển thị</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="radio" id="cr-enabled-0" name="type" @error('enabled') is-invalid @enderror value="0" {{ $enabled == false ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-enabled-0">Ẩn</label>
+                    </div>
                 </div>
                 @error('enabled')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>

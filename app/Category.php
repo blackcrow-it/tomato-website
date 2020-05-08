@@ -14,9 +14,13 @@ class Category extends Model
 
     protected $table = 'categories';
 
+    const TYPE_COURSE = 'course';
+    const TYPE_POST = 'post';
+
     protected $fillable = [
         'parent_id', 'title', 'slug', 'icon', 'cover', 'description',
-        'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image'
+        'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
+        'type'
     ];
 
     public function getSlugOptions(): SlugOptions

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
@@ -35,6 +37,10 @@ class CategoryRequest extends FormRequest
             'og_title' => 'nullable|string',
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|url',
+            'type' => [
+                'required_if:parent_id,',
+                Rule::in([Category::TYPE_COURSE, Category::TYPE_POST]),
+            ]
         ];
     }
 }

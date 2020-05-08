@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function list($id = null)
     {
-        $category = Category::find($id);
+        $category = Category::with('ancestors')->find($id);
 
         if ($category == null && $id != null) {
             return redirect()->route('admin.category.list')->withErrors('Danh mục không tồn tại hoặc đã bị xóa.');
@@ -82,6 +82,10 @@ class CategoryController extends Controller
     {
         $data = $request->input();
         $category->fill($data);
+
+        if ($category->parent_id != null) {
+            $category->type = $category->parent->type;
+        }
 
         $category->save();
     }
