@@ -88,7 +88,10 @@
             </div>
             <div class="form-group">
                 <label>Số tiền trong tài khoản</label>
-                <input type="text" name="money" placeholder="Số tiền trong tài khoản" value="{{ $data->money ?? old('money') }}" class="form-control currency">
+                <input type="text" name="money" placeholder="Số tiền trong tài khoản" value="{{ $data->money ?? old('money') }}" class="form-control currency @error('enabled') is-invalid @enderror">
+                @error('money')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
             </div>
         </div>
         <div class="card-footer">

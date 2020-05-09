@@ -37,6 +37,7 @@ class CourseRequest extends FormRequest
             'og_title' => 'nullable|string',
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|url',
+            'price' => 'nullable|numeric|min:0',
         ];
     }
 }

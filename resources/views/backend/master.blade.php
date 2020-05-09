@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             box-shadow: 0px 0px 1px #000;
         }
 
-        .image-preview[src=""] {
+        .image-preview[src=""], .img-thumbnail[src=""] {
             display: none;
         }
 

@@ -15,7 +15,8 @@ class Course extends Model
     protected $fillable = [
         'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'view', 'enabled',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
-        'category_id', 'order_in_category'
+        'category_id', 'order_in_category',
+        'price'
     ];
 
     public function owner()

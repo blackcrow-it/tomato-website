@@ -47,10 +47,11 @@ Khóa học
         <thead class="bg-lightblue">
             <tr>
                 <th>ID</th>
-                <th>Thumbnail</th>
-                <th>Title</th>
-                <th>Enabled</th>
-                <th>Action</th>
+                <th>Ảnh đại diện</th>
+                <th>Tiêu đề</th>
+                <th>Giá tiền</th>
+                <th>Hiển thị</th>
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -77,6 +78,7 @@ Khóa học
                             <i class="fas fa-calendar-alt" data-toggle="tooltip" title="Thời gian sửa"></i> {{ $item->updated_at }}
                         </small>
                     </td>
+                    <td>{{ currency($item->price) }}</td>
                     <td>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-url="{{ route('admin.course.enabled', [ 'id' => $item->id ]) }}">

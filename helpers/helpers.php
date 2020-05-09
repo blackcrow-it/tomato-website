@@ -24,6 +24,10 @@ if (!function_exists('categories_traverse')) {
 if (!function_exists('currency')) {
     function currency($money)
     {
-        return number_format(intval($money), 0, '.', ' ');
+        $money = intval($money);
+
+        if ($money == 0) return 'Miễn phí';
+
+        return number_format($money, 0, '.', ' ');
     }
 }

@@ -1,24 +1,24 @@
 @extends('frontend.master')
 
 @section('meta_tags')
-<title>{{ $post->meta_title ?? $post->title }}</title>
+<title>{{ $course->meta_title ?? $course->title }}</title>
 @endsection
 
 @section('page_header')
 <div id="post-header" class="page-header">
-    <div class="page-header-bg" style="background-image: url('{{ $post->cover ?? 'https://bing.biturl.top/?resolution=1920&format=image' }}');" data-stellar-background-ratio="0.8"></div>
+    <div class="page-header-bg" style="background-image: url('{{ $course->cover ?? 'https://bing.biturl.top/?resolution=1920&format=image' }}');" data-stellar-background-ratio="0.8"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-10">
                 <div class="post-category">
                     <a href="category.html">Lifestyle</a>
                 </div>
-                <h1>{{ $post->title }}</h1>
+                <h1>{{ $course->title }}</h1>
                 <ul class="post-meta">
-                    <li><a href="author.html">{{ $post->owner->name ?? $post->owner->username }}</a></li>
-                    <li>{{ $post->updated_at->format('d-m-Y H:i') }}</li>
+                    <li><a href="author.html">{{ $course->owner->name ?? $course->owner->username }}</a></li>
+                    <li>{{ $course->updated_at->format('d-m-Y H:i') }}</li>
                     <li><i class="fa fa-comments"></i> 3</li>
-                    <li><i class="fa fa-eye"></i> {{ $post->view }}</li>
+                    <li><i class="fa fa-eye"></i> {{ $course->view }}</li>
                 </ul>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <!-- /post share -->
                 <!-- post content -->
                 <div class="section-row">
-                    {!! $post->content !!}
+                    {!! $course->content !!}
                 </div>
                 <!-- /post content -->
                 <!-- post tags -->
@@ -80,7 +80,7 @@
                 <!-- post author -->
                 <div class="section-row">
                     <div class="section-title">
-                        <h3 class="title">About <a href="author.html">{{ $post->owner->name ?? $post->owner->username }}</a></h3>
+                        <h3 class="title">About <a href="author.html">{{ $course->owner->name ?? $course->owner->username }}</a></h3>
                     </div>
                     <div class="author media">
                         <div class="media-left">
