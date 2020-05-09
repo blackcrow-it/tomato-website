@@ -99,7 +99,8 @@ class CourseController extends Controller
     public function getCategoriesTraverse()
     {
         return categories_traverse(
-            Category::orderBy('title', 'ASC')
+            Category::where('type', Category::TYPE_COURSE)
+                ->orderBy('title', 'ASC')
                 ->get()
                 ->toTree()
         );

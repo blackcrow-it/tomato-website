@@ -20,7 +20,7 @@ class CategoryController extends Controller
 
         $list = Category::with('descendants')
             ->where('parent_id', $category->id ?? null)
-            ->orderBy('id', 'ASC')
+            ->orderBy('title', 'ASC')
             ->paginate();
 
         return view('backend.category.list', [
@@ -82,10 +82,6 @@ class CategoryController extends Controller
     {
         $data = $request->input();
         $category->fill($data);
-
-        if ($category->parent_id != null) {
-            $category->type = $category->parent->type;
-        }
 
         $category->save();
     }

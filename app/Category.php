@@ -32,6 +32,12 @@ class Category extends Model
 
     public static function booted()
     {
+        static::saving(function($category) {
+            if ($category->parent_id != null) {
+                $category->type = $category->parent->type;
+            }
+        });
+
         static::updating(function ($category) {
             if (!$category->isDirty('type')) return;
 
