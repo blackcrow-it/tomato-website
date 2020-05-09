@@ -30,6 +30,7 @@ namespace App{
  * @property int $_lft
  * @property int $_rgt
  * @property int|null $parent_id
+ * @property string $type
  * @property-read \Kalnoy\Nestedset\Collection|\App\Category[] $children
  * @property-read int|null $children_count
  * @property-read \App\Category|null $parent
@@ -54,6 +55,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereRgt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereUpdatedAt($value)
  */
 	class Category extends \Eloquent {}
@@ -83,6 +85,7 @@ namespace App{
  * @property int|null $updated_by
  * @property int|null $category_id
  * @property int $order_in_category
+ * @property int $price
  * @property-read \App\User|null $last_editor
  * @property-read \App\User|null $owner
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course newModelQuery()
@@ -102,6 +105,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOrderInCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereThumbnail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereTitle($value)

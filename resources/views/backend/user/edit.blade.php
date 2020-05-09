@@ -93,6 +93,23 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Ảnh đại diện</label>
+                        <div class="input-group">
+                            <input type="text" name="avatar" placeholder="Ảnh đại diện" value="{{ $data->avatar ?? old('avatar') }}" class="form-control @error('avatar') is-invalid @enderror" id="ck-avatar">
+                            <div class="input-group-append">
+                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-avatar', 'ck-avatar-preview')">Chọn file</button>
+                            </div>
+                        </div>
+                        @error('avatar')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                        <img class="image-preview" src="{{ $data->avatar ?? old('avatar') }}" id="ck-avatar-preview">
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>

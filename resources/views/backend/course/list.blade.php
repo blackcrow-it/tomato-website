@@ -100,14 +100,6 @@ Khóa học
 {{ $list->withQueryString()->links() }}
 @endsection
 
-@section('style')
-<style>
-    .img-thumbnail {
-        max-width: 110px;
-    }
-</style>
-@endsection
-
 @section('script')
 <script>
     $('.js-switch-enabled').change(function() {

@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 7.10.3 on 2020-05-08 21:05:32.
+ * Generated for Laravel 7.10.3 on 2020-05-09 11:06:32.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -15865,6 +15865,157 @@ namespace Barryvdh\Debugbar {
  
 }
 
+namespace GrahamCampbell\GitHub\Facades { 
+
+    /**
+     * This is the github facade class.
+     *
+     * @author Graham Campbell <graham@alt-three.com>
+     */ 
+    class GitHub {
+        
+        /**
+         * Get the configuration for a connection.
+         *
+         * @param string|null $name
+         * @throws \InvalidArgumentException
+         * @return array 
+         * @static 
+         */ 
+        public static function getConnectionConfig($name = null)
+        {
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->getConnectionConfig($name);
+        }
+        
+        /**
+         * Get the factory instance.
+         *
+         * @return \GrahamCampbell\GitHub\GitHubFactory 
+         * @static 
+         */ 
+        public static function getFactory()
+        {
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->getFactory();
+        }
+        
+        /**
+         * Get a connection instance.
+         *
+         * @param string|null $name
+         * @throws \InvalidArgumentException
+         * @return object 
+         * @static 
+         */ 
+        public static function connection($name = null)
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->connection($name);
+        }
+        
+        /**
+         * Reconnect to the given connection.
+         *
+         * @param string|null $name
+         * @throws \InvalidArgumentException
+         * @return object 
+         * @static 
+         */ 
+        public static function reconnect($name = null)
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->reconnect($name);
+        }
+        
+        /**
+         * Disconnect from the given connection.
+         *
+         * @param string|null $name
+         * @return void 
+         * @static 
+         */ 
+        public static function disconnect($name = null)
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        $instance->disconnect($name);
+        }
+        
+        /**
+         * Get the default connection name.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getDefaultConnection()
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->getDefaultConnection();
+        }
+        
+        /**
+         * Set the default connection name.
+         *
+         * @param string $name
+         * @return void 
+         * @static 
+         */ 
+        public static function setDefaultConnection($name)
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        $instance->setDefaultConnection($name);
+        }
+        
+        /**
+         * Register an extension connection resolver.
+         *
+         * @param string $name
+         * @param callable $resolver
+         * @return void 
+         * @static 
+         */ 
+        public static function extend($name, $resolver)
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        $instance->extend($name, $resolver);
+        }
+        
+        /**
+         * Return all of the created connections.
+         *
+         * @return \GrahamCampbell\Manager\array<string,object> 
+         * @static 
+         */ 
+        public static function getConnections()
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->getConnections();
+        }
+        
+        /**
+         * Get the config instance.
+         *
+         * @return \Illuminate\Contracts\Config\Repository 
+         * @static 
+         */ 
+        public static function getConfig()
+        {
+            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
+                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
+                        return $instance->getConfig();
+        }
+         
+    }
+ 
+}
+
 namespace Facade\Ignition\Facades { 
 
     /**
@@ -16124,6 +16275,115 @@ namespace Facade\Ignition\Facades {
         {
                         /** @var \Facade\FlareClient\Flare $instance */
                         return $instance->group($groupName, $properties);
+        }
+         
+    }
+ 
+}
+
+namespace Laravel\Socialite\Facades { 
+
+    /**
+     * 
+     *
+     * @see \Laravel\Socialite\SocialiteManager
+     */ 
+    class Socialite {
+        
+        /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed 
+         * @static 
+         */ 
+        public static function with($driver)
+        {
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->with($driver);
+        }
+        
+        /**
+         * Build an OAuth 2 provider instance.
+         *
+         * @param string $provider
+         * @param array $config
+         * @return \Laravel\Socialite\Two\AbstractProvider 
+         * @static 
+         */ 
+        public static function buildProvider($provider, $config)
+        {
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->buildProvider($provider, $config);
+        }
+        
+        /**
+         * Format the server configuration.
+         *
+         * @param array $config
+         * @return array 
+         * @static 
+         */ 
+        public static function formatConfig($config)
+        {
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->formatConfig($config);
+        }
+        
+        /**
+         * Get the default driver name.
+         *
+         * @return string 
+         * @throws \InvalidArgumentException
+         * @static 
+         */ 
+        public static function getDefaultDriver()
+        {
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->getDefaultDriver();
+        }
+        
+        /**
+         * Get a driver instance.
+         *
+         * @param string|null $driver
+         * @return mixed 
+         * @throws \InvalidArgumentException
+         * @static 
+         */ 
+        public static function driver($driver = null)
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->driver($driver);
+        }
+        
+        /**
+         * Register a custom driver creator Closure.
+         *
+         * @param string $driver
+         * @param \Closure $callback
+         * @return \Laravel\Socialite\SocialiteManager 
+         * @static 
+         */ 
+        public static function extend($driver, $callback)
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->extend($driver, $callback);
+        }
+        
+        /**
+         * Get all of the created "drivers".
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getDrivers()
+        {
+            //Method inherited from \Illuminate\Support\Manager            
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->getDrivers();
         }
          
     }
@@ -19053,7 +19313,11 @@ namespace  {
 
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
 
+    class GitHub extends \GrahamCampbell\GitHub\Facades\GitHub {}
+
     class Flare extends \Facade\Ignition\Facades\Flare {}
+
+    class Socialite extends \Laravel\Socialite\Facades\Socialite {}
  
 }
 

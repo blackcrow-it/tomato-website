@@ -47,6 +47,7 @@ Thành viên
         <thead class="bg-lightblue">
             <tr>
                 <th>ID</th>
+                <th>Ảnh đại diện</th>
                 <th>Tài khoản</th>
                 <th>Email</th>
                 <th>Họ tên</th>
@@ -58,6 +59,9 @@ Thành viên
             @foreach ($list as $item)
                 <tr>
                     <td>{{ $item->id }}</td>
+                    <td>
+                        <img src="{{ $item->avatar }}" class="img-thumbnail">
+                    </td>
                     <td>{{ $item->username }}</td>
                     <td>
                         @if ($item->email_verified_at)

@@ -38,6 +38,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         .invalid-feedback {
             display: block;
         }
+
+        .img-thumbnail {
+            max-width: 80px;
+        }
     </style>
     @yield('style')
 </head>
@@ -139,7 +143,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- User Dropdown Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-user"></i> {{ auth()->user()->username }} </a>
+                        <i class="far fa-user"></i> {{ auth()->user()->name ?? auth()->user()->username }} </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <a href="#" class="dropdown-item">
                             <i class="fas fa-lock mr-2"></i> Đổi mật khẩu</span>
@@ -161,7 +165,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('admin.home') }}" class="brand-link">
-                <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <img src="{{ auth()->user()->avatar ?? asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
                 <span class="brand-text font-weight-light">Admin Panel</span>
             </a>
             <!-- Sidebar -->

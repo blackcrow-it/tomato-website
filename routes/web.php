@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware('guest')->group(function () {
+    Route::get('auth/google', 'SocialiteController@loginWithGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback')->name('auth.google.callback');
+});
+
 Route::namespace('Frontend')
     ->group(function () {
         Route::get('/', 'HomeController@index')->name('home');
@@ -61,8 +66,10 @@ Route::prefix('admin')
             Route::post('course/delete/{id}', 'CourseController@submitDelete')->name('course.delete');
         });
 
-        Route::get('login', 'LoginController@index')->name('login');
-        Route::post('login', 'LoginController@login')->name('login');
+        Route::middleware('guest')->group(function () {
+            Route::get('login', 'LoginController@index')->name('login');
+            Route::post('login', 'LoginController@login')->name('login');
+        });
 
         Route::post('logout', 'LogoutController@logout')->name('logout');
     });

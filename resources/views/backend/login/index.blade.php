@@ -73,7 +73,7 @@
                     <a href="" class="btn btn-block btn-primary" onclick="alert('Nút này không có tác dụng đâu :)'); return false;">
                         <i class="fab fa-facebook mr-2"></i> Đăng nhập bằng Facebook
                     </a>
-                    <a href="" class="btn btn-block btn-danger" onclick="alert('Nút này không có tác dụng đâu :)'); return false;">
+                    <a href="{{ route('auth.google') }}" class="btn btn-block btn-danger">
                         <i class="fab fa-google mr-2"></i> Đăng nhập bằng Google
                     </a>
                 </div>
