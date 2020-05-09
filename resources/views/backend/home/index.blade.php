@@ -22,9 +22,7 @@ Homepage
             @foreach ($commits as $item)
                 <tr>
                     <td>
-                        <strong>{{ $item['commit']['message'] }}</strong>
-                        <br>
-                        <small class="text-secondary">{{ $item['sha'] }}</small>
+                        <pre>{{ $item['commit']['message'] }}</pre>
                     </td>
                     <td>{{ $item['commit']['author']['name'] }}</td>
                     <td>{{ $item['commit']['author']['date'] }}</td>
