@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function detail($slug)
+    public function index($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
 

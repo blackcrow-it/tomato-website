@@ -22,9 +22,11 @@ Route::namespace('Frontend')
     ->group(function () {
         Route::get('/', 'HomeController@index')->name('home');
 
-        Route::get('post/{slug}.html', 'PostController@detail')->name('post.detail');
+        Route::get('tin-tuc/{slug}.html', 'PostController@index')->name('post');
 
-        Route::get('course/{slug}.html', 'CourseController@detail')->name('course.detail');
+        Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
+
+        Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
     });
 
 Route::prefix('admin')

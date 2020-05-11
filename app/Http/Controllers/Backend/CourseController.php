@@ -72,6 +72,8 @@ class CourseController extends Controller
         $data = $request->all();
         $course->fill($data);
 
+        $course->price = $course->price ?? 0;
+
         $course->save();
     }
 

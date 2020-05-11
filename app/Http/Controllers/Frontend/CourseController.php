@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function detail($slug)
+    public function index($slug)
     {
         $course = Course::where('slug', $slug)->firstOrFail();
 
