@@ -71,7 +71,7 @@ Thành viên
                         @endif
                     </td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ currency($item->money) }}</td>
+                    <td>{{ currency($item->money, 0) }}</td>
                     <td class="text-nowrap">
                         <form action="{{ route('admin.user.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa thành viên này?')">
                             @csrf

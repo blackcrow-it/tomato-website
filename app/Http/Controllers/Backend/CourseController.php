@@ -10,15 +10,30 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function list()
+    public function list(Request $request)
     {
+        $categories = Category::where('type', Category::TYPE_COURSE)
+            ->get()
+            ->toTree();
+
         $list = Course::with('owner')
-            ->with('last_editor')
-            ->orderBy('updated_at', 'DESC')
-            ->paginate();
+            ->with('last_editor');
+
+        if ($request->input('category_id')) {
+            $categoryIds = Category::descendantsAndSelf($request->input('category_id'))
+                ->pluck('id');
+
+            $list = $list->whereIn('category_id', $categoryIds)
+                ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC, updated_at DESC');
+        } else {
+            $list = $list->orderBy('updated_at', 'DESC');
+        }
+
+        $list = $list->paginate();
 
         return view('backend.course.list', [
-            'list' => $list
+            'list' => $list,
+            'categories' => categories_traverse($categories)
         ]);
     }
 
@@ -91,10 +106,11 @@ class CourseController extends Controller
             ->with('success', 'Xóa khóa học thành công.');
     }
 
-    public function submitEnabled(Request $request, $id)
+    public function submitEnabled(Request $request)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::findOrFail($request->input('id'));
         $course->enabled = $request->input('enabled');
+        $course->timestamps = false;
         $course->save();
     }
 
@@ -106,5 +122,13 @@ class CourseController extends Controller
                 ->get()
                 ->toTree()
         );
+    }
+
+    public function submitOrderInCategory(Request $request)
+    {
+        $course = Course::findOrFail($request->input('id'));
+        $course->order_in_category = intval($request->input('order_in_category'));
+        $course->timestamps = false;
+        $course->save();
     }
 }

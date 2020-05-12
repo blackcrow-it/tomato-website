@@ -15,6 +15,16 @@ Khóa học
         </div>
     </div><!-- /.col -->
 </div>
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <select class="form-control" id="filter-post-in-category-id">
+            <option value="">Danh mục gốc</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ request()->input('category_id') == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 @endsection
 
 @section('content')
@@ -51,6 +61,9 @@ Khóa học
                 <th>Tiêu đề</th>
                 <th>Giá tiền</th>
                 <th>Hiển thị</th>
+                @if (request()->input('category_id'))
+                    <th data-toggle="tooltip" title="Thứ tự trong danh mục">Thứ tự</th>
+                @endif
                 <th>Hành động</th>
             </tr>
         </thead>
@@ -81,10 +94,15 @@ Khóa học
                     <td>{{ currency($item->price) }}</td>
                     <td>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-url="{{ route('admin.course.enabled', [ 'id' => $item->id ]) }}">
+                            <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-id="{{ $item->id }}">
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
+                    @if (request()->input('category_id'))
+                        <td>
+                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order">
+                        </td>
+                    @endif
                     <td class="text-nowrap">
                         <form action="{{ route('admin.course.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này?')">
                             @csrf
@@ -104,15 +122,41 @@ Khóa học
 <script>
     $('.js-switch-enabled').change(function() {
         var that = this;
-        $(this).prop('disabled', true);
+        $(that).prop('disabled', true);
 
-        $.course($(this).data('url'), {
-            enabled: $(this).prop('checked')
+        $.post('{{ route('admin.course.enabled') }}', {
+            id: $(that).data('id'),
+            enabled: $(that).prop('checked')
         }).fail(function() {
             alert('Không thể đổi trạng thái kích hoạt. Vui lòng thử lại.')
         }).always(function() {
             $(that).prop('disabled', false);
         });
     });
+
+    $('#filter-post-in-category-id').change(function() {
+        var category_id = $(this).val();
+        var url = new URL(location.href);
+        url.searchParams.set('category_id', category_id);
+        location.href = url.toString();
+    });
 </script>
+
+@if (request()->input('category_id'))
+    <script>
+        $('.custom-order').change(function() {
+            var that = this;
+            $(that).prop('disabled', true);
+
+            $.post('{{ route('admin.course.order_in_category') }}', {
+                id: $(that).data('id'),
+                order_in_category: $(that).val()
+            }).fail(function() {
+                alert('Có lỗi xảy ra, vui lòng thử lại.');                
+            }).always(function() {
+                $(that).prop('disabled', false);
+            });
+        });
+    </script>
+@endif
 @endsection

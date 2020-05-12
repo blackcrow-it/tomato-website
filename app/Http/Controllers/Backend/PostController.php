@@ -89,10 +89,11 @@ class PostController extends Controller
             ->with('success', 'Xóa bài viết thành công.');
     }
 
-    public function submitEnabled(Request $request, $id)
+    public function submitEnabled(Request $request)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::findOrFail($request->input('id'));
         $post->enabled = $request->input('enabled');
+        $post->timestamps = false;
         $post->save();
     }
 

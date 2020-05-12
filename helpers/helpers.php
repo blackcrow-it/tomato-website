@@ -22,11 +22,11 @@ if (!function_exists('categories_traverse')) {
 }
 
 if (!function_exists('currency')) {
-    function currency($money)
+    function currency($money, $default = 'Miễn phí')
     {
         $money = intval($money);
 
-        if ($money == 0) return 'Miễn phí';
+        if ($money == 0) return $default;
 
         return number_format($money, 0, '.', ' ');
     }

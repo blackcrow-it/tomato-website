@@ -11,10 +11,10 @@ Danh mục
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.category.add') }}?parent_id={{ $category->id ?? '' }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
             @if ($category != null)
                 <a href="{{ route('admin.category.list', [ 'id' => $category->parent_id ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
             @endif
+            <a href="{{ route('admin.category.add') }}?parent_id={{ $category->id ?? '' }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
         </div>
     </div><!-- /.col -->
 </div>

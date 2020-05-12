@@ -79,7 +79,7 @@ Bài viết
                     </td>
                     <td>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-url="{{ route('admin.post.enabled', [ 'id' => $item->id ]) }}">
+                            <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-id="{{ $item->id }}">
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
@@ -102,10 +102,11 @@ Bài viết
 <script>
     $('.js-switch-enabled').change(function() {
         var that = this;
-        $(this).prop('disabled', true);
+        $(that).prop('disabled', true);
 
-        $.post($(this).data('url'), {
-            enabled: $(this).prop('checked')
+        $.post('{{ route('admin.post.enabled') }}', {
+            id: $(that).data('id'),
+            enabled: $(that).prop('checked')
         }).fail(function() {
             alert('Không thể đổi trạng thái kích hoạt. Vui lòng thử lại.')
         }).always(function() {

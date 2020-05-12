@@ -18,31 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
     <!-- User style -->
-    <style>
-        .custom-file {
-            height: auto;
-        }
-        .image-preview {
-            max-height: 250px;
-            margin: 10px auto 0;
-            display: block;
-            max-width: 100%;
-            border: solid 3px #fff;
-            box-shadow: 0px 0px 1px #000;
-        }
-
-        .image-preview[src=""], .img-thumbnail[src=""] {
-            display: none;
-        }
-
-        .invalid-feedback {
-            display: block;
-        }
-
-        .img-thumbnail {
-            max-width: 80px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ mix('css/backend.css') }}">
     @yield('style')
 </head>
 
@@ -219,9 +195,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('adminlte/plugins/ckeditor/ckeditor.js') }}"></script>
     <!-- CKFinder -->
     <script type="text/javascript" src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
-    <!-- Input Mask -->
-    <script type="text/javascript" src="{{ asset('js/imask/imask.js') }}"></script>
     <!-- User Script -->
+    <script src="{{ mix('js/backend.js') }}"></script>
     <script>
         var __imask = [];
 
@@ -236,9 +211,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
 
         $(document).ready(function () {
-            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="tooltip"]').tooltip({
+                trigger: 'hover',
+                boundary: 'viewport'
+            });
+            
             $('[data-toggle="popover"]').popover({
-                trigger: 'hover'
+                trigger: 'hover',
+                boundary: 'viewport'
             });
 
             bsCustomFileInput.init();
@@ -269,6 +249,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 __imask[id] = IMask(this, {
                     mask: Number,
                     thousandsSeparator: ' ',
+                    signed: false,
+                    scale: 0
+                });
+                $(this).data('imask', id);
+            });
+
+            $('.custom-order').each(function() {
+                var id = Math.random().toString(36).substring(7);
+                __imask[id] = IMask(this, {
+                    mask: Number,
+                    thousandsSeparator: '',
                     signed: false,
                     scale: 0
                 });

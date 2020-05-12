@@ -49,7 +49,7 @@ Route::prefix('admin')
             Route::post('post/add', 'PostController@submitAdd')->name('post.add');
             Route::get('post/edit/{id}', 'PostController@edit')->name('post.edit');
             Route::post('post/edit/{id}', 'PostController@submitEdit')->name('post.edit');
-            Route::post('post/enabled/{id}', 'PostController@submitEnabled')->name('post.enabled');
+            Route::post('post/enabled', 'PostController@submitEnabled')->name('post.enabled');
             Route::post('post/delete/{id}', 'PostController@submitDelete')->name('post.delete');
 
             Route::get('category/list/{id?}', 'CategoryController@list')->name('category.list');
@@ -64,8 +64,9 @@ Route::prefix('admin')
             Route::post('course/add', 'CourseController@submitAdd')->name('course.add');
             Route::get('course/edit/{id}', 'CourseController@edit')->name('course.edit');
             Route::post('course/edit/{id}', 'CourseController@submitEdit')->name('course.edit');
-            Route::post('course/enabled/{id}', 'CourseController@submitEnabled')->name('course.enabled');
+            Route::post('course/enabled', 'CourseController@submitEnabled')->name('course.enabled');
             Route::post('course/delete/{id}', 'CourseController@submitDelete')->name('course.delete');
+            Route::post('course/order-in-category', 'CourseController@submitOrderInCategory')->name('course.order_in_category');
         });
 
         Route::middleware('guest')->group(function () {
