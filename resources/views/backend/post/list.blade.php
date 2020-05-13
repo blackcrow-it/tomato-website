@@ -15,6 +15,16 @@ Bài viết
         </div>
     </div><!-- /.col -->
 </div>
+<div class="row mb-2">
+    <div class="col-sm-4">
+        <select class="form-control" id="filter-post-in-category-id">
+            <option value="">Danh mục gốc</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" {{ request()->input('category_id') == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 @endsection
 
 @section('content')
@@ -47,10 +57,13 @@ Bài viết
         <thead class="bg-lightblue">
             <tr>
                 <th>ID</th>
-                <th>Thumbnail</th>
-                <th>Title</th>
-                <th>Enabled</th>
-                <th>Action</th>
+                <th>Ảnh đại diện</th>
+                <th>Tiêu đề</th>
+                <th>Hiển thị</th>
+                @if (request()->input('category_id'))
+                    <th data-toggle="tooltip" title="Thứ tự trong danh mục">Thứ tự</th>
+                @endif
+                <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -83,6 +96,11 @@ Bài viết
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
+                    @if (request()->input('category_id'))
+                        <td>
+                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order">
+                        </td>
+                    @endif
                     <td class="text-nowrap">
                         <form action="{{ route('admin.post.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài viết này?')">
                             @csrf
@@ -113,5 +131,30 @@ Bài viết
             $(that).prop('disabled', false);
         });
     });
+
+    $('#filter-post-in-category-id').change(function() {
+        var category_id = $(this).val();
+        var url = new URL(location.href);
+        url.searchParams.set('category_id', category_id);
+        location.href = url.toString();
+    });
 </script>
+
+@if (request()->input('category_id'))
+    <script>
+        $('.custom-order').change(function() {
+            var that = this;
+            $(that).prop('disabled', true);
+
+            $.post('{{ route('admin.course.order_in_category') }}', {
+                id: $(that).data('id'),
+                order_in_category: $(that).val()
+            }).fail(function() {
+                alert('Có lỗi xảy ra, vui lòng thử lại.');
+            }).always(function() {
+                $(that).prop('disabled', false);
+            });
+        });
+    </script>
+@endif
 @endsection

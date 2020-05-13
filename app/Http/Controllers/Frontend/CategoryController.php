@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Category;
 use App\Course;
 use App\Http\Controllers\Controller;
+use App\Post;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -27,7 +28,21 @@ class CategoryController extends Controller
 
     private function indexForPost(Category $category)
     {
-        return 'Nothing for post.';
+        $categoryIds = $category
+            ->descendants()
+            ->pluck('id');
+
+        $categoryIds[] = $category->id;
+
+        $list = Post::where('enabled', true)
+            ->whereIn('category_id', $categoryIds)
+            ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC, updated_at DESC')
+            ->get();
+
+        return view('frontend.category.index', [
+            'category' => $category,
+            'list' => $list
+        ]);
     }
 
     private function indexForCourse(Category $category)
