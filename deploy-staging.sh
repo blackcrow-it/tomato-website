@@ -6,6 +6,8 @@ ssh -i "web-ssh-key-private.pem" root@45.124.94.148 "
     git reset --hard &&
     git fetch &&
     git pull &&
+    npm install &&
+    npm run dev &&
     composer install &&
     php artisan config:cache &&
     php artisan migrate --force &&

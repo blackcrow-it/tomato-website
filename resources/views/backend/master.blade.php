@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
     <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
     <!-- User style -->
@@ -194,7 +194,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- CKEditor -->
     <script src="{{ asset('adminlte/plugins/ckeditor/ckeditor.js') }}"></script>
     <!-- CKFinder -->
-    <script type="text/javascript" src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
+    <script src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
     <!-- User Script -->
     <script src="{{ mix('js/backend.js') }}"></script>
     <script>
@@ -215,7 +215,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 trigger: 'hover',
                 boundary: 'viewport'
             });
-            
+
             $('[data-toggle="popover"]').popover({
                 trigger: 'hover',
                 boundary: 'viewport'
