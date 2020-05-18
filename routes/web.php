@@ -27,6 +27,10 @@ Route::namespace('Frontend')
         Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
 
         Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
+
+        Route::get('cart', 'CartController@index')->name('cart.index');
+        Route::post('cart/add', 'CartController@add')->name('cart.add');
+        Route::post('cart/remove', 'CartController@remove')->name('cart.remove');
     });
 
 Route::prefix('admin')

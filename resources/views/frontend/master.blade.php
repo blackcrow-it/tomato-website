@@ -11,15 +11,6 @@
             @foreach ($mainMenu as $c1)
                 <li>
                     <a href="{{ route('category', $c1->slug) }}">{{ $c1->title }}</a>
-                    @if ($c1->hasChildren())
-                        <ul>
-                            @foreach ($c1->children as $c2)
-                                <li>
-                                    <a href="{{ route('category', $c2->slug) }}">{{ $c2->title }}</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
                 </li>
             @endforeach
         </ul>

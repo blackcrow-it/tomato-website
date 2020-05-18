@@ -39,7 +39,7 @@ class CategoryController extends Controller
             ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC, updated_at DESC')
             ->get();
 
-        return view('frontend.category.index', [
+        return view('frontend.category.post', [
             'category' => $category,
             'list' => $list
         ]);
@@ -58,7 +58,7 @@ class CategoryController extends Controller
             ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC, updated_at DESC')
             ->get();
 
-        return view('frontend.category.index', [
+        return view('frontend.category.course', [
             'category' => $category,
             'list' => $list
         ]);
