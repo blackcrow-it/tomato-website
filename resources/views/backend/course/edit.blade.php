@@ -151,6 +151,42 @@
                 @enderror
             </div>
             <hr>
+            <div class="bg-light p-3 rounded">
+                <label>Danh sách video</label>
+                <div id="list-videos">
+                    @foreach (old('course_videos') ?? $data->videos ?? [] as $v)
+                        <?php $v = (object)$v; ?>
+                        <div class="form-group video-item">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <input type="text" name="course_videos[{{ $loop->index }}][title]" placeholder="Tiêu đề video" class="form-control @error('course_videos.' . $loop->index . '.title') is-invalid @enderror" value="{{ $v->title }}">
+                                    @error('course_videos.' . $loop->index . '.title')
+                                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="course_videos[{{ $loop->index }}][original_path]" placeholder="Chọn video" value="{{ $v->original_path }}" class="form-control @error('course_videos.' . $loop->index . '.original_path') is-invalid @enderror" id="course-video-{{ $loop->index }}" readonly>
+                                        <div class="input-group-append">
+                                            <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('course-video-{{ $loop->index }}', undefined, 'Videos')">Chọn file</button>
+                                        </div>
+                                    </div>
+                                    @error('course_videos.' . $loop->index . '.original_path')
+                                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                    @enderror
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-danger btn-sm align-self-center delete-video-item"><i class="fas fa-trash"></i> Xóa</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-info" id="add-new-video"><i class="fas fa-plus"></i> Thêm video</button>
+                </div>
+            </div>
+            <hr>
             <div class="form-group">
                 <label>Meta Title</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
@@ -207,4 +243,40 @@
         </div>
     </form>
 </div>
+@endsection
+
+@section('script')
+    <script>
+        var current_idx = $('#list-videos .video-item').length;
+
+        $('#add-new-video').click(function() {
+            $('#list-videos').append(`
+                <div class="form-group video-item">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <input type="text" name="course_videos[${current_idx}][title]" placeholder="Tiêu đề video" class="form-control">
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="input-group">
+                                <input type="text" name="course_videos[${current_idx}][original_path]" placeholder="Chọn video" value="" class="form-control" id="course-video-${current_idx}" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('course-video-${current_idx}', undefined, 'Videos')">Chọn file</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-danger btn-sm align-self-center delete-video-item"><i class="fas fa-trash"></i> Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            current_idx++;
+        });
+
+        $(document).on('click', '.delete-video-item', function() {
+            if (!confirm('Bạn chắc chắn muốn xóa video này?')) return;
+            $(this).closest('.video-item').remove();
+        });
+    </script>
 @endsection

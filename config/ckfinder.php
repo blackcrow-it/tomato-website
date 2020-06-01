@@ -99,18 +99,40 @@ $config['backends']['default'] = array(
     'visibility'   => 'public'
 );
 
+$config['backends']['videos'] = array(
+    'name'         => 'videos',
+    'adapter'      => 's3',
+    'bucket'       => env('AWS_BUCKET'),
+    'region'       => env('AWS_DEFAULT_REGION'),
+    'key'          => env('AWS_ACCESS_KEY_ID'),
+    'secret'       => env('AWS_SECRET_ACCESS_KEY'),
+    'root'         => 'videos',
+    'baseUrl'      => 'videos',
+    'endpoint'     => env('AWS_ENDPOINT'),
+    'visibility'   => 'private'
+);
+
 /*================================ Resource Types =====================================*/
 // http://docs.cksource.com/ckfinder3-php/configuration.html#configuration_options_resourceTypes
 
-$config['defaultResourceTypes'] = 'Files';
+$config['defaultResourceTypes'] = '';
 
 $config['resourceTypes'][] = array(
     'name'              => 'Files', // Single quotes not allowed.
     'directory'         => 'files',
     'maxSize'           => 0,
-    'allowedExtensions' => '7z,aiff,asf,avi,bmp,csv,doc,docx,fla,flv,gif,gz,gzip,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,ods,odt,pdf,png,ppt,pptx,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,wmv,xls,xlsx,zip',
+    'allowedExtensions' => '7z,aiff,asf,bmp,csv,doc,docx,fla,gif,gz,gzip,jpeg,jpg,mid,mp3,ods,odt,pdf,png,ppt,pptx,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,xls,xlsx,zip',
     'deniedExtensions'  => '',
     'backend'           => 'default'
+);
+
+$config['resourceTypes'][] = array(
+    'name'              => 'Videos', // Single quotes not allowed.
+    'directory'         => 'videos',
+    'maxSize'           => 0,
+    'allowedExtensions' => 'avi,flv,mov,mp4,mpc,mpeg,mpg,wmv',
+    'deniedExtensions'  => '',
+    'backend'           => 'videos'
 );
 
 /*================================ Access Control =====================================*/

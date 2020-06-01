@@ -57,7 +57,7 @@ class CourseController extends Controller
 
     public function edit($id)
     {
-        $course = Course::find($id);
+        $course = Course::with('videos')->find($id);
         if ($course == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
@@ -86,10 +86,16 @@ class CourseController extends Controller
     {
         $data = $request->all();
         $course->fill($data);
-
         $course->price = $course->price ?? 0;
-
         $course->save();
+
+        $videos = $request->input('course_videos');
+        if (is_array($videos)) {
+            $course->videos()->delete();
+            foreach ($videos as $item) {
+                $course->videos()->create($item);
+            }
+        }
     }
 
     public function submitDelete($id)

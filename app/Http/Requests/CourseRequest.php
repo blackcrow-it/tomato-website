@@ -38,6 +38,9 @@ class CourseRequest extends FormRequest
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|url',
             'price' => 'nullable|numeric|min:0',
+            'course_videos' => 'nullable|array',
+            'course_videos.*.title' => 'required|string',
+            'course_videos.*.original_path' => 'required|string'
         ];
     }
 }

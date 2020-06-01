@@ -47,4 +47,8 @@ class Course extends Model
             $post->updated_by = auth()->user()->id ?? null;
         });
     }
+
+    public function videos() {
+        return $this->hasMany('App\CourseVideo', 'course_id', 'id');
+    }
 }

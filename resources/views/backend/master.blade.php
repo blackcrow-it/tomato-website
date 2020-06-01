@@ -239,7 +239,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 var id = Math.random().toString(36).substring(7);
                 $(this).attr('id', id);
                 CKEDITOR.replace(id, {
-                    filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}',
+                    filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}?type=Files',
                     filebrowserUploadUrl: '{{ route('ckfinder_connector') }}?command=QuickUpload&type=Files'
                 });
             });
@@ -277,9 +277,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
 
-        function selectFileWithCKFinder(inputId, previewId) {
+        function selectFileWithCKFinder(inputId, previewId, type) {
             CKFinder.modal({
                 chooseFiles: true,
+                resourceType: type != undefined ? type : 'Files',
                 width: 800,
                 height: 600,
                 onInit: function (finder) {
