@@ -33,6 +33,8 @@ Route::namespace('Frontend')
         Route::get('cart', 'CartController@index')->name('cart.index');
         Route::post('cart/add', 'CartController@add')->name('cart.add');
         Route::post('cart/remove', 'CartController@remove')->name('cart.remove');
+
+        Route::get('video-{id}-key', 'VideoController@getKey')->name('video.key');
     });
 
 Route::prefix('admin')

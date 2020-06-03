@@ -16,4 +16,6 @@ mix
     .js('resources/js/frontend.js', 'public/js')
 
     .sass('resources/sass/backend.scss', 'public/css')
+    .sass('resources/sass/frontend.scss', 'public/css')
+
     .version();

@@ -1,2 +1,3 @@
 require('./bootstrap');
-window.HLS = require('hls.js');
+require('bootstrap');
+window.$ = require('jquery');
