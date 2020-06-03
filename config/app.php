@@ -168,7 +168,6 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         GrahamCampbell\GitHub\GitHubServiceProvider::class,
-        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -234,7 +233,6 @@ return [
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'GitHub' => GrahamCampbell\GitHub\Facades\GitHub::class,
-        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class,
 
     ],
 

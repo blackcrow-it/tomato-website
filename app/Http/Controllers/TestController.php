@@ -15,14 +15,13 @@ class TestController extends Controller
         $video = CourseVideo::first();
         if (!$video) return;
 
-        // ConvertToHlsJob::dispatch($video);
-        // $allFiles = Storage::disk('s3')->allFiles('hls/' . $video->course_id);
-        // foreach ($allFiles as $path) {
-        //     Storage::disk('s3')->setVisibility($path, 'public');
-        // }
+        $driver = Storage::disk('s3')->getDriver()->getAdapter()->getClient();
+        dd($driver);
 
-        return view('test', [
-            'video_url' => Storage::disk('s3')->url('hls/' . $video->course_id . '/playlist.m3u8')
-        ]);
+        // ConvertToHlsJob::dispatch($video);
+
+        // return view('test', [
+        //     'video_url' => Storage::disk('s3')->url('hls/' . $video->course_id . '/playlist.m3u8')
+        // ]);
     }
 }
