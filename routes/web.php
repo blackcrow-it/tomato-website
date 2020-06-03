@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::any('test', 'TestController@index');
+
 Route::middleware('guest')->group(function () {
     Route::get('auth/google', 'SocialiteController@loginWithGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback')->name('auth.google.callback');

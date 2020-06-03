@@ -88,6 +88,8 @@ namespace App{
  * @property int $price
  * @property-read \App\User|null $last_editor
  * @property-read \App\User|null $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\CourseVideo[] $videos
+ * @property-read int|null $videos_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course query()
@@ -114,6 +116,31 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereView($value)
  */
 	class Course extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\CourseVideo
+ *
+ * @property int $id
+ * @property int $course_id
+ * @property string $title
+ * @property string $original_path
+ * @property mixed|null $m3u8_path
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereCourseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereM3u8Path($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereOriginalPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereUpdatedAt($value)
+ */
+	class CourseVideo extends \Eloquent {}
 }
 
 namespace App{
