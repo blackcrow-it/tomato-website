@@ -11,12 +11,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>@yield('title') | Admin Panel</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
+
     <!-- User style -->
     <link rel="stylesheet" href="{{ mix('css/backend.css') }}">
     @yield('style')
@@ -183,32 +178,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </footer>
     </div>
     <!-- ./wrapper -->
-    <!-- jQuery -->
-    <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- bs-custom-file-input -->
-    <script src="{{ asset('adminlte/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
-    <!-- CKEditor -->
-    <script src="{{ asset('adminlte/plugins/ckeditor/ckeditor.js') }}"></script>
-    <!-- CKFinder -->
-    <script src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
+
     <!-- User Script -->
     <script src="{{ mix('js/backend.js') }}"></script>
+    <!-- CKEditor -->
+    <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
+    <!-- CKFinder -->
+    @include('ckfinder::setup')
+
     <script>
         var __imask = [];
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        CKFinder.config({
-            connectorPath: '{{ route('ckfinder_connector') }}'
-        });
 
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip({
