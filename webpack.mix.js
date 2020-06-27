@@ -11,6 +11,12 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+    output: {
+        chunkFilename: 'js/chunks/[name].[chunkhash].js',
+    },
+});
+
 mix
     .js('resources/js/backend.js', 'public/js')
     .js('resources/js/frontend.js', 'public/js')
