@@ -1,0 +1,177 @@
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-heading;
+    font-weight: $font-weight-heading;
+    line-height: $line-height-heading;
+    color: $color-heading;
+}
+
+h1 {
+    font-size: 35px;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 22px;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+h5 {
+    font-size: 18px;
+}
+
+h6 {
+    font-size: 15px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    a {
+        color: inherit;
+        text-decoration: none;
+        
+        &:hover {
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+}
+
+a {
+    transition: all .3s ease;
+}
+
+hr {
+    border: solid #DEDEDE;
+    border-width: 1px 0 0;
+    clear: both;
+    margin: 10px 0 30px;
+    height: 0
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.img-fullwidth {
+  width: 100%;
+}
+
+svg {
+    vertical-align: middle;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mt-0 {
+    margin-top: 0 !important;
+}
+
+.pd-0 {
+    padding: 0;
+}
+
+.pt-0 {
+    padding-top: 0 !important;
+}
+
+.pb-0 {
+    padding-bottom: 0 !important;
+}
+
+$list: [10,20,25,30,35,40,50,60,70];
+@each $mr in $list {
+    .pd-#{$mr} {
+        padding-top: $mr*1px;
+        padding-bottom: $mr*1px;
+    }
+    .pt-#{$mr} {
+    padding-top: $mr*1px !important;
+    }
+    .pb-#{$mr} {
+    padding-bottom: $mr*1px !important;
+    }
+    .mb-#{$mr} {
+    margin-bottom: $mr*1px !important;
+    }
+    .mt-#{$mr} {
+    margin-top: $mr*1px !important;
+    }
+}
+
+blockquote {
+    position: relative;
+    font-size: 20px;
+    font-family: $font-heading;
+    font-weight: 600;
+    color: $color-primary;
+    padding-left: 80px;
+    margin: 50px 0;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 60px;
+     height: 46px;
+        background-image: url(../img/icon/icon-quote.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+}
+
+figure {
+    margin: 15px 0;
+    
+    img {
+        // width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+figcaption {
+    position: relative;
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.64;
+    color: $body-color;
+   
+    span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-family: $font-heading;
+    }
+}
+
+.overflow-hidden {
+    overflow: hidden;
+    // pointer-events: none;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+audio {
+    &:focus {
+        outline: none;
+    }
+}
+
+.pointerEventsNone {
+    pointer-events: none;
+}

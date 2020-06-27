@@ -1,0 +1,25 @@
+.percent {
+	position: relative;
+	display: inline-block;
+}
+
+.percent__svg {
+	transform: rotate(-90deg);
+	
+	.circle {
+		stroke: $color-primary;
+		stroke-dasharray: 144;
+		stroke-dashoffset: 144;
+	}
+}
+
+.percent__number {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	line-height: 1;
+	font-weight: 600;
+	color: $color-primary;
+
+	transform: translate(-50%, -50%);
+}

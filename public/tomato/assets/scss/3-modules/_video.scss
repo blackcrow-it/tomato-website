@@ -1,0 +1,43 @@
+.video-demo {
+	position: relative;
+	z-index: 1;
+
+	&:after {
+		content: '';
+		display: block;
+		padding-top: 70%;
+	}
+
+	.bg-overlay {
+		background-color: $color-heading;
+		opacity: .4;
+	}
+}
+
+.video-demo__btn {
+	position: absolute;
+	z-index: 2;
+	top: 50%;
+	left: 0;
+	right: 0;
+	transform: translateY(-50%);
+	text-align: center;
+
+	a {
+		color: #fff;
+		display: inline-block;
+		font-weight: 500;
+		padding: 10px 15px;
+		background-color: $color-primary;
+
+		i {
+			font-size: 20px;	
+			vertical-align: middle;		
+			margin-right: 5px;
+		}
+
+		&:hover {
+			background-color: $color-secondary;
+		}
+	}
+}

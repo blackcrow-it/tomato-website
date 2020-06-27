@@ -1,0 +1,27 @@
+.alertbox {
+	display: block;
+	position: relative;
+	background-color: $color-primary;
+	color: #fff;
+	border-radius: 5px;
+	overflow: hidden;
+	padding: 15px 30px;
+	margin-bottom: 30px;
+
+	a {
+		color: inherit;
+	}
+}
+
+.alertbox__close {
+	position: absolute;
+	top: 2px;
+	right: 3px;
+	cursor: pointer;
+	line-height: 1;
+	font-size: 16px;
+}
+
+.alertbox--secondary {
+	background-color: $color-secondary;
+}

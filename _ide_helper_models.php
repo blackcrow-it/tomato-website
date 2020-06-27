@@ -126,15 +126,19 @@ namespace App{
  * @property int $course_id
  * @property string $title
  * @property string $original_path
- * @property mixed|null $m3u8_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $m3u8_path
+ * @property string|null $key_path
+ * @property int $job_progress
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereCourseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereJobProgress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereKeyPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereM3u8Path($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereOriginalPath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereTitle($value)

@@ -1,0 +1,187 @@
+.footer {
+	position: relative;
+	z-index: 5;
+	font-family: $font-heading;
+	background-color: $color-primary;
+	color: rgba(#fff, .9);
+	padding-top: 70px;
+
+	ul {
+		@include list-style;
+
+		li + li {
+			margin-top: 8px;
+		}
+	}
+
+	b {
+		font-weight: 500;
+	}
+
+	a {
+		color: inherit;
+
+		&:hover {
+			color: #fff;
+			text-decoration: underline;
+		}
+	}
+}
+
+.footer__logo {
+	font-size: 20px;
+	font-weight: bold;
+	text-transform: capitalize;
+	color: #fff;
+	margin-bottom: 25px;
+}
+
+.footer__widget {
+	margin-bottom: 30px;
+
+	&.widget-menu ul {
+		li {
+			a {
+				font-size: 13px;
+				display: block;
+			}
+		}
+	}
+
+	&.widget-contact {
+		ul {
+			li {
+				line-height: 1.4;
+
+				+ li {
+					margin-top: 12px;
+				}
+			}
+		}
+	}
+}
+
+.footer__widget-title {
+	font-size: 16px;
+	font-weight: 600;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+.footer__certification {
+	display: inline-block;
+}
+
+.footer__social {
+	a {
+		display: inline-block;
+		width: 35px;
+		height: 35px;
+		line-height: 33px;
+		text-align: center;
+		border: 1px solid #fff;
+		border-radius: 50%;
+		color: #fff;
+		margin-right: 10px;
+
+		&:hover {
+			background-color: #fff;
+			color: $color-primary;
+
+			svg path {
+				fill: $color-primary;
+			}
+		}
+	}
+}
+
+.footer__footer {
+	border-top: 1px solid rgba(#fff, .4);
+	padding: 20px 0;
+
+	p {
+		margin: 0;
+	}
+}
+
+.footer__marqee {
+	background-color: #bd0000;
+	padding: 5px 0;
+	text-align: center;
+
+	marquee {
+		* {
+			display: inline-block;
+			font-size: 10px;
+			color: #fff;
+			padding: 0 5px;
+			margin: 0;
+		}
+	}
+}
+
+#backtotop {
+	position: fixed;
+	z-index: 6;
+	right: 10px;
+	bottom: 11px;
+	width: 30px;
+	height: 30px;
+	line-height: 28px;
+	font-size: 16px;
+	text-align: center;
+	background-color: $color-primary;
+	border-radius: 50%;
+	color: #fff !important;
+	cursor: pointer;
+	box-shadow: 0 0 15px rgba(#fff, .7);
+
+	span {
+		display: inline-block;
+	}
+
+	&:hover span {
+		animation: effectBacktoTop 1.5s infinite;
+	}
+
+	@include media-breakpoint-up(xl) {
+		right: 20px;
+		bottom: 30px;
+		width: 40px;
+		height: 40px;
+		line-height: 38px;
+	}
+}
+
+@keyframes effectBacktoTop {
+	0% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+
+	40% {
+		transform: translateY(-9px);
+	}
+	50% {
+		transform: translateY(-9px);
+		opacity: 0;
+	}
+
+	60% {
+		transform: translateY(9px);
+		opacity: 0;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.footer__logo {
+		font-size: 25px;
+		margin-bottom: 35px;
+	}
+}
+
+@include media-breakpoint-up(xl) {
+	.footer {
+		padding-top: 100px;
+	}
+}

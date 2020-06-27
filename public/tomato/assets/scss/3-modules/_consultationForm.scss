@@ -1,0 +1,52 @@
+.consultationForm {
+	background-color: #fff;
+	box-shadow: 0 3px 20px rgba($color-heading, .1);
+	overflow: hidden;
+}
+
+.consultationForm__content,
+.consultationForm__bg {
+	height: 100%;
+}
+
+.consultationForm__content {
+	padding: 50px 20px;
+}
+
+.consultationForm__title {
+	font-size: 25px;
+	margin-bottom: 30px;
+}
+
+.consultationForm__fix {
+	max-width: 330px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.consultationForm__form {
+
+}
+
+.consultationForm__bg {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+@include media-breakpoint-down(sm) {
+	.consultationForm__title {
+		text-align: center;
+	}
+	
+	.consultationForm__bg {
+		display: none;
+	}
+}
+
+
+@include media-breakpoint-up(md) {
+	.consultationForm__content {
+		padding: 80px 20px;
+	}
+}

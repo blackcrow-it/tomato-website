@@ -1,0 +1,82 @@
+.section-testWhy {
+
+}
+
+.section-testWhy__inner {
+	padding: 50px 15px;
+	height: 100%;
+
+	&.first {
+		position: relative;
+		z-index: 1;
+		background-color: $color-primary;
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-attachment: fixed;
+
+
+		.title__title,
+		.btn-link {
+			color: #fff;
+		}
+	}
+
+
+	&.last {
+		background-color: $color-gray;
+	}
+}
+
+.section-testWhy__entry {
+	color: #fff;
+	margin-bottom: 40px;
+}
+
+@include media-breakpoint-up(md) {
+	.section-testWhy__inner {
+		padding: 80px 60px;
+	}
+
+	.section-testWhy__entry {
+		font-size: 15px;
+	}
+}
+
+@include media-breakpoint-between(md, lg) {
+	.section-testWhy__inner {
+		.title__title {
+			font-size: 27px;
+		}
+	}
+}
+
+@include media-breakpoint-up(lg) {
+	.section-testWhy__inner {
+		padding: 70px 30px;
+	}
+}
+
+@include media-breakpoint-up(xl) {
+	.section-testWhy__inner {
+		padding: 100px 60px;
+	}
+}
+
+@include media-breakpoint-up(xxl) {
+	.section-testWhy__inner {
+		height: 100%;
+		padding: 100px 140px;
+	}
+}
+
+//
+.section-faq-video {
+	.accordionJs {
+		margin-bottom: 50px;
+	}
+
+	@include media-breakpoint-up(md) {
+		margin-bottom: 0;
+	}
+}

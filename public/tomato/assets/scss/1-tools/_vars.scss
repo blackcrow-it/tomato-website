@@ -1,0 +1,38 @@
+$font-family-base: 'Open Sans', sans-serif !default;
+$font-size-base: 0.875rem !default;
+$font-weight-base: 400 !default;
+$line-height-base: 1.65 !default;
+$body-color: #707070 !default;
+$body-bg: #fff !default; 
+
+$font-heading: 'Nunito', sans-serif !default;
+$color-heading: #000!default;
+$font-weight-heading: bold !default;
+$line-height-heading: 1.2 !default;
+
+$color-primary : #E71D36 !default;
+$color-secondary: #77AF41 !default;
+$color-dark : #0F0F0F !default;
+$color-white:  #fff !default;
+$color-gray:  #f7f7f7 !default;
+$color-border: #d2cfcf !default;
+
+$link-color: $color-primary !default;
+$link-hover-color: $color-primary !default;
+$link-decoration: none !default;
+$link-hover-decoration: $link-decoration !default;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1260px,
+  xxl: 1500px
+) !default;
+
+
+$theme-colors: (
+  primary: $color-primary,
+  secondary: $color-secondary
+)

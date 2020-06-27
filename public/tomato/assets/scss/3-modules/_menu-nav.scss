@@ -1,0 +1,72 @@
+// .menu-nav {
+// 	ul {
+// 		@include list-style;
+// 		margin: 0;
+// 		padding: 0;
+// 	}
+// }
+
+// .menu-nav__ul {
+// 	> li {
+// 		> a {
+// 			font-size: 22px;
+// 			padding: 5px 0;
+// 		}
+
+// 		&.menu-has-children {
+// 		}
+// 	}
+
+// 	a {
+// 		display: block;
+// 		color: #9B9B9B;
+// 	}
+
+// 	.menu-item-current > a,
+// 	a:hover {
+// 		color: $color-primary;
+// 	}
+
+// 	.submenu {
+// 		display: none;
+// 		padding: 10px 0 30px 0;
+
+// 		a {
+// 			font-family: $font-heading;
+// 			font-size: 13px;
+// 			line-height: 1.2;
+// 		}
+
+// 		li + li {
+// 			margin-top: 5px;
+// 		}
+// 	}
+// }
+
+// @include media-breakpoint-up(md) {
+// 	.menu-nav__ul {
+// 		> li > a {
+// 			font-size: 26px;
+// 		}
+
+// 		.submenu {
+// 			a {
+// 				font-size: 20px;
+// 			}
+// 		}
+// 	}
+// }
+
+// @include media-breakpoint-up(xxl) {
+// 	.menu-nav__ul {
+// 		> li > a {
+// 			font-size: 34px;
+// 		}
+
+// 		.submenu {
+// 			a {
+// 				font-size: 24px;
+// 			}
+// 		}
+// 	}
+// }

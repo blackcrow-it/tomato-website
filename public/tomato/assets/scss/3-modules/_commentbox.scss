@@ -1,0 +1,171 @@
+.commentbox-wrap {
+	margin-top: 60px;
+
+	.tabJs {
+
+	}
+
+	.nav-tabs {
+		justify-content: flex-start;
+	}
+}
+
+.commentForm__avatar,
+.commentList__avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.commentForm {
+	position: relative;
+	padding-left: 60px;
+}
+
+.commentForm__avatar,
+.commentList__avatar {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.commentForm__form {
+	margin-bottom: 40px;
+
+	textarea {
+		height: 100px;
+		min-height: 100px;
+	}
+
+	button {
+		background-color: $color-primary;
+		color: #fff;
+	}
+}
+
+.commentList {
+	ul {
+		@include list-style;
+
+		li {
+			padding: 20px 0;
+			border-top: 1px solid $color-border;
+		}
+	}
+}
+
+.commentList__inner {
+	position: relative;
+	min-height: 50px;
+	padding-left: 60px;
+	
+}
+
+.commentList__name {
+	font-size: 16px;
+	color: $color-primary;
+	margin-bottom: 5px;
+}
+
+.commentList__text {
+	line-height: 1.4;
+	margin-bottom: 8px;
+}
+
+.commentList__meta {
+	font-family: $font-heading;
+	font-size: 12px;
+	
+	i {
+		margin-right: 3px;
+	}
+
+	a {
+		color: $color-secondary;
+	}
+
+	> span {
+		&:not(:last-child):after {
+			content: '|';
+			color: $body-color;
+			margin: 0 6px;
+		}
+	}
+}
+
+.commentList__submenu {
+	border-top: 1px solid $color-border;
+	padding-left: 40px !important;
+	margin-top: 20px !important;
+
+
+	li {
+		padding: 20px 0;
+		border-top: 1px solid $color-border;
+
+		&:first-child {
+			border-top: 0;
+		}
+
+		&:last-child {
+			padding-bottom: 0;
+		}
+	}
+
+	.commentList__inner {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	.commentForm {
+
+	}
+
+	.commentForm__form {
+		position: relative;
+		margin-bottom: 0;
+
+		textarea {
+			height: 60px;
+			min-height: 100%;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+
+		@include media-breakpoint-down(sm) {
+			button {
+				padding: 7px 20px;
+				font-size: 12px;
+			}
+		}
+
+		@include media-breakpoint-up(md) {
+			padding-right: 100px;
+
+			textarea {
+				margin-bottom: 0;
+			}
+
+			button {
+				position: absolute;
+				top: 0;
+				right: 0;
+				max-width: 81px;
+			}
+		}
+	}
+}
+
+.btn-load-comment {
+	span {
+		display: inline-block;
+		max-width: 10px;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.commentList__submenu {
+		padding-left: 70px !important;
+	}
+}

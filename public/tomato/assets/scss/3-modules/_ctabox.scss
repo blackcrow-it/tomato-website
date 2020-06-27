@@ -1,0 +1,70 @@
+.ctabox {
+	margin-top: 40px;
+}
+
+.ctabox__icon {
+	display: block;
+	max-width: 15%;
+	margin-left: auto;
+	margin-right: 30px;
+}
+
+.ctabox__wrap {
+	padding: 30px 50px;
+	background-color: $color-secondary;
+	border-top-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+
+.ctabox__title {
+	font-size: 17px;
+	font-weight: 600;
+	font-style: italic;
+	color: #fff;
+	line-height: 1.4;
+	margin-bottom: 20px;
+}
+
+.ctabox__btn {
+	.btn {
+		background-color: #fff;
+		color: $color-primary;
+
+		&:hover {
+			background-color: $color-primary;
+			color: #fff;
+		}
+	}
+}
+
+@include media-breakpoint-down(md) {
+	.ctabox__wrap {
+		text-align: center;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.ctabox__icon {
+		margin-right: 60px;
+	}
+
+	.ctabox__title {
+		font-size: 22px;
+	}
+
+	.ctabox__wrap {
+		padding: 45px 60px;
+		border-top-left-radius: 30px;
+		border-bottom-right-radius: 30px;
+	}
+}
+
+@include media-breakpoint-up(lg) {
+	.ctabox__title {
+		margin-bottom: 0;
+	}
+
+	.ctabox__btn {
+		text-align: right;
+	}
+}

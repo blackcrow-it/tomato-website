@@ -1,0 +1,174 @@
+.learning-lesson-page {
+	
+}
+
+.learningLesson__entry {
+	border-top: 1px solid $color-border;
+	padding-top: 40px;
+	margin-top: 40px;
+}
+
+.learningLesson__header {
+	> div {
+		+ div {
+		 	margin-top: 50px;
+		}
+	}
+}
+
+.learningLesson__footer {
+	padding-top: 80px;
+	
+	.commentbox-wrap {
+		margin-top: 0;
+	}
+}
+
+.learning-process {
+	+ .widget {
+		margin-top: 40px;
+	}
+}
+
+
+.learning-process__header {
+	position: relative;
+	background-color: $color-secondary;
+	margin-bottom: 1px;
+
+	.f-title {
+		display: flex;
+		align-items: center;
+		color: #fff;
+		height: 60px;
+		font-size: 18px;
+		font-weight: 600;
+		padding: 0 10px;
+		padding-right: 70px;
+		margin-bottom: 0;
+	}
+
+	.f-process {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 50px;
+		height: 60px;
+		line-height: 60px;
+		background-color: #71944f;
+		text-align: center;
+		font-weight: bold;
+		color: #fff;
+	}
+}
+
+.learning-process__list {
+	max-height: 560px;
+	overflow-y: auto;
+
+	.accordionJs {
+		margin-bottom: 0;
+
+		.panel {
+			border-radius: 0;
+
+			+ .panel {
+				margin-top: 1px;
+			}
+		}
+
+		.panel__title {
+			position: relative;
+			line-height: 1.3;
+			min-height: 40px;
+			padding: 17px 12px;
+			padding-right: 65px;
+			
+			.percent {
+				position: absolute;
+				top: 50%;
+				right: 12px;
+				transform: translateY(-50%);
+			}
+
+			.percent__svg .circle {
+				stroke: #fff;
+			}
+
+			.percent__number {
+				font-size: 10px;
+				font-weight: bold;
+				color: #fff;
+			}
+		}
+
+		.panel__entry {
+			padding: 0;
+		}
+	}
+
+	.collapse__submenu {
+		@include list-style;
+
+		li {
+			background-color: #f5ccd1;
+			transition: all .3s ease;
+
+			
+			+ li {
+				margin-top: 1px;
+			}
+			
+			a {
+				display: block;
+				position: relative;
+				color: $color-heading;
+				padding: 10px 12px;
+				position: relative;
+				padding-left: 30px;
+
+				span {
+					position: absolute;
+					top: 17px;
+					left: 12px;
+					width: 10px;
+					height: 10px;
+					border-radius: 50%;
+					border: 1px solid $color-heading;
+				}
+
+			}
+			
+			&:hover,
+			&.current {
+				background-color: #f397a3;
+			}
+
+			&.done {
+				a {
+					span {
+						border-color: $color-secondary;
+						background-color: $color-secondary;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+@include media-breakpoint-up(xl) {
+	.learning-process {
+		margin-right: -30px;
+
+		+ .widget {
+			margin-right: -30px;
+		}
+	}
+}
+
+@include media-breakpoint-up(xxl) {
+	.learning-process__list {
+		max-height: 870px;
+	}
+}

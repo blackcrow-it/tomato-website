@@ -1,0 +1,18 @@
+.badge {
+	display: inline-block;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 4px;
+    padding: 3px 6px;
+}
+
+.badge--primary {
+	background-color: $color-primary;
+	color: #fff;
+}
+.badge--secondary {
+	background-color: $color-secondary;
+	color: #fff;
+}

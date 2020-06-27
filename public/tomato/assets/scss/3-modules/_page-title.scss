@@ -1,0 +1,46 @@
+.page-title {
+	background-color: $color-gray;
+	text-align: center;
+	padding: 70px 0 40px;
+
+	.breadcrumb-nav {
+		margin-bottom: 10px;
+	}
+}
+
+.page-title__title {
+	font-size: 30px;
+	color: $color-primary;
+	margin: 0;
+}
+
+@include media-breakpoint-up(md) {
+	.page-title__title {
+		font-size: 40px;
+	}
+}
+
+@include media-breakpoint-up(lg) {
+	.page-title {
+		padding: 70px 0;
+
+		+ section,
+		+ .section {
+			padding-top: 100px;
+		}
+	}
+
+	.page-title__title {
+		font-size: 50px;
+	}
+}
+
+@include media-breakpoint-up(xl) {
+	.page-title {
+		text-align: left;
+
+		.breadcrumb-nav {
+			margin-bottom: 20px;
+		}
+	}
+}

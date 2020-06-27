@@ -1,0 +1,104 @@
+/* owl  */
+.owl-carousel {
+	&.fixheight {
+		.owl-stage {
+			display: flex;
+			flex-wrap: wrap;
+		}
+	}
+
+	.owl-nav {
+		button.owl-next,
+		button.owl-prev {
+			position: absolute;
+			z-index: 1;
+			top: 50%;
+			width: 40px;
+			height: 40px;
+			line-height: 38px;
+			border-radius: 50%;
+			font-size: 20px;
+			background-color: $color-primary;
+			color: #fff;
+			opacity: .7;
+			
+			transform: translateY(-50%);
+			transition: all .3s ease;
+
+			i {
+				line-height: 1;
+			}
+
+			&:hover {
+				opacity: 1;
+			}
+
+			&.disabled {
+				visibility: hidden;
+			}
+		}
+
+		.owl-prev {
+			left: -45px;
+		}
+
+		.owl-next {
+			right: -45px;
+		}
+	}
+
+	.owl-dots {
+		text-align: center;
+		margin-top: 15px;
+		line-height: 1;
+	}
+
+	button.owl-dot {
+		width: 8px;
+		height: 8px;
+		background-color: $color-border;
+		margin: 0 5px;
+		border-radius: 50%;
+		
+		opacity: 1;
+		transition: all .3s ease;
+
+		&.active {
+			background-color: $color-primary;
+		}
+	}
+
+	@include media-breakpoint-up(md) {
+		.owl-dots {
+			margin-top: 30px;
+		}
+
+		button.owl-dot {
+			width: 10px;
+			height: 10px;
+			margin: 0 6px;
+		}
+	}
+
+
+	@include media-breakpoint-up(xl) {
+		.owl-nav {
+			.owl-prev {
+				left: -70px;
+			}
+
+			.owl-next {
+				right: -70px;
+			}
+		}
+	}
+}
+
+
+// .skin-dark {
+// 	.owl-carousel {
+// 		button.owl-dot {
+// 			background-color: #fff;
+// 		}
+// 	}
+// }

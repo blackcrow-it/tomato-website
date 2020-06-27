@@ -1,0 +1,115 @@
+.bookBox {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.bookBox__img {
+	display: block;
+	position: relative;
+	margin-bottom: 10px;
+
+	.sale {
+		position: absolute;
+		top: 5px;
+		right: 5px;
+		z-index: 1;
+		width: 35px;
+		height: 35px;
+		line-height: 35px;
+		text-align: center;
+		background-color: $color-primary;
+		border-radius: 50%;
+		font-weight: bold;
+		color: #fff;
+	}
+}
+
+.bookBok__title {
+	font-size: 16px;
+
+	&:hover {
+		color: $color-primary;
+	}
+}
+
+.bookBok__price {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+
+	font-family: $font-heading;
+	line-height: 1;
+
+	ins {
+		font-size: 20px;
+		font-weight: bold;
+		text-decoration: none;
+		color: $color-primary;
+	}
+
+	del {
+		margin-left: 5px;
+	}
+}
+
+.bookBox__btn {
+	padding-top: 15px;
+}
+
+.owl-item {
+	.bookBox {
+		margin-bottom: 0;
+	}
+}
+
+@include media-breakpoint-down(md) {
+	.bookBox-slide {
+		.owl-nav {
+			display: none;
+		}
+	}
+}
+
+@include media-breakpoint-down(sm) {
+	.bookBox__img .sale {
+		font-size: 11px;
+	}
+
+	.bookBok__price {
+		font-size: 12px;
+
+		ins {
+			font-size: 16px;
+		}
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.bookBox__img {
+		margin-bottom: 15px;
+
+		.sale {
+			width: 50px;
+		    height: 50px;
+		    line-height: 50px;
+		}
+	}
+
+	.bookBok__title {
+		font-size: 18px;
+	}
+}
+
+@include media-breakpoint-up(lg) {
+	.bookBox-slide {
+		.owl-dots {
+			display: none;
+		}
+	}
+}
+
+.bookBook-retale {
+	.owl-nav {
+		display: none;
+	}
+}

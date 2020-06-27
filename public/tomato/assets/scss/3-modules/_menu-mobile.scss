@@ -1,0 +1,189 @@
+.menu-mobile {
+	position: fixed;
+	z-index: 49;
+	top: 70px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	opacity: 0;
+	visibility: hidden;
+	transition: all .3s;
+	transition-delay: .3s;
+	pointer-events: none;
+
+	ul {
+		@include list-style;
+	}
+
+	&.menu-mobile--active {
+		opacity: 1;
+		visibility: visible;
+		transition-delay: 0s;
+		pointer-events: visible;
+
+		.menu-mobile__inner {
+			transform: translateX(0);
+			transition-delay: .35s;
+		}
+	}
+}
+
+.menu-mobile__bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: #000;
+	opacity: .3;
+}
+
+.menu-mobile__inner {
+	position: relative;
+	width: 320px;
+	height: 100%;
+	background-color: $color-primary;
+	margin-left: auto;
+
+	transform: translateX(300px);
+	transition: all .3s;
+}
+
+.menu-mobile__nav {
+	max-height: calc(100% - 170px);
+	overflow: hidden;
+	overflow-y: auto;
+
+	.menu-list {
+		li {
+			position: relative;
+
+			> a {
+				border-bottom: 1px solid #ff5252;
+			}
+			
+			&.menu-item-current {
+				> a {
+					background-color: #ff5252;
+
+					b {
+						color: $color-secondary;
+					}
+				}
+			}
+		}
+
+		li.menu-has-children {
+			> a {
+				position: relative;
+				padding-right: 75px;
+
+				&:after,
+				&:before {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: 49px;
+					height: 50px;
+				}
+
+				&:after {
+					content: '';
+					font-family: 'fontAwesome';
+					text-align: center;
+					
+					transition: all .3s;
+				}
+
+				&:before {
+					content: '';
+					border-left: 1px solid #ff5252;
+				}
+
+				&.active:after {
+					transform: rotate(-180deg);
+				}
+			}
+		}
+
+		li.menu-item-current {
+			> a {
+				background-color: #ff5252;
+			}
+		}
+
+		a {
+			display: block;
+			@include text-ellipsis;
+			font-weight: 500;
+			color: #fff;
+			height: 50px;
+			line-height: 50px;
+			padding: 0 25px;
+		}
+
+		.submenu {
+			display: none;
+
+			a {
+				padding-left: 50px;
+				font-size: 14px;
+			}
+
+			.submenu {
+				a {
+					padding-left: 75px;
+					font-size: 13px;
+				}
+
+				.submenu {
+					a {
+						padding-left: 100px;
+						font-size: 12px;
+					}
+				}
+			}
+		}
+	}
+}
+
+.menu-mobile__footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	color: #fff;
+	background-color: $color-secondary;
+
+	ul {
+		li {
+			font-size: 12px;
+			padding: 8px 10px;
+
+			+ li {
+				border-top: 1px solid #8dcc52;
+			}
+		}
+
+		b {
+			font-weight: 600;
+		}
+
+		a {
+			color: #fff;
+		}
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.menu-mobile__nav {
+		max-height: calc(100% - 300px);
+
+		.menu-list {
+			a {
+				font-size: 16px;
+			}
+		}
+	}
+}

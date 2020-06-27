@@ -1,0 +1,135 @@
+	qưert	qưertresponsive boostrap
+@include media-breakpoint-up(xs) { ... }
+@include media-breakpoint-up(sm) { ... }
+@include media-breakpoint-up(md) { ... }
+@include media-breakpoint-up(lg) { ... }
+@include media-breakpoint-up(xl) { ... }
+
+
+@include media-breakpoint-down(xs) { ... }
+@include media-breakpoint-down(sm) { ... }
+@include media-breakpoint-down(md) { ... }
+@include media-breakpoint-down(lg) { ... }
+
+@include media-breakpoint-between(md, xl) { ... }
+
+
+
+dùng grid ảnh
+<div class="grid-css grid-css--grid grid-css--popup grid-loading" data-col-lg="3" data-col-md="3" data-col-sm="2" data-col-xs="1" data-gutter="4" data-ratio="75">
+	<div class="grid__filter">
+		<ul class="grid__filter-list">
+			<li class="current"><a href="#" data-filter="*">all</a></li>
+			<li><a href="#" data-filter=".cat1">guest room</a></li>
+		</ul>
+	</div>
+
+	<div class="grid__inner">
+		<div class="grid-sizer"></div>
+		<div class="grid-item cat1" data-colspan="1" data-rowspan="1">
+			<div class="grid-item__inner">                          
+				<div class="grid-item__content-wrapper">
+					<a href="img/bg-hero.jpg" class="gallery">
+						<div class="gallery__media" style="background-image: url(img/gallery.jpg)">
+							<img src="img/gallery.jpg" alt="">
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="grid-loading-effect">
+		<div class="ld-cube1 ld-cube"></div>
+		<div class="ld-cube2 ld-cube"></div>
+		<div class="ld-cube4 ld-cube"></div>
+		<div class="ld-cube3 ld-cube"></div>
+	</div>
+</div>
+
+<div class="ac-accordion">
+	<div class="ac-accordion__panel">
+		<div class="ac-accordion__header">
+			<h6 class="ac-accordion__title"><a href="#">Thông tin</a></h6>
+		</div>
+		<div class="ac-accordion__body">
+			
+		</div>
+	</div>
+</div>	
+
+function accordion() {
+    $('.ac-accordion').each(function () {
+        var self = $(this),
+            optData = eval('(' + self.attr('data-options') + ')'),
+            optDefault = {
+                active: 0,
+                collapsible: false,
+                activeEvent: 'click',
+                heightStyle: 'content',
+                duration: 200,
+                onOffIcon: {
+                    enable: true,
+                    expandIcon: "",
+                    collapseIcon: "",
+                    position: "right"
+                }
+            },
+        options = $.extend(optDefault, optData);
+        self.aweAccordion(options);
+    });
+}
+
+<section class="section" style="display: none">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+							<div class="title wow fadeInUp">
+								<h2 class="title__title">Danh sách các khoá học online Tomato</h2>
+							</div>
+						</div>
+					</div>
+
+					<div class="row justify-content-center">
+						<div class="col-6 col-md-4 col-xl-3">
+							<div class="coursebox">
+								<div class="coursebox__inner">
+									<span class="coursebox__icon"><img src="assets/img/icon/icon-china.svg"></span>
+									<h3 class="coursebox__title"><a href="khoahoc.html">Khoá học tiếng Trung</a></h3>
+									<p class="coursebox__text">Người học sẽ có nhưng kiến thức căn bản và nền tang về tiếng Trung để học tiếng Trung trong những giai đoạn về sau.</p>
+									
+									<div class="coursebox__btn">
+										<a href="#" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-6 col-md-4 col-xl-3">
+							<div class="coursebox">
+								<div class="coursebox__inner">
+									<span class="coursebox__icon"><img src="assets/img/icon/icon-korea.svg"></span>
+									<h3 class="coursebox__title"><a href="khoahoc.html">Khoá học tiếng Hàn</a></h3>
+									<p class="coursebox__text">Người học sẽ có nhưng kiến thức căn bản và nền tang về tiếng Trung để học tiếng Trung trong những giai đoạn về sau.</p>
+									
+									<div class="coursebox__btn">
+										<a href="#" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-6 col-md-4 col-xl-3">
+							<div class="coursebox">
+								<div class="coursebox__inner">
+									<span class="coursebox__icon"><img src="assets/img/icon/icon-japan.svg"></span>
+									<h3 class="coursebox__title"><a href="khoahoc.html">Khoá học tiếng Nhật</a></h3>
+									<p class="coursebox__text">Người học sẽ có nhưng kiến thức căn bản và nền tang về tiếng Trung để học tiếng Trung trong những giai đoạn về sau.</p>
+									
+									<div class="coursebox__btn">
+										<a href="khoahoc.html" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>

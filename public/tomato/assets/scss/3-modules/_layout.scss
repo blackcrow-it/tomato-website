@@ -1,0 +1,19 @@
+.layout--left {
+	.layout-content {
+		// padding-left: 50px;
+	}
+}
+
+@include media-breakpoint-down(lg) {
+	.layout--left .layout-sidebar {
+		margin-bottom: 40px;
+	}
+
+	.layout-mobile-last {
+		margin-top: 40px;
+	}
+
+	.layout--right .layout-sidebar {
+		margin-top: 40px;
+	}
+}

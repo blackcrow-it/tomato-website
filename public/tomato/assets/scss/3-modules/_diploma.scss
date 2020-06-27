@@ -1,0 +1,113 @@
+.diploma {
+	position: relative;
+	max-width: 600px;
+	overflow-x: auto;
+    background: #faebd7;
+	background-image: url(../img/icon/bg-result.jpg);
+    border-radius: 6px;
+    font-size: 15px;
+    text-align: center;
+    color: #565454;
+    background-size: 20px 20px;
+}
+
+.diploma__inner {
+	width: 600px;
+	padding: 25px 15px;
+}
+
+.diploma__header {
+	margin-bottom: 15px;
+
+	.f-title {
+		font-size: 15px;
+	}
+
+	.f-title-en {
+		font-size: 14px;
+	}
+}
+
+.diploma__content {
+
+}
+
+.diploma__list {
+	@include list-style;
+	text-align: left;
+	margin-bottom: 20px;
+
+	b {
+		font-weight: 600;
+		color: $color-heading;
+	}
+}
+
+.diploma__tablewrap {
+	border: 1px solid #555;
+	padding: 4px;
+}
+
+.diploma__table {
+	width: 100%;
+
+	tbody {
+		td {
+			border: 1px solid #999;
+
+			p {
+				margin-bottom: 0;
+			}
+		}
+
+		.result {
+			color: $color-heading;
+			font-weight: bold;
+		}
+
+		.f-left {
+			.f-left__header {
+				border-bottom: 1px solid #999;
+				padding: 5px;
+			}
+
+			.f-left__title {
+				display: flex;
+
+				.item {
+					width: 100%;
+					padding: 5px;
+
+					+ .item {
+						border-left: 1px solid #999;
+					}
+				}
+			}
+		}
+
+		.f-right {
+			width: 150px;
+		}
+	}
+}
+
+.diploma__footer {
+	display: flex;
+	justify-content: space-between;
+	padding-top: 20px;
+
+	.f-pass-btn {
+		display: inline-block;
+		height: 40px;
+		line-height: 40px;
+		font-weight: bold;
+		color: $color-heading;
+		border: 1px solid  #999;
+		padding: 0 20px;
+	}
+
+	.f-logo {
+		display: inline-block;
+		max-width: 120px
+	}
+}
