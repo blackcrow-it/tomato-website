@@ -136,7 +136,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('admin.home') }}" class="brand-link">
-                <img src="{{ auth()->user()->avatar ?? asset('adminlte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+                @if (auth()->user()->avatar)
+                    <img src="{{ auth()->user()->avatar }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+                @endif
                 <span class="brand-text font-weight-light">Admin Panel</span>
             </a>
             <!-- Sidebar -->
