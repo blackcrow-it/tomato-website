@@ -101,17 +101,19 @@
                 @enderror
             </div>
             <div class="row">
-                <div class="col-sm-6">
+            <div class="col-sm-6">
                     <div class="form-group">
                         <label>Icon</label>
-                        <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Sử dụng bộ icon miễn phí của Font Awesome."></i></small>
-                        <input type="text" name="icon" placeholder="Icon (vd: fas fa-check-circle)" value="{{ $data->icon ?? old('icon') }}" id="c-icon" class="form-control custom-icon-input @error('icon') is-invalid @enderror">
-                        @error('icon')
-                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                        @enderror
-                        <div class="custom-icon-preview text-center mt-2" for="c-icon">
-                            <i class=""></i>
+                        <div class="input-group">
+                            <input type="text" name="icon" placeholder="Icon" value="{{ $data->icon ?? old('icon') }}" class="form-control @error('icon') is-invalid @enderror" id="ck-icon">
+                            @error('icon')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                            <div class="input-group-append">
+                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-icon', 'ck-icon-preview')">Chọn file</button>
+                            </div>
                         </div>
+                        <img class="image-preview" src="{{ $data->icon ?? old('icon') }}" id="ck-icon-preview">
                     </div>
                 </div>
                 <div class="col-sm-6">

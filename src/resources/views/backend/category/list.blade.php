@@ -75,7 +75,7 @@ Danh mục
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>
-                        <i class="{{ $item->icon }}"></i>
+                        <img src="{{ $item->icon }}" class="img-thumbnail">
                     </td>
                     <td>
                         {{ $item->title }}
