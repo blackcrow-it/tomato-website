@@ -88,14 +88,6 @@ class CourseController extends Controller
         $course->fill($data);
         $course->price = $course->price ?? 0;
         $course->save();
-
-        $videos = $request->input('course_videos');
-        if (is_array($videos)) {
-            $course->videos()->delete();
-            foreach ($videos as $item) {
-                $course->videos()->create($item);
-            }
-        }
     }
 
     public function submitDelete($id)

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CourseRequest extends FormRequest
+class CourseVideoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,18 +26,8 @@ class CourseRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'slug' => 'nullable|string',
-            'thumbnail' => 'nullable|url',
-            'cover' => 'nullable|url',
-            'description' => 'nullable|string',
-            'content' => 'nullable|string',
+            'original_path' => 'required|string',
             'enabled' => 'required|boolean',
-            'meta_title' => 'nullable|string',
-            'meta_description' => 'nullable|string',
-            'og_title' => 'nullable|string',
-            'og_description' => 'nullable|string',
-            'og_image' => 'nullable|url',
-            'price' => 'nullable|numeric|min:0',
         ];
     }
 }

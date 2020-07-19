@@ -106,6 +106,7 @@ Khóa học
                     <td class="text-nowrap">
                         <form action="{{ route('admin.course.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này?')">
                             @csrf
+                            <a href="{{ route('admin.course_video.list', [ 'courseId' => $item->id ]) }}" class="btn btn-sm btn-info"><i class="fas fa-video"></i> Video</a>
                             <a href="{{ route('admin.course.edit', [ 'id' => $item->id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
                             <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
                         </form>
@@ -124,7 +125,7 @@ Khóa học
         var that = this;
         $(that).prop('disabled', true);
 
-        $.post('{{ route('admin.course.enabled') }}', {
+        $.post('{{ route("admin.course.enabled") }}', {
             id: $(that).data('id'),
             enabled: $(that).prop('checked')
         }).fail(function() {
@@ -148,11 +149,11 @@ Khóa học
             var that = this;
             $(that).prop('disabled', true);
 
-            $.post('{{ route('admin.course.order_in_category') }}', {
+            $.post('{{ route("admin.course.order_in_category") }}', {
                 id: $(that).data('id'),
                 order_in_category: $(that).val()
             }).fail(function() {
-                alert('Có lỗi xảy ra, vui lòng thử lại.');                
+                alert('Có lỗi xảy ra, vui lòng thử lại.');
             }).always(function() {
                 $(that).prop('disabled', false);
             });

@@ -11,4 +11,8 @@ class CourseVideo extends Model
     protected $fillable = [
         'course_id', 'title', 'original_path', 'm3u8_path'
     ];
+
+    public function course() {
+        return $this->belongsTo('App\Course', 'course_id', 'id');
+    }
 }
