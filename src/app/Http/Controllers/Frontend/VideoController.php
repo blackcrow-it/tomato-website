@@ -17,6 +17,9 @@ class VideoController extends Controller
     }
 
     public function oldGetKey($id) {
-        return Storage::disk('s3')->get("streaming/$id/secret.key");
+        $key = Storage::disk('s3')->get("streaming/$id/secret.key");
+        return response($key)->withHeaders([
+            'Access-Control-Allow-Origin' => 'http://tomatoonline.edu.vn'
+        ]);
     }
 }
