@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use DB;
+use Exception;
+use File;
 use Google_Client;
 use Google_Service_Drive;
 use Illuminate\Console\Command;
@@ -157,8 +159,31 @@ class ConvertHlsFromDrive extends Command
             printf("Start upload to s3.\n");
 
             Storage::disk('s3')->deleteDirectory('streaming/' . $video->video_id);
-            $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
-            $this->uploadDirectoryToS3('transcode/hls', 'streaming/' . $video->video_id . '/hls/', true);
+
+            while (true) {
+                try {
+                    printf("Transferring secret key.\n");
+                    $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
+
+                    $allFiles = scandir(Storage::path('transcode/hls'));
+                    $allFiles = array_filter($allFiles, function($item) {
+                        return $item != '.' && $item != '..';
+                    });
+                    foreach ($allFiles as $file) {
+                        $localPath = "transcode/hls/$file";
+                        $s3Path = 'streaming/' . $video->video_id . '/hls/' . basename($localPath);
+                        if (Storage::disk('s3')->exists($s3Path)) continue;
+                        printf("Transferring $localPath -> $s3Path\n");
+                        $this->uploadFileToS3($localPath, $s3Path, true);
+                    }
+                    break;
+                } catch (Exception $ex) {
+                    printf("[ERROR] " . $ex->getMessage() . "\nRe-upload after 5s...\n");
+                    sleep(5);
+                }
+            }
+
+            // $this->uploadDirectoryToS3('transcode/hls', 'streaming/' . $video->video_id . '/hls/', true);
 
             printf("Update stream url to database.\n");
 
@@ -175,8 +200,10 @@ class ConvertHlsFromDrive extends Command
     private function uploadFileToS3($localPath, $s3Path, $public = false)
     {
         $stream = Storage::getDriver()->readStream($localPath);
-        Storage::disk('s3')->put($s3Path, $stream, $public ? 'public' : 'private');
-        fclose($stream);
+        Storage::disk('s3')->writeStream($s3Path, $stream, [
+            'visibility' => $public ? 'public' : 'private'
+        ]);
+        if (is_resource($stream)) fclose($stream);
         gc_collect_cycles();
     }
 
