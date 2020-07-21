@@ -15,4 +15,8 @@ class VideoController extends Controller
         $key = Storage::disk('s3')->get($video->key_path);
         return $key;
     }
+
+    public function oldGetKey($id) {
+        return Storage::disk('s3')->get("streaming/$id/secret.key");
+    }
 }

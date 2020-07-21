@@ -34,7 +34,9 @@ Route::namespace('Frontend')
         Route::post('cart/add', 'CartController@add')->name('cart.add');
         Route::post('cart/remove', 'CartController@remove')->name('cart.remove');
 
-        Route::get('video-{id}-key', 'VideoController@getKey')->name('video.key');
+        Route::get('get-video-key/{id}', 'VideoController@getKey')->name('video.key');
+
+        Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
     });
 
 Route::prefix('admin')
