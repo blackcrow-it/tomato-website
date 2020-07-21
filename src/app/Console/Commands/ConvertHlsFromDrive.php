@@ -158,9 +158,7 @@ class ConvertHlsFromDrive extends Command
 
             Storage::disk('s3')->deleteDirectory('streaming/' . $video->video_id);
             $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
-            foreach (Storage::files('transcode/hls') as $path) {
-                $this->uploadFileToS3($path, 'streaming/' . $video->video_id . '/hls/' . basename($path), true);
-            }
+            $this->uploadDirectoryToS3('transcode/hls', 'streaming/' . $video->video_id . '/hls/', true);
 
             printf("Update stream url to database.\n");
 
@@ -176,7 +174,26 @@ class ConvertHlsFromDrive extends Command
 
     private function uploadFileToS3($localPath, $s3Path, $public = false)
     {
-        $contents = Storage::get($localPath);
-        Storage::disk('s3')->put($s3Path, $contents, $public ? 'public' : 'private');
+        $stream = Storage::getDriver()->readStream($localPath);
+        Storage::disk('s3')->put($s3Path, $stream, $public ? 'public' : 'private');
+        fclose($stream);
+        gc_collect_cycles();
+    }
+
+    private function uploadDirectoryToS3($localPath, $s3Path, $public = false)
+    {
+        $client = Storage::disk('s3')->getDriver()->getAdapter()->getClient();
+        $dir = Storage::path($localPath);
+        $bucket = config('filesystems.disks.s3.bucket');
+        $keyPrefix = $s3Path;
+        $options = array(
+            'concurrency' => 20,
+            'debug' => true,
+            'before' => function (\Aws\Command $command) use ($public) {
+                $command['ACL'] = $public ? 'public-read' : 'private';
+            }
+        );
+        $client->uploadDirectory($dir, $bucket, $keyPrefix, $options);
+        gc_collect_cycles();
     }
 }
