@@ -15,6 +15,12 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+if (strpos(PHP_OS, 'WIN') !== false) {
+    $app->loadEnvironmentFrom('.env.win');
+} else {
+    $app->loadEnvironmentFrom('.env');
+}
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces

@@ -13,4 +13,6 @@ return [
     'timeout' => 3600,
 
     'enable_logging' => (bool) env('APP_DEBUG', false),
+
+    'using_cuda' => (bool) env('USING_CUDA', false),
 ];

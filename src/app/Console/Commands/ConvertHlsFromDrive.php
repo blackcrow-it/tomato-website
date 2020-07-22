@@ -75,6 +75,8 @@ class ConvertHlsFromDrive extends Command
             'timeout'          => config('ffmpeg.timeout'),
         ];
 
+        $usingCuda = config('ffmpeg.using_cuda');
+
         $log = null;
         if (config('ffmpeg.enable_logging')) {
             $log = new Logger('FFmpeg_Streaming');
@@ -138,9 +140,12 @@ class ConvertHlsFromDrive extends Command
 
             printf("Start transcode.\n");
 
-            $videoHandle = $ffmpeg->open(Storage::path($mp4Path));
+            Storage::deleteDirectory('transcode/hls');
+            Storage::makeDirectory('transcode/hls');
 
-            $format = new HEVC();
+            $videoHandle = $ffmpeg->customInput(Storage::path($mp4Path), $usingCuda ? ['-hwaccel', 'cuda'] : []);
+
+            $format = new X264();
             $format->on('progress', function ($video, $format, $percentage) {
                 printf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage)));
             });
@@ -153,7 +158,8 @@ class ConvertHlsFromDrive extends Command
             $r720p  = (new Representation)->setKiloBitrate(1000)->setResize(1280, 720);
             $r1080p  = (new Representation)->setKiloBitrate(2000)->setResize(1920, 1080);
 
-            $videoHandle->hls()
+            $videoHandle
+                ->hls()
                 ->encryption($saveKeyTo, $keyUrl)
                 ->setFormat($format)
                 ->addRepresentations([$r1080p, $r720p])
