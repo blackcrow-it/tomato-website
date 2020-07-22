@@ -12,6 +12,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Storage;
 use Streaming\FFMpeg;
+use Streaming\Format\HEVC;
 use Streaming\Format\X264;
 
 class ConvertHlsFromDrive extends Command
@@ -98,7 +99,7 @@ class ConvertHlsFromDrive extends Command
 
             Storage::makeDirectory('transcode');
 
-            printf("Download video : " . $video->title . ".\n");
+            printf("Download video: " . $video->title . ".\n");
 
             $file = $drive->files->get($video->drive_id, [
                 'fields' => 'id, size'
@@ -138,7 +139,7 @@ class ConvertHlsFromDrive extends Command
 
             $videoHandle = $ffmpeg->open(Storage::path($mp4Path));
 
-            $format = new X264();
+            $format = new HEVC();
             $format->on('progress', function ($video, $format, $percentage) {
                 printf("\rTranscoding...(%s%%) [%s%s]", $percentage, str_repeat('#', $percentage), str_repeat('-', (100 - $percentage)));
             });
