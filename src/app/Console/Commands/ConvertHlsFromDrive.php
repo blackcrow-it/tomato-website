@@ -94,47 +94,47 @@ class ConvertHlsFromDrive extends Command
             $keyPath = 'transcode/secret.key';
             $m3u8Path = 'transcode/hls/playlist.m3u8';
 
-            printf("Delete transcode directory.\n");
-
-            Storage::deleteDirectory('transcode');
-
-            Storage::makeDirectory('transcode');
-
             printf("Download video: " . $video->title . ".\n");
 
             $file = $drive->files->get($video->drive_id, [
                 'fields' => 'id, size'
             ]);
 
-            // Get the authorized Guzzle HTTP client
-            $http = $client->authorize();
+            if (!Storage::exists($mp4Path) || Storage::size($mp4Path) != $file->getSize()) {
+                printf("Re-create transcode directory.\n");
+                Storage::deleteDirectory('transcode');
+                Storage::makeDirectory('transcode');
 
-            // Open a file for writing
-            $fp = fopen(Storage::path($mp4Path), 'w');
+                // Get the authorized Guzzle HTTP client
+                $http = $client->authorize();
 
-            // Download in 10 MB chunks
-            $chunkSizeBytes = 10 * 1024 * 1024;
-            $chunkStart = 0;
+                // Open a file for writing
+                $fp = fopen(Storage::path($mp4Path), 'w');
 
-            // Iterate over each chunk and write it to our file
-            while ($chunkStart < $file->getSize()) {
-                $chunkEnd = $chunkStart + $chunkSizeBytes;
-                $response = $http->request(
-                    'GET',
-                    sprintf('/drive/v3/files/%s', $file->getId()),
-                    [
-                        'query' => ['alt' => 'media'],
-                        'headers' => [
-                            'Range' => sprintf('bytes=%s-%s', $chunkStart, $chunkEnd)
+                // Download in 10 MB chunks
+                $chunkSizeBytes = 10 * 1024 * 1024;
+                $chunkStart = 0;
+
+                // Iterate over each chunk and write it to our file
+                while ($chunkStart < $file->getSize()) {
+                    $chunkEnd = $chunkStart + $chunkSizeBytes;
+                    $response = $http->request(
+                        'GET',
+                        sprintf('/drive/v3/files/%s', $file->getId()),
+                        [
+                            'query' => ['alt' => 'media'],
+                            'headers' => [
+                                'Range' => sprintf('bytes=%s-%s', $chunkStart, $chunkEnd)
+                            ]
                         ]
-                    ]
-                );
-                $chunkStart = $chunkEnd + 1;
-                fwrite($fp, $response->getBody()->getContents());
-            }
+                    );
+                    $chunkStart = $chunkEnd + 1;
+                    fwrite($fp, $response->getBody()->getContents());
+                }
 
-            // close the file pointer
-            fclose($fp);
+                // close the file pointer
+                fclose($fp);
+            }
 
             printf("Start transcode.\n");
 
