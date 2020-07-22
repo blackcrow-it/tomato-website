@@ -14,6 +14,7 @@ use Storage;
 use Streaming\FFMpeg;
 use Streaming\Format\HEVC;
 use Streaming\Format\X264;
+use Streaming\Representation;
 
 class ConvertHlsFromDrive extends Command
 {
@@ -149,10 +150,13 @@ class ConvertHlsFromDrive extends Command
             //A URL (or a path) to access the key on your website
             $keyUrl = route('video.old_key', ['id' => $video->video_id]);
 
+            $r720p  = (new Representation)->setKiloBitrate(1000)->setResize(1280, 720);
+            $r1080p  = (new Representation)->setKiloBitrate(2000)->setResize(1920, 1080);
+
             $videoHandle->hls()
                 ->encryption($saveKeyTo, $keyUrl)
                 ->setFormat($format)
-                ->autoGenerateRepresentations([1080, 720, 360])
+                ->addRepresentations([$r1080p, $r720p])
                 ->save(Storage::path($m3u8Path));
 
             printf("\r\nTrancoded complete.\n");
