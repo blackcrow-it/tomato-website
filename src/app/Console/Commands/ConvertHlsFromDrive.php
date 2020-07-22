@@ -170,25 +170,26 @@ class ConvertHlsFromDrive extends Command
                     printf("Transferring secret key.\n");
                     $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
 
-                    $allFiles = scandir(Storage::path('transcode/hls'));
-                    $allFiles = array_filter($allFiles, function($item) {
-                        return $item != '.' && $item != '..';
-                    });
-                    foreach ($allFiles as $file) {
-                        $localPath = "transcode/hls/$file";
-                        $s3Path = 'streaming/' . $video->video_id . '/hls/' . basename($localPath);
-                        if (Storage::disk('s3')->exists($s3Path)) continue;
-                        printf("Transferring $localPath -> $s3Path\n");
-                        $this->uploadFileToS3($localPath, $s3Path, true);
-                    }
+                    // $allFiles = scandir(Storage::path('transcode/hls'));
+                    // $allFiles = array_filter($allFiles, function($item) {
+                    //     return $item != '.' && $item != '..';
+                    // });
+                    // foreach ($allFiles as $file) {
+                    //     $localPath = "transcode/hls/$file";
+                    //     $s3Path = 'streaming/' . $video->video_id . '/hls/' . basename($localPath);
+                    //     if (Storage::disk('s3')->exists($s3Path)) continue;
+                    //     printf("Transferring $localPath -> $s3Path\n");
+                    //     $this->uploadFileToS3($localPath, $s3Path, true);
+                    // }
+
+                    $this->uploadDirectoryToS3('transcode/hls/', 'streaming/' . $video->video_id . '/hls/', true);
+
                     break;
                 } catch (Exception $ex) {
                     printf("[ERROR] " . $ex->getMessage() . "\nRe-upload after 5s...\n");
                     sleep(5);
                 }
             }
-
-            // $this->uploadDirectoryToS3('transcode/hls', 'streaming/' . $video->video_id . '/hls/', true);
 
             printf("Update stream url to database.\n");
 
