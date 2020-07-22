@@ -1,5 +1,7 @@
 FROM amazonlinux:2
 
+RUN echo -e "\ntimeout=300\n" | tee -a /etc/yum.conf
+
 RUN amazon-linux-extras enable php7.4 epel
 RUN yum clean metadata
 RUN yum install -y epel-release zip unzip wget curl
