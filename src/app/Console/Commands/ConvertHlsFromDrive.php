@@ -169,9 +169,9 @@ class ConvertHlsFromDrive extends Command
 
             printf("Start upload to s3.\n");
 
-            Storage::disk('s3')->deleteDirectory('streaming/' . $video->video_id);
-
             while (true) {
+                Storage::disk('s3')->deleteDirectory('streaming/' . $video->video_id);
+
                 try {
                     printf("Transferring secret key.\n");
                     $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
