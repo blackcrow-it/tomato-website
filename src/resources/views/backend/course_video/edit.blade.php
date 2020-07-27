@@ -21,7 +21,7 @@
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.course_video.list', [ 'courseId' => $course->id ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
+            <a href="{{ route('admin.course_video.list', [ 'course_id' => $course->id ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
         </div>
     </div><!-- /.col -->
 </div>

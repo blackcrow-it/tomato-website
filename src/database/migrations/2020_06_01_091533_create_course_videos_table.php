@@ -15,11 +15,17 @@ class CreateCourseVideosTable extends Migration
     {
         Schema::create('course_videos', function (Blueprint $table) {
             $table->id();
+            $table->timestamps();
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
             $table->string('title', 255);
-            $table->string('original_path', 255);
-            $table->json('m3u8_path')->nullable();
-            $table->timestamps();
+            $table->string('thumbnail', 255)->nullable();
+            $table->unsignedInteger('order_in_course')->default(0);
+            $table->string('stream_url', 255)->nullable();
+            $table->string('key_path', 255)->nullable();
+            $table->unsignedInteger('percent')->default(0);
+            $table->string('status', 255)->default('pending');
+            $table->longText('message')->nullable();
+            $table->boolean('enabled')->default(true);
         });
     }
 

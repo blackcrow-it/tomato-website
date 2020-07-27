@@ -11,7 +11,7 @@ Video
     </div><!-- /.col -->
     <div class="col-sm-4">
         <div class="float-sm-right">
-            <a href="{{ route('admin.course_video.add', [ 'courseId' => $course->id ]) }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
+            <a href="{{ route('admin.course_video.add', [ 'course_id' => $course->id ]) }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
         </div>
     </div><!-- /.col -->
 </div>
@@ -49,7 +49,7 @@ Video
                 <th>ID</th>
                 <th>Ảnh thu nhỏ</th>
                 <th>Tiêu đề</th>
-                <th>Transcode</th>
+                <th>Trạng thái</th>
                 <th>Hiển thị</th>
                 <th data-toggle="tooltip" title="Thứ tự trong khoá học">Thứ tự</th>
                 <th>Hành động</th>
@@ -66,7 +66,7 @@ Video
                         {{ $item->title }}
                     </td>
                     <td>
-                        {{ $item->job_progress }}%
+                        {{ $item->percent }}%
                     </td>
                     <td>
                         <div class="custom-control custom-switch">

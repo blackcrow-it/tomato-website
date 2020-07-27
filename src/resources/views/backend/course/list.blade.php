@@ -106,7 +106,7 @@ Khóa học
                     <td class="text-nowrap">
                         <form action="{{ route('admin.course.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này?')">
                             @csrf
-                            <a href="{{ route('admin.course_video.list', [ 'courseId' => $item->id ]) }}" class="btn btn-sm btn-info"><i class="fas fa-video"></i> Video</a>
+                            <a href="{{ route('admin.course_video.list', [ 'course_id' => $item->id ]) }}" class="btn btn-sm btn-info"><i class="fas fa-video"></i> Video</a>
                             <a href="{{ route('admin.course.edit', [ 'id' => $item->id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
                             <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
                         </form>

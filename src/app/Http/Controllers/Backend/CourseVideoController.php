@@ -11,13 +11,14 @@ use Illuminate\Http\Request;
 
 class CourseVideoController extends Controller
 {
-    public function list($courseId) {
-        $course = Course::find($courseId);
+    public function list(Request $request)
+    {
+        $course = Course::find($request->input('course_id'));
         if ($course == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
 
-        $list = CourseVideo::where('course_id', $courseId)
+        $list = CourseVideo::where('course_id', $course->id)
             ->orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC, updated_at DESC')
             ->get();
 
@@ -27,9 +28,9 @@ class CourseVideoController extends Controller
         ]);
     }
 
-    public function add($courseId)
+    public function add(Request $request)
     {
-        $course = Course::find($courseId);
+        $course = Course::find($request->input('course_id'));
         if ($course == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
@@ -39,9 +40,9 @@ class CourseVideoController extends Controller
         ]);
     }
 
-    public function submitAdd(CourseVideoRequest $request, $courseId)
+    public function submitAdd(CourseVideoRequest $request)
     {
-        $course = Course::find($courseId);
+        $course = Course::find($request->input('course_id'));
         if ($course == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
@@ -51,7 +52,7 @@ class CourseVideoController extends Controller
         $this->processCourseVideoFromRequest($request, $video);
 
         return redirect()
-            ->route('admin.course_video.edit', [ 'id' => $video->id ])
+            ->route('admin.course_video.list', ['course_id' => $video->course_id])
             ->with('success', 'Thêm video mới thành công.');
     }
 
@@ -78,7 +79,7 @@ class CourseVideoController extends Controller
         $this->processCourseVideoFromRequest($request, $video);
 
         return redirect()
-            ->route('admin.course_video.edit', ['id' => $video->id])
+            ->route('admin.course_video.list', ['course_id' => $video->course_id])
             ->with('success', 'Thay đổi video thành công.');
     }
 
@@ -88,14 +89,7 @@ class CourseVideoController extends Controller
 
         $data = $request->all();
         $video->fill($data);
-
-        $triggerJob = $video->isDirty('original_path');
-
         $video->save();
-
-        if ($triggerJob) {
-            // ConvertToHlsJob::dispatch();
-        }
     }
 
     public function submitDelete($id)
@@ -108,7 +102,7 @@ class CourseVideoController extends Controller
         $video->delete();
 
         return redirect()
-            ->route('admin.course_video.list', ['courseId' => $video->course_id])
+            ->route('admin.course_video.list', ['course_id' => $video->course_id])
             ->with('success', 'Xóa khóa học thành công.');
     }
 
