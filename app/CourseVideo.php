@@ -9,7 +9,7 @@ class CourseVideo extends Model
     protected $table = 'course_videos';
 
     protected $fillable = [
-        'course_id', 'title', 'original_path', 'm3u8_path'
+        'course_id', 'title', 'thumbnail'
     ];
 
     public function course() {

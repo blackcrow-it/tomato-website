@@ -26,7 +26,7 @@ class CourseVideoRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'original_path' => 'required|string',
+            'thumbnail' => 'nullable|url',
             'enabled' => 'required|boolean',
         ];
     }

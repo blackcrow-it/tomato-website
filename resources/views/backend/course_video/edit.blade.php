@@ -67,16 +67,17 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Video</label>
+                        <label>Ảnh thu nhỏ (thumbnail)</label>
                         <div class="input-group">
-                            <input type="text" name="original_path" placeholder="Video" value="{{ $data->original_path ?? old('original_path') }}" class="form-control @error('original_path') is-invalid @enderror" id="ck-video">
-                            @error('original_path')
+                            <input type="text" name="thumbnail" placeholder="Ảnh thu nhỏ" value="{{ $data->thumbnail ?? old('thumbnail') }}" class="form-control @error('thumbnail') is-invalid @enderror" id="ck-thumbnail">
+                            @error('thumbnail')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                             <div class="input-group-append">
-                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-video', null, 'Videos')">Chọn file</button>
+                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-thumbnail', 'ck-thumbnail-preview')">Chọn file</button>
                             </div>
                         </div>
+                        <img class="image-preview" src="{{ $data->thumbnail ?? old('thumbnail') }}" id="ck-thumbnail-preview">
                     </div>
                 </div>
             </div>
