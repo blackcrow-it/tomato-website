@@ -37,6 +37,10 @@ class PostRequest extends FormRequest
             'og_title' => 'nullable|string',
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|url',
+            '__template_position' => 'nullable|array',
+            '__template_position.*' => [
+                Rule::in(collect(get_template_position('post'))->pluck('code'))
+            ]
         ];
     }
 }

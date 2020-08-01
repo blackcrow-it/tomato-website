@@ -18,12 +18,12 @@ class Post extends Model
         'category_id', 'order_in_category'
     ];
 
-    public function owner()
+    public function author()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
-    public function last_editor()
+    public function editor()
     {
         return $this->belongsTo('App\User', 'updated_by', 'id');
     }
@@ -45,5 +45,15 @@ class Post extends Model
         static::updating(function ($post) {
             $post->updated_by = auth()->user()->id ?? null;
         });
+    }
+
+    public function position()
+    {
+        return $this->hasMany('App\PostPosition', 'post_id', 'id');
+    }
+
+    public function getPositionOrderByCode($code)
+    {
+        return $this->position->where('code', $code)->first()->order_in_position ?? 0;
     }
 }

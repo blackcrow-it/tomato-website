@@ -6,30 +6,30 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Post;
+use App\PostPosition;
+use App\Repositories\PostRepo;
+use DB;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Log;
 
 class PostController extends Controller
 {
+    private $postRepo;
+
+    public function __construct(PostRepo $postRepo)
+    {
+        $this->postRepo = $postRepo;
+    }
+
     public function list(Request $request)
     {
+        $list = $this->postRepo->getByFilterQuery($request->input('filter'))->paginate();
+
         $categories = Category::where('type', Category::TYPE_POST)
             ->get()
             ->toTree();
-
-        $list = Post::with('owner')
-            ->with('last_editor');
-
-        if ($request->input('category_id')) {
-            $categoryIds = Category::descendantsAndSelf($request->input('category_id'))
-                ->pluck('id');
-
-            $list = $list->whereIn('category_id', $categoryIds)
-                ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC, updated_at DESC');
-        } else {
-            $list = $list->orderBy('updated_at', 'DESC');
-        }
-
-        $list = $list->paginate();
 
         return view('backend.post.list', [
             'list' => $list,
@@ -46,13 +46,24 @@ class PostController extends Controller
 
     public function submitAdd(PostRequest $request)
     {
-        $post = new Post;
+        $post = new Post();
 
-        $this->processPostFromRequest($request, $post);
+        try {
+            DB::beginTransaction();
+            $this->processPostFromRequest($request, $post);
+            DB::commit();
 
-        return redirect()
-            ->route('admin.post.edit', ['id' => $post->id])
-            ->with('success', 'Thêm bài viết mới thành công.');
+            return redirect()
+                ->route('admin.post.list')
+                ->with('success', 'Thêm bài viết mới thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+
+            return redirect()
+                ->route('admin.post.list')
+                ->withErrors('Thêm bài viết mới thất bại.');
+        }
     }
 
     public function edit($id)
@@ -61,6 +72,8 @@ class PostController extends Controller
         if ($post == null) {
             return redirect()->route('admin.post.list')->withErrors('Bài viết không tồn tại hoặc đã bị xóa.');
         }
+
+        $post->__template_position = $post->position->pluck('code')->toArray();
 
         return view('backend.post.edit', [
             'data' => $post,
@@ -75,19 +88,38 @@ class PostController extends Controller
             return redirect()->route('admin.post.list')->withErrors('Bài viết không tồn tại hoặc đã bị xóa.');
         }
 
-        $this->processPostFromRequest($request, $post);
+        try {
+            DB::beginTransaction();
+            $this->processPostFromRequest($request, $post);
+            DB::commit();
 
-        return redirect()
-            ->route('admin.post.edit', ['id' => $post->id])
-            ->with('success', 'Thay đổi bài viết thành công.');
+            return redirect()
+                ->route('admin.post.list')
+                ->with('success', 'Thay đổi bài viết mới thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+
+            return redirect()
+                ->route('admin.post.list')
+                ->withErrors('Thay đổi bài viết mới thất bại.');
+        }
     }
 
     private function processPostFromRequest(Request $request, Post $post)
     {
         $data = $request->all();
         $post->fill($data);
-
         $post->save();
+
+        PostPosition::where('post_id', $post->id)->delete();
+        $templatePositionCodeArray = $request->input('__template_position', []);
+        foreach ($templatePositionCodeArray as $code) {
+            $postPosition = new PostPosition();
+            $postPosition->code = $code;
+            $postPosition->post_id = $post->id;
+            $postPosition->save();
+        }
     }
 
     public function submitDelete($id)
@@ -97,11 +129,22 @@ class PostController extends Controller
             return redirect()->route('admin.post.list')->withErrors('Bài viết không tồn tại hoặc đã bị xóa.');
         }
 
-        $post->delete();
+        try {
+            DB::beginTransaction();
+            $post->delete();
+            DB::commit();
 
-        return redirect()
-            ->route('admin.post.list')
-            ->with('success', 'Xóa bài viết thành công.');
+            return redirect()
+                ->route('admin.post.list')
+                ->with('success', 'Xóa bài viết mới thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+
+            return redirect()
+                ->route('admin.post.list')
+                ->withErrors('Xóa bài viết mới thất bại.');
+        }
     }
 
     public function submitEnabled(Request $request)
@@ -124,9 +167,20 @@ class PostController extends Controller
 
     public function submitOrderInCategory(Request $request)
     {
-        $course = Post::findOrFail($request->input('id'));
-        $course->order_in_category = intval($request->input('order_in_category'));
-        $course->timestamps = false;
-        $course->save();
+        $post = Post::findOrFail($request->input('id'));
+        $post->order_in_category = intval($request->input('order_in_category'));
+        $post->timestamps = false;
+        $post->save();
+    }
+
+    public function submitOrderInPosition(Request $request)
+    {
+        $position = PostPosition::where([
+            'post_id'   => $request->input('id'),
+            'code'      => $request->input('code')
+        ])->firstOrFail();
+        $position->order_in_position = intval($request->input('order_in_position'));
+        $position->timestamps = false;
+        $position->save();
     }
 }

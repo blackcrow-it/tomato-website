@@ -143,6 +143,20 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
+            <div class="form-group">
+                <label>Vị trí hiển thị</label>
+                <div>
+                    @foreach (get_template_position('post') as $item)
+                        <div class="form-check">
+                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template_position-1" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cr-template_position-1">{{ $item['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
+                @error('__template_position')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
             <hr>
             <div class="form-group">
                 <label>Meta Title</label>

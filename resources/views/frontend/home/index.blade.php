@@ -7,15 +7,13 @@
 @section('body')
 <section class="section sec-hero">
     <div class="sec-hero__slide owl-carousel wow fadeInRight" data-slide-one-item>
-        <div class="item">
-            <img src="assets/img/image/hero.jpg" alt="">
-        </div>
-        <div class="item">
-            <img src="assets/img/image/hero.jpg" alt="">
-        </div>
-        <div class="item">
-            <img src="assets/img/image/hero.jpg" alt="">
-        </div>
+        @foreach (get_posts(null, 'slider') as $item)
+            <div class="item">
+                <a href="{{ route('post', [ 'slug' => $item->slug ]) }}">
+                    <img src="{{ $item->cover }}" alt="{{ $item->title }}">
+                </a>
+            </div>
+        @endforeach
     </div>
     <div class="sec-hero__sidebar wow fadeInLeft">
         <h2 class="f-title">Danh mục khoá học</h2>

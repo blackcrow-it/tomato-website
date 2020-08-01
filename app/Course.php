@@ -19,12 +19,12 @@ class Course extends Model
         'price'
     ];
 
-    public function owner()
+    public function author()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
-    public function last_editor()
+    public function editor()
     {
         return $this->belongsTo('App\User', 'updated_by', 'id');
     }
