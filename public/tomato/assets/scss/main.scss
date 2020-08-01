@@ -1,10 +1,12 @@
 // This is the single file output by sass. It is intended to ONLY @import other files.
 
+@import 'https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300;1,600;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap';
+
 // 1 - TOOLS
 @import '1-tools/bourbon/bourbon';
 
 
-@import '1-tools/fonts';
+// @import '1-tools/fonts';
 // @import '1-tools/normalize';
 @import '1-tools/vars';
 @import '1-tools/mixin';

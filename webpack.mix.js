@@ -22,6 +22,6 @@ mix
     .js('resources/js/frontend.js', 'public/js')
 
     .sass('resources/sass/backend.scss', 'public/css')
-    .sass('resources/sass/frontend.scss', 'public/css')
+    .sass('public/tomato/assets/scss/main.scss', 'public/tomato/assets/css')
 
     .version();

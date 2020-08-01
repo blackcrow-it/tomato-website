@@ -54572,6 +54572,17 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./public/tomato/assets/scss/main.scss":
+/*!*********************************************!*\
+  !*** ./public/tomato/assets/scss/main.scss ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/js/backend.js":
 /*!*********************************!*\
   !*** ./resources/js/backend.js ***!
@@ -54657,27 +54668,16 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/sass/frontend.scss":
-/*!**************************************!*\
-  !*** ./resources/sass/frontend.scss ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ 0:
-/*!****************************************************************************************************!*\
-  !*** multi ./resources/js/backend.js ./resources/sass/backend.scss ./resources/sass/frontend.scss ***!
-  \****************************************************************************************************/
+/*!***********************************************************************************************************!*\
+  !*** multi ./resources/js/backend.js ./resources/sass/backend.scss ./public/tomato/assets/scss/main.scss ***!
+  \***********************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/resources/js/backend.js */"./resources/js/backend.js");
-__webpack_require__(/*! /var/www/html/resources/sass/backend.scss */"./resources/sass/backend.scss");
-module.exports = __webpack_require__(/*! /var/www/html/resources/sass/frontend.scss */"./resources/sass/frontend.scss");
+__webpack_require__(/*! D:\GitHub\tomato\resources\js\backend.js */"./resources/js/backend.js");
+__webpack_require__(/*! D:\GitHub\tomato\resources\sass\backend.scss */"./resources/sass/backend.scss");
+module.exports = __webpack_require__(/*! D:\GitHub\tomato\public\tomato\assets\scss\main.scss */"./public/tomato/assets/scss/main.scss");
 
 
 /***/ })

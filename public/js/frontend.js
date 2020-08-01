@@ -49542,7 +49542,7 @@ window.Vue = vue__WEBPACK_IMPORTED_MODULE_3___default.a;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/html/resources/js/frontend.js */"./resources/js/frontend.js");
+module.exports = __webpack_require__(/*! D:\GitHub\tomato\resources\js\frontend.js */"./resources/js/frontend.js");
 
 
 /***/ })
