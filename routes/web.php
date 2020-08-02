@@ -64,12 +64,14 @@ Route::prefix('admin')
             Route::post('post/order-in-category', 'PostController@submitOrderInCategory')->name('post.order_in_category');
             Route::post('post/order-in-position', 'PostController@submitOrderInPosition')->name('post.order_in_position');
 
-            Route::get('category/list/{id?}', 'CategoryController@list')->name('category.list');
+            Route::get('category/list', 'CategoryController@list')->name('category.list');
             Route::get('category/add', 'CategoryController@add')->name('category.add');
             Route::post('category/add', 'CategoryController@submitAdd')->name('category.add');
             Route::get('category/edit/{id}', 'CategoryController@edit')->name('category.edit');
             Route::post('category/edit/{id}', 'CategoryController@submitEdit')->name('category.edit');
             Route::post('category/delete/{id}', 'CategoryController@submitDelete')->name('category.delete');
+            Route::post('category/enabled', 'CategoryController@submitEnabled')->name('category.enabled');
+            Route::post('category/order-in-position', 'CategoryController@submitOrderInPosition')->name('category.order_in_position');
 
             Route::get('course', 'CourseController@list')->name('course.list');
             Route::get('course/add', 'CourseController@add')->name('course.add');

@@ -14,13 +14,10 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    const TYPE_COURSE = 'course';
-    const TYPE_POST = 'post';
-
     protected $fillable = [
         'parent_id', 'title', 'slug', 'icon', 'cover', 'description',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
-        'type'
+        'type', 'url'
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -32,7 +29,7 @@ class Category extends Model
 
     public static function booted()
     {
-        static::saving(function($category) {
+        static::saving(function ($category) {
             if ($category->parent_id != null) {
                 $category->type = $category->parent->type;
             }
@@ -52,6 +49,7 @@ class Category extends Model
         });
 
         static::deleting(function ($category) {
+            // Cập nhật category_id thành null cho các bài viết thuộc danh mục được xóa
             Post::whereIn('category_id', $category->descendants()->pluck('id'))->update([
                 'category_id' => null,
                 'order_in_category' => 0
@@ -59,5 +57,10 @@ class Category extends Model
 
             $category->descendants()->delete();
         });
+    }
+
+    public function position()
+    {
+        return $this->hasMany('App\CategoryPosition', 'category_id', 'id');
     }
 }

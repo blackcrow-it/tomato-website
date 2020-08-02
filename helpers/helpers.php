@@ -1,5 +1,6 @@
 <?php
 
+use App\Repositories\CategoryRepo;
 use App\Repositories\PostRepo;
 
 if (!function_exists('categories_traverse')) {
@@ -51,9 +52,43 @@ if (!function_exists('get_template_position')) {
 if (!function_exists('get_posts')) {
     function get_posts($category_id = null, $position = null)
     {
-        return (new PostRepo())->getByFilterQuery([
-            'category_id'  => $category_id,
-            'position'     => $position
-        ])->get();
+        return (new PostRepo())
+            ->getByFilterQuery([
+                'category_id' => $category_id,
+                'position' => $position
+            ])
+            ->where('posts.enabled', true)
+            ->get()
+            ->map(function ($item) {
+                $item->url = route('post', ['slug' => $item->slug]);
+                return $item;
+            });
+    }
+}
+
+if (!function_exists('get_categories')) {
+    function get_categories($parent_id = null, $position = null)
+    {
+        $cacheKey = 'get_categories_' . $parent_id . '_' . $position;
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $data = (new CategoryRepo())
+            ->getByFilterQuery([
+                'parent_id' => $parent_id,
+                'position' => $position
+            ])
+            ->where('categories.enabled', true)
+            ->get()
+            ->map(function ($item) {
+                $item->url = $item->url ?? route('category', ['slug' => $item->slug]);
+                return $item;
+            });
+
+        Cache::set($cacheKey, $data, now()->addMinutes(10));
+
+        return $data;
     }
 }

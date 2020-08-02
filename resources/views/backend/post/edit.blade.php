@@ -146,7 +146,7 @@
             <div class="form-group">
                 <label>Vị trí hiển thị</label>
                 <div>
-                    @foreach (get_template_position('post') as $item)
+                    @foreach (get_template_position(\App\Constants\ObjectType::POST) as $item)
                         <div class="form-check">
                             <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template_position-1" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
                             <label class="form-check-label" for="cr-template_position-1">{{ $item['name'] }}</label>

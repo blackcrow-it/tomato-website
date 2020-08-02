@@ -23,18 +23,18 @@ class PostRepo
                 $categoryIds = Category::descendantsAndSelf($filter['category_id'])->pluck('id');
                 $query
                     ->whereIn('category_id', $categoryIds)
-                    ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC, updated_at DESC');
+                    ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC');
             }
 
             if ($filter['position'] ?? false) {
                 $query
                     ->join('post_position', 'post_position.post_id', '=', 'posts.id')
                     ->addSelect('post_position.order_in_position as __order_in_position')
-                    ->orderByRaw('CASE WHEN post_position.order_in_position > 0 THEN 0 ELSE 1 END, post_position.order_in_position ASC, updated_at DESC');
+                    ->orderByRaw('CASE WHEN post_position.order_in_position > 0 THEN 0 ELSE 1 END, post_position.order_in_position ASC');
             }
-        } else {
-            $query->orderBy('updated_at', 'DESC');
         }
+
+        $query->orderBy('updated_at', 'DESC');
 
         return $query;
     }

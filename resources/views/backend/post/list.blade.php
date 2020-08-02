@@ -31,14 +31,16 @@ Bài viết
             <div class="form-group">
                 <select class="form-control" name="filter[position]">
                     <option value="">--- Vị trí hiển thị ---</option>
-                    @foreach(get_template_position('post') as $item)
+                    @foreach(get_template_position(\App\Constants\ObjectType::POST) as $item)
                         <option value="{{ $item['code'] }}" {{ request()->input('filter.position') == $item['code'] ? 'selected' : '' }}>{{ $item['name'] }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+    </div>
 </form>
 @endsection
 
@@ -155,9 +157,6 @@ Bài viết
         });
     });
 
-</script>
-
-<script>
     $('.js-order-in-category').change(function () {
         var that = this;
         $(that).prop('disabled', true);

@@ -5,27 +5,39 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Category;
+use App\CategoryPosition;
+use App\Repositories\CategoryRepo;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Log;
 
 class CategoryController extends Controller
 {
-    public function list($id = null)
-    {
-        $category = Category::with('ancestors')->find($id);
+    private $categoryRepo;
 
-        if ($category == null && $id != null) {
+    public function __construct(CategoryRepo $categoryRepo)
+    {
+        $this->categoryRepo = $categoryRepo;
+    }
+
+    public function list(Request $request)
+    {
+        $currentCategory = Category::with('ancestors')->find($request->input('filter.parent_id'));
+
+        if ($currentCategory == null && $request->input('filter.parent_id') != null) {
             return redirect()->route('admin.category.list')->withErrors('Danh mục không tồn tại hoặc đã bị xóa.');
         }
 
-        $list = Category::with('descendants')
-            ->where('parent_id', $category->id ?? null)
-            ->orderBy('title', 'ASC')
-            ->paginate();
+        $list = $this->categoryRepo->getByFilterQuery($request->input('filter'))->paginate();
+
+        $categories = Category::all()->toTree();
 
         return view('backend.category.list', [
             'list' => $list,
-            'category' => $category
+            'currentCategory' => $currentCategory,
+            'categories' => categories_traverse($categories)
         ]);
     }
 
@@ -40,13 +52,24 @@ class CategoryController extends Controller
 
     public function submitAdd(CategoryRequest $request)
     {
-        $category = new Category;
+        $category = new Category();
 
-        $this->processCategoryFromRequest($request, $category);
+        try {
+            DB::beginTransaction();
+            $this->processCategoryFromRequest($request, $category);
+            DB::commit();
 
-        return redirect()
-            ->route('admin.category.edit', ['id' => $category->id])
-            ->with('success', 'Thêm danh mục mới thành công.');
+            return redirect()
+                ->route('admin.category.list')
+                ->with('success', 'Thêm danh mục thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+
+            return redirect()
+                ->route('admin.category.list')
+                ->withErrors('Thêm danh mục thất bại.');
+        }
     }
 
     public function edit($id)
@@ -55,6 +78,8 @@ class CategoryController extends Controller
         if ($category == null) {
             return redirect()->route('admin.category.list')->withErrors('Danh mục không tồn tại hoặc đã bị xóa.');
         }
+
+        $category->__template_position = $category->position->pluck('code')->toArray();
 
         $categories = Category::where('id', '!=', $category->id)->get()->toTree();
 
@@ -71,19 +96,38 @@ class CategoryController extends Controller
             return redirect()->route('admin.category.list')->withErrors('Danh mục không tồn tại hoặc đã bị xóa.');
         }
 
-        $this->processCategoryFromRequest($request, $category);
+        try {
+            DB::beginTransaction();
+            $this->processCategoryFromRequest($request, $category);
+            DB::commit();
 
-        return redirect()
-            ->route('admin.category.edit', ['id' => $category->id])
-            ->with('success', 'Thay đổi danh mục thành công.');
+            return redirect()
+                ->route('admin.category.list')
+                ->with('success', 'Thay đổi danh mục thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+
+            return redirect()
+                ->route('admin.category.list')
+                ->withErrors('Thay đổi danh mục thất bại.');
+        }
     }
 
     private function processCategoryFromRequest(Request $request, Category $category)
     {
         $data = $request->input();
         $category->fill($data);
-
         $category->save();
+
+        CategoryPosition::where('category_id', $category->id)->delete();
+        $templatePositionCodeArray = $request->input('__template_position', []);
+        foreach ($templatePositionCodeArray as $code) {
+            $position = new CategoryPosition();
+            $position->code = $code;
+            $position->category_id = $category->id;
+            $position->save();
+        }
     }
 
     public function submitDelete($id)
@@ -93,10 +137,40 @@ class CategoryController extends Controller
             return redirect()->route('admin.category.list')->withErrors('Danh mục không tồn tại hoặc đã bị xóa.');
         }
 
-        $category->delete();
+        try {
+            DB::beginTransaction();
+            $category->delete();
+            DB::commit();
 
-        return redirect()
-            ->route('admin.category.list')
-            ->with('success', 'Xóa danh mục thành công.');
+            return redirect()
+                ->route('admin.category.list')
+                ->with('success', 'Xóa danh mục thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+
+            return redirect()
+                ->route('admin.category.list')
+                ->withErrors('Xóa danh mục thất bại.');
+        }
+    }
+
+    public function submitEnabled(Request $request)
+    {
+        $post = Category::findOrFail($request->input('id'));
+        $post->enabled = $request->input('enabled');
+        $post->timestamps = false;
+        $post->save();
+    }
+
+    public function submitOrderInPosition(Request $request)
+    {
+        $position = CategoryPosition::where([
+            'category_id'   => $request->input('id'),
+            'code'          => $request->input('code')
+        ])->firstOrFail();
+        $position->order_in_position = intval($request->input('order_in_position'));
+        $position->timestamps = false;
+        $position->save();
     }
 }

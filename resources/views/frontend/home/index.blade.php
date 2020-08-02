@@ -9,7 +9,7 @@
     <div class="sec-hero__slide owl-carousel wow fadeInRight" data-slide-one-item>
         @foreach (get_posts(null, 'slider') as $item)
             <div class="item">
-                <a href="{{ route('post', [ 'slug' => $item->slug ]) }}">
+                <a href="{{ $item->url }}">
                     <img src="{{ $item->cover }}" alt="{{ $item->title }}">
                 </a>
             </div>
@@ -18,26 +18,32 @@
     <div class="sec-hero__sidebar wow fadeInLeft">
         <h2 class="f-title">Danh mục khoá học</h2>
         <ul class="f-list">
-            <li class="menu-has-children">
-                <a href="#">
-                    <img src="assets/img/icon/icon-china.svg">Khoá học tiếng trung
-                </a>
-                <ul class="submenu">
-                    <li class="menu-has-children">
-                        <a href="#">Giáo trình Hán Ngữ (mới)</a>
+            @foreach(get_categories(null, 'course-categories') as $c1)
+                <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                    <a href="{{ $c1->url }}">
+                        <img src="{{ $c1->icon }}">
+                        {{ $c1->title }}
+                    </a>
+                    @if($c1->__subcategory_count > 0)
                         <ul class="submenu">
-                            <li><a href="khoahoc.html">Khoá học 1</a></li>
-                            <li><a href="khoahoc.html">Khoá học 2</a></li>
-                            <li><a href="khoahoc.html">Khoá học 3</a></li>
+                            @foreach(get_categories($c1->id, 'course-categories') as $c2)
+                                <li class="{{ $c2->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                    <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                    @if($c2->__subcategory_count > 0)
+                                        <ul class="submenu">
+                                            @foreach(get_categories($c2->id, 'course-categories') as $c3)
+                                                <li class="">
+                                                    <a href="{{ $c3->url }}">{{ $c3->title }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </li>
+                            @endforeach
                         </ul>
-                    </li>
-                    <li><a href="#">Giáo trình Boya</a></li>
-                    <li><a href="#">Tiếng Trung văn phòng</a></li>
-                </ul>
-            </li>
-            <li><a href="khoahoc.html"><img src="assets/img/icon/icon-korea.svg">Khoá học tiếng Hàn</a></li>
-            <li><a href="khoahoc.html"><img src="assets/img/icon/icon-japan.svg">Khoá học tiếng Nhật</a>
-            </li>
+                    @endif
+                </li>
+            @endforeach
         </ul>
     </div>
 </section>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Category;
+use App\Constants\ObjectType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -39,7 +39,13 @@ class CategoryRequest extends FormRequest
             'og_image' => 'nullable|url',
             'type' => [
                 'required_if:parent_id,',
-                Rule::in([Category::TYPE_COURSE, Category::TYPE_POST]),
+                Rule::in([ObjectType::COURSE, ObjectType::POST]),
+            ],
+            'url' => 'nullable|url',
+            'enabled' => 'required|boolean',
+            '__template_position' => 'nullable|array',
+            '__template_position.*' => [
+                Rule::in(collect(get_template_position(ObjectType::CATEGORY))->pluck('code'))
             ]
         ];
     }

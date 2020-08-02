@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Category;
+use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use App\Post;
@@ -16,7 +17,7 @@ class CategoryController extends Controller
             ->firstOrFail();
 
         switch ($category->type) {
-            case Category::TYPE_COURSE:
+            case ObjectType::COURSE:
                 return $this->indexForCourse($category);
                 break;
 

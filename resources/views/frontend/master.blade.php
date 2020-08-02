@@ -56,34 +56,30 @@
 
                     <nav class="header__nav">
                         <ul class="menu-list">
-                            <li class="menu-item-current"><a href="{{ route('home') }}">Trang chủ</a></li>
-                            <li><a href="gioithieu.html">Giới thiệu</a></li>
-                            <li class="menu-has-children">
-                                <a href="khoahoc.html">Khoá học</a>
-                                <ul class="submenu">
-                                    <li class="menu-has-children">
-                                        <a href="khoahoc.html">Tiếng Trung</a>
+                            <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                            @foreach(get_categories(null, 'navigator') as $c1)
+                                <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                    <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                    @if($c1->__subcategory_count > 0)
                                         <ul class="submenu">
-                                            <li class="menu-has-children">
-                                                <a href="khoahoc.html">Giáo trình Hán ngữ</a>
-                                                <ul class="submenu">
-                                                    <li><a href="khoahoc.html">Khoá học 1</a></li>
-                                                    <li><a href="khoahoc.html">Khoá học 2</a></li>
-                                                    <li><a href="khoahoc.html">Khoá học 3</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="khoahoc.html">Giáo trình Boya</a></li>
-                                            <li><a href="khoahoc.html">Tiếng trung văn phòng</a></li>
+                                            @foreach(get_categories($c1->id, 'navigator') as $c2)
+                                                <li class="{{ $c2->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                                    <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                    @if($c2->__subcategory_count > 0)
+                                                        <ul class="submenu">
+                                                            @foreach(get_categories($c2->id, 'navigator') as $c3)
+                                                                <li class="">
+                                                                    <a href="{{ $c3->url }}">{{ $c3->title }}</a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    @endif
+                                                </li>
+                                            @endforeach
                                         </ul>
-                                    </li>
-                                    <li><a href="khoahoc.html">Tiếng Nhật</a></li>
-                                    <li><a href="khoahoc.html">Tiếng Hàn</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><a href="sach.html">Sách</a></li>
-                            <li><a href="tintuc.html">Tin tức</a></li>
-                            <li><a href="top-diemcao.html">Thi thử</a></li>
+                                    @endif
+                                </li>
+                            @endforeach
                             <li><a href="lienhe.html">Liên hệ</a></li>
                         </ul>
                     </nav>
@@ -132,34 +128,30 @@
             <div class="menu-mobile__inner">
                 <nav class="menu-mobile__nav">
                     <ul class="menu-list">
-                        <li class="menu-item-current"><a href="{{ route('home') }}">Trang chủ</a></li>
-                        <li><a href="gioithieu.html">Giới thiệu</a></li>
-                        <li class="menu-has-children">
-                            <a href="khoahoc.html">Khoá học</a>
-                            <ul class="submenu">
-                                <li class="menu-has-children">
-                                    <a href="khoahoc.html">Tiếng Trung</a>
+                        <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                        @foreach(get_categories(null, 'navigator') as $c1)
+                            <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                @if($c1->__subcategory_count > 0)
                                     <ul class="submenu">
-                                        <li class="menu-has-children">
-                                            <a href="khoahoc.html">Giáo trình Hán ngữ</a>
-                                            <ul class="submenu">
-                                                <li><a href="khoahoc.html">Khoá học 1</a></li>
-                                                <li><a href="khoahoc.html">Khoá học 2</a></li>
-                                                <li><a href="khoahoc.html">Khoá học 3</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="khoahoc.html">Giáo trình Boya</a></li>
-                                        <li><a href="khoahoc.html">Tiếng trung văn phòng</a></li>
+                                        @foreach(get_categories($c1->id, 'navigator') as $c2)
+                                            <li class="{{ $c2->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                                <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                @if($c2->__subcategory_count > 0)
+                                                    <ul class="submenu">
+                                                        @foreach(get_categories($c2->id, 'navigator') as $c3)
+                                                            <li class="">
+                                                                <a href="{{ $c3->url }}">{{ $c3->title }}</a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                @endif
+                                            </li>
+                                        @endforeach
                                     </ul>
-                                </li>
-                                <li><a href="khoahoc.html">Tiếng Nhật</a></li>
-                                <li><a href="khoahoc.html">Tiếng Hàn</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="sach.html">Sách</a></li>
-                        <li><a href="tintuc.html">Tin tức</a></li>
-                        <li><a href="top-diemcao.html">Thi thử</a></li>
+                                @endif
+                            </li>
+                        @endforeach
                         <li><a href="lienhe.html">Liên hệ</a></li>
                     </ul>
                 </nav>

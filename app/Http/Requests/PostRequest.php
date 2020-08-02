@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\ObjectType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -39,7 +40,7 @@ class PostRequest extends FormRequest
             'og_image' => 'nullable|url',
             '__template_position' => 'nullable|array',
             '__template_position.*' => [
-                Rule::in(collect(get_template_position('post'))->pluck('code'))
+                Rule::in(collect(get_template_position(ObjectType::POST))->pluck('code'))
             ]
         ];
     }

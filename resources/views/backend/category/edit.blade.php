@@ -1,18 +1,18 @@
 @extends('backend.master')
 
 @section('title')
-    @if (request()->routeIs('admin.category.add'))
-        Thêm danh mục mới
-    @else
-        Sửa danh mục
-    @endif
+@if(request()->routeIs('admin.category.add'))
+    Thêm danh mục mới
+@else
+    Sửa danh mục
+@endif
 @endsection
 
 @section('content-header')
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if (request()->routeIs('admin.category.add'))
+            @if(request()->routeIs('admin.category.add'))
                 Thêm danh mục mới
             @else
                 Sửa danh mục
@@ -28,21 +28,21 @@
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -60,7 +60,7 @@
                 <label>Danh mục cha</label>
                 <select name="parent_id" class="form-control">
                     <option value="">Danh mục gốc</option>
-                    @foreach ($categories as $category)
+                    @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ ($data->parent_id ?? old('parent_id') ?? request()->input('parent_id')) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
                     @endforeach
                 </select>
@@ -73,11 +73,11 @@
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Loại của danh mục con sẽ tự động theo loại của danh mục cha."></i></small>
                 <div>
                     <div class="form-check-inline">
-                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-1" name="type" value="{{ \App\Category::TYPE_COURSE }}" {{ ($data->type ?? old('type')) == \App\Category::TYPE_COURSE ? 'checked' : '' }}>
+                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-1" name="type" value="{{ \App\Constants\ObjectType::COURSE }}" {{ ($data->type ?? old('type')) == \App\Constants\ObjectType::COURSE ? 'checked' : '' }}>
                         <label class="form-check-label" for="cr-type-1">Khóa học</label>
                     </div>
                     <div class="form-check-inline">
-                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-2" name="type" value="{{ \App\Category::TYPE_POST }}" {{ ($data->type ?? old('type')) == \App\Category::TYPE_POST ? 'checked' : '' }}>
+                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-2" name="type" value="{{ \App\Constants\ObjectType::POST }}" {{ ($data->type ?? old('type')) == \App\Constants\ObjectType::POST ? 'checked' : '' }}>
                         <label class="form-check-label" for="cr-type-2">Bài viết</label>
                     </div>
                 </div>
@@ -100,8 +100,16 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
+            <div class="form-group">
+                <label>Liên kết tùy chỉnh</label>
+                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Liên kết tùy chỉnh<br>- Bỏ trống nếu không dùng"></i></small>
+                <input type="text" name="url" placeholder="Liên kết tùy chỉnh" value="{{ $data->url ?? old('url') }}" class="form-control @error('url') is-invalid @enderror">
+                @error('url')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
             <div class="row">
-            <div class="col-sm-6">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label>Icon</label>
                         <div class="input-group">
@@ -136,6 +144,37 @@
                 <label>Mô tả nội dung</label>
                 <textarea name="description" rows="3" placeholder="Mô tả nội dung" class="form-control @error('description') is-invalid @enderror">{{ $data->description ?? old('description') }}</textarea>
                 @error('description')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Hiển thị danh mục</label>
+                <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
+                <div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input @error('enabled') is-invalid @enderror" type="radio" id="cr-enabled-1" name="enabled" value="1" {{ $enabled == true ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-enabled-1">Hiển thị</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input @error('enabled') is-invalid @enderror" type="radio" id="cr-enabled-0" name="enabled" value="0" {{ $enabled == false ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-enabled-0">Ẩn</label>
+                    </div>
+                </div>
+                @error('enabled')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Vị trí hiển thị</label>
+                <div>
+                    @foreach (get_template_position(\App\Constants\ObjectType::CATEGORY) as $item)
+                        <div class="form-check">
+                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template_position-1" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cr-template_position-1">{{ $item['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
+                @error('__template_position')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
@@ -196,27 +235,4 @@
         </div>
     </form>
 </div>
-@endsection
-
-@section('style')
-<style>
-    .custom-icon-preview {
-        font-size: 2.5rem;
-    }
-</style>
-@endsection
-
-@section('script')
-<script>
-    var updateIconPreview = function() {
-        var id = $(this).attr('id');
-        var preview = $(this).parent().find('.custom-icon-preview i');
-
-        $(preview).attr('class', $(this).val());
-    }
-
-    $('.custom-icon-input').on('keyup change', updateIconPreview);
-
-    $('.custom-icon-input').each(updateIconPreview);
-</script>
 @endsection

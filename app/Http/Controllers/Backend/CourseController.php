@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Category;
+use App\Constants\ObjectType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Course;
@@ -12,7 +13,7 @@ class CourseController extends Controller
 {
     public function list(Request $request)
     {
-        $categories = Category::where('type', Category::TYPE_COURSE)
+        $categories = Category::where('type', ObjectType::COURSE)
             ->get()
             ->toTree();
 
@@ -115,7 +116,7 @@ class CourseController extends Controller
     public function getCategoriesTraverse()
     {
         return categories_traverse(
-            Category::where('type', Category::TYPE_COURSE)
+            Category::where('type', ObjectType::COURSE)
                 ->orderBy('title', 'ASC')
                 ->get()
                 ->toTree()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Category;
+use App\Constants\ObjectType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Post;
@@ -27,7 +28,7 @@ class PostController extends Controller
     {
         $list = $this->postRepo->getByFilterQuery($request->input('filter'))->paginate();
 
-        $categories = Category::where('type', Category::TYPE_POST)
+        $categories = Category::where('type', ObjectType::POST)
             ->get()
             ->toTree();
 
@@ -115,10 +116,10 @@ class PostController extends Controller
         PostPosition::where('post_id', $post->id)->delete();
         $templatePositionCodeArray = $request->input('__template_position', []);
         foreach ($templatePositionCodeArray as $code) {
-            $postPosition = new PostPosition();
-            $postPosition->code = $code;
-            $postPosition->post_id = $post->id;
-            $postPosition->save();
+            $position = new PostPosition();
+            $position->code = $code;
+            $position->post_id = $post->id;
+            $position->save();
         }
     }
 
@@ -158,7 +159,7 @@ class PostController extends Controller
     public function getCategoriesTraverse()
     {
         return categories_traverse(
-            Category::where('type', Category::TYPE_POST)
+            Category::where('type', ObjectType::POST)
                 ->orderBy('title', 'ASC')
                 ->get()
                 ->toTree()
