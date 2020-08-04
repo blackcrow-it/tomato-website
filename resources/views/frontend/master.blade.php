@@ -50,7 +50,7 @@
                 <div class="header__content">
                     <div class="header__logo">
                         <a href="{{ route('home') }}">
-                            <img src="assets/img/logo.png">
+                            <img src="{{ asset('tomato/assets/img/logo.png') }}">
                         </a>
                     </div>
 

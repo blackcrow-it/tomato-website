@@ -15,34 +15,51 @@ Khóa học
         </div>
     </div><!-- /.col -->
 </div>
-<div class="row mb-2">
-    <div class="col-sm-4">
-        <select class="form-control" id="filter-post-in-category-id">
-            <option value="">Danh mục gốc</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}" {{ request()->input('category_id') == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
-            @endforeach
-        </select>
+<form action="" method="GET">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <select class="form-control" name="filter[category_id]">
+                    <option value="">--- Danh mục gốc ---</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request()->input('filter.category_id') == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <select class="form-control" name="filter[position]">
+                    <option value="">--- Vị trí hiển thị ---</option>
+                    @foreach(get_template_position(\App\Constants\ObjectType::COURSE) as $item)
+                        <option value="{{ $item['code'] }}" {{ request()->input('filter.position') == $item['code'] ? 'selected' : '' }}>{{ $item['name'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
     </div>
-</div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+    </div>
+</form>
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -61,14 +78,16 @@ Khóa học
                 <th>Tiêu đề</th>
                 <th>Giá tiền</th>
                 <th>Hiển thị</th>
-                @if (request()->input('category_id'))
+                @if(request()->input('filter.position'))
+                    <th data-toggle="tooltip" title="Thứ tự hiển thị">Thứ tự</th>
+                @elseif(request()->input('filter.category_id'))
                     <th data-toggle="tooltip" title="Thứ tự trong danh mục">Thứ tự</th>
                 @endif
                 <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($list as $item)
+            @foreach($list as $item)
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>
@@ -91,16 +110,25 @@ Khóa học
                             <i class="fas fa-calendar-alt" data-toggle="tooltip" title="Thời gian sửa"></i> {{ $item->updated_at }}
                         </small>
                     </td>
-                    <td>{{ currency($item->price) }}</td>
+                    <td>
+                        {{ currency($item->price) }}<br>
+                        @if($item->original_price)
+                            <del>{{ currency($item->original_price) }}</del>
+                        @endif
+                    </td>
                     <td>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-id="{{ $item->id }}">
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
-                    @if (request()->input('category_id'))
+                    @if(request()->input('filter.position'))
                         <td>
-                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order">
+                            <input type="text" value="{{ $item->__order_in_position }}" data-id="{{ $item->id }}" class="custom-order js-order-in-position">
+                        </td>
+                    @elseif(request()->input('filter.category_id'))
+                        <td>
+                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order js-order-in-category">
                         </td>
                     @endif
                     <td class="text-nowrap">
@@ -121,43 +149,48 @@ Khóa học
 
 @section('script')
 <script>
-    $('.js-switch-enabled').change(function() {
+    $('.js-switch-enabled').change(function () {
         var that = this;
         $(that).prop('disabled', true);
 
         $.post('{{ route("admin.course.enabled") }}', {
             id: $(that).data('id'),
             enabled: $(that).prop('checked')
-        }).fail(function() {
+        }).fail(function () {
             alert('Không thể đổi trạng thái kích hoạt. Vui lòng thử lại.')
-        }).always(function() {
+        }).always(function () {
             $(that).prop('disabled', false);
         });
     });
 
-    $('#filter-post-in-category-id').change(function() {
-        var category_id = $(this).val();
-        var url = new URL(location.href);
-        url.searchParams.set('category_id', category_id);
-        location.href = url.toString();
-    });
-</script>
+    $('.js-order-in-category').change(function () {
+        var that = this;
+        $(that).prop('disabled', true);
 
-@if (request()->input('category_id'))
-    <script>
-        $('.custom-order').change(function() {
-            var that = this;
-            $(that).prop('disabled', true);
-
-            $.post('{{ route("admin.course.order_in_category") }}', {
-                id: $(that).data('id'),
-                order_in_category: $(that).val()
-            }).fail(function() {
-                alert('Có lỗi xảy ra, vui lòng thử lại.');
-            }).always(function() {
-                $(that).prop('disabled', false);
-            });
+        $.post('{{ route("admin.course.order_in_category") }}', {
+            id: $(that).data('id'),
+            order_in_category: $(that).val()
+        }).fail(function () {
+            alert('Có lỗi xảy ra, vui lòng thử lại.');
+        }).always(function () {
+            $(that).prop('disabled', false);
         });
-    </script>
-@endif
+    });
+
+    $('.js-order-in-position').change(function () {
+        var that = this;
+        $(that).prop('disabled', true);
+
+        $.post('{{ route("admin.course.order_in_position") }}', {
+            id: $(that).data('id'),
+            code: '{{ request()->input("filter.position") }}',
+            order_in_position: $(that).val()
+        }).fail(function () {
+            alert('Có lỗi xảy ra, vui lòng thử lại.');
+        }).always(function () {
+            $(that).prop('disabled', false);
+        });
+    });
+
+</script>
 @endsection

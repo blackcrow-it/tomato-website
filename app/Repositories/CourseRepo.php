@@ -5,15 +5,15 @@ namespace App\Repositories;
 use App\Category;
 use DB;
 
-class PostRepo
+class CourseRepo
 {
     public function getByFilterQuery($filter)
     {
-        $query = DB::table('posts')
-            ->leftJoin('users as author', 'posts.created_by', '=', 'author.id')
-            ->leftJoin('users as editor', 'posts.updated_by', '=', 'editor.id')
+        $query = DB::table('courses')
+            ->leftJoin('users as author', 'courses.created_by', '=', 'author.id')
+            ->leftJoin('users as editor', 'courses.updated_by', '=', 'editor.id')
             ->select([
-                'posts.*',
+                'courses.*',
                 'author.username as __created_by',
                 'editor.username as __updated_by'
             ]);
@@ -21,9 +21,9 @@ class PostRepo
         if (!empty($filter)) {
             if ($filter['position'] ?? false) {
                 $query
-                    ->join('post_position', 'post_position.post_id', '=', 'posts.id')
-                    ->addSelect('post_position.order_in_position as __order_in_position')
-                    ->orderByRaw('CASE WHEN post_position.order_in_position > 0 THEN 0 ELSE 1 END, post_position.order_in_position ASC');
+                    ->join('course_position', 'course_position.course_id', '=', 'courses.id')
+                    ->addSelect('course_position.order_in_position as __order_in_position')
+                    ->orderByRaw('CASE WHEN course_position.order_in_position > 0 THEN 0 ELSE 1 END, course_position.order_in_position ASC');
             }
 
             if ($filter['category_id'] ?? false) {

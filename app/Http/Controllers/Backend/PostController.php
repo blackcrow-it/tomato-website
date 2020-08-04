@@ -28,13 +28,9 @@ class PostController extends Controller
     {
         $list = $this->postRepo->getByFilterQuery($request->input('filter'))->paginate();
 
-        $categories = Category::where('type', ObjectType::POST)
-            ->get()
-            ->toTree();
-
         return view('backend.post.list', [
             'list' => $list,
-            'categories' => categories_traverse($categories)
+            'categories' => $this->getCategoriesTraverse()
         ]);
     }
 

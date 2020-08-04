@@ -7,7 +7,7 @@
 @section('body')
 <section class="section sec-hero">
     <div class="sec-hero__slide owl-carousel wow fadeInRight" data-slide-one-item>
-        @foreach (get_posts(null, 'slider') as $item)
+        @foreach(get_posts(null, 'slider') as $item)
             <div class="item">
                 <a href="{{ $item->url }}">
                     <img src="{{ $item->cover }}" alt="{{ $item->title }}">
@@ -59,293 +59,52 @@
         </div>
 
         <div class="lessonbox-wrap">
-            <div class="lessonbox-wrap__item wow fadeInUp" data-wow-delay=".2s">
-                <div class="lessonbox-wrap__header">
-                    <h3 class="lessonbox-wrap__title"><a href="khoahoc.html">Tiếng Trung</a></h3>
-                    <a href="khoahoc.html" class="btn-link">Xem tất cả <i class="fa fa-angle-right"></i></a>
-                </div>
-
-                <div class="lessonbox-wrap__slide owl-carousel fixheight" data-slide-three-item>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-1.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Trung</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung
-                                        Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 15 bài</li>
-                                    <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                    <li>Trình độ: Mới bắt đầu</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
+            @foreach(get_categories(null, 'home-courses') as $category)
+                <div class="lessonbox-wrap__item wow fadeInUp" data-wow-delay=".2s">
+                    <div class="lessonbox-wrap__header">
+                        <h3 class="lessonbox-wrap__title"><a href="{{ $category->url }}">{{ $category->title }}</a></h3>
+                        <a href="{{ $category->url }}" class="btn-link">Xem tất cả <i class="fa fa-angle-right"></i></a>
                     </div>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-1.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Trung</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung
-                                        Giáo Trình Hán Ngữ Tập 1 - Quyển 2</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 15 bài</li>
-                                    <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                    <li>Trình độ: Cấp 2</li>
-                                </ul>
 
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-1.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Trung</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung
-                                        Giáo Trình Hán Ngữ Tập 1 - Quyển 3</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 15 bài</li>
-                                    <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                    <li>Trình độ: Cấp 3</li>
-                                </ul>
+                    <div class="lessonbox-wrap__slide owl-carousel fixheight" data-slide-three-item>
+                        @foreach(get_courses($category->id) as $course)
+                            <div class="lessonbox">
+                                <div class="lessonbox__inner">
+                                    <a href="{{ $course->url }}" class="lessonbox__img">
+                                        <img src="{{ $course->thumbnail }}">
+                                        @if($course->original_price)
+                                            <span class="sale">-{{ ceil(100 - $course->price / $course->original_price * 100) }}%</span>
+                                        @endif
+                                    </a>
+                                    <div class="lessonbox__body">
+                                        <div class="lessonbox__cat">
+                                            <a href="{{ $category->url }}">{{ $category->title }}</a>
+                                        </div>
+                                        <h3 class="lessonbox__title">
+                                            <a href="{{ $course->url }}">{{ $course->title }}</a>
+                                        </h3>
+                                        <ul class="lessonbox__info">
+                                            <li>Bài học: 15 bài</li>
+                                            <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
+                                            <li>Trình độ: Mới bắt đầu</li>
+                                        </ul>
 
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
+                                        <div class="lessonbox__footer">
+                                            <div class="lessonbox__price">
+                                                <ins>{{ currency($course->price) }}</ins>
+                                                @if($course->original_price)
+                                                    <del>{{ currency($course->original_price) }}</del>
+                                                @endif
+                                            </div>
+                                            <a href="{{ $course->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
+                                        </div>
                                     </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-1.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Trung</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung
-                                        Giáo Trình Hán Ngữ Tập 1 - Quyển 4</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 15 bài</li>
-                                    <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                    <li>Trình độ: Cấp 4</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-            </div>
-            <div class="lessonbox-wrap__item wow fadeInUp" data-wow-delay=".2s">
-                <div class="lessonbox-wrap__header">
-                    <h3 class="lessonbox-wrap__title"><a href="khoahoc.html">Tiếng Hàn</a></h3>
-                    <a href="khoahoc.html" class="btn-link">Xem tất cả <i class="fa fa-angle-right"></i></a>
-                </div>
-
-                <div class="lessonbox-wrap__slide owl-carousel fixheight" data-slide-three-item>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-2.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Hàn</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học tiếng Hàn
-                                        Giáo Trình Tiếng Hàn Tổng Hợp Sơ Cấp 1 ( Bài 1 - 10 Free)</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 1 bài</li>
-                                    <li>Giảng viên: <a href="#">Nguyễn Yến Vân</a></li>
-                                    <li>Trình độ: Mới bắt đầu</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>Miễn Phí</ins>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-2.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Hàn</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học tiếng Hàn
-                                        Giáo Trình Tiếng Hàn Tổng Hợp Sơ Cấp 1 ( Bài 1 - 10 Free)</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 1 bài</li>
-                                    <li>Giảng viên: <a href="#">Nguyễn Yến Vân</a></li>
-                                    <li>Trình độ: Mới bắt đầu</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-2.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Hàn</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học tiếng Hàn
-                                        Giáo Trình Tiếng Hàn Tổng Hợp Sơ Cấp 1 ( Bài 1 - 10 Free)</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 1 bài</li>
-                                    <li>Giảng viên: <a href="#">Nguyễn Yến Vân</a></li>
-                                    <li>Trình độ: Mới bắt đầu</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-2.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Hàn</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học tiếng Hàn
-                                        Giáo Trình Tiếng Hàn Tổng Hợp Sơ Cấp 1 ( Bài 1 - 10 Free)</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 1 bài</li>
-                                    <li>Giảng viên: <a href="#">Nguyễn Yến Vân</a></li>
-                                    <li>Trình độ: Mới bắt đầu</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="lessonbox-wrap__item wow fadeInUp" data-wow-delay=".2s">
-                <div class="lessonbox-wrap__header">
-                    <h3 class="lessonbox-wrap__title"><a href="khoahoc.html">Tiếng Nhật</a></h3>
-                    <a href="khoahoc.html" class="btn-link">Xem tất cả <i class="fa fa-angle-right"></i></a>
-                </div>
-
-                <div class="lessonbox-wrap__slide owl-carousel fixheight" data-slide-three-item>
-                    <div class="lessonbox">
-                        <div class="lessonbox__inner">
-                            <div class="lessonbox__img">
-                                <img src="assets/img/image/lessonbox-3.jpg">
-                                <span class="sale">-50%</span>
-                            </div>
-                            <div class="lessonbox__body">
-                                <div class="lessonbox__cat">
-                                    <a href="khoahoc.html">Tiếng Nhật</a>
-                                </div>
-                                <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Nhật
-                                        Giáo Trình Minnano Nihongo 1</a></h3>
-                                <ul class="lessonbox__info">
-                                    <li>Bài học: 1 bài</li>
-                                    <li>Giảng viên: <a href="#">Trần Thị Mai Hiên</a></li>
-                                    <li>Trình độ: Mới bắt đầu</li>
-                                </ul>
-
-                                <div class="lessonbox__footer">
-                                    <div class="lessonbox__price">
-                                        <ins>499.000đ</ins>
-                                        <del>1.000.000đ</del>
-                                    </div>
-                                    <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi
-                                        tiết</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <div class="text-center pt-40">

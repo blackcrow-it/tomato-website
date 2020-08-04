@@ -16,7 +16,7 @@ class Course extends Model
         'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'view', 'enabled',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
         'category_id', 'order_in_category',
-        'price'
+        'price', 'original_price'
     ];
 
     public function author()
@@ -50,5 +50,10 @@ class Course extends Model
 
     public function videos() {
         return $this->hasMany('App\CourseVideo', 'course_id', 'id');
+    }
+
+    public function position()
+    {
+        return $this->hasMany('App\CoursePosition', 'course_id', 'id');
     }
 }

@@ -127,6 +127,20 @@
                 <textarea name="content" class="editor">{!! $data->content ?? old('content') !!}</textarea>
             </div>
             <div class="form-group">
+                <label>Giá tiền</label>
+                <input type="text" name="price" placeholder="Giá tiền" value="{{ $data->price ?? old('price') }}" class="form-control currency @error('price') is-invalid @enderror">
+                @error('price')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Giá gốc</label>
+                <input type="text" name="original_price" placeholder="Giá gốc" value="{{ $data->original_price ?? old('original_price') }}" class="form-control currency @error('original_price') is-invalid @enderror">
+                @error('original_price')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Hiển thị khóa học</label>
                 <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
                 <div>
@@ -144,9 +158,16 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Giá tiền</label>
-                <input type="text" name="price" placeholder="Giá tiền" value="{{ $data->price ?? old('price') }}" class="form-control currency @error('price') is-invalid @enderror">
-                @error('price')
+                <label>Vị trí hiển thị</label>
+                <div>
+                    @foreach (get_template_position(\App\Constants\ObjectType::COURSE) as $item)
+                        <div class="form-check">
+                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template-position-{{ $loop->index }}" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cr-template-position-{{ $loop->index }}">{{ $item['name'] }}</label>
+                        </div>
+                    @endforeach
+                </div>
+                @error('__template_position')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>

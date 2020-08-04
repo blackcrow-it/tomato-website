@@ -79,8 +79,7 @@ Bài viết
                 <th>Hiển thị</th>
                 @if(request()->input('filter.category_id'))
                     <th data-toggle="tooltip" title="Thứ tự trong danh mục">Thứ tự</th>
-                @endif
-                @if(request()->input('filter.position'))
+                @elseif(request()->input('filter.position'))
                     <th data-toggle="tooltip" title="Thứ tự hiển thị">Thứ tự</th>
                 @endif
                 <th>Hành động</th>
@@ -116,14 +115,13 @@ Bài viết
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
-                    @if(request()->input('filter.category_id'))
-                        <td>
-                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order js-order-in-category">
-                        </td>
-                    @endif
                     @if(request()->input('filter.position'))
                         <td>
                             <input type="text" value="{{ $item->__order_in_position }}" data-id="{{ $item->id }}" class="custom-order js-order-in-position">
+                        </td>
+                    @elseif(request()->input('filter.category_id'))
+                        <td>
+                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order js-order-in-category">
                         </td>
                     @endif
                     <td class="text-nowrap">

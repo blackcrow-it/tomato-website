@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPriceFieldToCoursesTable extends Migration
+class AddOriginalPriceToCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddPriceFieldToCoursesTable extends Migration
     public function up()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->unsignedBigInteger('price')->nullable()->default(0);
+            $table->unsignedBigInteger('original_price')->nullable()->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddPriceFieldToCoursesTable extends Migration
     public function down()
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn('price');
+            //
         });
     }
 }

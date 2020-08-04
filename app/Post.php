@@ -51,9 +51,4 @@ class Post extends Model
     {
         return $this->hasMany('App\PostPosition', 'post_id', 'id');
     }
-
-    public function getPositionOrderByCode($code)
-    {
-        return $this->position->where('code', $code)->first()->order_in_position ?? 0;
-    }
 }

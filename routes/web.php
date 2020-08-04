@@ -81,6 +81,7 @@ Route::prefix('admin')
             Route::post('course/enabled', 'CourseController@submitEnabled')->name('course.enabled');
             Route::post('course/delete/{id}', 'CourseController@submitDelete')->name('course.delete');
             Route::post('course/order-in-category', 'CourseController@submitOrderInCategory')->name('course.order_in_category');
+            Route::post('course/order-in-position', 'CourseController@submitOrderInPosition')->name('course.order_in_position');
 
             Route::get('course-video', 'CourseVideoController@list')->name('course_video.list');
             Route::get('course-video/add', 'CourseVideoController@add')->name('course_video.add');

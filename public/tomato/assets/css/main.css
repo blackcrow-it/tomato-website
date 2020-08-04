@@ -7863,6 +7863,7 @@ section {
 
 .lessonbox__img {
   position: relative;
+  display: block;
 }
 
 .lessonbox__img img {

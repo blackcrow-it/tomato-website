@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\ObjectType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -38,6 +39,11 @@ class CourseRequest extends FormRequest
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|url',
             'price' => 'nullable|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
+            '__template_position' => 'nullable|array',
+            '__template_position.*' => [
+                Rule::in(collect(get_template_position(ObjectType::COURSE))->pluck('code'))
+            ]
         ];
     }
 }

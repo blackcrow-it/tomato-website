@@ -21,6 +21,7 @@
 
 .lessonbox__img {
 	position: relative;
+	display: block;
 
 	img {
 		width: 100%;
@@ -52,7 +53,7 @@
 .lessonbox__cat {
 	margin-bottom: 8px;
 	line-height: 1;
-	
+
 	a {
 		display: inline-block;
 		font-size: 10px;
@@ -273,7 +274,7 @@
 	.spacing-custom {
 		margin-left: -10px;
 		margin-right: -10px;
-		
+
 		[class*='col-'] {
 			padding-left: 10px;
 			padding-right: 10px;
@@ -329,9 +330,9 @@
 .lessonbox-wrap-min {
 	@include media-breakpoint-up(md) {
 		.lessonbox {
-		
+
 		}
-		
+
 		.lessonbox__body {
 			padding: 15px;
 			padding-bottom: 70px;

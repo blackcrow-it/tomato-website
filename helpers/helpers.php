@@ -1,6 +1,7 @@
 <?php
 
 use App\Repositories\CategoryRepo;
+use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
 
 if (!function_exists('categories_traverse')) {
@@ -32,7 +33,7 @@ if (!function_exists('currency')) {
 
         if ($money == 0) return $default;
 
-        return number_format($money, 0, '.', ' ');
+        return number_format($money, 0, '.', ' ') . 'đ';
     }
 }
 
@@ -61,6 +62,23 @@ if (!function_exists('get_posts')) {
             ->get()
             ->map(function ($item) {
                 $item->url = route('post', ['slug' => $item->slug]);
+                return $item;
+            });
+    }
+}
+
+if (!function_exists('get_courses')) {
+    function get_courses($category_id = null, $position = null)
+    {
+        return (new CourseRepo())
+            ->getByFilterQuery([
+                'category_id' => $category_id,
+                'position' => $position
+            ])
+            ->where('courses.enabled', true)
+            ->get()
+            ->map(function ($item) {
+                $item->url = route('course', ['slug' => $item->slug]);
                 return $item;
             });
     }

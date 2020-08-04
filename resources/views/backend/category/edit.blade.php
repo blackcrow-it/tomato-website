@@ -169,8 +169,8 @@
                 <div>
                     @foreach (get_template_position(\App\Constants\ObjectType::CATEGORY) as $item)
                         <div class="form-check">
-                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template_position-1" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="cr-template_position-1">{{ $item['name'] }}</label>
+                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template-position-{{ $loop->index }}" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cr-template-position-{{ $loop->index }}">{{ $item['name'] }}</label>
                         </div>
                     @endforeach
                 </div>

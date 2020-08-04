@@ -1,18 +1,18 @@
 @extends('backend.master')
 
 @section('title')
-    @if (request()->routeIs('admin.post.add'))
-        Thêm bài viết mới
-    @else
-        Sửa bài viết
-    @endif
+@if(request()->routeIs('admin.post.add'))
+    Thêm bài viết mới
+@else
+    Sửa bài viết
+@endif
 @endsection
 
 @section('content-header')
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if (request()->routeIs('admin.post.add'))
+            @if(request()->routeIs('admin.post.add'))
                 Thêm bài viết mới
             @else
                 Sửa bài viết
@@ -28,21 +28,21 @@
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -60,7 +60,7 @@
                 <label>Chọn danh mục</label>
                 <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                     <option value="">Không phân loại</option>
-                    @foreach ($categories as $category)
+                    @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ ($data->category_id ?? old('category_id')) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
                     @endforeach
                 </select>
@@ -146,10 +146,10 @@
             <div class="form-group">
                 <label>Vị trí hiển thị</label>
                 <div>
-                    @foreach (get_template_position(\App\Constants\ObjectType::POST) as $item)
+                    @foreach(get_template_position(\App\Constants\ObjectType::POST) as $item)
                         <div class="form-check">
-                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template_position-1" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="cr-template_position-1">{{ $item['name'] }}</label>
+                            <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template-position-{{ $loop->index }}" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cr-template-position-{{ $loop->index }}">{{ $item['name'] }}</label>
                         </div>
                     @endforeach
                 </div>
