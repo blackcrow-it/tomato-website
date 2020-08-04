@@ -22,6 +22,7 @@ class PostRepo
             if ($filter['position'] ?? false) {
                 $query
                     ->join('post_position', 'post_position.post_id', '=', 'posts.id')
+                    ->where('post_position.code', $filter['position'])
                     ->addSelect('post_position.order_in_position as __order_in_position')
                     ->orderByRaw('CASE WHEN post_position.order_in_position > 0 THEN 0 ELSE 1 END, post_position.order_in_position ASC');
             }

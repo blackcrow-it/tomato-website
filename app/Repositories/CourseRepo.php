@@ -22,6 +22,7 @@ class CourseRepo
             if ($filter['position'] ?? false) {
                 $query
                     ->join('course_position', 'course_position.course_id', '=', 'courses.id')
+                    ->where('course_position.code', $filter['position'])
                     ->addSelect('course_position.order_in_position as __order_in_position')
                     ->orderByRaw('CASE WHEN course_position.order_in_position > 0 THEN 0 ELSE 1 END, course_position.order_in_position ASC');
             }

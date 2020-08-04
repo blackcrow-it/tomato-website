@@ -38,7 +38,8 @@ class CategoryRepo
 
             if ($filter['position'] ?? false) {
                 $query
-                    ->leftJoin('category_position', 'category_position.category_id', '=', 'categories.id')
+                    ->join('category_position', 'category_position.category_id', '=', 'categories.id')
+                    ->where('category_position.code', $filter['position'])
                     ->addSelect('category_position.order_in_position as __order_in_position')
                     ->orderByRaw('CASE WHEN category_position.order_in_position > 0 THEN 0 ELSE 1 END, category_position.order_in_position ASC')
                     ->groupBy('category_position.order_in_position');

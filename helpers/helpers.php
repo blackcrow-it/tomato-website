@@ -89,10 +89,6 @@ if (!function_exists('get_categories')) {
     {
         $cacheKey = 'get_categories_' . $parent_id . '_' . $position;
 
-        if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
-        }
-
         $data = (new CategoryRepo())
             ->getByFilterQuery([
                 'parent_id' => $parent_id,
@@ -104,8 +100,6 @@ if (!function_exists('get_categories')) {
                 $item->url = $item->url ?? route('category', ['slug' => $item->slug]);
                 return $item;
             });
-
-        Cache::set($cacheKey, $data, now()->addMinutes(10));
 
         return $data;
     }
