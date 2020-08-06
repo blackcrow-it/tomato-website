@@ -31,9 +31,13 @@ namespace App{
  * @property int $_rgt
  * @property int|null $parent_id
  * @property string $type
+ * @property string|null $url
+ * @property bool $enabled
  * @property-read \Kalnoy\Nestedset\Collection|\App\Category[] $children
  * @property-read int|null $children_count
  * @property-read \App\Category|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\CategoryPosition[] $position
+ * @property-read int|null $position_count
  * @method static \Kalnoy\Nestedset\Collection|static[] all($columns = ['*'])
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category d()
  * @method static \Kalnoy\Nestedset\Collection|static[] get($columns = ['*'])
@@ -43,6 +47,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereCover($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereLft($value)
@@ -57,8 +62,32 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Category whereUrl($value)
  */
 	class Category extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\CategoryPosition
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $code
+ * @property int $category_id
+ * @property int $order_in_position
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition whereOrderInPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CategoryPosition whereUpdatedAt($value)
+ */
+	class CategoryPosition extends \Eloquent {}
 }
 
 namespace App{
@@ -85,9 +114,12 @@ namespace App{
  * @property int|null $updated_by
  * @property int|null $category_id
  * @property int $order_in_category
- * @property int $price
- * @property-read \App\User|null $last_editor
- * @property-read \App\User|null $owner
+ * @property int|null $price
+ * @property int|null $original_price
+ * @property-read \App\User|null $author
+ * @property-read \App\User|null $editor
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\CoursePosition[] $position
+ * @property-read int|null $position_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\CourseVideo[] $videos
  * @property-read int|null $videos_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course newModelQuery()
@@ -107,6 +139,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOgTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOrderInCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereOriginalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Course whereThumbnail($value)
@@ -120,18 +153,43 @@ namespace App{
 
 namespace App{
 /**
+ * App\CoursePosition
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $code
+ * @property int $course_id
+ * @property int $order_in_position
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition whereCourseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition whereOrderInPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CoursePosition whereUpdatedAt($value)
+ */
+	class CoursePosition extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\CourseVideo
  *
  * @property int $id
- * @property int $course_id
- * @property string $title
- * @property string|null $original_path
- * @property string|null $m3u8_path
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $key_path
- * @property int $job_progress
+ * @property int $course_id
+ * @property string $title
+ * @property string|null $thumbnail
  * @property int $order_in_course
+ * @property string|null $stream_url
+ * @property string|null $key_path
+ * @property int $percent
+ * @property string $status
+ * @property string|null $message
  * @property bool $enabled
  * @property-read \App\Course $course
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo newModelQuery()
@@ -141,11 +199,13 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereJobProgress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereKeyPath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereM3u8Path($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereOrderInCourse($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereOriginalPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo wherePercent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereStreamUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereThumbnail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\CourseVideo whereUpdatedAt($value)
  */
@@ -176,8 +236,10 @@ namespace App{
  * @property int|null $updated_by
  * @property int|null $category_id
  * @property int $order_in_category
- * @property-read \App\User|null $last_editor
- * @property-read \App\User|null $owner
+ * @property-read \App\User|null $author
+ * @property-read \App\User|null $editor
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\PostPosition[] $position
+ * @property-read int|null $position_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post query()
@@ -203,6 +265,29 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Post whereView($value)
  */
 	class Post extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\PostPosition
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $code
+ * @property int $post_id
+ * @property int $order_in_position
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition whereOrderInPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PostPosition whereUpdatedAt($value)
+ */
+	class PostPosition extends \Eloquent {}
 }
 
 namespace App{

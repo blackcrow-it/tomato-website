@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 7.17.2 on 2020-07-21 12:04:58.
+ * Generated for Laravel 7.17.2 on 2020-08-06 11:29:14.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -3093,8 +3093,6 @@ namespace Illuminate\Support\Facades {
     /**
      * 
      *
-     * @method static \Illuminate\Contracts\Cache\Lock lock(string $name, int $seconds = 0, mixed $owner = null)
-     * @method static \Illuminate\Contracts\Cache\Lock restoreLock(string $name, string $owner)
      * @see \Illuminate\Cache\CacheManager
      * @see \Illuminate\Cache\Repository
      */ 
@@ -3696,6 +3694,35 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Get a lock instance.
+         *
+         * @param string $name
+         * @param int $seconds
+         * @param string|null $owner
+         * @return \Illuminate\Contracts\Cache\Lock 
+         * @static 
+         */ 
+        public static function lock($name, $seconds = 0, $owner = null)
+        {
+                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        return $instance->lock($name, $seconds, $owner);
+        }
+        
+        /**
+         * Restore a lock instance using the owner identifier.
+         *
+         * @param string $name
+         * @param string $owner
+         * @return \Illuminate\Contracts\Cache\Lock 
+         * @static 
+         */ 
+        public static function restoreLock($name, $owner)
+        {
+                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        return $instance->restoreLock($name, $owner);
+        }
+        
+        /**
          * Remove all items from the cache.
          *
          * @return bool 
@@ -3703,32 +3730,20 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function flush()
         {
-                        /** @var \Illuminate\Cache\FileStore $instance */
+                        /** @var \Illuminate\Cache\DatabaseStore $instance */
                         return $instance->flush();
         }
         
         /**
-         * Get the Filesystem instance.
+         * Get the underlying database connection.
          *
-         * @return \Illuminate\Filesystem\Filesystem 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
-        public static function getFilesystem()
+        public static function getConnection()
         {
-                        /** @var \Illuminate\Cache\FileStore $instance */
-                        return $instance->getFilesystem();
-        }
-        
-        /**
-         * Get the working directory of the cache.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getDirectory()
-        {
-                        /** @var \Illuminate\Cache\FileStore $instance */
-                        return $instance->getDirectory();
+                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        return $instance->getConnection();
         }
         
         /**
@@ -3739,7 +3754,7 @@ namespace Illuminate\Support\Facades {
          */ 
         public static function getPrefix()
         {
-                        /** @var \Illuminate\Cache\FileStore $instance */
+                        /** @var \Illuminate\Cache\DatabaseStore $instance */
                         return $instance->getPrefix();
         }
          
@@ -15974,157 +15989,6 @@ namespace Barryvdh\Debugbar {
  
 }
 
-namespace GrahamCampbell\GitHub\Facades { 
-
-    /**
-     * This is the github facade class.
-     *
-     * @author Graham Campbell <graham@alt-three.com>
-     */ 
-    class GitHub {
-        
-        /**
-         * Get the configuration for a connection.
-         *
-         * @param string|null $name
-         * @throws \InvalidArgumentException
-         * @return array 
-         * @static 
-         */ 
-        public static function getConnectionConfig($name = null)
-        {
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->getConnectionConfig($name);
-        }
-        
-        /**
-         * Get the factory instance.
-         *
-         * @return \GrahamCampbell\GitHub\GitHubFactory 
-         * @static 
-         */ 
-        public static function getFactory()
-        {
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->getFactory();
-        }
-        
-        /**
-         * Get a connection instance.
-         *
-         * @param string|null $name
-         * @throws \InvalidArgumentException
-         * @return object 
-         * @static 
-         */ 
-        public static function connection($name = null)
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->connection($name);
-        }
-        
-        /**
-         * Reconnect to the given connection.
-         *
-         * @param string|null $name
-         * @throws \InvalidArgumentException
-         * @return object 
-         * @static 
-         */ 
-        public static function reconnect($name = null)
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->reconnect($name);
-        }
-        
-        /**
-         * Disconnect from the given connection.
-         *
-         * @param string|null $name
-         * @return void 
-         * @static 
-         */ 
-        public static function disconnect($name = null)
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        $instance->disconnect($name);
-        }
-        
-        /**
-         * Get the default connection name.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getDefaultConnection()
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->getDefaultConnection();
-        }
-        
-        /**
-         * Set the default connection name.
-         *
-         * @param string $name
-         * @return void 
-         * @static 
-         */ 
-        public static function setDefaultConnection($name)
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        $instance->setDefaultConnection($name);
-        }
-        
-        /**
-         * Register an extension connection resolver.
-         *
-         * @param string $name
-         * @param callable $resolver
-         * @return void 
-         * @static 
-         */ 
-        public static function extend($name, $resolver)
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        $instance->extend($name, $resolver);
-        }
-        
-        /**
-         * Return all of the created connections.
-         *
-         * @return \GrahamCampbell\Manager\array<string,object> 
-         * @static 
-         */ 
-        public static function getConnections()
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->getConnections();
-        }
-        
-        /**
-         * Get the config instance.
-         *
-         * @return \Illuminate\Contracts\Config\Repository 
-         * @static 
-         */ 
-        public static function getConfig()
-        {
-            //Method inherited from \GrahamCampbell\Manager\AbstractManager            
-                        /** @var \GrahamCampbell\GitHub\GitHubManager $instance */
-                        return $instance->getConfig();
-        }
-         
-    }
- 
-}
-
 namespace Facade\Ignition\Facades { 
 
     /**
@@ -19449,8 +19313,6 @@ namespace  {
     class View extends \Illuminate\Support\Facades\View {}
 
     class Debugbar extends \Barryvdh\Debugbar\Facade {}
-
-    class GitHub extends \GrahamCampbell\GitHub\Facades\GitHub {}
 
     class Flare extends \Facade\Ignition\Facades\Flare {}
 
