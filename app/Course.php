@@ -56,4 +56,9 @@ class Course extends Model
     {
         return $this->hasMany('App\CoursePosition', 'course_id', 'id');
     }
+
+    public function getUrlAttribute()
+    {
+        return route('course', ['slug' => $this->slug]);
+    }
 }

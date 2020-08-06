@@ -1,8 +1,10 @@
 <?php
 
+use App\Category;
 use App\Repositories\CategoryRepo;
 use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
+use Carbon\Carbon;
 
 if (!function_exists('categories_traverse')) {
     function categories_traverse($nodes, $prefix = '|--- ')
@@ -53,34 +55,50 @@ if (!function_exists('get_template_position')) {
 if (!function_exists('get_posts')) {
     function get_posts($category_id = null, $position = null)
     {
-        return (new PostRepo())
+        $posts = (new PostRepo())
             ->getByFilterQuery([
                 'category_id' => $category_id,
                 'position' => $position
             ])
             ->where('posts.enabled', true)
-            ->get()
-            ->map(function ($item) {
-                $item->url = route('post', ['slug' => $item->slug]);
-                return $item;
-            });
+            ->get();
+
+        $categories = Category::where('enabled', true)
+            ->whereIn('id', $posts->pluck('category_id'))
+            ->get();
+
+        return $posts->map(function ($item) use ($categories) {
+            $item->category = $categories->firstWhere('id', $item->category_id);
+            $item->url = route('post', ['slug' => $item->slug]);
+            $item->created_at = Carbon::parse($item->created_at);
+            $item->updated_at = Carbon::parse($item->created_at);
+            return $item;
+        });
     }
 }
 
 if (!function_exists('get_courses')) {
     function get_courses($category_id = null, $position = null)
     {
-        return (new CourseRepo())
+        $courses = (new CourseRepo())
             ->getByFilterQuery([
                 'category_id' => $category_id,
                 'position' => $position
             ])
             ->where('courses.enabled', true)
-            ->get()
-            ->map(function ($item) {
-                $item->url = route('course', ['slug' => $item->slug]);
-                return $item;
-            });
+            ->get();
+
+        $categories = Category::where('enabled', true)
+            ->whereIn('id', $courses->pluck('category_id'))
+            ->get();
+
+        return $courses->map(function ($item) use ($categories) {
+            $item->category = $categories->firstWhere('id', $item->category_id);
+            $item->url = route('course', ['slug' => $item->slug]);
+            $item->created_at = Carbon::parse($item->created_at);
+            $item->updated_at = Carbon::parse($item->created_at);
+            return $item;
+        });
     }
 }
 

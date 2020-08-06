@@ -124,78 +124,28 @@
         </div>
 
         <div class="post-slide owl-carousel fixheight wow fadeInUp" data-wow-delay=".2s" data-slide-three-item>
-            <div class="post">
-                <div class="post__inner">
-                    <a href="#" class="post__img">
-                        <img src="assets/img/image/post-1.jpg" alt="">
-                    </a>
-                    <div class="post__body">
-                        <div class="post__meta">
-                            <span class="meta-cat"><a href="tintuc.html">Tiếng Trung</a></span>
-                            <span class="meta-date">20/12/2020</span>
+            @foreach(get_posts(null, 'hot-news') as $post)
+                <div class="post">
+                    <div class="post__inner">
+                        <a href="{{ $post->url }}" class="post__img">
+                            <img src="{{ $post->thumbnail }}" alt="{{ $post->title }}">
+                        </a>
+                        <div class="post__body">
+                            <div class="post__meta">
+                                @if ($post->category)
+                                    <span class="meta-cat"><a href="{{ $post->category->url }}">{{ $post->category->title }}</a></span>
+                                @endif
+                                <span class="meta-date">{{ $post->updated_at->format('d/m/Y') }}</span>
+                            </div>
+                            <h3 class="post__title">
+                                <a href="{{ $post->url }}">{{ $post->title }}</a>
+                                </h3>
+                            <p class="post__text">{{ $post->description }}</p>
+                            <a href="{{ $post->url }}" class="btn btn--sm btn--outline">Xem chi tiết</a>
                         </div>
-                        <h3 class="post__title"><a href="chitietbaiviet.html">Để học tiếng nhật online hiệu
-                                quả bạn nên biết 3 điều này.</a></h3>
-                        <p class="post__text">Việc bạn lựa chọn địa chỉ hay trang web cũng như phương pháp
-                            và tài liệu học tiếng Nhật...</p>
-                        <a href="chitietbaiviet.html" class="btn btn--sm btn--outline">Xem chi tiết</a>
                     </div>
                 </div>
-            </div>
-            <div class="post">
-                <div class="post__inner">
-                    <a href="#" class="post__img">
-                        <img src="assets/img/image/post-2.jpg" alt="">
-                    </a>
-                    <div class="post__body">
-                        <div class="post__meta">
-                            <span class="meta-cat"><a href="tintuc.html">Tiếng Nhật</a></span>
-                            <span class="meta-date">20/12/2020</span>
-                        </div>
-                        <h3 class="post__title"><a href="chitietbaiviet.html">4 điều nên tránh nếu muốn học
-                                tiếng Nhật online hiệu quả</a></h3>
-                        <p class="post__text">Vì học online là việc các bạn học viên phải có tinh thần tự
-                            học tự chủ động rất cao, chính vì vậy sẽ không...</p>
-                        <a href="chitietbaiviet.html" class="btn btn--sm btn--outline">Xem chi tiết</a>
-                    </div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="post__inner">
-                    <a href="#" class="post__img">
-                        <img src="assets/img/image/post-3.jpg" alt="">
-                    </a>
-                    <div class="post__body">
-                        <div class="post__meta">
-                            <span class="meta-cat"><a href="tintuc.html">Tiếng Nhật</a></span>
-                            <span class="meta-date">20/12/2020</span>
-                        </div>
-                        <h3 class="post__title"><a href="chitietbaiviet.html">4 ứng dụng giúp bạn học tiếng
-                                Nhật Online luyện nghe trên điện thoại</a></h3>
-                        <p class="post__text">Ứng dụng này được đánh giá là một trong những ứng dụng luyện
-                            tập nghe tiếng Nhật tốt nhất cho các bạn sử dụng điện thoại...</p>
-                        <a href="chitietbaiviet.html" class="btn btn--sm btn--outline">Xem chi tiết</a>
-                    </div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="post__inner">
-                    <a href="#" class="post__img">
-                        <img src="assets/img/image/post-2.jpg" alt="">
-                    </a>
-                    <div class="post__body">
-                        <div class="post__meta">
-                            <span class="meta-cat"><a href="tintuc.html">Tiếng Nhật</a></span>
-                            <span class="meta-date">20/12/2020</span>
-                        </div>
-                        <h3 class="post__title"><a href="chitietbaiviet.html">4 điều nên tránh nếu muốn học
-                                tiếng Nhật online hiệu quả</a></h3>
-                        <p class="post__text">Vì học online là việc các bạn học viên phải có tinh thần tự
-                            học tự chủ động rất cao, chính vì vậy sẽ không...</p>
-                        <a href="chitietbaiviet.html" class="btn btn--sm btn--outline">Xem chi tiết</a>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <div class="text-center pt-30 wow fadeInUp" data-wow-delay=".2s">

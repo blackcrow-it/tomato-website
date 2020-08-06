@@ -63,4 +63,9 @@ class Category extends Model
     {
         return $this->hasMany('App\CategoryPosition', 'category_id', 'id');
     }
+
+    public function getUrlAttribute()
+    {
+        return route('category', ['slug' => $this->slug]);
+    }
 }

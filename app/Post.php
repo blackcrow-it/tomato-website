@@ -51,4 +51,9 @@ class Post extends Model
     {
         return $this->hasMany('App\PostPosition', 'post_id', 'id');
     }
+
+    public function getUrlAttribute()
+    {
+        return route('post', ['slug' => $this->slug]);
+    }
 }
