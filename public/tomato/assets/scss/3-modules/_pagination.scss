@@ -1,62 +1,61 @@
 .pagination {
-	padding-top: 30px;
+    padding-top: 30px;
 }
 
 .pagination__list {
-	@include list-style;
+    @include list-style;
 
-	li {
-		display: inline-block;
-		vertical-align: middle;
+    li {
+        display: inline-block;
+        vertical-align: middle;
 
-		&.current a,
-		&:hover a {
-			background-color: $color-primary;
-			color: #fff;
-		}
+        &:not(.disabled) {
 
-		&.current a {
-			pointer-events: none;
-		}
-	}
+            &.current .page-link,
+            &:hover .page-link {
+                background-color: $color-primary;
+                color: #fff;
+            }
+        }
+    }
 
-	a {
-		display: block;
-		width: 40px;
-		height: 40px;
-		line-height: 40px;
-		font-family: $font-heading;
-		font-size: 14px;
-		font-weight: bold;
-		border-radius: 5px;
-		text-align: center;
-		color: $color-heading;
-		background-color: #f3eded;
+    .page-link {
+        display: block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-family: $font-heading;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        text-align: center;
+        color: $color-heading;
+        background-color: #f3eded;
 
-		img {
-			max-width: 20px;
-		}
+        img {
+            max-width: 20px;
+        }
 
-		&:hover {
-			text-decoration: none;
-		}
-	}
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 @include media-breakpoint-down(sm) {
-	.pagination {
-		text-align: center;
-	}
+    .pagination {
+        text-align: center;
+    }
 }
 
 @include media-breakpoint-up(md) {
-	.pagination {
-		padding-top: 50px;
-	}
+    .pagination {
+        padding-top: 50px;
+    }
 }
 
 @include media-breakpoint-up(xl) {
-	.pagination {
-		padding-top: 80px;
-	}
+    .pagination {
+        padding-top: 80px;
+    }
 }

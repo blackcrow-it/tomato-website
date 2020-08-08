@@ -16,6 +16,11 @@ return [
             'name' => 'Danh mục khoá học'
         ],
         [
+            'code' => 'post-categories',
+            'type' => ObjectType::CATEGORY,
+            'name' => 'Danh mục tin tức'
+        ],
+        [
             'code' => 'home-courses',
             'type' => ObjectType::CATEGORY,
             'name' => 'Trang chủ - Giáo trình học online'
@@ -31,7 +36,12 @@ return [
         [
             'code' => 'hot-news',
             'type' => ObjectType::POST,
-            'name' => 'Trang chủ - Tin tức nổi bật'
+            'name' => 'Trang chủ - Tin nổi bật'
+        ],
+        [
+            'code' => 'category-top-news',
+            'type' => ObjectType::POST,
+            'name' => 'Danh mục - Tin nổi bật'
         ],
         // END POST POSITION
 
@@ -45,8 +55,8 @@ return [
     ],
     'paginate' => [
         'list' => [
-            ObjectType::COURSE  => 12,
-            ObjectType::POST    => 12,
+            ObjectType::COURSE  => 1,
+            ObjectType::POST    => 1,
         ],
     ],
 ];

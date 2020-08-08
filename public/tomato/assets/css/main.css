@@ -7659,17 +7659,13 @@ section {
   vertical-align: middle;
 }
 
-.pagination__list li.current a,
-.pagination__list li:hover a {
+.pagination__list li:not(.disabled).current .page-link,
+.pagination__list li:not(.disabled):hover .page-link {
   background-color: #E71D36;
   color: #fff;
 }
 
-.pagination__list li.current a {
-  pointer-events: none;
-}
-
-.pagination__list a {
+.pagination__list .page-link {
   display: block;
   width: 40px;
   height: 40px;
@@ -7683,11 +7679,11 @@ section {
   background-color: #f3eded;
 }
 
-.pagination__list a img {
+.pagination__list .page-link img {
   max-width: 20px;
 }
 
-.pagination__list a:hover {
+.pagination__list .page-link:hover {
   text-decoration: none;
 }
 
