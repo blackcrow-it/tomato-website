@@ -14,10 +14,10 @@
     <div class="container">
         <nav class="breadcrumb-nav">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="home.html">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
             </ol>
         </nav>
-        <h1 class="page-title__title">Khoá học tiếng Trung</h1>
+        <h1 class="page-title__title">{{ $category->title }}</h1>
     </div>
 </section>
 
@@ -31,23 +31,29 @@
                             <h2 class="widget__title">Khoá học</h2>
                             <div class="f-scroll">
                                 <ul>
-                                    <li class="menu-has-children current">
-                                        <a href="#">Tiếng trung</a>
-                                        <ul class="submenu">
-                                            <li class="menu-has-children">
-                                                <a href="giaotrinhhanngu.html">Giáo trình Hán ngữ (mới)</a>
+                                    @foreach(get_categories(null, 'course-categories') as $c1)
+                                        <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                            <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                            @if($c1->__subcategory_count > 0)
                                                 <ul class="submenu">
-                                                    <li><a href="giaotrinhhanngu.html">Giáo trình Boya</a></li>
-                                                    <li><a href="giaotrinhhanngu.html">Tiếng Trung văn phòng</a></li>
+                                                    @foreach(get_categories($c1->id, 'course-categories') as $c2)
+                                                        <li class="{{ $c2->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                                            <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                            @if($c2->__subcategory_count > 0)
+                                                                <ul class="submenu">
+                                                                    @foreach(get_categories($c2->id, 'course-categories') as $c3)
+                                                                        <li class="">
+                                                                            <a href="{{ $c3->url }}">{{ $c3->title }}</a>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
                                                 </ul>
-                                            </li>
-                                            <li><a href="giaotrinhhanngu.html">Giáo trình Boya</a></li>
-                                            <li><a href="giaotrinhhanngu.html">Tiếng Trung văn phòng</a></li>
-                                        </ul>
-
-                                    </li>
-                                    <li><a href="#">Tiếng Hàn</a></li>
-                                    <li><a href="#">Nhật</a></li>
+                                            @endif
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>

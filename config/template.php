@@ -4,6 +4,7 @@ use App\Constants\ObjectType;
 
 return [
     'position' => [
+        // START CATEGORY POSITION
         [
             'code' => 'navigator',
             'type' => ObjectType::CATEGORY,
@@ -12,14 +13,16 @@ return [
         [
             'code' => 'course-categories',
             'type' => ObjectType::CATEGORY,
-            'name' => 'Trang chủ - Danh mục khoá học'
+            'name' => 'Danh mục khoá học'
         ],
         [
             'code' => 'home-courses',
             'type' => ObjectType::CATEGORY,
             'name' => 'Trang chủ - Giáo trình học online'
         ],
+        // END CATEGORY POSITION
 
+        // START POST POSITION
         [
             'code' => 'slider',
             'type' => ObjectType::POST,
@@ -30,11 +33,20 @@ return [
             'type' => ObjectType::POST,
             'name' => 'Trang chủ - Tin tức nổi bật'
         ],
+        // END POST POSITION
 
+        // START COURSE POSITION
         [
             'code' => 'home-courses',
             'type' => ObjectType::COURSE,
             'name' => 'Trang chủ - Giáo trình học online'
         ],
-    ]
+        // END COURSE POSITION
+    ],
+    'paginate' => [
+        'list' => [
+            ObjectType::COURSE  => 12,
+            ObjectType::POST    => 12,
+        ],
+    ],
 ];
