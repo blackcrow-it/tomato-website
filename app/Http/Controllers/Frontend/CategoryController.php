@@ -11,9 +11,10 @@ class CategoryController extends Controller
 {
     public function index($slug)
     {
-        $category = Category::where('slug', $slug)
-            ->where('enabled', true)
-            ->first();
+        $category = Category::firstWhere([
+            'slug' => $slug,
+            'enabled' => true
+        ]);
 
         if ($category == null) {
             return redirect()->route('home');

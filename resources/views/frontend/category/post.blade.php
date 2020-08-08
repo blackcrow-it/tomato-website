@@ -134,24 +134,16 @@
                     <h2 class="widget__title">Khoá học</h2>
 
                     <ul>
-                        <li class="item">
-                            <a href="#">
-                                <span class="item__icon"><img src="assets/img/icon/icon-china.svg"></span>
-                                <h3 class="item__title">Khoá học tiếng Trung</h3>
-                            </a>
-                        </li>
-                        <li class="item">
-                            <a href="#">
-                                <span class="item__icon"><img src="assets/img/icon/icon-korea.svg"></span>
-                                <h3 class="item__title">Khoá học tiếng Hàn</h3>
-                            </a>
-                        </li>
-                        <li class="item">
-                            <a href="#">
-                                <span class="item__icon"><img src="assets/img/icon/icon-japan.svg"></span>
-                                <h3 class="item__title">Khoá học tiếng Nhật</h3>
-                            </a>
-                        </li>
+                        @foreach(get_categories(null, 'course-categories') as $c1)
+                            <li class="item">
+                                <a href="{{ $c1->url }}">
+                                    <span class="item__icon">
+                                        <img src="{{ $c1->icon }}" alt="{{ $c1->title }}">
+                                    </span>
+                                    <h3 class="item__title">{{ $c1->title }}</h3>
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="widget widget--book">

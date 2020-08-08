@@ -1,404 +1,289 @@
 @extends('frontend.master')
 
-@section('meta_tags')
+@section('header')
 <title>{{ $post->meta_title ?? $post->title }}</title>
+<meta content="description" value="{{ $post->meta_description ?? $post->description }}">
+<meta property="og:title" content="{{ $post->og_title ?? $post->meta_title ?? $post->title }}">
+<meta property="og:description" content="{{ $post->og_description ?? $post->meta_description ?? $post->description }}">
+<meta property="og:url" content="{{ $post->url }}">
+<meta property="og:image" content="{{ $post->og_image ?? $post->cover }}">
 @endsection
 
-@section('page_header')
-<div id="post-header" class="page-header">
-    <div class="page-header-bg" style="background-image: url('{{ $post->cover ?? 'https://bing.biturl.top/?resolution=1920&format=image' }}');" data-stellar-background-ratio="0.8"></div>
+@section('body')
+<section class="section page-title">
     <div class="container">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="post-category">
-                    <a href="category.html">Lifestyle</a>
-                </div>
-                <h1>{{ $post->title }}</h1>
-                <ul class="post-meta">
-                    <li><a href="author.html">{{ $post->owner->name ?? $post->owner->username }}</a></li>
-                    <li>{{ $post->updated_at->format('d-m-Y H:i') }}</li>
-                    <li><i class="fa fa-comments"></i> 3</li>
-                    <li><i class="fa fa-eye"></i> {{ $post->view }}</li>
-                </ul>
-            </div>
-        </div>
+        <nav class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
+                @foreach ($breadcrumb as $item)
+                    <li class="breadcrumb-item"><a href="{{ $item->url }}">{{ $item->title }}</a></li>
+                @endforeach
+            </ol>
+        </nav>
+        <h1 class="page-title__title">{{ $post->title }}</h1>
     </div>
-</div>
-@endsection
+</section>
 
-@section('content')
-<div class="section">
-    <!-- container -->
+<section class="section pb-0">
     <div class="container">
-        <!-- row -->
-        <div class="row">
-            <div class="col-md-8">
-                <!-- post share -->
-                <div class="section-row">
-                    <div class="post-share">
-                        <a href="#" class="social-facebook"><i class="fa fa-facebook"></i><span>Share</span></a>
-                        <a href="#" class="social-twitter"><i class="fa fa-twitter"></i><span>Tweet</span></a>
-                        <a href="#" class="social-pinterest"><i class="fa fa-pinterest"></i><span>Pin</span></a>
-                        <a href="#"><i class="fa fa-envelope"></i><span>Email</span></a>
-                    </div>
-                </div>
-                <!-- /post share -->
-                <!-- post content -->
-                <div class="section-row">
-                    {!! $post->content !!}
-                </div>
-                <!-- /post content -->
-                <!-- post tags -->
-                <div class="section-row">
-                    <div class="post-tags">
-                        <ul>
-                            <li>TAGS:</li>
-                            <li><a href="#">Social</a></li>
-                            <li><a href="#">Lifestyle</a></li>
-                            <li><a href="#">Fashion</a></li>
-                            <li><a href="#">Health</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /post tags -->
-                <!-- post nav -->
-                <div class="section-row">
-                    <div class="post-nav">
-                        <div class="prev-post">
-                            <a class="post-img" href="blog-post.html"><img src="./img/widget-8.jpg" alt=""></a>
-                            <h3 class="post-title"><a href="#">Sed ut perspiciatis, unde omnis iste natus error sit</a></h3>
-                            <span>Previous post</span>
+        <div class="layout layout--right">
+            <div class="row">
+                <div class="col-xl-9 order-xl-2">
+                    <div class="layout-content">
+                        <div class="post-detail detailbox">
+                            @if ($post->cover)
+                                <div class="post-detail__img">
+                                    <img src="{{ $post->cover }}" alt="{{ $post->title }}">
+                                </div>
+                            @endif
+                            <div class="detailbox__content entry-detail">{!! $post->content !!}</div>
+
+                            <div class="post-detail__navigation">
+                                <div class="f-item first">
+                                    <div class="f-item__inner">
+                                        <a href="chitietbaiviet.html">
+                                            <h3>Đây là tiêu đề bài viết trước đó</h3>
+                                            <span><i class="fa fa-long-arrow-left"></i> Bài trước</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="f-item last">
+                                    <div class="f-item__inner">
+                                        <a href="chitietbaiviet.html">
+                                            <h3>Đây là tiêu đề bài viết tiếp theo</h3>
+                                            <span>Bài tiếp theo <i class="fa fa-long-arrow-right"></i></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="next-post">
-                            <a class="post-img" href="blog-post.html"><img src="./img/widget-10.jpg" alt=""></a>
-                            <h3 class="post-title"><a href="#">Postea senserit id eos, vivendo periculis ei qui</a></h3>
-                            <span>Next post</span>
+
+                        <div class="post-detail__relatedCourse">
+                            <h2 class="title-page-min">Khoá học liên quan</h2>
+                            <div class="owl-carousel lessonbox-wrap-min">
+                                <div class="lessonbox">
+                                    <div class="lessonbox__inner">
+                                        <div class="lessonbox__img">
+                                            <img src="assets/img/image/lessonbox-1.jpg">
+                                            <span class="sale">-50%</span>
+                                        </div>
+                                        <div class="lessonbox__body">
+                                            <div class="lessonbox__cat">
+                                                <a href="khoahoc.html">Tiếng Trung</a>
+                                            </div>
+                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
+                                            <ul class="lessonbox__info">
+                                                <li>Bài học: 15 bài</li>
+                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
+                                                <li>Trình độ: Mới bắt đầu</li>
+                                            </ul>
+
+                                            <div class="lessonbox__footer">
+                                                <div class="lessonbox__price">
+                                                    <ins>499.000đ</ins>
+                                                    <del>1.000.000đ</del>
+                                                </div>
+                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lessonbox">
+                                    <div class="lessonbox__inner">
+                                        <div class="lessonbox__img">
+                                            <img src="assets/img/image/lessonbox-1.jpg">
+                                            <span class="sale">-50%</span>
+                                        </div>
+                                        <div class="lessonbox__body">
+                                            <div class="lessonbox__cat">
+                                                <a href="khoahoc.html">Tiếng Trung</a>
+                                            </div>
+                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
+                                            <ul class="lessonbox__info">
+                                                <li>Bài học: 15 bài</li>
+                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
+                                                <li>Trình độ: Mới bắt đầu</li>
+                                            </ul>
+
+                                            <div class="lessonbox__footer">
+                                                <div class="lessonbox__price">
+                                                    <ins>499.000đ</ins>
+                                                    <del>1.000.000đ</del>
+                                                </div>
+                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lessonbox">
+                                    <div class="lessonbox__inner">
+                                        <div class="lessonbox__img">
+                                            <img src="assets/img/image/lessonbox-1.jpg">
+                                            <span class="sale">-50%</span>
+                                        </div>
+                                        <div class="lessonbox__body">
+                                            <div class="lessonbox__cat">
+                                                <a href="khoahoc.html">Tiếng Trung</a>
+                                            </div>
+                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
+                                            <ul class="lessonbox__info">
+                                                <li>Bài học: 15 bài</li>
+                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
+                                                <li>Trình độ: Mới bắt đầu</li>
+                                            </ul>
+
+                                            <div class="lessonbox__footer">
+                                                <div class="lessonbox__price">
+                                                    <ins>499.000đ</ins>
+                                                    <del>1.000.000đ</del>
+                                                </div>
+                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="lessonbox">
+                                    <div class="lessonbox__inner">
+                                        <div class="lessonbox__img">
+                                            <img src="assets/img/image/lessonbox-1.jpg">
+                                            <span class="sale">-50%</span>
+                                        </div>
+                                        <div class="lessonbox__body">
+                                            <div class="lessonbox__cat">
+                                                <a href="khoahoc.html">Tiếng Trung</a>
+                                            </div>
+                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
+                                            <ul class="lessonbox__info">
+                                                <li>Bài học: 15 bài</li>
+                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
+                                                <li>Trình độ: Mới bắt đầu</li>
+                                            </ul>
+
+                                            <div class="lessonbox__footer">
+                                                <div class="lessonbox__price">
+                                                    <ins>499.000đ</ins>
+                                                    <del>1.000.000đ</del>
+                                                </div>
+                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- /post nav  -->
-                <!-- post author -->
-                <div class="section-row">
-                    <div class="section-title">
-                        <h3 class="title">About <a href="author.html">{{ $post->owner->name ?? $post->owner->username }}</a></h3>
-                    </div>
-                    <div class="author media">
-                        <div class="media-left">
-                            <a href="author.html">
-                                <img class="author-img media-object" src="./img/avatar-1.jpg" alt="">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                            <ul class="author-social">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                <div class="col-xl-3 order-xl-1">
+                    <div class="layout-sidebar">
+                        <div class="widget widget--relatePost">
+                            <h2 class="widget__title">Bài viết liên quan</h2>
+
+                            <ul>
+                                <li>
+                                    <a href="chitietbaiviet.html">
+                                        <img src="assets/img/image/post-widget-1.jpg">
+                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
+                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="chitietbaiviet.html">
+                                        <img src="assets/img/image/post-widget-1.jpg">
+                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
+                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="chitietbaiviet.html">
+                                        <img src="assets/img/image/post-widget-1.jpg">
+                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
+                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="chitietbaiviet.html">
+                                        <img src="assets/img/image/post-widget-1.jpg">
+                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
+                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
-                    </div>
-                </div>
-                <!-- /post author -->
-                <!-- /related post -->
-                <div>
-                    <div class="section-title">
-                        <h3 class="title">Related Posts</h3>
-                    </div>
-                    <div class="row">
-                        <!-- post -->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="./img/post-4.jpg" alt=""></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Health</a>
+                        <div class="widget widget--course">
+                            <h2 class="widget__title">Khoá học</h2>
+
+                            <ul>
+                                @foreach(get_categories(null, 'course-categories') as $c1)
+                                    <li class="item">
+                                        <a href="{{ $c1->url }}">
+                                            <span class="item__icon">
+                                                <img src="{{ $c1->icon }}" alt="{{ $c1->title }}">
+                                            </span>
+                                            <h3 class="item__title">{{ $c1->title }}</h3>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <div class="widget widget--book">
+                            <h2 class="widget__title">Sách liên quan</h2>
+                            <div class="owl-carousel">
+                                <a href="chitietsach.html" class="item">
+                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
+                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__price">
+                                        <ins>499.000đ</ins>
+                                        <del>899.000đ</del>
                                     </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Postea senserit id eos, vivendo periculis ei qui</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2018</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /post -->
-                        <!-- post -->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="./img/post-6.jpg" alt=""></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Fashion</a>
-                                        <a href="category.html">Lifestyle</a>
-                                    </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Mel ut impetus suscipit tincidunt. Cum id ullum laboramus persequeris.</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2018</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /post -->
-                        <!-- post -->
-                        <div class="col-md-4">
-                            <div class="post post-sm">
-                                <a class="post-img" href="blog-post.html"><img src="./img/post-7.jpg" alt=""></a>
-                                <div class="post-body">
-                                    <div class="post-category">
-                                        <a href="category.html">Health</a>
-                                        <a href="category.html">Lifestyle</a>
-                                    </div>
-                                    <h3 class="post-title title-sm"><a href="blog-post.html">Ne bonorum praesent cum, labitur persequeris definitionem quo cu?</a></h3>
-                                    <ul class="post-meta">
-                                        <li><a href="author.html">John Doe</a></li>
-                                        <li>20 April 2018</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /post -->
-                    </div>
-                </div>
-                <!-- /related post -->
-                <!-- post comments -->
-                <div class="section-row">
-                    <div class="section-title">
-                        <h3 class="title">3 Comments</h3>
-                    </div>
-                    <div class="post-comments">
-                        <!-- comment -->
-                        <div class="media">
-                            <div class="media-left">
-                                <img class="media-object" src="./img/avatar-2.jpg" alt="">
-                            </div>
-                            <div class="media-body">
-                                <div class="media-heading">
-                                    <h4>John Doe</h4>
-                                    <span class="time">5 min ago</span>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                <a href="#" class="reply">Reply</a>
-                                <!-- comment -->
-                                <div class="media media-author">
-                                    <div class="media-left">
-                                        <img class="media-object" src="./img/avatar-1.jpg" alt="">
-                                    </div>
-                                    <div class="media-body">
-                                        <div class="media-heading">
-                                            <h4>John Doe</h4>
-                                            <span class="time">5 min ago</span>
-                                        </div>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                        <a href="#" class="reply">Reply</a>
-                                    </div>
-                                </div>
-                                <!-- /comment -->
-                            </div>
-                        </div>
-                        <!-- /comment -->
-                        <!-- comment -->
-                        <div class="media">
-                            <div class="media-left">
-                                <img class="media-object" src="./img/avatar-3.jpg" alt="">
-                            </div>
-                            <div class="media-body">
-                                <div class="media-heading">
-                                    <h4>John Doe</h4>
-                                    <span class="time">5 min ago</span>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                <a href="#" class="reply">Reply</a>
-                            </div>
-                        </div>
-                        <!-- /comment -->
-                    </div>
-                </div>
-                <!-- /post comments -->
-                <!-- post reply -->
-                <div class="section-row">
-                    <div class="section-title">
-                        <h3 class="title">Leave a reply</h3>
-                    </div>
-                    <form class="post-reply">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <textarea class="input" name="message" placeholder="Message"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <input class="input" type="text" name="name" placeholder="Name">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <input class="input" type="email" name="email" placeholder="Email">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <input class="input" type="text" name="website" placeholder="Website">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <button class="primary-button">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <!-- /post reply -->
-            </div>
-            <div class="col-md-4">
-                <!-- ad widget -->
-                <div class="aside-widget text-center">
-                    <a href="#" style="display: inline-block;margin: auto;">
-                        <img class="img-responsive" src="./img/ad-3.jpg" alt="">
-                    </a>
-                </div>
-                <!-- /ad widget -->
-                <!-- social widget -->
-                <div class="aside-widget">
-                    <div class="section-title">
-                        <h2 class="title">Social Media</h2>
-                    </div>
-                    <div class="social-widget">
-                        <ul>
-                            <li>
-                                <a href="#" class="social-facebook">
-                                    <i class="fa fa-facebook"></i>
-                                    <span>21.2K<br>Followers</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a href="#" class="social-twitter">
-                                    <i class="fa fa-twitter"></i>
-                                    <span>10.2K<br>Followers</span>
+                                <a href="chitietsach.html" class="item">
+                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
+                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__price">
+                                        <ins>499.000đ</ins>
+                                        <del>899.000đ</del>
+                                    </div>
                                 </a>
-                            </li>
-                            <li>
-                                <a href="#" class="social-google-plus">
-                                    <i class="fa fa-google-plus"></i>
-                                    <span>5K<br>Followers</span>
+                                <a href="chitietsach.html" class="item">
+                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
+                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__price">
+                                        <ins>499.000đ</ins>
+                                        <del>899.000đ</del>
+                                    </div>
                                 </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /social widget -->
-                <!-- category widget -->
-                <div class="aside-widget">
-                    <div class="section-title">
-                        <h2 class="title">Categories</h2>
-                    </div>
-                    <div class="category-widget">
-                        <ul>
-                            <li><a href="#">Lifestyle <span>451</span></a></li>
-                            <li><a href="#">Fashion <span>230</span></a></li>
-                            <li><a href="#">Technology <span>40</span></a></li>
-                            <li><a href="#">Travel <span>38</span></a></li>
-                            <li><a href="#">Health <span>24</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /category widget -->
-                <!-- newsletter widget -->
-                <div class="aside-widget">
-                    <div class="section-title">
-                        <h2 class="title">Newsletter</h2>
-                    </div>
-                    <div class="newsletter-widget">
-                        <form>
-                            <p>Nec feugiat nisl pretium fusce id velit ut tortor pretium.</p>
-                            <input class="input" placeholder="Enter Your Email">
-                            <button class="primary-button">Subscribe</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /newsletter widget -->
-                <!-- post widget -->
-                <div class="aside-widget">
-                    <div class="section-title">
-                        <h2 class="title">Popular Posts</h2>
-                    </div>
-                    <!-- post -->
-                    <div class="post post-widget">
-                        <a class="post-img" href="blog-post.html"><img src="./img/widget-3.jpg" alt=""></a>
-                        <div class="post-body">
-                            <div class="post-category">
-                                <a href="category.html">Lifestyle</a>
                             </div>
-                            <h3 class="post-title"><a href="blog-post.html">Ne bonorum praesent cum, labitur persequeris definitionem quo cu?</a></h3>
                         </div>
                     </div>
-                    <!-- /post -->
-                    <!-- post -->
-                    <div class="post post-widget">
-                        <a class="post-img" href="blog-post.html"><img src="./img/widget-2.jpg" alt=""></a>
-                        <div class="post-body">
-                            <div class="post-category">
-                                <a href="category.html">Technology</a>
-                                <a href="category.html">Lifestyle</a>
-                            </div>
-                            <h3 class="post-title"><a href="blog-post.html">Mel ut impetus suscipit tincidunt. Cum id ullum laboramus persequeris.</a></h3>
-                        </div>
-                    </div>
-                    <!-- /post -->
-                    <!-- post -->
-                    <div class="post post-widget">
-                        <a class="post-img" href="blog-post.html"><img src="./img/widget-4.jpg" alt=""></a>
-                        <div class="post-body">
-                            <div class="post-category">
-                                <a href="category.html">Health</a>
-                            </div>
-                            <h3 class="post-title"><a href="blog-post.html">Postea senserit id eos, vivendo periculis ei qui</a></h3>
-                        </div>
-                    </div>
-                    <!-- /post -->
-                    <!-- post -->
-                    <div class="post post-widget">
-                        <a class="post-img" href="blog-post.html"><img src="./img/widget-5.jpg" alt=""></a>
-                        <div class="post-body">
-                            <div class="post-category">
-                                <a href="category.html">Health</a>
-                                <a href="category.html">Lifestyle</a>
-                            </div>
-                            <h3 class="post-title"><a href="blog-post.html">Sed ut perspiciatis, unde omnis iste natus error sit</a></h3>
-                        </div>
-                    </div>
-                    <!-- /post -->
                 </div>
-                <!-- /post widget -->
-                <!-- galery widget -->
-                <div class="aside-widget">
-                    <div class="section-title">
-                        <h2 class="title">Instagram</h2>
-                    </div>
-                    <div class="galery-widget">
-                        <ul>
-                            <li><a href="#"><img src="./img/galery-1.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="./img/galery-2.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="./img/galery-3.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="./img/galery-4.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="./img/galery-5.jpg" alt=""></a></li>
-                            <li><a href="#"><img src="./img/galery-6.jpg" alt=""></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /galery widget -->
-                <!-- Ad widget -->
-                <div class="aside-widget text-center">
-                    <a href="#" style="display: inline-block;margin: auto;">
-                        <img class="img-responsive" src="./img/ad-1.jpg" alt="">
-                    </a>
-                </div>
-                <!-- /Ad widget -->
             </div>
         </div>
-        <!-- /row -->
     </div>
-    <!-- /container -->
-</div>
+</section>
+
+<section class="section pt-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 offset-xl-3">
+                <div class="commentbox-wrap">
+                    <h3 class="title-page-min">Bình luận bài viết</h3>
+
+                    <div class="tabJs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bình luận Facebook</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <img src="assets/img/image/comment-facebook.jpg" class="img-fullwidth">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 @endsection
