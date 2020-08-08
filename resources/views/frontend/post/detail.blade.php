@@ -179,34 +179,15 @@
                             <h2 class="widget__title">Bài viết liên quan</h2>
 
                             <ul>
-                                <li>
-                                    <a href="chitietbaiviet.html">
-                                        <img src="assets/img/image/post-widget-1.jpg">
-                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
-                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="chitietbaiviet.html">
-                                        <img src="assets/img/image/post-widget-1.jpg">
-                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
-                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="chitietbaiviet.html">
-                                        <img src="assets/img/image/post-widget-1.jpg">
-                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
-                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="chitietbaiviet.html">
-                                        <img src="assets/img/image/post-widget-1.jpg">
-                                        <h3>Lộ trình học tiếng Nhật cho người mới bắt đầu</h3>
-                                        <span><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
-                                    </a>
-                                </li>
+                                @foreach ($related_posts as $item)
+                                    <li>
+                                        <a href="{{ $item->url }}">
+                                            <img src="{{ $item->thumbnail }}">
+                                            <h3>{{ $item->title }}</h3>
+                                            <span><i class="fa fa-clock-o"></i>{{ $item->updated_at->format('d/m/Y') }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                         <div class="widget widget--course">

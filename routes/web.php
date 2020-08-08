@@ -63,6 +63,8 @@ Route::prefix('admin')
             Route::post('post/delete/{id}', 'PostController@submitDelete')->name('post.delete');
             Route::post('post/order-in-category', 'PostController@submitOrderInCategory')->name('post.order_in_category');
             Route::post('post/order-in-position', 'PostController@submitOrderInPosition')->name('post.order_in_position');
+            Route::get('post/get-related-post', 'PostController@getRelatedPost')->name('post.get_related_post');
+            Route::get('post/search-post', 'PostController@getSearchPost')->name('post.search_post');
 
             Route::get('category/list', 'CategoryController@list')->name('category.list');
             Route::get('category/add', 'CategoryController@add')->name('category.add');

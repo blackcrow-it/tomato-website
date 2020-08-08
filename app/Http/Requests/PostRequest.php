@@ -41,7 +41,11 @@ class PostRequest extends FormRequest
             '__template_position' => 'nullable|array',
             '__template_position.*' => [
                 Rule::in(collect(get_template_position(ObjectType::POST))->pluck('code'))
-            ]
+            ],
+            '__related_posts' => 'nullable|array',
+            '__related_posts.*' => [
+                Rule::exists('posts', 'id')->where('enabled', true),
+            ],
         ];
     }
 }
