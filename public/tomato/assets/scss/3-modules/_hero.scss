@@ -41,7 +41,7 @@
 	.f-list {
 		> li {
 			border-bottom: 1px solid $color-border;
-			
+
 
 			> a {
 				font-size: 15px;
@@ -152,7 +152,7 @@
 						transform: translateY(-50%) rotate(90deg);
 						transition: all .3s;
 					}
-					
+
 					&.active:after {
 						transform: translateY(-50%) rotate(270deg);
 					}
@@ -166,7 +166,7 @@
 				li {
 					a {
 						padding-left: 60px;
-						
+
 						&.active {
 							background-color: $color-primary;
 						}
@@ -194,6 +194,7 @@
 @include media-breakpoint-down(sm) {
 	.sec-hero__sidebar {
 		margin: 0;
+		max-width: none;
 	}
 }
 
@@ -212,7 +213,7 @@
 			    top: 0;
 			    left: 100%;
 			    width: 250px;
-				
+
 				opacity: 0;
 				visibility: hidden;
 			    transform: translateX(20px);
@@ -265,7 +266,7 @@
 			}
 		}
 	}
-	
+
 	.sec-hero__slide {
 	    width: calc(100% - 350px);
 	}

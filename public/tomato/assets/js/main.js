@@ -1,6 +1,6 @@
 (function($) {
     "use strict";
-    
+
     /**
      * [isMobile description]
      * @type {Object}
@@ -30,7 +30,7 @@
     window.windowHeight = window.innerHeight;
     window.windowWidth = window.innerWidth;
 
-    
+
     // Returns a function, that, as long as it continues to be invoked, will not
     // be triggered. The function will be called after it stops being called for
     // N milliseconds. If `immediate` is passed, trigger the function on the
@@ -66,7 +66,7 @@
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
     }
 
 
@@ -82,7 +82,7 @@
                     unpinned: "header-unpin"
                 },
                 onPin : function() {
-                   
+
                 },
                 onUnpin : function() {
                 },
@@ -97,7 +97,7 @@
                 e.stopPropagation();
                 $('.menu-mobile').toggleClass('menu-mobile--active');
                 $(this).closest('.header').toggleClass('header-show-mobile');
-                
+
                 if( $(this).closest('.header').hasClass('header-show-mobile') ) {
                     bodyScrollLock.disableBodyScroll(mobilescroll);
 
@@ -156,7 +156,7 @@
         }
 
         function dataSlideOneItem() {
-            
+
             $('[data-slide-one-item]').each(function() {
                 let self = $(this);
                 let timeRandom = getRandomIntInclusive(5, 10)*1000;
@@ -403,7 +403,7 @@
         lessonboxRelated();
     }
 
-    
+
     function popupJs() {
         var magnificPopupDefault = {
             type: 'image',
@@ -618,7 +618,7 @@
             var self = $(this),
                 btn = $('.btn-play', self),
                 iframe = $('iframe', self);
-            
+
             btn.on('click', function(e) {
                 e.preventDefault();
                 jQuery(iframe)[0].src += "&autoplay=1";
@@ -666,7 +666,7 @@
                 } else {
 
                 }
-                
+
                 btn.on('click', function() {
                     var el = $(this),
                         value = input.val();
@@ -690,7 +690,7 @@
                         if(  newVal < min ) return;
                     }
                     input.val(newVal);
-                }); 
+                });
             }
             clickButton();
         });
@@ -726,9 +726,9 @@
 
             value = Math.floor( totalLength - (totalLength* (percent / 100)));
             showNumber.text(percent+'%');
-            svg.css({ 
+            svg.css({
                 'stroke-dasharray': totalLength,
-                'stroke-dashoffset': value  
+                'stroke-dashoffset': value
             });
         });
     }
@@ -907,7 +907,7 @@
                 $(this).closest('.choose-form__item').find('.choose-form__content').addClass('show');
             });
         }
-        
+
         item.on('show.bs.modal', function (e) {
             var dataId = $(e.relatedTarget).parent().attr('id');
             item.attr('data-id', dataId);
@@ -942,9 +942,9 @@
 
             prevScrollpos = currentScrollPos;
         }
-        
+
         fix();
-        $(window).on('scroll', fix);    
+        $(window).on('scroll', fix);
     }
 
 
@@ -965,13 +965,13 @@
                     </div>
                 </div>`
         }
-        
+
 
         if( ww < 1200 && filter.length ) {
             var filterHltm = filter.html();
             $('body').append(htmlMobile(filterHltm));
             filter.remove();
-            
+
             var fixscroll = $('.mobile-fliter .form-filter')[0];
             $('.mobile-fliter__btn').on('click', function() {
                 $('.mobile-fliter').addClass('mobile-fliter--active');
@@ -1019,14 +1019,14 @@
             $('body').append(htmlMobile(getHtml, text));
             domHtml.remove();
             percentJs();
-            
+
             var fixscroll = $('.mobile-learningProcess .learning-process__list')[0];
 
 
             $('.mobile-learningProcess .f-text-active').on('click', function() {
                 $('.mobile-learningProcess .f-content').addClass('f-content--active');
                 bodyScrollLock.disableBodyScroll(fixscroll);
-                
+
             });
 
             $('.mobile-learningProcess .f-content__close').on('click', function() {
@@ -1059,18 +1059,15 @@
 
 
     function mobileCategoryCourse() {
-        var ww = $(window).width(),
-            wrap = $('.sec-hero__sidebar'),
+        var wrap = $('.sec-hero__sidebar'),
             submenu = $('.submenu', wrap);
 
-
-        if(ww < 12000) {
-            wrap.find('li.menu-has-children').on('click', '> a', function(e) {
-                e.preventDefault();
-                $(this).next().slideToggle();
-                $(this).toggleClass('active');
-            });
-        }
+        wrap.find('li.menu-has-children').on('click', '> a', function(e) {
+            if ($(window).width() >= 1260) return;
+            e.preventDefault();
+            $(this).next().slideToggle();
+            $(this).toggleClass('active');
+        });
     }
 
 

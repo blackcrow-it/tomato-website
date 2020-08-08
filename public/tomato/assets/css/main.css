@@ -1,19 +1,19 @@
-@import url(https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;
+@charset "UTF-8";
 
-0,
-600;0,
-700;1,
-300;1,
-600;1,
-700&family=Open+Sans:ital,
-wght@0,
-400;0,
-600;0,
-700;1,
-400;1,
-600;1,
-700&display=swap);@charset "UTF-8";
+/*!
+ * Bootstrap v4.0.0 (https://getbootstrap.com)
+ * Copyright 2011-2018 The Bootstrap Authors
+ * Copyright 2011-2018 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
 
+/*!
+ * Bootstrap Reboot v4.0.0 (https://getbootstrap.com)
+ * Copyright 2011-2018 The Bootstrap Authors
+ * Copyright 2011-2018 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md)
+ */
 
 *,
 *::before,
@@ -6668,6 +6668,7 @@ section {
 @media (max-width: 767.98px) {
   .sec-hero__sidebar {
     margin: 0;
+    max-width: none;
   }
 }
 
