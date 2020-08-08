@@ -32,7 +32,7 @@ class Course extends Model
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom(['slug', 'title'])
             ->saveSlugsTo('slug');
     }
 
