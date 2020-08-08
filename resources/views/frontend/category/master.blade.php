@@ -15,6 +15,9 @@
         <nav class="breadcrumb-nav">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
+                @foreach($breadcrumb as $item)
+                    <li class="breadcrumb-item"><a href="{{ $item->url }}">{{ $item->title }}</a></li>
+                @endforeach
             </ol>
         </nav>
         <h1 class="page-title__title">{{ $category->title }}</h1>
