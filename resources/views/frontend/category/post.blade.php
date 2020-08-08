@@ -86,7 +86,7 @@
                 </div>
                 <div class="col-xl-9">
                     <div class="layout-content">
-                        @foreach(get_posts($category->id, 'category-top-news') as $item)
+                        @foreach($featured_posts as $item)
                             <div class="post-featured">
                                 <a href="{{ $item->url }}" class="post-featured__img">
                                     <img src="{{ $item->cover }}" alt="{{ $item->title }}">
@@ -106,7 +106,7 @@
                         @endforeach
 
                         <div class="post-list">
-                            @foreach(get_posts($category->id) as $item)
+                            @foreach($list as $item)
                                 <div class="post-list__item">
                                     <a href="{{ $item->url }}" class="post-list__img">
                                         <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">

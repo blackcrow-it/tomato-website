@@ -34,7 +34,8 @@ class CategoryController extends Controller
     {
         return view('frontend.category.post', [
             'category' => $category,
-            'list' => get_posts($category->id, null, true)
+            'list' => get_posts($category->id, null, true),
+            'featured_posts' => get_posts($category->id, 'category-top-news')
         ]);
     }
 

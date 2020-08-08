@@ -55,8 +55,8 @@ return [
     ],
     'paginate' => [
         'list' => [
-            ObjectType::COURSE  => 1,
-            ObjectType::POST    => 1,
+            ObjectType::COURSE  => 12,
+            ObjectType::POST    => 12,
         ],
     ],
 ];
