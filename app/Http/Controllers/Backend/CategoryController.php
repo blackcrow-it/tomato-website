@@ -127,7 +127,7 @@ class CategoryController extends Controller
             $position = new CategoryPosition();
             $position->code = $code;
             $position->category_id = $category->id;
-            $position->order_in_position = $positionData->firstWhere('code', $code) ?? 0;
+            $position->order_in_position = $positionData->firstWhere('code', $code)->order_in_position ?? 0;
             $position->save();
         }
     }

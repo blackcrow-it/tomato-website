@@ -116,7 +116,7 @@ class PostController extends Controller
             $position = new PostPosition();
             $position->code = $code;
             $position->post_id = $post->id;
-            $position->order_in_position = $positionData->firstWhere('code', $code) ?? 0;
+            $position->order_in_position = $positionData->firstWhere('code', $code)->order_in_position ?? 0;
             $position->save();
         }
     }

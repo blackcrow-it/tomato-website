@@ -115,7 +115,7 @@ class CourseController extends Controller
             $position = new CoursePosition();
             $position->code = $code;
             $position->course_id = $course->id;
-            $position->order_in_position = $positionData->firstWhere('code', $code) ?? 0;
+            $position->order_in_position = $positionData->firstWhere('code', $code)->order_in_position ?? 0;
             $position->save();
         }
     }
