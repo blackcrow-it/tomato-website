@@ -109,12 +109,14 @@ class PostController extends Controller
         $post->fill($data);
         $post->save();
 
+        $positionData = PostPosition::where('post_id', $post->id)->get();
         PostPosition::where('post_id', $post->id)->delete();
         $templatePositionCodeArray = $request->input('__template_position', []);
         foreach ($templatePositionCodeArray as $code) {
             $position = new PostPosition();
             $position->code = $code;
             $position->post_id = $post->id;
+            $position->order_in_position = $positionData->firstWhere('code', $code) ?? 0;
             $position->save();
         }
     }

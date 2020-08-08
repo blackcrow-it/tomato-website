@@ -120,12 +120,14 @@ class CategoryController extends Controller
         $category->fill($data);
         $category->save();
 
+        $positionData = CategoryPosition::where('category_id', $category->id)->get();
         CategoryPosition::where('category_id', $category->id)->delete();
         $templatePositionCodeArray = $request->input('__template_position', []);
         foreach ($templatePositionCodeArray as $code) {
             $position = new CategoryPosition();
             $position->code = $code;
             $position->category_id = $category->id;
+            $position->order_in_position = $positionData->firstWhere('code', $code) ?? 0;
             $position->save();
         }
     }

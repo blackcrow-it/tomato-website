@@ -108,12 +108,14 @@ class CourseController extends Controller
         $course->fill($data);
         $course->save();
 
+        $positionData = CoursePosition::where('course_id', $course->id)->get();
         CoursePosition::where('course_id', $course->id)->delete();
         $templatePositionCodeArray = $request->input('__template_position', []);
         foreach ($templatePositionCodeArray as $code) {
             $position = new CoursePosition();
             $position->code = $code;
             $position->course_id = $course->id;
+            $position->order_in_position = $positionData->firstWhere('code', $code) ?? 0;
             $position->save();
         }
     }
