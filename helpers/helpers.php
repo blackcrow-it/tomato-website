@@ -124,8 +124,6 @@ if (!function_exists('get_courses')) {
 if (!function_exists('get_categories')) {
     function get_categories($parent_id = null, $position = null)
     {
-        $cacheKey = 'get_categories_' . $parent_id . '_' . $position;
-
         $data = (new CategoryRepo())
             ->getByFilterQuery([
                 'parent_id' => $parent_id,

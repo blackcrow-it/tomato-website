@@ -109,7 +109,11 @@ Danh mục
                     <td>
                         {{ $item->title }}
                         <br>
-                        <a href="{{ route('admin.category.list', [ 'id' => $item->id ]) }}" class="text-primary"><small>Xem {{ $item->__subcategory_count }} danh mục con</small></a>
+                        <?php
+                            $filterQuery = request()->input('filter');
+                            $filterQuery['parent_id'] = $item->id;
+                        ?>
+                        <a href="{{ route('admin.category.list', [ 'filter' => $filterQuery ]) }}" class="text-primary"><small>Xem {{ $item->__subcategory_count }} danh mục con</small></a>
                     </td>
                     <td>
                         @switch($item->type)
