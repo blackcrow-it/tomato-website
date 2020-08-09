@@ -56,4 +56,9 @@ class Post extends Model
     {
         return route('post', ['slug' => $this->slug]);
     }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Category', 'category_id', 'id');
+    }
 }

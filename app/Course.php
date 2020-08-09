@@ -48,7 +48,8 @@ class Course extends Model
         });
     }
 
-    public function videos() {
+    public function videos()
+    {
         return $this->hasMany('App\CourseVideo', 'course_id', 'id');
     }
 
@@ -60,5 +61,10 @@ class Course extends Model
     public function getUrlAttribute()
     {
         return route('course', ['slug' => $this->slug]);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Category', 'category_id', 'id');
     }
 }

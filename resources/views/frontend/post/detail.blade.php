@@ -15,7 +15,7 @@
         <nav class="breadcrumb-nav">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
-                @foreach ($breadcrumb as $item)
+                @foreach($breadcrumb as $item)
                     <li class="breadcrumb-item"><a href="{{ $item->url }}">{{ $item->title }}</a></li>
                 @endforeach
             </ol>
@@ -31,7 +31,7 @@
                 <div class="col-xl-9 order-xl-2">
                     <div class="layout-content">
                         <div class="post-detail detailbox">
-                            @if ($post->cover)
+                            @if($post->cover)
                                 <div class="post-detail__img">
                                     <img src="{{ $post->cover }}" alt="{{ $post->title }}">
                                 </div>
@@ -40,135 +40,34 @@
 
                             <div class="post-detail__navigation">
                                 <div class="f-item first">
-                                    <div class="f-item__inner">
-                                        <a href="chitietbaiviet.html">
-                                            <h3>Đây là tiêu đề bài viết trước đó</h3>
-                                            <span><i class="fa fa-long-arrow-left"></i> Bài trước</span>
-                                        </a>
-                                    </div>
+                                    @if($prev_post)
+                                        <div class="f-item__inner">
+                                            <a href="{{ $prev_post->url }}">
+                                                <h3>{{ $prev_post->title }}</h3>
+                                                <span><i class="fa fa-long-arrow-left"></i> Bài trước</span>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="f-item last">
-                                    <div class="f-item__inner">
-                                        <a href="chitietbaiviet.html">
-                                            <h3>Đây là tiêu đề bài viết tiếp theo</h3>
-                                            <span>Bài tiếp theo <i class="fa fa-long-arrow-right"></i></span>
-                                        </a>
-                                    </div>
+                                    @if($next_post)
+                                        <div class="f-item__inner">
+                                            <a href="{{ $next_post->url }}">
+                                                <h3>{{ $next_post->title }}</h3>
+                                                <span>Bài tiếp theo <i class="fa fa-long-arrow-right"></i></span>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
 
                         <div class="post-detail__relatedCourse">
                             <h2 class="title-page-min">Khoá học liên quan</h2>
-                            <div class="owl-carousel lessonbox-wrap-min">
-                                <div class="lessonbox">
-                                    <div class="lessonbox__inner">
-                                        <div class="lessonbox__img">
-                                            <img src="assets/img/image/lessonbox-1.jpg">
-                                            <span class="sale">-50%</span>
-                                        </div>
-                                        <div class="lessonbox__body">
-                                            <div class="lessonbox__cat">
-                                                <a href="khoahoc.html">Tiếng Trung</a>
-                                            </div>
-                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
-                                            <ul class="lessonbox__info">
-                                                <li>Bài học: 15 bài</li>
-                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                                <li>Trình độ: Mới bắt đầu</li>
-                                            </ul>
-
-                                            <div class="lessonbox__footer">
-                                                <div class="lessonbox__price">
-                                                    <ins>499.000đ</ins>
-                                                    <del>1.000.000đ</del>
-                                                </div>
-                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="lessonbox">
-                                    <div class="lessonbox__inner">
-                                        <div class="lessonbox__img">
-                                            <img src="assets/img/image/lessonbox-1.jpg">
-                                            <span class="sale">-50%</span>
-                                        </div>
-                                        <div class="lessonbox__body">
-                                            <div class="lessonbox__cat">
-                                                <a href="khoahoc.html">Tiếng Trung</a>
-                                            </div>
-                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
-                                            <ul class="lessonbox__info">
-                                                <li>Bài học: 15 bài</li>
-                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                                <li>Trình độ: Mới bắt đầu</li>
-                                            </ul>
-
-                                            <div class="lessonbox__footer">
-                                                <div class="lessonbox__price">
-                                                    <ins>499.000đ</ins>
-                                                    <del>1.000.000đ</del>
-                                                </div>
-                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="lessonbox">
-                                    <div class="lessonbox__inner">
-                                        <div class="lessonbox__img">
-                                            <img src="assets/img/image/lessonbox-1.jpg">
-                                            <span class="sale">-50%</span>
-                                        </div>
-                                        <div class="lessonbox__body">
-                                            <div class="lessonbox__cat">
-                                                <a href="khoahoc.html">Tiếng Trung</a>
-                                            </div>
-                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
-                                            <ul class="lessonbox__info">
-                                                <li>Bài học: 15 bài</li>
-                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                                <li>Trình độ: Mới bắt đầu</li>
-                                            </ul>
-
-                                            <div class="lessonbox__footer">
-                                                <div class="lessonbox__price">
-                                                    <ins>499.000đ</ins>
-                                                    <del>1.000.000đ</del>
-                                                </div>
-                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="lessonbox">
-                                    <div class="lessonbox__inner">
-                                        <div class="lessonbox__img">
-                                            <img src="assets/img/image/lessonbox-1.jpg">
-                                            <span class="sale">-50%</span>
-                                        </div>
-                                        <div class="lessonbox__body">
-                                            <div class="lessonbox__cat">
-                                                <a href="khoahoc.html">Tiếng Trung</a>
-                                            </div>
-                                            <h3 class="lessonbox__title"><a href="chitietkhoahoc.html">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h3>
-                                            <ul class="lessonbox__info">
-                                                <li>Bài học: 15 bài</li>
-                                                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                                                <li>Trình độ: Mới bắt đầu</li>
-                                            </ul>
-
-                                            <div class="lessonbox__footer">
-                                                <div class="lessonbox__price">
-                                                    <ins>499.000đ</ins>
-                                                    <del>1.000.000đ</del>
-                                                </div>
-                                                <a href="chitietkhoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="owl-carousel fixheight lessonbox-wrap-min">
+                                @foreach($related_courses as $item)
+                                    @include('frontend.category.course_item', [ 'course' => $item ])
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -179,7 +78,7 @@
                             <h2 class="widget__title">Bài viết liên quan</h2>
 
                             <ul>
-                                @foreach ($related_posts as $item)
+                                @foreach($related_posts as $item)
                                     <li>
                                         <a href="{{ $item->url }}">
                                             <img src="{{ $item->thumbnail }}">

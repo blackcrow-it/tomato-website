@@ -13,6 +13,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use Route;
 
 class CourseController extends Controller
 {
@@ -180,5 +181,23 @@ class CourseController extends Controller
         $position->order_in_position = intval($request->input('order_in_position'));
         $position->timestamps = false;
         $position->save();
+    }
+
+    public function getSearchCourse(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        if (empty($keyword)) return [];
+
+        $query = Course::where('enabled', true)
+            ->orderBy('updated_at', 'desc');
+
+        if (strpos($keyword, config('app.url')) === 0) {
+            $route = Route::getRoutes()->match(Request::create($keyword));
+            $query->where('slug', $route->slug);
+        } else {
+            $query->where('title', 'ilike', "%$keyword%");
+        }
+
+        return $query->get();
     }
 }

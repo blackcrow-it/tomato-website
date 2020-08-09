@@ -7,9 +7,11 @@
             @endif
         </a>
         <div class="lessonbox__body">
-            <div class="lessonbox__cat">
-                <a href="{{ $category->url }}">{{ $category->title }}</a>
-            </div>
+            @if ($course->category)
+                <div class="lessonbox__cat">
+                    <a href="{{ $course->category->url }}">{{ $course->category->title }}</a>
+                </div>
+            @endif
             <h3 class="lessonbox__title">
                 <a href="{{ $course->url }}">{{ $course->title }}</a>
             </h3>

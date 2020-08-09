@@ -158,6 +158,71 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label>Khóa học liên quan</label>
+                <div id="js-related-course">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <tr v-for="item in relatedCourses" :key="item.id">
+                                    <td>
+                                        @{{ item.id }}
+                                        <input type="hidden" name="__related_courses[]" :value="item.id">
+                                    </td>
+                                    <td>
+                                        <img :src="item.thumbnail" class="img-thumbnail">
+                                    </td>
+                                    <td>@{{ item.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteItem(item.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddItemModal"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-related-course-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn khóa học liên quan</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm khóa học" v-model="keyword">
+                                    </div>
+                                    <div class="text-center" v-if="isSearching">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="item in searchResult" :key="item.id">
+                                            <td>@{{ item.id }}</td>
+                                            <td>
+                                                <img :src="item.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ item.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addItem(item)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('__related_courses')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Bài viết liên quan</label>
                 <div id="js-related-post">
                     <div class="card">
@@ -283,6 +348,8 @@
 
 @section('script')
 <script>
+    const POST_ID = {{ $data->id ?? 'undefined' }};
+
     new Vue({
         el: '#js-related-post',
         data: {
@@ -295,7 +362,7 @@
         mounted() {
             axios.get('{{ route("admin.post.get_related_post") }}', {
                 params: {
-                    id: '{{ $data->id }}'
+                    id: POST_ID
                 }
             }).then(res => {
                 this.relatedPosts = res.data;
@@ -320,7 +387,57 @@
                 this.searchTimer = setTimeout(() => {
                     axios.get('{{ route("admin.post.search_post") }}', {
                         params: {
-                            id: '{{ $data->id }}',
+                            id: POST_ID,
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res.data;
+                    }).finally(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
+            }
+        }
+    });
+
+    new Vue({
+        el: '#js-related-course',
+        data: {
+            relatedCourses: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
+        },
+        mounted() {
+            axios.get('{{ route("admin.post.get_related_course") }}', {
+                params: {
+                    id: POST_ID
+                }
+            }).then(res => {
+                this.relatedCourses = res.data;
+            });
+        },
+        methods: {
+            showAddItemModal() {
+                $('#js-related-course-modal').modal('show');
+            },
+            addItem(item) {
+                this.relatedCourses.push(item);
+            },
+            deleteItem(id) {
+                const index = this.relatedCourses.findIndex(x => x.id == id);
+                this.relatedCourses.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.course.search_course") }}', {
+                        params: {
+                            id: POST_ID,
                             keyword: this.keyword
                         }
                     }).then(res => {

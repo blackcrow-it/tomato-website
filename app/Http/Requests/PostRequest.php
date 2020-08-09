@@ -46,6 +46,10 @@ class PostRequest extends FormRequest
             '__related_posts.*' => [
                 Rule::exists('posts', 'id')->where('enabled', true),
             ],
+            '__related_courses' => 'nullable|array',
+            '__related_courses.*' => [
+                Rule::exists('courses', 'id')->where('enabled', true),
+            ],
         ];
     }
 }

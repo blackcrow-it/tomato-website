@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Post;
 use App\PostPosition;
+use App\PostRelatedCourse;
 use App\PostRelatedPost;
 use App\Repositories\PostRepo;
 use DB;
@@ -130,6 +131,15 @@ class PostController extends Controller
             $related->related_post_id = $relatedPostId;
             $related->save();
         }
+
+        PostRelatedCourse::where('post_id', $post->id)->delete();
+        $relatedCourseIds = $request->input('__related_courses', []);
+        foreach ($relatedCourseIds as $relatedCourseId) {
+            $related = new PostRelatedCourse();
+            $related->post_id = $post->id;
+            $related->related_course_id = $relatedCourseId;
+            $related->save();
+        }
     }
 
     public function submitDelete($id)
@@ -194,15 +204,6 @@ class PostController extends Controller
         $position->save();
     }
 
-    public function getRelatedPost(Request $request)
-    {
-        $id = $request->input('id');
-        return PostRelatedPost::with('related_post')
-            ->where('post_id', $id)
-            ->get()
-            ->pluck('related_post');
-    }
-
     public function getSearchPost(Request $request)
     {
         $keyword = $request->input('keyword');
@@ -215,9 +216,27 @@ class PostController extends Controller
             $route = Route::getRoutes()->match(Request::create($keyword));
             $query->where('slug', $route->slug);
         } else {
-            $query->where('title', 'like', "%$keyword%");
+            $query->where('title', 'ilike', "%$keyword%");
         }
 
         return $query->get();
+    }
+
+    public function getRelatedPost(Request $request)
+    {
+        $id = $request->input('id');
+        return PostRelatedPost::with('related_post')
+            ->where('post_id', $id)
+            ->get()
+            ->pluck('related_post');
+    }
+
+    public function getRelatedCourse(Request $request)
+    {
+        $id = $request->input('id');
+        return PostRelatedCourse::with('related_course')
+            ->where('post_id', $id)
+            ->get()
+            ->pluck('related_course');
     }
 }
