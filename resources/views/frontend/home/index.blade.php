@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="lessonbox-wrap__slide owl-carousel fixheight" data-slide-three-item>
-                        @foreach(get_courses($category->id) as $course)
+                        @foreach(get_courses($category->id, 'home-courses') as $course)
                             @include('frontend.category.course_item', [ 'course' => $course ])
                         @endforeach
                     </div>
