@@ -6,7 +6,7 @@ Sửa đầu mục
 
 @section('style')
 <link href="https://vjs.zencdn.net/7.7.6/video-js.css" rel="stylesheet" />
-<link href="https://unpkg.com/@silvermine/videojs-quality-selector/dist/css/quality-selector.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.css">
 <style>
     .video-js .vjs-big-play-button {
         left: 50%;
@@ -145,17 +145,19 @@ Sửa đầu mục
 
 @section('script')
 <script src="https://vjs.zencdn.net/7.7.6/video.js"></script>
-<script src="https://unpkg.com/@silvermine/videojs-quality-selector/dist/js/silvermine-videojs-quality-selector.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js"></script>
 
 <script>
-    var player1 = videojs('video');
-    player1.src({
+    var player = videojs('video');
+    player.src({
         src: '{{ $video_url }}',
         type: 'application/x-mpegURL'
     });
-    player1.aspectRatio('16:9');
-    player1.fluid(true);
+    player.aspectRatio('16:9');
+    player.fluid(true);
+    player.hlsQualitySelector();
 
 </script>
 
