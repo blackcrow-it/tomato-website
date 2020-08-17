@@ -36,7 +36,7 @@ class PartVideoController extends Controller
         $data = $part->part_video;
 
         return view('backend.part.edit_video', [
-            'data' => $data,
+            'video_url' => $data ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
             'part' => $part,
             'lesson' => $lesson,
             'course' => $course

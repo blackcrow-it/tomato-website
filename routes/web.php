@@ -34,9 +34,12 @@ Route::namespace('Frontend')
         Route::post('cart/add', 'CartController@add')->name('cart.add');
         Route::post('cart/remove', 'CartController@remove')->name('cart.remove');
 
-        Route::get('get-video-key/{id}', 'VideoController@getKey')->name('video.key');
-
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
+
+        Route::middleware('auth')->group(function () {
+            // Không được đổi dù bất cứ lý do gì
+            Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key');
+        });
     });
 
 Route::prefix('admin')
