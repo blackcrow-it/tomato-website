@@ -1,7 +1,7 @@
 @extends('backend.master')
 
 @section('title')
-Bài học
+Đầu mục
 @endsection
 
 @section('content-header')
@@ -9,22 +9,25 @@ Bài học
     <div class="col-sm-2">
         <img src="{{ $course->thumbnail }}">
     </div>
-    <div class="col-sm-10">
+    <div class="col-sm-5">
         <strong>{{ $course->title }}</strong>
         <br>
         <a href="{{ route('course', [ 'slug' => $course->slug ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $course->slug ]) }}</em></small></a>
         <br>
         {{ $course->description }}
     </div>
+    <div class="col-sm-5">
+        <strong>{{ $lesson->title }}</strong>
+    </div>
 </div>
 <hr>
 <div class="row mb-2">
     <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Bài học</h1>
+        <h1 class="m-0 text-dark">Đầu mục</h1>
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.lesson.add', [ 'course_id' => $course->id ]) }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
+            <a href="{{ route('admin.part.add', [ 'lesson_id' => $lesson->id ]) }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
         </div>
     </div><!-- /.col -->
 </div>
@@ -61,6 +64,7 @@ Bài học
             <tr>
                 <th>ID</th>
                 <th>Tiêu đề</th>
+                <th>Loại</th>
                 <th>Hiển thị</th>
                 <th data-toggle="tooltip" title="Thứ tự trong khóa học">Thứ tự</th>
                 <th>Hành động</th>
@@ -72,21 +76,56 @@ Bài học
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->title }}</td>
                     <td>
+                        @switch($item->type)
+                            @case(\App\Constants\PartType::VIDEO)
+                                <i class="fas fa-video"></i>
+                                Video
+                                @break
+                            @case(\App\Constants\PartType::YOUTUBE)
+                                <i class="fab fa-youtube"></i>
+                                Youtube
+                                @break
+                            @case(\App\Constants\PartType::CONTENT)
+                                <i class="fas fa-file-alt"></i>
+                                Bài viết
+                                @break
+                            @case(\App\Constants\PartType::TEST)
+                                <i class="fas fa-question-circle"></i>
+                                Trắc nghiệm
+                                @break
+                            @case(\App\Constants\PartType::SURVEY)
+                                <i class="fas fa-poll"></i>
+                                Khảo sát
+                                @break
+                        @endswitch
+                    </td>
+                    <td>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input js-switch-enabled" {{ $item->enabled ? 'checked' : '' }} id="cs-enabled-{{ $item->id }}" data-id="{{ $item->id }}">
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
                     <td>
-                        <input type="text" value="{{ $item->order_in_course }}" data-id="{{ $item->id }}" class="custom-order js-order-in-course">
+                        <input type="text" value="{{ $item->order_in_lesson }}" data-id="{{ $item->id }}" class="custom-order js-order-in-lesson">
                     </td>
                     <td class="text-nowrap">
-                        <form action="{{ route('admin.lesson.delete', [ 'id' => $item->id, 'course_id' => $course->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bài học này?')">
-                            @csrf
-                            <a href="{{ route('admin.part.list', [ 'lesson_id' => $item->id ]) }}" class="btn btn-sm btn-info"><i class="fas fa-align-left"></i> Đầu mục</a>
-                            <a href="{{ route('admin.lesson.edit', [ 'id' => $item->id, 'course_id' => $item->course_id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
-                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
-                        </form>
+                        @switch($item->type)
+                            @case(\App\Constants\PartType::VIDEO)
+                                <form action="{{ route('admin.part_video.delete', [ 'part_id' => $item->id, 'lesson_id' => $lesson->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đầu mục này?')">
+                                    @csrf
+                                    <a href="{{ route('admin.part_video.edit', [ 'part_id' => $item->id, 'lesson_id' => $item->lesson_id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
+                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
+                                </form>
+                                @break
+                            @case(\App\Constants\PartType::YOUTUBE)
+                                @break
+                            @case(\App\Constants\PartType::CONTENT)
+                                @break
+                            @case(\App\Constants\PartType::TEST)
+                                @break
+                            @case(\App\Constants\PartType::SURVEY)
+                                @break
+                        @endswitch
                     </td>
                 </tr>
             @endforeach
@@ -102,7 +141,7 @@ Bài học
         var that = this;
         $(that).prop('disabled', true);
 
-        $.post('{{ route("admin.lesson.enabled") }}', {
+        $.post('{{ route("admin.part.enabled") }}', {
             id: $(that).data('id'),
             enabled: $(that).prop('checked')
         }).fail(function () {
@@ -112,13 +151,13 @@ Bài học
         });
     });
 
-    $('.js-order-in-course').change(function () {
+    $('.js-order-in-lesson').change(function () {
         var that = this;
         $(that).prop('disabled', true);
 
-        $.post('{{ route("admin.lesson.order_in_course") }}', {
+        $.post('{{ route("admin.part.order_in_lesson") }}', {
             id: $(that).data('id'),
-            order_in_course: $(that).val()
+            order_in_lesson: $(that).val()
         }).fail(function () {
             alert('Có lỗi xảy ra, vui lòng thử lại.');
         }).always(function () {

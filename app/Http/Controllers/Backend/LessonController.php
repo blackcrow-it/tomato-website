@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Category;
-use App\Constants\ObjectType;
 use App\Http\Controllers\Controller;
 use App\Course;
-use App\CoursePosition;
 use App\Http\Requests\Backend\LessonRequest;
 use App\Lesson;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
-use Route;
 
 class LessonController extends Controller
 {

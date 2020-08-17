@@ -203,18 +203,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
 
             bsCustomFileInput.init();
-            $('.custom-file .custom-file-input').change(function () {
-                var id = $(this).attr('id');
-                var imgTag = $(this).parent().find('img[for="' + id + '"]');
-                if (imgTag.length == 0) return;
-
-                var files = $(this).prop('files');
-                if (!files || !files[0]) return;
-
-                var file = files[0];
-                var objectUrl = URL.createObjectURL(file);
-                $(imgTag).attr('src', objectUrl);
-            });
 
             $('.editor').each(function () {
                 var id = Math.random().toString(36).substring(7);

@@ -16,4 +16,8 @@ class Lesson extends Model
     {
         return $this->belongsTo('App\Course', 'course_id', 'id');
     }
+
+    public function parts() {
+        return $this->hasMany('App\Part', 'lesson_id', 'id');
+    }
 }

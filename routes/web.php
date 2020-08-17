@@ -95,6 +95,16 @@ Route::prefix('admin')
             Route::post('lesson/enabled', 'LessonController@submitEnabled')->name('lesson.enabled');
             Route::post('lesson/delete/{id}', 'LessonController@submitDelete')->name('lesson.delete');
             Route::post('lesson/order-in-course', 'LessonController@submitOrderInCourse')->name('lesson.order_in_course');
+
+            Route::get('part', 'PartController@list')->name('part.list');
+            Route::get('part/add', 'PartController@add')->name('part.add');
+            Route::post('part/add', 'PartController@submitAdd')->name('part.add');
+            Route::post('part/enabled', 'PartController@submitEnabled')->name('part.enabled');
+            Route::post('part/order-in-lesson', 'PartController@submitOrderInLesson')->name('part.order_in_lesson');
+
+            Route::get('part-video/edit/{part_id}', 'PartVideoController@edit')->name('part_video.edit');
+            Route::post('part-video/edit/{part_id}', 'PartVideoController@submitEdit')->name('part_video.edit');
+            Route::post('part-video/delete/{part_id}', 'PartVideoController@submitDelete')->name('part_video.delete');
         });
 
         Route::middleware('guest')->group(function () {

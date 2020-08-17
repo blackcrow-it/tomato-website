@@ -39,7 +39,10 @@ class CategoryRequest extends FormRequest
             'og_image' => 'nullable|url',
             'type' => [
                 'required_if:parent_id,',
-                Rule::in([ObjectType::COURSE, ObjectType::POST]),
+                Rule::in([
+                    ObjectType::COURSE,
+                    ObjectType::POST
+                ]),
             ],
             'url' => 'nullable|url',
             'enabled' => 'required|boolean',

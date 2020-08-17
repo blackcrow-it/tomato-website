@@ -128,7 +128,7 @@ class CourseController extends Controller
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
 
-        if ($course->lesson()->count() > 0) {
+        if ($course->lessons()->count() > 0) {
             return redirect()->route('admin.course.list')->withErrors('Không thể xóa khóa học vì vẫn còn bài học bên trong.');
         }
 
