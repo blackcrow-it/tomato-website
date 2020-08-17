@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\Backend\UserRequest;
 use App\Repositories\UserRepo;
 use App\User;
 use Hash;

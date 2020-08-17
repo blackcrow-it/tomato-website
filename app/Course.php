@@ -48,11 +48,6 @@ class Course extends Model
         });
     }
 
-    public function videos()
-    {
-        return $this->hasMany('App\CourseVideo', 'course_id', 'id');
-    }
-
     public function position()
     {
         return $this->hasMany('App\CoursePosition', 'course_id', 'id');
@@ -66,5 +61,10 @@ class Course extends Model
     public function category()
     {
         return $this->belongsTo('App\Category', 'category_id', 'id');
+    }
+
+    public function lesson()
+    {
+        return $this->hasMany('App\Lesson', 'course_id', 'id');
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CourseVideoRequest extends FormRequest
+class LessonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +25,6 @@ class CourseVideoRequest extends FormRequest
     {
         return [
             'title' => 'required|string',
-            'thumbnail' => 'nullable|url',
             'enabled' => 'required|boolean',
         ];
     }

@@ -38826,6 +38826,10 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
 }
 
+img {
+  max-width: 100%;
+}
+
 .custom-file {
   height: auto;
 }
@@ -38849,7 +38853,7 @@ readers do not read off random characters that represent icons */
 }
 
 .img-thumbnail {
-  max-width: 80px;
+  max-width: 100px;
 }
 
 .custom-order {

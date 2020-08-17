@@ -87,14 +87,14 @@ Route::prefix('admin')
             Route::post('course/order-in-position', 'CourseController@submitOrderInPosition')->name('course.order_in_position');
             Route::get('course/search-course', 'CourseController@getSearchCourse')->name('course.search_course');
 
-            Route::get('course-video', 'CourseVideoController@list')->name('course_video.list');
-            Route::get('course-video/add', 'CourseVideoController@add')->name('course_video.add');
-            Route::post('course-video/add', 'CourseVideoController@submitAdd')->name('course_video.add');
-            Route::get('course-video/edit/{id}', 'CourseVideoController@edit')->name('course_video.edit');
-            Route::post('course-video/edit/{id}', 'CourseVideoController@submitEdit')->name('course_video.edit');
-            Route::post('course-video/enabled', 'CourseVideoController@submitEnabled')->name('course_video.enabled');
-            Route::post('course-video/delete/{id}', 'CourseVideoController@submitDelete')->name('course_video.delete');
-            Route::post('course-video/order-in-course', 'CourseVideoController@submitOrderInCourse')->name('course_video.order_in_course');
+            Route::get('lesson', 'LessonController@list')->name('lesson.list');
+            Route::get('lesson/add', 'LessonController@add')->name('lesson.add');
+            Route::post('lesson/add', 'LessonController@submitAdd')->name('lesson.add');
+            Route::get('lesson/edit/{id}', 'LessonController@edit')->name('lesson.edit');
+            Route::post('lesson/edit/{id}', 'LessonController@submitEdit')->name('lesson.edit');
+            Route::post('lesson/enabled', 'LessonController@submitEnabled')->name('lesson.enabled');
+            Route::post('lesson/delete/{id}', 'LessonController@submitDelete')->name('lesson.delete');
+            Route::post('lesson/order-in-course', 'LessonController@submitOrderInCourse')->name('lesson.order_in_course');
         });
 
         Route::middleware('guest')->group(function () {

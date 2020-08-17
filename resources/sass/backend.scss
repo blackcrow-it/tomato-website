@@ -2,6 +2,10 @@
 @import '~admin-lte/build/scss/AdminLTE';
 @import '~@fortawesome/fontawesome-free/css/all';
 
+img {
+    max-width: 100%;
+}
+
 .custom-file {
     height: auto;
 }
@@ -25,7 +29,7 @@
 }
 
 .img-thumbnail {
-    max-width: 80px;
+    max-width: 100px;
 }
 
 .custom-order {

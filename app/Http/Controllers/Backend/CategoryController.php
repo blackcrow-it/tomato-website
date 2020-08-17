@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\Backend\CategoryRequest;
 use App\Category;
 use App\CategoryPosition;
 use App\Repositories\CategoryRepo;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Category;
 use App\Constants\ObjectType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\Backend\PostRequest;
 use App\Post;
 use App\PostPosition;
 use App\PostRelatedCourse;

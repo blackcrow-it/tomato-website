@@ -2,26 +2,39 @@
 
 @section('title')
     @if (request()->routeIs('admin.course.add'))
-        Thêm video mới
+        Thêm bài học mới
     @else
-        Sửa video
+        Sửa bài học
     @endif
 @endsection
 
 @section('content-header')
+<div class="row">
+    <div class="col-sm-2">
+        <img src="{{ $course->thumbnail }}">
+    </div>
+    <div class="col-sm-10">
+        <strong>{{ $course->title }}</strong>
+        <br>
+        <a href="{{ route('course', [ 'slug' => $course->slug ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $course->slug ]) }}</em></small></a>
+        <br>
+        {{ $course->description }}
+    </div>
+</div>
+<hr>
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if (request()->routeIs('admin.course.add'))
-                Thêm video mới
+            @if (request()->routeIs('admin.lesson.add'))
+                Thêm bài học mới
             @else
-                Sửa video
+                Sửa bài học
             @endif
         </h1>
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.course_video.list', [ 'course_id' => $course->id ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
+            <a href="{{ route('admin.lesson.list', [ 'course_id' => $course->id ]) }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
         </div>
     </div><!-- /.col -->
 </div>
@@ -56,7 +69,6 @@
     <form action="" method="POST">
         @csrf
         <div class="card-body">
-            <input type="hidden" name="course_id" value="{{ $course->id }}">
             <div class="form-group">
                 <label>Tiêu đề</label>
                 <input type="text" name="title" placeholder="Tiêu đề" value="{{ $data->title ?? old('title') }}" class="form-control @error('title') is-invalid @enderror">
@@ -64,25 +76,8 @@
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>Ảnh thu nhỏ (thumbnail)</label>
-                        <div class="input-group">
-                            <input type="text" name="thumbnail" placeholder="Ảnh thu nhỏ" value="{{ $data->thumbnail ?? old('thumbnail') }}" class="form-control @error('thumbnail') is-invalid @enderror" id="ck-thumbnail">
-                            @error('thumbnail')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                            <div class="input-group-append">
-                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-thumbnail', 'ck-thumbnail-preview')">Chọn file</button>
-                            </div>
-                        </div>
-                        <img class="image-preview" src="{{ $data->thumbnail ?? old('thumbnail') }}" id="ck-thumbnail-preview">
-                    </div>
-                </div>
-            </div>
             <div class="form-group">
-                <label>Hiển thị video</label>
+                <label>Hiển thị bài học</label>
                 <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
                 <div>
                     <div class="form-check-inline">

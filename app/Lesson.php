@@ -4,15 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CourseVideo extends Model
+class Lesson extends Model
 {
-    protected $table = 'course_videos';
+    protected $table = 'lessons';
 
     protected $fillable = [
-        'course_id', 'title', 'thumbnail'
+        'title', 'enabled', 'order_in_course', 'course_id'
     ];
 
-    public function course() {
+    public function course()
+    {
         return $this->belongsTo('App\Course', 'course_id', 'id');
     }
 }

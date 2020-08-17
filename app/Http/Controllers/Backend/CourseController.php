@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Category;
 use App\Constants\ObjectType;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CourseRequest;
+use App\Http\Requests\Backend\CourseRequest;
 use App\Course;
 use App\CoursePosition;
 use App\Repositories\CourseRepo;
@@ -126,6 +126,10 @@ class CourseController extends Controller
         $course = Course::find($id);
         if ($course == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
+        }
+
+        if ($course->lesson()->count() > 0) {
+            return redirect()->route('admin.course.list')->withErrors('Không thể xóa khóa học vì vẫn còn bài học bên trong.');
         }
 
         try {
