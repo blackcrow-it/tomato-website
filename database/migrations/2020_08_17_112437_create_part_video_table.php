@@ -17,9 +17,7 @@ class CreatePartVideoTable extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('part_id')->constrained('parts')->onDelete('cascade');
-            $table->string('stream_path', 255)->nullable();
-            $table->string('key_path', 255)->nullable();
-            $table->string('upload_status', 255)->nullable();
+            $table->string('s3_path', 255)->nullable();
         });
     }
 

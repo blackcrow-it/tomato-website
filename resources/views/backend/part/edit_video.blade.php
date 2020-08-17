@@ -34,21 +34,21 @@ Sửa đầu mục
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -59,7 +59,7 @@ Sửa đầu mục
 @endif
 
 <div class="card">
-    <form action="" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST" class="js-main-form">
         @csrf
         <div class="card-body">
             <div class="form-group">
@@ -96,19 +96,132 @@ Sửa đầu mục
             </div>
             <div class="form-group">
                 <label>Thư mục stream video</label>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="streamfile[]" directory webkitdirectory mozdirectory>
-                            <label class="custom-file-label">Chọn thư mục</label>
-                        </div>
-                    </div>
+                <input type="file" class="invisible js-input-directory" directory webkitdirectory mozdirectory>
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-info mr-3 js-open-select-directory">Chọn thư mục</button>
+                    <span class="js-selected-directory-name"></span>
                 </div>
+            </div>
+            <div class="progress js-upload-progress" style="display:none">
+                <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
             </div>
         </div>
         <div class="card-footer">
-            <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+            <button class="btn btn-primary js-save-button"><i class="fas fa-save"></i> Lưu</button>
         </div>
     </form>
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('.js-open-select-directory').click(function () {
+        $('.js-input-directory').trigger('click');
+    });
+
+    $('.js-input-directory').change(function () {
+        var files = $(this).prop('files');
+        var count = files.length;
+
+        if (count == 0) {
+            $('.js-selected-directory-name').text('');
+            return;
+        }
+
+        var webkitRelativePath = files[0].webkitRelativePath;
+
+        var directoryName = webkitRelativePath.split('/')[0];
+
+        $('.js-selected-directory-name').text(`${directoryName} (${count} files)`);
+    });
+
+    $('.js-main-form').submit(function (e) {
+        e.preventDefault();
+        $('.js-save-button').prop('disabled', true);
+
+        $.post('{{ route("admin.part_video.edit", [ "part_id" => $part->id, "lesson_id" => $lesson->id ]) }}', $(this).serialize())
+            .done(function () {
+                var files = $('.js-input-directory').prop('files');
+
+                if (files.length == 0) {
+                    location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
+                    return;
+                }
+
+                $('.js-upload-progress').show();
+                window.onbeforeunload = function (e) {
+                    e.returnValue = '';
+                };
+
+                $.post('{{ route("admin.part_video.clear_s3") }}', {
+                    part_id: '{{ $part->id }}'
+                }).done(function () {
+                    var uploadFail = function () {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                        $('.js-save-button').prop('disabled', false);
+                        $('.js-upload-progress').hide();
+                        window.onbeforeunload = function (e) {
+                            delete e['returnValue'];
+                        };
+                    };
+
+                    var uploadNextFile = function (index) {
+                        var file = files[index];
+
+                        var webkitRelativePath = file.webkitRelativePath;
+                        var pathSplit = webkitRelativePath.split('/');
+                        pathSplit.splice(0, 1);
+                        var path = pathSplit.join('/');
+
+                        var formData = new FormData();
+                        formData.append('part_id', '{{ $part->id }}');
+                        formData.append('path', path);
+                        formData.append('file', file);
+
+                        $.ajax({
+                            url: '{{ route("admin.part_video.upload") }}',
+                            method: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                        }).done(function () {
+                            var percent = Math.ceil((index + 1) / files.length * 100);
+                            $('.js-upload-progress .progress-bar').width(percent + '%');
+                            $('.js-upload-progress .progress-bar').text(percent + '%');
+
+                            if (index + 1 < files.length) {
+                                uploadNextFile(index + 1);
+                                return;
+                            }
+
+                            window.onbeforeunload = function (e) {
+                                delete e['returnValue'];
+                            };
+
+                            setTimeout(function () {
+                                alert('Upload video thành công.');
+                                location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
+                            }, 500);
+                        }).fail(function () {
+                            uploadFail();
+                        });
+                    };
+
+                    uploadNextFile(0);
+                }).fail(function () {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    $('.js-save-button').prop('disabled', false);
+                    $('.js-upload-progress').hide();
+                    window.onbeforeunload = function (e) {
+                        delete e['returnValue'];
+                    };
+                });
+            })
+            .fail(function () {
+                alert('Có lỗi xảy ra, vui lòng thử lại.');
+                $('.js-save-button').prop('disabled', false);
+            });
+    });
+
+</script>
 @endsection

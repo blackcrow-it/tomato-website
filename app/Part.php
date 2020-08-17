@@ -17,7 +17,7 @@ class Part extends Model
         return $this->belongsTo('App\Lesson', 'lesson_id', 'id');
     }
 
-    public function part_videos()
+    public function part_video()
     {
         return $this->hasOne('App\PartVideo', 'part_id', 'id');
     }

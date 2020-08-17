@@ -105,6 +105,8 @@ Route::prefix('admin')
             Route::get('part-video/edit/{part_id}', 'PartVideoController@edit')->name('part_video.edit');
             Route::post('part-video/edit/{part_id}', 'PartVideoController@submitEdit')->name('part_video.edit');
             Route::post('part-video/delete/{part_id}', 'PartVideoController@submitDelete')->name('part_video.delete');
+            Route::post('part-video/ajax-upload', 'PartVideoController@upload')->name('part_video.upload');
+            Route::post('part-video/ajax-clear-s3', 'PartVideoController@clearS3')->name('part_video.clear_s3');
         });
 
         Route::middleware('guest')->group(function () {
