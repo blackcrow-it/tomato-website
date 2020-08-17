@@ -49,7 +49,7 @@ class PartVideoController extends Controller
         if ($part == null) return abort(500);
 
         $lesson = $part->lesson;
-        if ($lesson == null)return abort(500);
+        if ($lesson == null) return abort(500);
 
         $course = $lesson->course;
         if ($course == null) return abort(500);
@@ -118,6 +118,15 @@ class PartVideoController extends Controller
                 's3'
             );
         }
+
+        if ($pathInfo['extension'] != 'm3u8') return;
+
+        $s3Path = $data->s3_path . '/' . $pathInfo['dirname'] . '/' . $pathInfo['basename'];
+        if (!Storage::disk('s3')->exists($s3Path)) return;
+
+        $contents = Storage::disk('s3')->get($s3Path);
+        $contents = str_replace('<<URL>>', route('part_video.get_key', ['id' => $part->id]), $contents);
+        Storage::disk('s3')->put($s3Path, $contents, 'public');
     }
 
     public function clearS3(Request $request)
