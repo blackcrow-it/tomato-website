@@ -21,4 +21,9 @@ class Part extends Model
     {
         return $this->hasOne('App\PartVideo', 'part_id', 'id');
     }
+
+    public function part_youtube()
+    {
+        return $this->hasOne('App\PartYoutube', 'part_id', 'id');
+    }
 }

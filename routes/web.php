@@ -110,6 +110,10 @@ Route::prefix('admin')
             Route::post('part-video/delete/{part_id}', 'PartVideoController@submitDelete')->name('part_video.delete');
             Route::post('part-video/ajax-upload', 'PartVideoController@upload')->name('part_video.upload');
             Route::post('part-video/ajax-clear-s3', 'PartVideoController@clearS3')->name('part_video.clear_s3');
+
+            Route::get('part-youtube/edit/{part_id}', 'PartYoutubeController@edit')->name('part_youtube.edit');
+            Route::post('part-youtube/edit/{part_id}', 'PartYoutubeController@submitEdit')->name('part_youtube.edit');
+            Route::post('part-youtube/delete/{part_id}', 'PartYoutubeController@submitDelete')->name('part_youtube.delete');
         });
 
         Route::middleware('guest')->group(function () {

@@ -109,23 +109,11 @@
                         <input type="text" value="{{ $item->order_in_lesson }}" data-id="{{ $item->id }}" class="custom-order js-order-in-lesson">
                     </td>
                     <td class="text-nowrap">
-                        @switch($item->type)
-                            @case(\App\Constants\PartType::VIDEO)
-                                <form action="{{ route('admin.part_video.delete', [ 'part_id' => $item->id, 'lesson_id' => $lesson->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đầu mục này?')">
-                                    @csrf
-                                    <a href="{{ route('admin.part_video.edit', [ 'part_id' => $item->id, 'lesson_id' => $item->lesson_id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
-                                </form>
-                                @break
-                            @case(\App\Constants\PartType::YOUTUBE)
-                                @break
-                            @case(\App\Constants\PartType::CONTENT)
-                                @break
-                            @case(\App\Constants\PartType::TEST)
-                                @break
-                            @case(\App\Constants\PartType::SURVEY)
-                                @break
-                        @endswitch
+                        <form action="{{ route('admin.part_' . $item->type . '.delete', [ 'part_id' => $item->id, 'lesson_id' => $lesson->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đầu mục này?')">
+                            @csrf
+                            <a href="{{ route('admin.part_' . $item->type . '.edit', [ 'part_id' => $item->id, 'lesson_id' => $item->lesson_id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

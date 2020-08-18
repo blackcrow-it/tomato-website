@@ -59,7 +59,7 @@ class PartController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('admin.part_video.edit', ['part_id' => $part->id, 'lesson_id' => $lesson->id])
+                ->route('admin.part_' . $part->type . '.edit', ['part_id' => $part->id, 'lesson_id' => $lesson->id])
                 ->with('success', 'Thêm đầu mục mới thành công.');
         } catch (Exception $ex) {
             DB::rollBack();
