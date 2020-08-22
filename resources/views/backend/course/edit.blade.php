@@ -116,6 +116,13 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>Intro Youtube ID</label>
+                <input type="text" name="intro_youtube_id" placeholder="Intro Youtube ID" value="{{ $data->intro_youtube_id ?? old('intro_youtube_id') }}" class="form-control @error('intro_youtube_id') is-invalid @enderror">
+                @error('intro_youtube_id')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Mô tả nội dung</label>
                 <textarea name="description" rows="3" placeholder="Mô tả nội dung" class="form-control @error('description') is-invalid @enderror">{{ $data->description ?? old('description') }}</textarea>
                 @error('description')

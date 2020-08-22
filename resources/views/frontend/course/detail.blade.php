@@ -30,8 +30,7 @@
             <div class="row">
                 <div class="col-md-6 col-xl-7">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <a href="#" class="btn-play"><i class="fa fa-play"></i></a>
-                        <iframe src="https://www.youtube.com/embed/I9GrlUj6aHw?rel=0" frameborder="0" allow="encrypted-media" allowfullscreen=""></iframe>
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $course->intro_youtube_id ?? null }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-5">

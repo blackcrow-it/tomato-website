@@ -107,6 +107,7 @@ class CourseController extends Controller
     {
         $data = $request->all();
         $course->fill($data);
+        $course->intro_youtube_id = get_youtube_id_from_url($course->intro_youtube_id);
         $course->save();
 
         $positionData = CoursePosition::where('course_id', $course->id)->get();

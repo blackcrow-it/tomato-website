@@ -30,6 +30,7 @@ class CourseRequest extends FormRequest
             'slug' => 'nullable|string',
             'thumbnail' => 'nullable|url',
             'cover' => 'nullable|url',
+            'intro_youtube_id' => 'nullable|string',
             'description' => 'nullable|string',
             'content' => 'nullable|string',
             'enabled' => 'required|boolean',

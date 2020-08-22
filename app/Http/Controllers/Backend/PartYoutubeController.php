@@ -59,7 +59,7 @@ class PartYoutubeController extends Controller
 
         try {
             preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $request->input('youtube_id'), $match);
-            $youtubeId = $match[1] ?? $request->input('youtube_id');
+            $youtubeId = get_youtube_id_from_url($request->input('youtube_id'));
 
             DB::beginTransaction();
 

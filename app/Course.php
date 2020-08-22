@@ -16,7 +16,7 @@ class Course extends Model
         'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'view', 'enabled',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
         'category_id', 'order_in_category',
-        'price', 'original_price'
+        'price', 'original_price', 'intro_youtube_id'
     ];
 
     public function author()
