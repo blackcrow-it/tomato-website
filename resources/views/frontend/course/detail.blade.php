@@ -138,72 +138,22 @@
                         </div>
                         <div class="tab-pane fade" id="tab-giaotrinh" role="tabpanel">
                             <div id="lessonbox-listpost" class="accordionJs product-detail__listPost">
-                                <div class="panel">
-                                    <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-1" aria-expanded="true" aria-controls="lessonbox-listpost-id-1">Bài 1: Làm quen với tiếng Trung
-                                        Bài 1: Làm quen với tiếng Trung</h3>
-                                    <div id="lessonbox-listpost-id-1" class="collapse show" data-parent="#lessonbox-listpost">
-                                        <div class="panel__entry">
-                                            <ul>
-                                                <li>Bài tập số 1 - 1</li>
-                                                <li>Bài tập số 1 - 2</li>
-                                                <li>Bài tập số 1 - 3</li>
-                                                <li class="testing">Bài tập</li>
-                                            </ul>
+                                @foreach($lessons as $lesson)
+                                    <div class="panel">
+                                        <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-{{ $loop->index }}" aria-expanded="true" aria-controls="lessonbox-listpost-id-{{ $loop->index }}">
+                                            {{ $lesson->title }}
+                                        </h3>
+                                        <div id="lessonbox-listpost-id-{{ $loop->index }}" class="collapse show" data-parent="#lessonbox-listpost">
+                                            <div class="panel__entry">
+                                                <ul>
+                                                    @foreach($lesson->parts as $part)
+                                                        <li>{{ $part->title }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel">
-                                    <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-2" aria-expanded="false" aria-controls="lessonbox-listpost-id-2">Bài 2: Nguyên tắc và các nét cơ bản khi viết chữ Hán</h3>
-                                    <div id="lessonbox-listpost-id-2" class="panel__content collapse" data-parent="#lessonbox-listpost">
-                                        <div class="panel__entry">
-                                            <ul>
-                                                <li>Bài tập số 2 - 1</li>
-                                                <li>Bài tập số 1 - 2</li>
-                                                <li>Bài tập số 1 - 3</li>
-                                                <li>Bài tập</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel">
-                                    <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-3" aria-expanded="false" aria-controls="lessonbox-listpost-id-3">Bài 2: Nguyên tắc và các nét cơ bản khi viết chữ Hán</h3>
-                                    <div id="lessonbox-listpost-id-3" class="panel__content collapse" data-parent="#lessonbox-listpost">
-                                        <div class="panel__entry">
-                                            <ul>
-                                                <li>Bài tập số 2 - 1</li>
-                                                <li>Bài tập số 1 - 2</li>
-                                                <li>Bài tập số 1 - 3</li>
-                                                <li>Bài tập</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel">
-                                    <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-4" aria-expanded="false" aria-controls="lessonbox-listpost-id-4">Bài 2: Nguyên tắc và các nét cơ bản khi viết chữ Hán</h3>
-                                    <div id="lessonbox-listpost-id-4" class="panel__content collapse" data-parent="#lessonbox-listpost">
-                                        <div class="panel__entry">
-                                            <ul>
-                                                <li>Bài tập số 2 - 1</li>
-                                                <li>Bài tập số 1 - 2</li>
-                                                <li>Bài tập số 1 - 3</li>
-                                                <li>Bài tập</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel">
-                                    <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-5" aria-expanded="false" aria-controls="lessonbox-listpost-id-5">Bài 2: Nguyên tắc và các nét cơ bản khi viết chữ Hán</h3>
-                                    <div id="lessonbox-listpost-id-5" class="panel__content collapse" data-parent="#lessonbox-listpost">
-                                        <div class="panel__entry">
-                                            <ul>
-                                                <li>Bài tập số 2 - 1</li>
-                                                <li>Bài tập số 1 - 2</li>
-                                                <li>Bài tập số 1 - 3</li>
-                                                <li>Bài tập</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab-tailieu" role="tabpanel">
