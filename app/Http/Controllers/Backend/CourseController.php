@@ -65,7 +65,7 @@ class CourseController extends Controller
 
     public function edit($id)
     {
-        $course = Course::with('videos')->find($id);
+        $course = Course::find($id);
         if ($course == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
