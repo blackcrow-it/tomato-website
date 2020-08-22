@@ -114,6 +114,10 @@ Route::prefix('admin')
             Route::get('part-youtube/edit/{part_id}', 'PartYoutubeController@edit')->name('part_youtube.edit');
             Route::post('part-youtube/edit/{part_id}', 'PartYoutubeController@submitEdit')->name('part_youtube.edit');
             Route::post('part-youtube/delete/{part_id}', 'PartYoutubeController@submitDelete')->name('part_youtube.delete');
+
+            Route::get('part-content/edit/{part_id}', 'PartContentController@edit')->name('part_content.edit');
+            Route::post('part-content/edit/{part_id}', 'PartContentController@submitEdit')->name('part_content.edit');
+            Route::post('part-content/delete/{part_id}', 'PartContentController@submitDelete')->name('part_content.delete');
         });
 
         Route::middleware('guest')->group(function () {

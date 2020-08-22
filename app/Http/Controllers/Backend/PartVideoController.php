@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PartVideoRequest;
-use App\Jobs\UploadStreamfileJob;
 use App\Part;
 use App\PartVideo;
 use DB;
@@ -12,7 +11,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Log;
 use Storage;
-use Str;
 
 class PartVideoController extends Controller
 {

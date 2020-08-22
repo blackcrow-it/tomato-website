@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PartVideoRequest;
 use App\Part;
-use App\PartYoutube;
+use App\PartContent;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
 
-class PartYoutubeController extends Controller
+class PartContentController extends Controller
 {
     public function edit(Request $request, $part_id)
     {
@@ -30,9 +30,9 @@ class PartYoutubeController extends Controller
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
 
-        $data = $part->part_youtube;
+        $data = $part->part_content;
 
-        return view('backend.part.edit_youtube', [
+        return view('backend.part.edit_content', [
             'data' => $data,
             'part' => $part,
             'lesson' => $lesson,
@@ -58,17 +58,14 @@ class PartYoutubeController extends Controller
         }
 
         try {
-            preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $request->input('youtube_id'), $match);
-            $youtubeId = $match[1] ?? $request->input('youtube_id');
-
             DB::beginTransaction();
 
             $part->title = $request->input('title');
             $part->save();
 
-            $data = $part->part_youtube ?? new PartYoutube();
+            $data = $part->part_youtube ?? new PartContent();
             $data->part_id = $part_id;
-            $data->youtube_id = $youtubeId;
+            $data->content = $request->input('content');
             $data->save();
 
             DB::commit();
@@ -95,7 +92,7 @@ class PartYoutubeController extends Controller
 
         try {
             DB::beginTransaction();
-            $part->part_youtube()->delete();
+            $part->part_content()->delete();
             $part->delete();
             DB::commit();
 
