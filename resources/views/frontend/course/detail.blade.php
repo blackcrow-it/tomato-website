@@ -76,7 +76,8 @@
                                     <span><i class="fa fa-opencart"></i>Loading ... <span><i class="fa fa-check"></i>Xong</span></span>
                                 </a>
                             </div>
-                            <span class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></span>
+                            <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
+                            <div class="btn-min"><a href="{{ route('course.start', [ 'id' => $course->id ]) }}">Bắt đầu khóa học</a></div>
                         </div>
                     </form>
                 </div>

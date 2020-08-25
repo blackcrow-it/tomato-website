@@ -27,6 +27,9 @@ Route::namespace('Frontend')
         Route::get('tin-tuc/{slug}.html', 'PostController@index')->name('post');
 
         Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
+        Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
+
+        Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
 
         Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
 

@@ -28,7 +28,7 @@ class CourseController extends Controller
         $lessons->map(function ($lesson) {
             $lesson->parts = $lesson->parts()
                 ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
-                ->orderBy('title', 'asc')
+                ->orderBy('created_at', 'asc')
                 ->get();
         });
 
@@ -37,5 +37,25 @@ class CourseController extends Controller
             'lessons' => $lessons,
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
         ]);
+    }
+
+    public function start($id)
+    {
+        $course = Course::find($id);
+        if ($course == null) return redirect()->route('home');
+
+        $lesson = $course->lessons()
+            ->orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC')
+            ->orderBy('title', 'asc')
+            ->first();
+        if ($lesson == null) return redirect()->route('home');
+
+        $part = $lesson->parts()
+            ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
+            ->orderBy('created_at', 'asc')
+            ->first();
+        if ($part == null) return redirect()->route('home');
+
+        return redirect()->route('part', ['id' => $part->id]);
     }
 }
