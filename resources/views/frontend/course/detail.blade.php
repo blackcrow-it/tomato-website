@@ -58,28 +58,34 @@
                         <li>Sở hữu mãi mãi</li>
                     </ul>
 
-                    <form class="product-detail__formsubmit">
-                        <div class="product-detail__quantity">
-                            <label>Số lượng: </label>
-                            <div class="input-quantity disable">
-                                <input type="number" class="input-quantity-text form-control" value="1" data-max="20" data-min="1">
-                                <button type="button" class="input-quantity-number input-quantity-down">-</button>
-                                <button type="button" class="input-quantity-number input-quantity-up">+</button>
+                    @if(auth()->check())
+                        <form class="product-detail__formsubmit">
+                            <div class="product-detail__quantity">
+                                <label>Số lượng: </label>
+                                <div class="input-quantity disable">
+                                    <input type="number" class="input-quantity-text form-control" value="1" data-max="20" data-min="1">
+                                    <button type="button" class="input-quantity-number input-quantity-down">-</button>
+                                    <button type="button" class="input-quantity-number input-quantity-up">+</button>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="product-detal__btn">
-                            <div class="btn-wrap">
-                                <a href="giohang.html" class="btn">Mua ngay</a>
-                                <a href="#" class="btn btn--secondary btn-add-to-cart">
-                                    Thêm vào giỏ
-                                    <span><i class="fa fa-opencart"></i>Loading ... <span><i class="fa fa-check"></i>Xong</span></span>
-                                </a>
+                            <div class="product-detal__btn">
+                                <div class="btn-wrap">
+                                    <a href="giohang.html" class="btn">Mua ngay</a>
+                                    <a href="#" class="btn btn--secondary btn-add-to-cart">
+                                        Thêm vào giỏ
+                                        <span><i class="fa fa-opencart"></i>Loading ... <span><i class="fa fa-check"></i>Xong</span></span>
+                                    </a>
+                                </div>
+                                <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
                             </div>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="btn">Đăng nhập để tiếp tục</a>
+                        <div class="product-detal__btn">
                             <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
-                            <div class="btn-min"><a href="{{ route('course.start', [ 'id' => $course->id ]) }}">Bắt đầu khóa học</a></div>
                         </div>
-                    </form>
+                    @endif
                 </div>
             </div>
 

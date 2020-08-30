@@ -14,13 +14,6 @@ class SocialiteController extends Controller
 {
     public function loginWithGoogle()
     {
-        $redirectUrl = url()->previous();
-        if (Str::startsWith($redirectUrl, route('admin.login'))) {
-            $redirectUrl = route('admin.home');
-        }
-
-        redirect()->setIntendedUrl($redirectUrl);
-
         return Socialite::driver('google')->redirect();
     }
 
