@@ -119,7 +119,7 @@
                             @if(auth()->check())
                                 <div class="dropdown">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownUserHeader" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="f-avatar" style="background-image: url('{{ auth()->user()->avatar }}');"></span>
+                                        <span class="f-avatar" style="background-image: url('{{ auth()->user()->avatar ?? asset("tomato/assets/img/image/default-avatar.jpg") }}');"></span>
                                         <p class="f-name">{{ auth()->user()->username }}</p>
                                     </a>
 
