@@ -19,7 +19,7 @@ class SocialiteController extends Controller
             $redirectUrl = route('admin.home');
         }
 
-        session()->put('socialite_back_url', $redirectUrl);
+        redirect()->setIntendedUrl($redirectUrl);
 
         return Socialite::driver('google')->redirect();
     }
@@ -48,7 +48,6 @@ class SocialiteController extends Controller
 
         Auth::login($user);
 
-        $redirectUrl = session()->pull('socialite_back_url', route('home'));
-        return redirect()->to($redirectUrl);
+        return redirect()->intended(route('home'));
     }
 }
