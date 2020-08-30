@@ -34,10 +34,10 @@ class SocialiteController extends Controller
 
         if ($user == null) {
             $user = new User;
+            $user->username = $googleUser->email;
             $user->password = Hash::make(Str::random());
         }
 
-        $user->username = $user->username ?? $googleUser->email;
         $user->google_id = $googleUser->id;
         $user->email = $googleUser->email;
         $user->avatar = $user->avatar ?? $googleUser->avatar;

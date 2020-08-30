@@ -13152,6 +13152,10 @@ section {
   }
 }
 
+.invalid-feedback {
+  display: block;
+}
+
 .animated {
   -webkit-animation-duration: 1.2s;
           animation-duration: 1.2s;
@@ -18327,6 +18331,14 @@ section {
 
 .login-page__content .login-social__btn a.login-google:hover {
   background-color: #ff7260;
+}
+
+.login-page__content .login-social__btn a.register {
+  background-color: #359a57;
+}
+
+.login-page__content .login-social__btn a.register:hover {
+  background-color: #41bd6a;
 }
 
 @media (max-width: 767.98px) {

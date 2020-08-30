@@ -46,7 +46,7 @@
 
 .accordionJs {
 	margin-bottom: 30px;
-	
+
 	.panel {
 		border: 1px solid $color-primary;
 		border-radius: 5px;
@@ -92,4 +92,8 @@
 			padding: 15px 25px;
 		}
 	}
+}
+
+.invalid-feedback {
+    display: block;
 }

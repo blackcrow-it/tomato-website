@@ -34,7 +34,6 @@ class UserController extends Controller
     {
         $data = $request->input();
         $data['username'] = mb_strtolower(trim($data['username']));
-        $data['email'] = mb_strtolower(trim($data['email']));
         $data['password'] = Hash::make($data['password']);
 
         $user = new User;

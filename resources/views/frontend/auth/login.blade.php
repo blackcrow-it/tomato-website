@@ -10,7 +10,7 @@
 @endsection
 
 @section('body')
-<section class="section">
+<section class="section p-0">
     <div class="container">
         <div class="login-page">
             <div class="row">
@@ -21,8 +21,16 @@
                     <div class="login-page__wrap">
                         <div class="login-page__content">
                             <div class="tabJs">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active show" href="{{ route('login') }}">Đăng nhập</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('register') }}">Đăng ký</a>
+                                    </li>
+                                </ul>
                                 <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="tab-login" role="tabpanel">
+                                    <div class="tab-pane fade active show">
                                         @if($errors->any())
                                             <div class="alert alert-primary" role="alert">
                                                 <ul class="pl-4 mb-0">
@@ -61,6 +69,13 @@
                                                 <div class="login-social__btn">
                                                     <a href="" class="login-facebook" onclick="alert('Đang trong quá trình xây dựng'); return false;"><i class="fa fa-facebook"></i> Facebook</a>
                                                     <a href="{{ route('auth.google') }}" class="login-google"><i class="fa fa-google-plus"></i> Google</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="login-social">
+                                                <span>hoặc</span>
+                                                <div class="login-social__btn">
+                                                    <a href="{{ route('register') }}" class="register"><i class="fa fa-sign-in"></i> Đăng ký ngay</a>
                                                 </div>
                                             </div>
                                         </form>

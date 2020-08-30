@@ -96,6 +96,14 @@
 					background-color: #ff7260;
 				}
 			}
+
+			&.register {
+				background-color: #359a57;
+
+				&:hover {
+					background-color: #41bd6a;
+				}
+			}
 		}
 	}
 }

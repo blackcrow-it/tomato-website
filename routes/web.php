@@ -48,11 +48,14 @@ Route::namespace('Frontend')
         });
 
         Route::middleware('guest')->group(function () {
-            Route::get('login', 'LoginController@index')->name('login');
-            Route::post('login', 'LoginController@login')->name('login');
+            Route::get('dang-nhap', 'LoginController@index')->name('login');
+            Route::post('dang-nhap', 'LoginController@login')->name('login');
+
+            Route::get('dang-ky', 'RegisterController@index')->name('register');
+            Route::post('dang-ky', 'RegisterController@register')->name('register');
         });
 
-        Route::post('logout', 'LogoutController@logout')->name('logout');
+        Route::post('dang-xuat', 'LogoutController@logout')->name('logout');
     });
 
 Route::prefix('admin')
