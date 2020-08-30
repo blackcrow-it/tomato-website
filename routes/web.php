@@ -22,6 +22,7 @@ Route::middleware('guest')->group(function () {
 
 Route::namespace('Frontend')
     ->group(function () {
+
         Route::get('/', 'HomeController@index')->name('home');
 
         Route::get('tin-tuc/{slug}.html', 'PostController@index')->name('post');
@@ -29,7 +30,9 @@ Route::namespace('Frontend')
         Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
         Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
-        Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
+        Route::middleware('auth')->group(function () {
+            Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
+        });
 
         Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
 
@@ -43,6 +46,13 @@ Route::namespace('Frontend')
             // Không được đổi dù bất cứ lý do gì
             Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key');
         });
+
+        Route::middleware('guest')->group(function () {
+            Route::get('login', 'LoginController@index')->name('login');
+            Route::post('login', 'LoginController@login')->name('login');
+        });
+
+        Route::post('logout', 'LogoutController@logout')->name('logout');
     });
 
 Route::prefix('admin')

@@ -116,7 +116,29 @@
                     <div class="header__tool">
                         <a href="#" class="header__iconSearch"><i class="pe-icon-search"></i></a>
                         <div class="header__login">
-                            <a href="login.html" class="header__iconLogin"><i class="pe-icon-user"></i></a>
+                            @if(auth()->check())
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownUserHeader" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="f-avatar" style="background-image: url('{{ auth()->user()->avatar }}');"></span>
+                                        <p class="f-name">{{ auth()->user()->username }}</p>
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownUserHeader">
+                                        <a class="dropdown-item" href=""><i class="fa fa-vcard-o"></i>Trang cá nhân</a>
+                                        <a class="dropdown-item" href=""><i class="fa fa-bell-o"></i>Thông báo <small>(3)</small></a>
+                                        <a class="dropdown-item" href=""><i class="fa fa-cart-arrow-down"></i>Lịch sử mua hàng</a>
+                                        <a class="dropdown-item" href=""><i class="fa fa-server"></i>Khoá học của tôi</a>
+                                        <a class="dropdown-item" href=""><i class="fa fa-credit-card"></i>Nạp tiền</a>
+                                        <a class="dropdown-item" href=""><i class="fa fa-edit"></i>Thay đổi mật khẩu</a>
+                                        <a class="dropdown-item" href="#" onclick="$('#js-logout-form').submit();"><i class="fa fa-sign-out"></i>Đăng xuất</a>
+                                    </div>
+                                </div>
+                                <form action="{{ route('logout') }}" method="POST" id="js-logout-form">
+                                    @csrf
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="header__iconLogin"><i class="pe-icon-user"></i></a>
+                            @endif
                         </div>
                         <div class="header__iconmenu">
                             <div class="f-wrap">

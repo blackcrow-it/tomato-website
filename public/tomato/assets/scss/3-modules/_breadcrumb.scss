@@ -4,6 +4,7 @@
 
 .breadcrumb {
 	@include list-style;
+	background: none;
 
 	li {
 		display: inline-block;

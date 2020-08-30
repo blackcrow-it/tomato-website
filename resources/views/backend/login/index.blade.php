@@ -19,7 +19,7 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                @if ($errors->any())
+                @if($errors->any())
                     <blockquote class="quote-danger m-0 mb-3">
                         <ul class="pl-4 mb-0">
                             @foreach($errors->all() as $err)
@@ -30,7 +30,9 @@
                 @else
                     <p class="login-box-msg">Đăng nhập để tiếp tục</p>
                 @endif
-                <form action="{{ route('admin.login') }}" method="post"> @csrf <div class="input-group mb-3">
+                <form action="{{ route('admin.login') }}" method="post">
+                    @csrf
+                    <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Username" name="username">
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -62,7 +64,7 @@
                 </form>
                 <div class="social-auth-links text-center mb-3">
                     <p>- HOẶC -</p>
-                    <a href="" class="btn btn-block btn-primary" onclick="alert('Nút này không có tác dụng đâu :)'); return false;">
+                    <a href="" class="btn btn-block btn-primary" onclick="alert('Đang trong quá trình xây dựng'); return false;">
                         <i class="fab fa-facebook mr-2"></i> Đăng nhập bằng Facebook
                     </a>
                     <a href="{{ route('auth.google') }}" class="btn btn-block btn-danger">
@@ -71,10 +73,10 @@
                 </div>
                 <!-- /.social-auth-links -->
                 <p class="mb-1">
-                    <a href="" onclick="alert('Nút này không có tác dụng đâu :)'); return false;">Quên mật khẩu</a>
+                    <a href="" onclick="alert('Đang trong quá trình xây dựng'); return false;">Quên mật khẩu</a>
                 </p>
                 <p class="mb-0">
-                    <a href="" onclick="alert('Nút này không có tác dụng đâu :)'); return false;">Đăng ký thành viên</a>
+                    <a href="" onclick="alert('Đang trong quá trình xây dựng'); return false;">Đăng ký thành viên</a>
                 </p>
             </div>
             <!-- /.login-card-body -->
