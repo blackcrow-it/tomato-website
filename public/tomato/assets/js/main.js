@@ -1,6 +1,12 @@
 (function ($) {
     "use strict";
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     /**
      * [isMobile description]
      * @type {Object}
@@ -534,10 +540,12 @@
             var self = $(this);
             self.addClass('loading');
 
-            $.get(self.attr('href')).done(function () {
+            var form = $(self.attr('href'));
+            $.post(form.attr('action'), form.serialize()).done(function () {
                 self.removeClass('loading');
                 self.addClass('added');
                 $('.cartbox').addClass('cartbox--show');
+                vueCartbox.getData();
             }).fail(function () {
                 self.removeClass('loading');
             });

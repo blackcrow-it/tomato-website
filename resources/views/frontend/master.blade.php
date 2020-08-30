@@ -10,6 +10,8 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="shortcut icon" href="{{ asset('tomato/favicon.ico') }}" type="image/vnd.microsoft.icon">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- CSS LIBRARY -->
     <link href="{{ asset('tomato/assets/font/fontawesome/font-awesome.css') }}" rel="stylesheet">
     <link href="{{ asset('tomato/assets/font/Pe-icon/pe-icon.css') }}" rel="stylesheet">
@@ -116,7 +118,7 @@
                     <div class="header__tool">
                         @if(auth()->check())
                             <div class="header__cart">
-                                <span><i class="pe-icon-cart"></i><small>3</small></span>
+                                <span><i class="pe-icon-cart"></i><small id="cartbox__count">0</small></span>
                             </div>
                         @endif
                         <a href="#" class="header__iconSearch"><i class="pe-icon-search"></i></a>
@@ -345,44 +347,38 @@
     </div>
 
     <!-- Cart -->
-    <div class="cartbox">
+    <div class="cartbox" id="cartbox">
         <div class="cartbox__clickout"></div>
         <div class="cartbox__inner">
             <span class="cartbox__close"><i class="fa fa-close"></i></span>
-            <h3 class="cartbox__title">Giỏ hàng (2 sản phẩm)</h3>
+            <div class="cartbox__flex d-flex align-items-start flex-column">
+                <h3 class="cartbox__title">Giỏ hàng (@{{ data.length }} sản phẩm)</h3>
 
-            <div class="cartbox__list">
-                <ul>
-                    <li class="item">
-                        <span class="close"><i class="fa fa-close"></i></span>
-                        <div>
-                            <img src="assets/img/image/lessonbox-1.jpg">
-                            <h4><a href="#">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h4>
-                            <p>
-                                1 x <b>499.000đ</b>
-                            </p>
-                        </div>
-                    </li>
-                    <li class="item">
-                        <span class="close"><i class="fa fa-close"></i></span>
-                        <div>
-                            <img src="assets/img/image/lessonbox-1.jpg">
-                            <h4><a href="#">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h4>
-                            <p>
-                                1 x <b>499.000đ</b>
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="cartbox__footer">
-                <div class="cartbox__total">
-                    Tổng
-                    <b>499.000đ</b>
+                <div class="cartbox__list">
+                    <div v-if="loading" class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <ul v-else>
+                        <li v-for="(item, index) in data" :key="item.id" class="item">
+                            <span class="close" @click="removeCartItem(item.id)"><i class="fa fa-close"></i></span>
+                            <div>
+                                <img :src="item.object.thumbnail">
+                                <h4><a :href="item.__object_url">@{{ item.object.title }}</a></h4>
+                                <p>
+                                    @{{ item.amount }} x <b>@{{ item.__price_format }}</b>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div class="cartbox__btn">
-                    <a href="giohang.html" class="btn btn--outline-secondary btn--block">Giỏ hàng</a>
+
+                <div class="cartbox__footer mt-auto">
+                    <div class="cartbox__total">
+                        Tổng <b>@{{ totalPriceFormat }}</b>
+                    </div>
+                    <div class="cartbox__btn">
+                        <a href="" class="btn btn--outline-secondary btn--block">Giỏ hàng</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -404,17 +400,56 @@
     <!-- End/Modal thông báo đăng ký nhận tin thành công -->
 
     <!-- Link Js -->
-    <script type="text/javascript" src="{{ asset('tomato/assets/lib/jquery/jquery-3.3.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ mix('js/frontend.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/bodyScrollLock/bodyScrollLock.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/jquery-validate/jquery.validate.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('tomato/assets/lib/boostrap/popper.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('tomato/assets/lib/boostrap/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/headroom/headroom.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/owl-carousel/owl.carousel.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/theia-sticky-sidebar/theia-sticky-sidebar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/wow/wow.min.js') }}"></script>
+    <script>
+        const vueCartbox = new Vue({
+            el: '#cartbox',
+            data: {
+                data: [],
+                loading: false,
+                totalPriceFormat: 0,
+            },
+            mounted() {
+                this.getData();
+            },
+            methods: {
+                getData() {
+                    this.loading = true;
+                    axios.get("{{ route('cart.get_data') }}").then(res => {
+                        this.data = res.map(item => {
+                            item.__price_format = currency(item.price);
+                            return item;
+                        });
+                        const totalPrice = this.data.reduce((total, item) => {
+                            return total + item.price * item.amount;
+                        }, 0);
+                        this.totalPriceFormat = currency(totalPrice);
+                        $('#cartbox__count').text(this.data.map(x => x.amount).reduce((t, x) => t + x, 0));
+                    }).then(() => {
+                        this.loading = false;
+                    });
+                },
+                removeCartItem(id) {
+                    this.loading = true;
+                    axios.post("{{ route('cart.delete') }}", {
+                        id
+                    }).then(() => {
 
+                    }).then(() => {
+                        this.getData();
+                    });
+                },
+            },
+        });
+
+    </script>
     <script type="text/javascript" src="{{ asset('tomato/assets/js/main.js') }}?v={{ date('Ymd') }}"></script>
 
     @yield('footer')

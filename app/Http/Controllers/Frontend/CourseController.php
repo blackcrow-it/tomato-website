@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Cart;
 use App\Category;
+use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -36,6 +38,7 @@ class CourseController extends Controller
             'course' => $course,
             'lessons' => $lessons,
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
+            'added_to_cart' => Cart::where('type', ObjectType::COURSE)->where('object_id', $course->id)->exists()
         ]);
     }
 

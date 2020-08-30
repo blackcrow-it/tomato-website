@@ -18079,7 +18079,7 @@ section {
   background-color: #fff;
   margin-left: auto;
   height: 100%;
-  padding: 50px 20px;
+  padding-top: 15px;
   transform: translateX(100%);
   transition: all 0.3s ease;
 }
@@ -18098,6 +18098,7 @@ section {
   cursor: pointer;
   border-radius: 50%;
   border: 1px solid #E71D36;
+  margin: 10px;
   transition: all 0.3s;
 }
 
@@ -18106,15 +18107,22 @@ section {
   color: #fff;
 }
 
+.cartbox__flex {
+  height: 100%;
+}
+
 .cartbox__title {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 20px;
+  padding: 0 20px;
+  width: 100%;
 }
 
 .cartbox__list {
-  max-height: calc(100% - 250px);
   overflow-y: auto;
+  padding-left: 15px;
+  width: 100%;
 }
 
 .cartbox__list ul {
@@ -18189,12 +18197,9 @@ section {
 }
 
 .cartbox__footer {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
   border-top: 1px solid #d2cfcf;
   padding: 15px 20px;
+  width: 100%;
 }
 
 .cartbox__total {

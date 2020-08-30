@@ -54641,6 +54641,11 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.interceptors.response.use(function (response) {
+  return response.data;
+}, function (error) {
+  return Promise.reject(error.response.data);
+});
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -54654,6 +54659,20 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+window.currency = function (number) {
+  var defaultText = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Miễn phí';
+  number = parseInt(number);
+
+  if (isNaN(number) || number <= 0) {
+    return defaultText;
+  }
+
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  }).format(number);
+};
 
 /***/ }),
 

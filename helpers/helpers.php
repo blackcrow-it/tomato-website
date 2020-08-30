@@ -36,7 +36,7 @@ if (!function_exists('currency')) {
 
         if ($money == 0) return $default;
 
-        return number_format($money, 0, '.', ' ') . 'đ';
+        return number_format($money, 0, ',', '.') . ' ₫';
     }
 }
 

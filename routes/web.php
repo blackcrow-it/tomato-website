@@ -25,27 +25,25 @@ Route::namespace('Frontend')
 
         Route::get('/', 'HomeController@index')->name('home');
 
+        Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
+
         Route::get('tin-tuc/{slug}.html', 'PostController@index')->name('post');
 
         Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
         Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
         Route::middleware('auth')->group(function () {
+            Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
+
             Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
+
+            Route::get('gio-hang', 'CartController@index')->name('cart.index');
+            Route::get('gio-hang/get-data', 'CartController@getData')->name('cart.get_data');
+            Route::post('gio-hang/add', 'CartController@add')->name('cart.add');
+            Route::post('gio-hang/delete', 'CartController@delete')->name('cart.delete');
         });
-
-        Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
-
-        Route::get('cart', 'CartController@index')->name('cart.index');
-        Route::post('cart/add', 'CartController@add')->name('cart.add');
-        Route::post('cart/remove', 'CartController@remove')->name('cart.remove');
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
-
-        Route::middleware('auth')->group(function () {
-            // Không được đổi dù bất cứ lý do gì
-            Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key');
-        });
 
         Route::middleware('guest')->group(function () {
             Route::get('dang-nhap', 'LoginController@index')->name('login');

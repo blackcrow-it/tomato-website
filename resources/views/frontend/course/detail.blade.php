@@ -62,7 +62,7 @@
                         <div class="product-detal__btn">
                             <div class="btn-wrap">
                                 <a href="" class="btn">Mua ngay</a>
-                                <a href="" class="btn btn--secondary btn-add-to-cart">
+                                <a href="#add-to-cart" class="btn btn--secondary btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
                                     <span class="add-to-cart-text">Thêm vào giỏ</span>
                                     <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
                                     <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
@@ -70,6 +70,12 @@
                             </div>
                             <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
                         </div>
+                        @if(!$added_to_cart)
+                            <form action="{{ route('cart.add') }}" id="add-to-cart" class="invisible">
+                                <input type="hidden" name="object_id" value="{{ $course->id }}">
+                                <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::COURSE }}">
+                            </form>
+                        @endif
                     @else
                         <a href="{{ route('login') }}" class="btn">Đăng nhập để tiếp tục</a>
                         <div class="product-detal__btn">
