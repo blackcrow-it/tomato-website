@@ -59,27 +59,17 @@
                     </ul>
 
                     @if(auth()->check())
-                        <form class="product-detail__formsubmit">
-                            <div class="product-detail__quantity">
-                                <label>Số lượng: </label>
-                                <div class="input-quantity disable">
-                                    <input type="number" class="input-quantity-text form-control" value="1" data-max="20" data-min="1">
-                                    <button type="button" class="input-quantity-number input-quantity-down">-</button>
-                                    <button type="button" class="input-quantity-number input-quantity-up">+</button>
-                                </div>
+                        <div class="product-detal__btn">
+                            <div class="btn-wrap">
+                                <a href="" class="btn">Mua ngay</a>
+                                <a href="" class="btn btn--secondary btn-add-to-cart">
+                                    <span class="add-to-cart-text">Thêm vào giỏ</span>
+                                    <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
+                                    <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
+                                </a>
                             </div>
-
-                            <div class="product-detal__btn">
-                                <div class="btn-wrap">
-                                    <a href="giohang.html" class="btn">Mua ngay</a>
-                                    <a href="#" class="btn btn--secondary btn-add-to-cart">
-                                        Thêm vào giỏ
-                                        <span><i class="fa fa-opencart"></i>Loading ... <span><i class="fa fa-check"></i>Xong</span></span>
-                                    </a>
-                                </div>
-                                <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
-                            </div>
-                        </form>
+                            <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
+                        </div>
                     @else
                         <a href="{{ route('login') }}" class="btn">Đăng nhập để tiếp tục</a>
                         <div class="product-detal__btn">

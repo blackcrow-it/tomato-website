@@ -24,7 +24,7 @@ button {
 	background-color: $color-primary;
 	border-radius: 25px;
 	padding: 0 35px;
-	
+
 	transition: all .3s ease;
 
 	&:hover,
@@ -107,70 +107,52 @@ button {
 	overflow: hidden;
 
 	span {
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
 		text-align: center;
 		border-radius: 25px;
 	}
 
-	span {
-		i {
-			margin-right: 5px;
-		}
-
-		span {
-			transform: translateY(0);
-			opacity: 0;
-
-			i {
-				margin-right: 0;
-			}
-		}
+	.add-to-cart-text {
+		display: block;
 	}
 
-	> span {
-		opacity: 0;
-		visibility: hidden;
+	.loading-text {
+		display: none;
 	}
 
-	&:not(.btn--secondary) {
-		span {
-			background-color: $color-secondary;
+	.complete-text {
+		display: none;
+	}
+
+	&.loading {
+		pointer-events: none;
+
+		.add-to-cart-text {
+			display: none;
+		}
+
+		.loading-text {
+			display: block;
+		}
+
+		.complete-text {
+			display: none;
 		}
 	}
 
 	&.added {
 		pointer-events: none;
 
-		> span {
-			opacity: 1;
-			visibility: visible;
-			transition: all .4s ease;
-
-			> span {
-				animation: efffectAddToCart .3s forwards;
-				animation-delay: .7s;
-			}
+		.add-to-cart-text {
+			display: none;
 		}
-	}
 
-	&.btn--secondary {
-		span {
-			background-color: $color-secondary;
+		.loading-text {
+			display: none;
 		}
-	}
-}
 
-@keyframes efffectAddToCart {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
+		.complete-text {
+			display: block;
+		}
 	}
 }
 
@@ -181,7 +163,7 @@ button {
 	font-size: 12px;
 	font-weight: 600;
 	color: $color-primary;
-	
+
 	i {
 		margin-left: 4px;
 		transition: all .3s ease;

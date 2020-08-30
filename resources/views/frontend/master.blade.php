@@ -114,6 +114,11 @@
                     </nav>
 
                     <div class="header__tool">
+                        @if(auth()->check())
+                            <div class="header__cart">
+                                <span><i class="pe-icon-cart"></i><small>3</small></span>
+                            </div>
+                        @endif
                         <a href="#" class="header__iconSearch"><i class="pe-icon-search"></i></a>
                         <div class="header__login">
                             @if(auth()->check())
@@ -339,6 +344,51 @@
         </a>
     </div>
 
+    <!-- Cart -->
+    <div class="cartbox">
+        <div class="cartbox__clickout"></div>
+        <div class="cartbox__inner">
+            <span class="cartbox__close"><i class="fa fa-close"></i></span>
+            <h3 class="cartbox__title">Giỏ hàng (2 sản phẩm)</h3>
+
+            <div class="cartbox__list">
+                <ul>
+                    <li class="item">
+                        <span class="close"><i class="fa fa-close"></i></span>
+                        <div>
+                            <img src="assets/img/image/lessonbox-1.jpg">
+                            <h4><a href="#">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h4>
+                            <p>
+                                1 x <b>499.000đ</b>
+                            </p>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <span class="close"><i class="fa fa-close"></i></span>
+                        <div>
+                            <img src="assets/img/image/lessonbox-1.jpg">
+                            <h4><a href="#">Học Tiếng Trung Giáo Trình Hán Ngữ Tập 1 - Quyển 1</a></h4>
+                            <p>
+                                1 x <b>499.000đ</b>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="cartbox__footer">
+                <div class="cartbox__total">
+                    Tổng
+                    <b>499.000đ</b>
+                </div>
+                <div class="cartbox__btn">
+                    <a href="giohang.html" class="btn btn--outline-secondary btn--block">Giỏ hàng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End/Cart -->
+
     <!-- Modal thông báo đăng ký nhận tin thành công -->
     <div class="modal fade" id="consultationForm-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -365,7 +415,7 @@
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/theia-sticky-sidebar/theia-sticky-sidebar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/wow/wow.min.js') }}"></script>
 
-    <script type="text/javascript" src="{{ asset('tomato/assets/js/main.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('tomato/assets/js/main.js') }}?v={{ date('Ymd') }}"></script>
 
     @yield('footer')
 </body>
