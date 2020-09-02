@@ -37,10 +37,12 @@ Route::namespace('Frontend')
 
             Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
 
-            Route::get('gio-hang', 'CartController@index')->name('cart.index');
+            Route::get('gio-hang', 'CartController@index')->name('cart');
             Route::get('gio-hang/get-data', 'CartController@getData')->name('cart.get_data');
             Route::post('gio-hang/add', 'CartController@add')->name('cart.add');
             Route::post('gio-hang/delete', 'CartController@delete')->name('cart.delete');
+            Route::post('gio-hang/submit', 'CartController@submitCart')->name('cart.submit');
+            Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
         });
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');

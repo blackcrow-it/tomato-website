@@ -15,6 +15,7 @@ class CartController extends Controller
 {
     public function index()
     {
+        return view('frontend.cart.index');
     }
 
     public function add(Request $request)
@@ -22,6 +23,7 @@ class CartController extends Controller
         $type = $request->input('type');
         $object_id = $request->input('object_id');
         $amount = $request->input('amount', 1);
+        if ($amount < 1) $amount = 1;
 
         $object = null;
         switch ($type) {
@@ -77,9 +79,11 @@ class CartController extends Controller
             ->get()
             ->map(function ($item) {
                 $item->object = null;
+                $item->__enabled_change_amount = true;
                 switch ($item->type) {
                     case ObjectType::COURSE:
-                        $item->object = Course::find($item->object_id);
+                        $item->object = Course::with('category')->find($item->object_id);
+                        $item->__enabled_change_amount = false;
                         break;
                 }
                 return $item;
@@ -93,5 +97,25 @@ class CartController extends Controller
             });
 
         return $cart;
+    }
+
+    public function submitCart(Request $request)
+    {
+        DB::transaction(function () use ($request) {
+            Cart::where('user_id', Auth::user()->id)->delete();
+
+            foreach ($request->input('cart') as $item) {
+                $this->add(new Request([
+                    'type' => $item['type'],
+                    'object_id' => $item['object_id'],
+                    'amount' => $item['amount']
+                ]));
+            }
+        });
+    }
+
+    public function paymentConfirm()
+    {
+        return view('frontend.cart.confirm');
     }
 }

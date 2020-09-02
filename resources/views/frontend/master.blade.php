@@ -347,7 +347,7 @@
     </div>
 
     <!-- Cart -->
-    <div class="cartbox" id="cartbox">
+    <div class="cartbox" id="cartbox__mini">
         <div class="cartbox__clickout"></div>
         <div class="cartbox__inner">
             <span class="cartbox__close"><i class="fa fa-close"></i></span>
@@ -365,7 +365,7 @@
                                 <img :src="item.object.thumbnail">
                                 <h4><a :href="item.__object_url">@{{ item.object.title }}</a></h4>
                                 <p>
-                                    @{{ item.amount }} x <b>@{{ item.__price_format }}</b>
+                                    @{{ item.amount }} x <b>@{{ currency(item.price) }}</b>
                                 </p>
                             </div>
                         </li>
@@ -374,10 +374,10 @@
 
                 <div class="cartbox__footer mt-auto">
                     <div class="cartbox__total">
-                        Tổng <b>@{{ totalPriceFormat }}</b>
+                        Tổng <b>@{{ currency(totalPrice) }}</b>
                     </div>
                     <div class="cartbox__btn">
-                        <a href="" class="btn btn--outline-secondary btn--block">Giỏ hàng</a>
+                        <a href="{{ route('cart') }}" class="btn btn--outline-secondary btn--block">Giỏ hàng</a>
                     </div>
                 </div>
             </div>
@@ -410,11 +410,11 @@
     <script type="text/javascript" src="{{ asset('tomato/assets/lib/wow/wow.min.js') }}"></script>
     <script>
         const vueCartbox = new Vue({
-            el: '#cartbox',
+            el: '#cartbox__mini',
             data: {
                 data: [],
                 loading: false,
-                totalPriceFormat: 0,
+                totalPrice: 0,
             },
             mounted() {
                 this.getData();
@@ -423,14 +423,12 @@
                 getData() {
                     this.loading = true;
                     axios.get("{{ route('cart.get_data') }}").then(res => {
-                        this.data = res.map(item => {
-                            item.__price_format = currency(item.price);
-                            return item;
-                        });
-                        const totalPrice = this.data.reduce((total, item) => {
+                        this.data = res;
+
+                        this.totalPrice = this.data.reduce((total, item) => {
                             return total + item.price * item.amount;
                         }, 0);
-                        this.totalPriceFormat = currency(totalPrice);
+
                         $('#cartbox__count').text(this.data.map(x => x.amount).reduce((t, x) => t + x, 0));
                     }).then(() => {
                         this.loading = false;
@@ -441,10 +439,13 @@
                     axios.post("{{ route('cart.delete') }}", {
                         id
                     }).then(() => {
-
+                        // nothing
                     }).then(() => {
                         this.getData();
                     });
+                },
+                currency(x) {
+                    return currency(x);
                 },
             },
         });
