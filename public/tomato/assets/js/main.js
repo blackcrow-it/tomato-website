@@ -540,7 +540,7 @@
             var self = $(this);
             self.addClass('loading');
 
-            var form = $(self.attr('href'));
+            var form = $(self.data('form'));
             $.post(form.attr('action'), form.serialize()).done(function () {
                 self.removeClass('loading');
                 self.addClass('added');
@@ -556,6 +556,24 @@
             setTimeout(function () {
                 $('.cartbox').addClass('cartbox--show');
             }, 300);
+        });
+
+        $('.btn-buy-now').on('click', function (e) {
+            e.preventDefault();
+            var self = $(this);
+            self.prop('disabled', true);
+
+            var form = $(self.data('form'));
+            if (form.length == 0) {
+                location.href = self.data('redirect');
+                return;
+            }
+
+            $.post(form.attr('action'), form.serialize()).done(function () {
+                location.href = self.data('redirect');
+            }).fail(function () {
+                self.prop('disabled', false);
+            });
         });
     }
 

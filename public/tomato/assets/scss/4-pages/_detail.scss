@@ -36,7 +36,7 @@
 }
 
 .post-detail {
-	
+
 }
 
 .post-detail__img {
@@ -95,7 +95,7 @@
 
 	@include media-breakpoint-up(md) {
 		padding: 30px;
-		
+
 		.f-item__inner {
 			h3 {
 				font-size: 16px;
@@ -294,12 +294,12 @@
 }
 
 .product-detal__btn {
-	
+
 
 	.btn-wrap {
 		display: flex;
 
-		a {
+		.btn {
 			margin-right: 10px;
 		}
 	}
@@ -341,7 +341,7 @@
 .product-detail__team {
 	.f-avatar {
 		margin-bottom: 20px;
-		
+
 		img {
 			width: 100%;
 		}

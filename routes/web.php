@@ -30,10 +30,11 @@ Route::namespace('Frontend')
         Route::get('tin-tuc/{slug}.html', 'PostController@index')->name('post');
 
         Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
-        Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
         Route::middleware('auth')->group(function () {
             Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
+
+            Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
             Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
 

@@ -19725,7 +19725,7 @@ section {
   display: flex;
 }
 
-.product-detal__btn .btn-wrap a {
+.product-detal__btn .btn-wrap .btn {
   margin-right: 10px;
 }
 
