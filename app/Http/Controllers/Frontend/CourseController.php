@@ -6,8 +6,10 @@ use App\Cart;
 use App\Category;
 use App\Constants\ObjectType;
 use App\Course;
+use App\CourseRelatedCourse;
 use App\Http\Controllers\Controller;
 use App\UserCourse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -35,6 +37,14 @@ class CourseController extends Controller
                 ->get();
         });
 
+        $relatedCourses = CourseRelatedCourse::with('related_course')
+            ->wherehas('related_course', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('course_id', $course->id)
+            ->get()
+            ->pluck('related_course');
+
         return view('frontend.course.detail', [
             'course' => $course,
             'lessons' => $lessons,
@@ -46,6 +56,7 @@ class CourseController extends Controller
                 ->where('course_id', $course->id)
                 ->where('expires_on', '>', now())
                 ->exists(),
+            'related_courses' => $relatedCourses,
         ]);
     }
 

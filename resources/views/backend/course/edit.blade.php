@@ -1,18 +1,18 @@
 @extends('backend.master')
 
 @section('title')
-    @if (request()->routeIs('admin.course.add'))
-        Thêm khóa học mới
-    @else
-        Sửa khóa học
-    @endif
+@if(request()->routeIs('admin.course.add'))
+    Thêm khóa học mới
+@else
+    Sửa khóa học
+@endif
 @endsection
 
 @section('content-header')
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if (request()->routeIs('admin.course.add'))
+            @if(request()->routeIs('admin.course.add'))
                 Thêm khóa học mới
             @else
                 Sửa khóa học
@@ -28,21 +28,21 @@
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -60,7 +60,7 @@
                 <label>Chọn danh mục</label>
                 <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                     <option value="">Không phân loại</option>
-                    @foreach ($categories as $category)
+                    @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ ($data->category_id ?? old('category_id')) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
                     @endforeach
                 </select>
@@ -167,7 +167,7 @@
             <div class="form-group">
                 <label>Vị trí hiển thị</label>
                 <div>
-                    @foreach (get_template_position(\App\Constants\ObjectType::COURSE) as $item)
+                    @foreach(get_template_position(\App\Constants\ObjectType::COURSE) as $item)
                         <div class="form-check">
                             <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template-position-{{ $loop->index }}" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
                             <label class="form-check-label" for="cr-template-position-{{ $loop->index }}">{{ $item['name'] }}</label>
@@ -175,6 +175,71 @@
                     @endforeach
                 </div>
                 @error('__template_position')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Khóa học liên quan</label>
+                <div id="js-related-course">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <tr v-for="item in relatedCourses" :key="item.id">
+                                    <td>
+                                        @{{ item.id }}
+                                        <input type="hidden" name="__related_courses[]" :value="item.id">
+                                    </td>
+                                    <td>
+                                        <img :src="item.thumbnail" class="img-thumbnail">
+                                    </td>
+                                    <td>@{{ item.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteItem(item.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddItemModal"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-related-course-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn khóa học liên quan</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm khóa học" v-model="keyword">
+                                    </div>
+                                    <div class="text-center" v-if="isSearching">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="item in searchResult" :key="item.id">
+                                            <td>@{{ item.id }}</td>
+                                            <td>
+                                                <img :src="item.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ item.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addItem(item)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('__related_courses')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
@@ -235,4 +300,60 @@
         </div>
     </form>
 </div>
+@endsection
+
+@section('script')
+<script>
+    const COURSE_ID = "{{ $data->id ?? 'undefined' }}";
+
+    new Vue({
+        el: '#js-related-course',
+        data: {
+            relatedCourses: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
+        },
+        mounted() {
+            axios.get('{{ route("admin.course.get_related_course") }}', {
+                params: {
+                    id: COURSE_ID
+                }
+            }).then(res => {
+                this.relatedCourses = res;
+            });
+        },
+        methods: {
+            showAddItemModal() {
+                $('#js-related-course-modal').modal('show');
+            },
+            addItem(item) {
+                this.relatedCourses.push(item);
+            },
+            deleteItem(id) {
+                const index = this.relatedCourses.findIndex(x => x.id == id);
+                this.relatedCourses.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.course.search_course") }}', {
+                        params: {
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res;
+                    }).then(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
+            }
+        }
+    });
+
+</script>
 @endsection

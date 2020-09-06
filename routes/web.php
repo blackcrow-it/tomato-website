@@ -108,6 +108,7 @@ Route::prefix('admin')
             Route::post('course/order-in-category', 'CourseController@submitOrderInCategory')->name('course.order_in_category');
             Route::post('course/order-in-position', 'CourseController@submitOrderInPosition')->name('course.order_in_position');
             Route::get('course/search-course', 'CourseController@getSearchCourse')->name('course.search_course');
+            Route::get('course/get-related-course', 'CourseController@getRelatedCourse')->name('course.get_related_course');
 
             Route::get('lesson', 'LessonController@list')->name('lesson.list');
             Route::get('lesson/add', 'LessonController@add')->name('lesson.add');

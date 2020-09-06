@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\CourseRequest;
 use App\Course;
 use App\CoursePosition;
+use App\CourseRelatedCourse;
 use App\Repositories\CourseRepo;
 use DB;
 use Exception;
@@ -120,6 +121,15 @@ class CourseController extends Controller
             $position->order_in_position = $positionData->firstWhere('code', $code)->order_in_position ?? 0;
             $position->save();
         }
+
+        CourseRelatedCourse::where('course_id', $course->id)->delete();
+        $relatedCourseIds = $request->input('__related_courses', []);
+        foreach ($relatedCourseIds as $relatedCourseId) {
+            $related = new CourseRelatedCourse();
+            $related->course_id = $course->id;
+            $related->related_course_id = $relatedCourseId;
+            $related->save();
+        }
     }
 
     public function submitDelete($id)
@@ -204,5 +214,14 @@ class CourseController extends Controller
         }
 
         return $query->get();
+    }
+
+    public function getRelatedCourse(Request $request)
+    {
+        $id = $request->input('id');
+        return CourseRelatedCourse::with('related_course')
+            ->where('course_id', $id)
+            ->get()
+            ->pluck('related_course');
     }
 }

@@ -44,7 +44,11 @@ class CourseRequest extends FormRequest
             '__template_position' => 'nullable|array',
             '__template_position.*' => [
                 Rule::in(collect(get_template_position(ObjectType::COURSE))->pluck('code'))
-            ]
+            ],
+            '__related_courses' => 'nullable|array',
+            '__related_courses.*' => [
+                Rule::exists('courses', 'id')->where('enabled', true),
+            ],
         ];
     }
 }

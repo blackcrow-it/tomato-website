@@ -348,7 +348,7 @@
 
 @section('script')
 <script>
-    const POST_ID = {{ $data->id ?? 'undefined' }};
+    const POST_ID = "{{ $data->id ?? 'undefined' }}";
 
     new Vue({
         el: '#js-related-post',
@@ -365,7 +365,7 @@
                     id: POST_ID
                 }
             }).then(res => {
-                this.relatedPosts = res.data;
+                this.relatedPosts = res;
             });
         },
         methods: {
@@ -387,12 +387,11 @@
                 this.searchTimer = setTimeout(() => {
                     axios.get('{{ route("admin.post.search_post") }}', {
                         params: {
-                            id: POST_ID,
                             keyword: this.keyword
                         }
                     }).then(res => {
-                        this.searchResult = res.data;
-                    }).finally(() => {
+                        this.searchResult = res;
+                    }).then(() => {
                         this.isSearching = false;
                     });
                 }, 1000);
@@ -415,7 +414,7 @@
                     id: POST_ID
                 }
             }).then(res => {
-                this.relatedCourses = res.data;
+                this.relatedCourses = res;
             });
         },
         methods: {
@@ -437,12 +436,11 @@
                 this.searchTimer = setTimeout(() => {
                     axios.get('{{ route("admin.course.search_course") }}', {
                         params: {
-                            id: POST_ID,
                             keyword: this.keyword
                         }
                     }).then(res => {
-                        this.searchResult = res.data;
-                    }).finally(() => {
+                        this.searchResult = res;
+                    }).then(() => {
                         this.isSearching = false;
                     });
                 }, 1000);
