@@ -17,6 +17,7 @@ class CreateInvoiceItemsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
+            $table->string('type', 255);
             $table->unsignedBigInteger('object_id');
             $table->unsignedBigInteger('amount')->default(1);
             $table->unsignedBigInteger('price')->nullable();

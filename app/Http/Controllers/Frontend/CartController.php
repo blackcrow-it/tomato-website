@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
 use App\Invoice;
 use App\InvoiceItem;
+use App\UserCourse;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -135,10 +136,21 @@ class CartController extends Controller
             foreach ($cart as $item) {
                 $invoiceItem = new InvoiceItem();
                 $invoiceItem->invoice_id = $invoice->id;
+                $invoiceItem->type = $item->type;
                 $invoiceItem->object_id = $item->object_id;
                 $invoiceItem->amount = $item->amount;
                 $invoiceItem->price = $item->price;
                 $invoiceItem->save();
+            }
+
+            $courseIds = $cart->where('type', ObjectType::COURSE)->pluck('object_id');
+            $courses = Course::whereIn('id', $courseIds)->get();
+            foreach ($courses as $course) {
+                $userCourse = new UserCourse();
+                $userCourse->user_id = $user->id;
+                $userCourse->course_id = $course->id;
+                $userCourse->expires_on = now()->addYear();
+                $userCourse->save();
             }
 
             Cart::where('user_id', $user->id)->delete();
