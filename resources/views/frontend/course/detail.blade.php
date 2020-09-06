@@ -26,6 +26,15 @@
 
 <section class="section">
     <div class="container">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $msg)
+                        <li>{{ $msg }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="product-detail">
             <div class="row">
                 <div class="col-md-6 col-xl-7">
@@ -59,22 +68,26 @@
                     </ul>
 
                     @if(auth()->check())
-                        <div class="product-detal__btn">
-                            <div class="btn-wrap">
-                                <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart.confirm') }}" class="btn btn-buy-now">Mua ngay</button>
-                                <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
-                                    <span class="add-to-cart-text">Thêm vào giỏ</span>
-                                    <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
-                                    <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
-                                </button>
+                        @if($is_owned)
+                            <a href="{{ route('course.start', [ 'id' => $course->id ]) }}" class="btn">Xem bài giảng</a>
+                        @else
+                            <div class="product-detal__btn">
+                                <div class="btn-wrap">
+                                    <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart.confirm') }}" class="btn btn-buy-now">Mua ngay</button>
+                                    <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
+                                        <span class="add-to-cart-text">Thêm vào giỏ</span>
+                                        <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
+                                        <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
+                                    </button>
+                                </div>
+                                <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
                             </div>
-                            <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
-                        </div>
-                        @if(!$added_to_cart)
-                            <form action="{{ route('cart.add') }}" id="add-to-cart" class="invisible">
-                                <input type="hidden" name="object_id" value="{{ $course->id }}">
-                                <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::COURSE }}">
-                            </form>
+                            @if(!$added_to_cart)
+                                <form action="{{ route('cart.add') }}" id="add-to-cart" class="invisible">
+                                    <input type="hidden" name="object_id" value="{{ $course->id }}">
+                                    <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::COURSE }}">
+                                </form>
+                            @endif
                         @endif
                     @else
                         <a href="{{ route('login') }}" class="btn">Đăng nhập để tiếp tục</a>
