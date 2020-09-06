@@ -21,9 +21,7 @@ class SocialiteController extends Controller
     {
         $googleUser = Socialite::driver('google')->user();
 
-        $user = User::where('email', $googleUser->email)
-            ->orWhere('google_id', $googleUser->id)
-            ->first();
+        $user = Auth::user() ?? User::where('email', $googleUser->email)->first();
 
         if ($user == null) {
             $user = new User;

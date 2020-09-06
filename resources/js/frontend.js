@@ -10,3 +10,6 @@ import 'bootstrap';
 
 import Vue from 'vue';
 window.Vue = Vue;
+
+import moment from 'moment';
+window.moment = moment;

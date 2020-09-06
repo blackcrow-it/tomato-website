@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::any('test', 'TestController@index');
 
-Route::middleware('guest')->group(function () {
-    Route::get('auth/google', 'SocialiteController@loginWithGoogle')->name('auth.google');
-    Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback')->name('auth.google.callback');
-});
+Route::get('auth/google', 'SocialiteController@loginWithGoogle')->name('auth.google');
+Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback')->name('auth.google.callback');
 
 Route::namespace('Frontend')
     ->group(function () {
@@ -36,7 +34,7 @@ Route::namespace('Frontend')
 
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
-            Route::get('bai-giang/{id}.html', 'PartController@index')->name('part');
+            Route::get('bai-giang/{id}', 'PartController@index')->name('part');
 
             Route::get('gio-hang', 'CartController@index')->name('cart');
             Route::get('gio-hang/get-data', 'CartController@getData')->name('cart.get_data');
@@ -46,6 +44,10 @@ Route::namespace('Frontend')
             Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
             Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
             Route::post('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentComplete')->name('cart.complete');
+
+            Route::get('ca-nhan/thong-tin', 'UserController@info')->name('user.info');
+            Route::get('ca-nhan/thong-tin/get-data', 'UserController@info_getData')->name('user.info.get_data');
+            Route::post('ca-nhan/thong-tin/submit-data', 'UserController@info_submitData')->name('user.info.submit_data');
         });
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
