@@ -44,6 +44,8 @@ Route::namespace('Frontend')
             Route::post('gio-hang/delete', 'CartController@delete')->name('cart.delete');
             Route::post('gio-hang/submit', 'CartController@submitCart')->name('cart.submit');
             Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
+            Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
+            Route::post('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentComplete')->name('cart.complete');
         });
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');

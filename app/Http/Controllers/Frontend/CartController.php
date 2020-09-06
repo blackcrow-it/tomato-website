@@ -7,6 +7,8 @@ use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
+use App\Invoice;
+use App\InvoiceItem;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
@@ -117,5 +119,31 @@ class CartController extends Controller
     public function paymentConfirm()
     {
         return view('frontend.cart.confirm');
+    }
+
+    public function paymentComplete()
+    {
+        DB::transaction(function () {
+            $user = Auth::user();
+
+            $cart = Cart::where('user_id', $user->id)->get();
+
+            $invoice = new Invoice();
+            $invoice->user_id = $user->id;
+            $invoice->save();
+
+            foreach ($cart as $item) {
+                $invoiceItem = new InvoiceItem();
+                $invoiceItem->invoice_id = $invoice->id;
+                $invoiceItem->object_id = $item->object_id;
+                $invoiceItem->amount = $item->amount;
+                $invoiceItem->price = $item->price;
+                $invoiceItem->save();
+            }
+
+            Cart::where('user_id', $user->id)->delete();
+        });
+
+        return view('frontend.cart.complete');
     }
 }

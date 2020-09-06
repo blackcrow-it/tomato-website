@@ -45,7 +45,10 @@
                         </div>
                     </div>
                     <div class="payment-confirmation__footer text-center">
-                        <a href="thanhtoanthanhcong.html" class="btn">Thanh toán</a>
+                        <form action="{{ route('cart.complete') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn">Thanh toán</button>
+                        </form>
                     </div>
                 </div>
             </div>
