@@ -209,49 +209,49 @@
                     <div class="row">
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-teacher.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-teacher.svg') }}"></span>
                                 <h3 class="featuredText__title">Giảng viên</h3>
                                 <p class="featuredText__text">có nhiều năm kinh nghiệm</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-listF.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-listF.svg') }}"></span>
                                 <h3 class="featuredText__title">Bài giảng</h3>
                                 <p class="featuredText__text">dựa theo tài liệu mới nhất</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-platform.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-platform.svg') }}"></span>
                                 <h3 class="featuredText__title">Đa nền tảng</h3>
                                 <p class="featuredText__text">chỉ cần thiết bị có kết nối internet</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-24-house.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-24-house.svg') }}"></span>
                                 <h3 class="featuredText__title">24/7</h3>
                                 <p class="featuredText__text">bất kể thời gian nào</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-payOne.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-payOne.svg') }}"></span>
                                 <h3 class="featuredText__title">Thanh toán 1 lần</h3>
                                 <p class="featuredText__text">linh hoạt và nhanh gọn</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-saleF.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-saleF.svg') }}"></span>
                                 <h3 class="featuredText__title">Ưu đãi</h3>
                                 <p class="featuredText__text">luôn luôn được cập nhật</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
-                                <span class="featuredText__icon"><img src="assets/img/icon/icon-faqF.svg"></span>
+                                <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-faqF.svg') }}"></span>
                                 <h3 class="featuredText__title">Giải đáp</h3>
                                 <p class="featuredText__text">mọi câu hỏi của học viên</p>
                             </div>
@@ -264,7 +264,7 @@
             </div>
         </div>
         <div class="col-lg-6 order-lg-1">
-            <div class="section-testWhy__inner first" style="background-image: url(assets/img/image/bg-testimonial.jpg)">
+            <div class="section-testWhy__inner first" style="background-image: url({{ asset('tomato/assets/img/image/bg-testimonial.jpg') }})">
                 <div class="bg-overlay"></div>
 
                 <div class="f-fix wow fadeInLeft">
@@ -275,7 +275,7 @@
                     <div class="testimonial-slide">
                         <div class="owl-carousel">
                             <div class="testimonial">
-                                <span class="testimonial__icon"><img src="assets/img/icon/icon-quote.svg" alt=""></span>
+                                <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
                                 <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
                                     thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
@@ -287,7 +287,7 @@
                                 </div>
                             </div>
                             <div class="testimonial">
-                                <span class="testimonial__icon"><img src="assets/img/icon/icon-quote.svg" alt=""></span>
+                                <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
                                 <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
                                     thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
@@ -298,7 +298,7 @@
                                 </div>
                             </div>
                             <div class="testimonial">
-                                <span class="testimonial__icon"><img src="assets/img/icon/icon-quote.svg" alt=""></span>
+                                <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
                                 <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
                                     thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
@@ -309,7 +309,7 @@
                                 </div>
                             </div>
                             <div class="testimonial">
-                                <span class="testimonial__icon"><img src="assets/img/icon/icon-quote.svg" alt=""></span>
+                                <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
                                 <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
                                     thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
@@ -320,7 +320,7 @@
                                 </div>
                             </div>
                             <div class="testimonial">
-                                <span class="testimonial__icon"><img src="assets/img/icon/icon-quote.svg" alt=""></span>
+                                <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
                                 <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
                                     thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
@@ -332,11 +332,11 @@
                             </div>
                         </div>
                         <ul class="owl-dot-custom">
-                            <li class="owl-dot"><span style="background-image: url(assets/img/image/avatar.png)"></span></li>
-                            <li class="owl-dot"><span style="background-image: url(assets/img/image/avatar.png"></span></li>
-                            <li class="owl-dot"><span style="background-image: url(assets/img/image/avatar.png)"></span></li>
-                            <li class="owl-dot"><span style="background-image: url(assets/img/image/avatar.png)"></span></li>
-                            <li class="owl-dot"><span style="background-image: url(assets/img/image/avatar.png)"></span></li>
+                            <li class="owl-dot"><span style="background-image: url({{ asset('tomato/assets/img/image/avatar.png') }})"></span></li>
+                            <li class="owl-dot"><span style="background-image: url({{ asset('tomato/assets/img/image/avatar.png') }})"></span></li>
+                            <li class="owl-dot"><span style="background-image: url({{ asset('tomato/assets/img/image/avatar.png') }})"></span></li>
+                            <li class="owl-dot"><span style="background-image: url({{ asset('tomato/assets/img/image/avatar.png') }})"></span></li>
+                            <li class="owl-dot"><span style="background-image: url({{ asset('tomato/assets/img/image/avatar.png') }})"></span></li>
                         </ul>
                     </div>
                 </div>
@@ -437,7 +437,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="video-demo wow fadeInRight" data-wow-delay=".2s" style="background-image: url(assets/img/image/lessonbox-2.jpg);">
+                <div class="video-demo wow fadeInRight" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/lessonbox-2.jpg') }});">
                     <div class="bg-overlay"></div>
                     <div class="video-demo__btn">
                         <a href="https://www.youtube.com/watch?v=8blp3Tl770Q" data-init="magnificPopupVideo"><i class="pe-icon-play"></i> Xem thử bài
@@ -448,7 +448,7 @@
         </div>
 
         <div class="ctabox wow fadeInUp">
-            <span class="ctabox__icon"><img src="assets/img/icon/icon-ctabox.svg"></span>
+            <span class="ctabox__icon"><img src="{{ asset('tomato/assets/img/icon/icon-ctabox.svg') }}"></span>
             <div class="ctabox__wrap">
                 <div class="row">
                     <div class="col-lg-8">
@@ -481,7 +481,7 @@
                 <div class="item">
                     <div class="teambox">
                         <div class="teambox__img">
-                            <img src="assets/img/image/teambox-1.jpg">
+                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
                         </div>
 
                         <div class="teambox__body">
@@ -503,7 +503,7 @@
                 <div class="item">
                     <div class="teambox">
                         <div class="teambox__img">
-                            <img src="assets/img/image/teambox-1.jpg">
+                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
                         </div>
 
                         <div class="teambox__body">
@@ -525,7 +525,7 @@
                 <div class="item">
                     <div class="teambox">
                         <div class="teambox__img">
-                            <img src="assets/img/image/teambox-1.jpg">
+                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
                         </div>
 
                         <div class="teambox__body">
@@ -547,7 +547,7 @@
                 <div class="item">
                     <div class="teambox">
                         <div class="teambox__img">
-                            <img src="assets/img/image/teambox-1.jpg">
+                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
                         </div>
 
                         <div class="teambox__body">
@@ -618,7 +618,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url(assets/img/image/consultationForm-bg.jpg);"></div>
+                    <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/consultationForm-bg.jpg') }});"></div>
                 </div>
             </div>
         </div>
