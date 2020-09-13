@@ -1,11 +1,10 @@
 @extends('frontend.user.master')
 
 @section('header')
-<title>Thông tin cá nhân</title>
+<title>Lịch sử mua hàng</title>
 @endsection
 
 @section('content')
-
 <h2 class="user-page__title">Lịch sử mua hàng</h2>
 
 <div class="user-page__productHistory">
@@ -45,6 +44,5 @@
         </table>
     </div>
     {{ $invoice_items->links() }}
-</div>
 </div>
 @endsection

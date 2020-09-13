@@ -49,6 +49,7 @@ Route::namespace('Frontend')
             Route::get('ca-nhan/thong-tin/get-data', 'UserController@info_getData')->name('user.info.get_data');
             Route::post('ca-nhan/thong-tin/submit-data', 'UserController@info_submitData')->name('user.info.submit_data');
             Route::get('ca-nhan/lich-su-mua-hang', 'UserController@invoice')->name('user.invoice');
+            Route::get('ca-nhan/khoa-hoc-cua-toi', 'UserController@myCourse')->name('user.my_course');
         });
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
