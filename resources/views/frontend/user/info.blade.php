@@ -156,7 +156,7 @@
 </div>
 @endsection
 
-@section('footer')
+@section('user_script')
 <script>
     new Vue({
         el: '#app',

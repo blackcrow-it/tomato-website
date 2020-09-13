@@ -8,10 +8,10 @@
                 <div class="col-lg-3">
                     <div class="user-page__sidebar">
                         <div class="user-page__avatar">
-                            <div class="f-avatar">
-                                <img src="{{ auth()->user()->avatar ?? asset("tomato/assets/img/image/default-avatar.jpg") }}">
+                            <div class="f-avatar" id="user-avatar" :style="{ 'opacity': isLoading ? 0.5 : 1, 'pointer-events': isLoading ? 'none' : 'auto' }">
+                                <img :src="avatar">
                                 <label>
-                                    <input type="file" name="">
+                                    <input type="file" accept="image/*" @change="inputFileChange">
                                     <span> <i class="fa fa-camera"></i>Cập nhật</span>
                                 </label>
                             </div>
@@ -41,4 +41,37 @@
     </div>
 </section>
 
+@endsection
+
+@section('footer')
+<script>
+    new Vue({
+        el: '#user-avatar',
+        data: {
+            avatar: '{{ auth()->user()->avatar ?? asset("tomato/assets/img/image/default-avatar.jpg") }}',
+            isLoading: false
+        },
+        methods: {
+            inputFileChange(e) {
+                const files = e.target.files;
+                if (files.length == 0) return;
+
+                const file = files[0];
+                const formData = new FormData;
+                formData.append('avatar', file);
+                this.isLoading = true;
+                axios.post('{{ route("user.upload_avatar") }}', formData)
+                    .then(res => {
+                        this.avatar = res;
+                    })
+                    .then(() => {
+                        this.isLoading = false;
+                    });
+            },
+        },
+    });
+
+</script>
+
+@yield('user_script')
 @endsection

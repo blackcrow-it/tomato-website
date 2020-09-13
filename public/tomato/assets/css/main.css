@@ -20629,10 +20629,10 @@ section {
   position: absolute;
   top: 0;
   right: 0;
-  height: 55px;
-  line-height: 55px;
-  width: 54px;
-  text-align: center;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
   font-weight: 600;
   color: #fff;
   background-color: #E71D36;

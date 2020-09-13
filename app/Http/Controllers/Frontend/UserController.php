@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Frontend\UploadAvatarRequest;
 use App\Http\Requests\Frontend\UserInfoRequest;
 use App\InvoiceItem;
 use App\UserCourse;
@@ -12,6 +13,7 @@ use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Storage;
 
 class UserController extends Controller
 {
@@ -74,5 +76,20 @@ class UserController extends Controller
         return view('frontend.user.my_course', [
             'user_courses' => $userCourses
         ]);
+    }
+
+    public function uploadAvatar(UploadAvatarRequest $request)
+    {
+        $user = Auth::user();
+
+        $file = $request->file('avatar');
+        $path = $file->storePubliclyAs('avatars', $user->id . '.png', 's3');
+
+        $avatarUrl = Storage::disk('s3')->url($path);
+
+        $user->avatar = $avatarUrl;
+        $user->save();
+
+        return $avatarUrl . '?t=' . time();
     }
 }
