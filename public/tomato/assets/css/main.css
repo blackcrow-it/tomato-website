@@ -20070,6 +20070,10 @@ section {
 
 .user-page__avatar .f-avatar img {
   width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: all 0.3s ease;
 }
 
 .user-page__avatar .f-avatar label {
