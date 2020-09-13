@@ -11,4 +11,9 @@ class Invoice extends Model
     protected $fillable = [
         'user_id'
     ];
+
+    public function items()
+    {
+        return $this->hasMany('App\InvoiceItem', 'invoice_id', 'id');
+    }
 }

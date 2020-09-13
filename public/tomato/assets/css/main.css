@@ -15935,6 +15935,7 @@ section {
   text-align: center;
   color: #000;
   background-color: #f3eded;
+  padding: 0;
 }
 
 .pagination__list .page-link img {
