@@ -20,7 +20,8 @@ class PartController extends Controller
             return redirect()->route('admin.lesson.list')->withErrors('Bài học không tồn tại hoặc đã bị xóa.');
         }
 
-        $list = Part::orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
+        $list = Part::where('lesson_id', $lesson->id)
+            ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
             ->orderBy('created_at', 'asc')
             ->paginate();
 

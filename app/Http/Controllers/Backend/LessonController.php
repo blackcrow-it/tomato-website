@@ -20,7 +20,8 @@ class LessonController extends Controller
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
 
-        $list = Lesson::orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC')
+        $list = Lesson::where('course_id', $course->id)
+            ->orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC')
             ->orderBy('created_at', 'asc')
             ->paginate();
 
