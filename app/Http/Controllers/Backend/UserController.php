@@ -45,7 +45,7 @@ class UserController extends Controller
         }
 
         return redirect()
-            ->route('admin.user.edit', ['id' => $user->id])
+            ->route('admin.user.list')
             ->with('success', 'Thêm thành viên mới thành công.');
     }
 
@@ -91,7 +91,7 @@ class UserController extends Controller
         }
 
         return redirect()
-            ->route('admin.user.edit', ['id' => $user->id])
+            ->route('admin.user.list')
             ->with('success', 'Thông tin thành viên thay đổi thành công.');
     }
 
