@@ -123,6 +123,7 @@ Sửa đầu mục
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-primary js-save-button"><i class="fas fa-save"></i> Lưu</button>
+                    <a class="btn btn-warning float-right" href="/TomatoTranscode.exe"><i class="fas fa-download"></i> Download transcode app</a>
                 </div>
             </form>
         </div>
