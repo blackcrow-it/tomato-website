@@ -92,4 +92,9 @@ class UserController extends Controller
 
         return $avatarUrl . '?t=' . time();
     }
+
+    public function recharge()
+    {
+        return view('frontend.user.recharge');
+    }
 }

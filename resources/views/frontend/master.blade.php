@@ -135,7 +135,7 @@
                                         <a class="dropdown-item" href=""><i class="fa fa-bell-o"></i>Thông báo <small>(3)</small></a>
                                         <a class="dropdown-item" href="{{ route('user.invoice') }}"><i class="fa fa-cart-arrow-down"></i>Lịch sử mua hàng</a>
                                         <a class="dropdown-item" href="{{ route('user.my_course') }}"><i class="fa fa-server"></i>Khoá học của tôi</a>
-                                        <a class="dropdown-item" href="{{ route('recharge') }}"><i class="fa fa-credit-card"></i>Nạp tiền</a>
+                                        <a class="dropdown-item" href="{{ route('user.recharge') }}"><i class="fa fa-credit-card"></i>Nạp tiền</a>
                                         <a class="dropdown-item" href=""><i class="fa fa-edit"></i>Thay đổi mật khẩu</a>
                                         <a class="dropdown-item" href="#" onclick="$('#js-logout-form').submit();"><i class="fa fa-sign-out"></i>Đăng xuất</a>
                                     </div>

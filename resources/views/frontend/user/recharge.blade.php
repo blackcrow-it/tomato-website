@@ -19,6 +19,29 @@
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="tab-naptien" role="tabpanel">
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $msg)
+                                <li>{{ $msg }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        @if(is_array(session('success')))
+                            <ul class="mb-0">
+                                @foreach(session('success') as $msg)
+                                    <li>{{ $msg }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            {{ session('success') }}
+                        @endif
+                    </div>
+                @endif
                 <div class="form-moneyCard">
                     <div class="form-moneyCard__header">
                         <h3 class="f-title">Nhập số tiền bạn muốn nạp vào ví Tomato Online</h3>
@@ -26,15 +49,16 @@
                     </div>
                     <div class="input-item form-moneyCard__input">
                         <div class="input-item__inner">
-                            <input type="text" v-model="money" placeholder="Nhập số tiền bạn muốn nạp" class="form-control" autocomplete="off">
+                            <input type="text" v-model="money" placeholder="Nhập số tiền bạn muốn nạp" class="form-control" autocomplete="off" :disabled="loading">
                             <span>VND</span>
                         </div>
+                        <p v-for="msg in validateErrors.money" class="error">@{{ msg }}</p>
                     </div>
                     <div class="form-moneyCard__btn">
                         <div class="row">
                             <div class="col-md-6">
                                 <form class="form-momo">
-                                    <button type="submit">
+                                    <button type="button" :disabled="loading" @click="requestMomo">
                                         <img src="{{ asset('tomato/assets/img/icon/icon-momo.jpg') }}">
                                         <p>
                                             Thanh toán qua Ví MoMo
@@ -45,7 +69,7 @@
                             </div>
                             <div class="col-md-6">
                                 <form class="form-epay">
-                                    <button type="submit">
+                                    <button type="button" :disabled="loading" @click="requestEpay">
                                         <img src="{{ asset('tomato/assets/img/icon/icon-epay.png') }}">
                                         <p>
                                             Thanh toán qua Epay
@@ -151,12 +175,30 @@
         el: '#recharge',
         data: {
             money: 500000,
+            loading: false,
+            validateErrors: {},
         },
         methods: {
             currency(x) {
                 return currency(x, 0);
             },
+            requestMomo() {
+                this.loading = true;
+                axios.post("{{ route('recharge.momo.request') }}", {
+                    money: this.money
+                }).then(res => {
+                    window.location.href = res.pay_url;
+                }).catch(res => {
+                    this.validateErrors = res.errors;
+                }).then(() => {
+                    this.loading = false;
+                });
+            },
+            requestEpay() {
+
+            },
         },
     });
+
 </script>
 @endsection

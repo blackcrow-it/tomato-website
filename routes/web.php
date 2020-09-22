@@ -51,8 +51,15 @@ Route::namespace('Frontend')
             Route::get('ca-nhan/lich-su-mua-hang', 'UserController@invoice')->name('user.invoice');
             Route::get('ca-nhan/khoa-hoc-cua-toi', 'UserController@myCourse')->name('user.my_course');
             Route::post('ca-nhan/upload-avatar', 'UserController@uploadAvatar')->name('user.upload_avatar');
-            Route::get('ca-nhan/nap-tien', 'RechargeController@index')->name('recharge');
+            Route::get('ca-nhan/nap-tien', 'UserController@recharge')->name('user.recharge');
         });
+
+        Route::middleware('auth')->group(function () {
+            Route::post('recharge/momo', 'RechargeMomoController@makeRequest')->name('recharge.momo.request');
+            Route::get('recharge/momo-callback', 'RechargeMomoController@processCallback')->name('recharge.momo.callback');
+        });
+
+        Route::get('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
 
