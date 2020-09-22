@@ -87,10 +87,10 @@ class UserController extends Controller
 
         $avatarUrl = Storage::disk('s3')->url($path);
 
-        $user->avatar = $avatarUrl;
+        $user->avatar = $avatarUrl . '?t=' . time();
         $user->save();
 
-        return $avatarUrl . '?t=' . time();
+        return $user->avatar;
     }
 
     public function recharge()
