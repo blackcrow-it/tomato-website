@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Constants\RechargePartner;
+use App\Constants\RechargeStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\RechargeRequest;
+use App\Recharge;
 use App\Repositories\UserRepo;
 use App\Services\Momo;
 use Auth;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Log;
 use Str;
 
 class RechargeMomoController extends Controller
@@ -24,7 +30,7 @@ class RechargeMomoController extends Controller
     public function makeRequest(RechargeRequest $request)
     {
         $requestId = 'TOMATO_' . date('YmdHis') . '_' . Str::random(8);
-        $result = $this->momo->captureMoMoWallet([
+        $response = $this->momo->captureMoMoWallet([
             'requestId' => $requestId,
             'amount'    => $request->input('money'),
             'orderId'   => $requestId,
@@ -33,33 +39,114 @@ class RechargeMomoController extends Controller
             'notifyUrl' => route('recharge.momo.notify'),
         ]);
 
-        if ($result === false) {
+        if ($response === false) {
             return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không chính xác. Vui lòng thử lại.');
         }
 
+        $recharge = new Recharge();
+        $recharge->user_id = Auth::user()->id;
+        $recharge->amount = $request->input('money');
+        $recharge->type = RechargePartner::MOMO;
+        $recharge->status = RechargeStatus::PENDING;
+        $recharge->trans_id = $requestId;
+        $recharge->request_data = json_encode($response);
+        $recharge->save();
+
         return [
-            'pay_url' => $result['payUrl']
+            'pay_url' => $response['payUrl']
         ];
     }
 
     public function processCallback(Request $request)
     {
         $response = $request->input();
-        $isValidResponse = $this->momo->checkResponse($response);
-        if (!$isValidResponse) {
-            $response = $this->momo->transactionStatus($response['requestId']);
+
+        try {
+            DB::beginTransaction();
+
+            $requestId = $response['requestId'] ?? null;
+            if ($requestId == null) {
+                DB::rollBack();
+                return redirect()->route('user.recharge')->withErrors('Dữ liệu nhận được không chính xác.');
+            }
+
+            $recharge = Recharge::lockForUpdate()
+                ->where([
+                    'trans_id' => $requestId,
+                    'type' => RechargePartner::MOMO,
+                    'status' => RechargeStatus::PENDING,
+                ])
+                ->first();
+            if ($recharge == null) {
+                DB::rollBack();
+                return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không tồn tại.');
+            }
+
+            $isValidResponse = $this->momo->checkResponse($response);
+            if (!$isValidResponse) {
+                $response = $this->momo->transactionStatus($requestId);
+            }
+
+            $recharge->callback_data = json_encode($response);
+
+            if ($response['errorCode'] != 0) {
+                $recharge->status = RechargeStatus::CANCEL;
+                $recharge->save();
+
+                DB::rollBack();
+                return redirect()->route('user.recharge')->withErrors($response['localMessage']);
+            }
+
+            $recharge->status = RechargeStatus::SUCCESS;
+            $recharge->save();
+
+            DB::commit();
+
+            $this->userRepo->addMoney(Auth::user()->id, $response['amount']);
+
+            return redirect()->route('user.recharge')->with('success', 'Nạp tiền thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            return redirect()->route('user.recharge')->withErrors('Có lỗi xảy ra. Vui lòng thử lại.');
         }
-
-        if ($response['errorCode'] != 0) {
-            return redirect()->route('user.recharge')->withErrors($response['localMessage']);
-        }
-
-        $this->userRepo->addMoney(Auth::user()->id, $response['amount']);
-
-        return redirect()->route('user.recharge')->with('success', 'Nạp tiền thành công.');
     }
 
-    public function processNotify()
+    public function processNotify(Request $request)
     {
+        $response = $request->input();
+
+        DB::transaction(function () use ($response) {
+            $requestId = $response['requestId'] ?? null;
+            if ($requestId == null) return;
+
+            $recharge = Recharge::lockForUpdate()
+                ->where([
+                    'trans_id' => $requestId,
+                    'type' => RechargePartner::MOMO,
+                    'status' => RechargeStatus::PENDING,
+                ])
+                ->first();
+            if ($recharge == null) return;
+
+            $isValidResponse = $this->momo->checkResponse($response);
+            if (!$isValidResponse) {
+                $response = $this->momo->transactionStatus($requestId);
+            }
+
+            $recharge->notify_data = json_encode($response);
+
+            if ($response['errorCode'] != 0) {
+                $recharge->status = RechargeStatus::CANCEL;
+                $recharge->save();
+
+                return;
+            }
+
+            $recharge->status = RechargeStatus::SUCCESS;
+            $recharge->save();
+
+            $this->userRepo->addMoney(Auth::user()->id, $response['amount']);
+        });
     }
 }
