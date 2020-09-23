@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\RechargeRequest;
 use App\Recharge;
 use App\Repositories\UserRepo;
-use App\Services\Momo;
+use App\Services\Epay;
 use Auth;
 use DB;
 use Exception;
@@ -16,45 +16,30 @@ use Illuminate\Http\Request;
 use Log;
 use Str;
 
-class RechargeMomoController extends Controller
+class RechargeEpayController extends Controller
 {
-    private $momo;
+    private $epay;
     private $userRepo;
 
     public function __construct(UserRepo $userRepo)
     {
-        $this->momo = new Momo();
+        $this->epay = new Epay();
         $this->userRepo = $userRepo;
     }
 
     public function makeRequest(RechargeRequest $request)
     {
         $requestId = 'TOMATO' . date('YmdHis') . rand(1000, 9999);
-        $response = $this->momo->captureMoMoWallet([
-            'requestId' => $requestId,
-            'amount'    => $request->input('money'),
-            'orderId'   => $requestId,
-            'orderInfo' => 'Nạp tiền vào tài khoản Tomato Online',
-            'returnUrl' => route('recharge.momo.callback'),
-            'notifyUrl' => route('recharge.momo.notify'),
-        ]);
-
-        if ($response === false) {
-            return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không chính xác. Vui lòng thử lại.');
-        }
 
         $recharge = new Recharge();
         $recharge->user_id = Auth::user()->id;
         $recharge->amount = $request->input('money');
-        $recharge->type = RechargePartner::MOMO;
+        $recharge->type = RechargePartner::EPAY;
         $recharge->status = RechargeStatus::PENDING;
         $recharge->trans_id = $requestId;
-        $recharge->request_data = json_encode($response);
         $recharge->save();
 
-        return [
-            'pay_url' => $response['payUrl']
-        ];
+        return $this->epay->generateMegapayFormData($recharge->trans_id, $recharge->amount);
     }
 
     public function processCallback(Request $request)
@@ -64,16 +49,16 @@ class RechargeMomoController extends Controller
         try {
             DB::beginTransaction();
 
-            $requestId = $response['requestId'] ?? null;
+            $requestId = $response['merTrxId'] ?? null;
             if ($requestId == null) {
                 DB::rollBack();
-                return redirect()->route('user.recharge')->withErrors('Dữ liệu nhận được không chính xác.');
+                return redirect()->route('user.recharge')->withErrors('Mã giao dịch không chính xác.');
             }
 
             $recharge = Recharge::lockForUpdate()
                 ->where([
                     'trans_id' => $requestId,
-                    'type' => RechargePartner::MOMO,
+                    'type' => RechargePartner::EPAY,
                     'status' => RechargeStatus::PENDING,
                 ])
                 ->first();
@@ -82,19 +67,24 @@ class RechargeMomoController extends Controller
                 return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không tồn tại.');
             }
 
-            $isValidResponse = $this->momo->checkResponse($response);
+            $isValidResponse = $this->epay->verifyMerchantToken($response);
             if (!$isValidResponse) {
-                $response = $this->momo->transactionStatus($requestId);
+                $response = $this->epay->transactionStatus($requestId);
+            }
+
+            if ($response === false) {
+                DB::rollBack();
+                return redirect()->route('user.recharge')->withErrors('Giao dịch thất bại.');
             }
 
             $recharge->callback_data = json_encode($response);
 
-            if ($response['errorCode'] != 0) {
+            if ($response['resultCd'] != 00_000) {
                 $recharge->status = RechargeStatus::CANCEL;
                 $recharge->save();
 
                 DB::rollBack();
-                return redirect()->route('user.recharge')->withErrors($response['localMessage']);
+                return redirect()->route('user.recharge')->withErrors($response['resultMsg']);
             }
 
             $recharge->status = RechargeStatus::SUCCESS;
@@ -114,29 +104,31 @@ class RechargeMomoController extends Controller
 
     public function processNotify(Request $request)
     {
-        $response = $request->input();
+        $response = $request->getContent();
 
         DB::transaction(function () use ($response) {
-            $requestId = $response['requestId'] ?? null;
+            $requestId = $response['merTrxId'] ?? null;
             if ($requestId == null) return;
 
             $recharge = Recharge::lockForUpdate()
                 ->where([
                     'trans_id' => $requestId,
-                    'type' => RechargePartner::MOMO,
+                    'type' => RechargePartner::EPAY,
                     'status' => RechargeStatus::PENDING,
                 ])
                 ->first();
             if ($recharge == null) return;
 
-            $isValidResponse = $this->momo->checkResponse($response);
+            $isValidResponse = $this->epay->verifyMerchantToken($response);
             if (!$isValidResponse) {
-                $response = $this->momo->transactionStatus($requestId);
+                $response = $this->epay->transactionStatus($requestId);
             }
+
+            if ($response === false) return;
 
             $recharge->notify_data = json_encode($response);
 
-            if ($response['errorCode'] != 0) {
+            if ($response['resultCd'] != 00_000) {
                 $recharge->status = RechargeStatus::CANCEL;
                 $recharge->save();
 

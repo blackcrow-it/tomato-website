@@ -166,10 +166,15 @@
             </div>
         </div>
     </div>
+    <form method="POST" id="megapayForm" name="megapayForm">
+        <input v-for="key in Object.keys(epayRequestAttributes)" type="hidden" :name="key" :value="epayRequestAttributes[key]">
+    </form>
 </div>
 @endsection
 
 @section('user_script')
+<link rel="stylesheet" href="{{ config('epay.css_url') }}">
+<script src="{{ config('epay.js_url') }}"></script>
 <script>
     new Vue({
         el: '#recharge',
@@ -177,6 +182,7 @@
             money: 500000,
             loading: false,
             validateErrors: {},
+            epayRequestAttributes: {},
         },
         methods: {
             currency(x) {
@@ -195,7 +201,19 @@
                 });
             },
             requestEpay() {
-
+                this.loading = true;
+                axios.post("{{ route('recharge.epay.request') }}", {
+                    money: this.money
+                }).then(res => {
+                    this.epayRequestAttributes = res;
+                    this.$nextTick(() => {
+                        openPayment(1, '{{ config("epay.domain") }}');
+                    });
+                }).catch(res => {
+                    this.validateErrors = res.errors;
+                }).then(() => {
+                    this.loading = false;
+                });
             },
         },
     });

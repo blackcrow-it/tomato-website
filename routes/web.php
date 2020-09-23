@@ -57,9 +57,13 @@ Route::namespace('Frontend')
         Route::middleware('auth')->group(function () {
             Route::post('recharge/momo', 'RechargeMomoController@makeRequest')->name('recharge.momo.request');
             Route::get('recharge/momo-callback', 'RechargeMomoController@processCallback')->name('recharge.momo.callback');
+
+            Route::post('recharge/epay', 'RechargeEpayController@makeRequest')->name('recharge.epay.request');
+            Route::get('recharge/epay-callback', 'RechargeEpayController@processCallback')->name('recharge.epay.callback');
         });
 
-        Route::get('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
+        Route::post('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
+        Route::post('recharge/epay-notify', 'RechargeEpayController@processNotify')->name('recharge.epay.notify');
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
 
