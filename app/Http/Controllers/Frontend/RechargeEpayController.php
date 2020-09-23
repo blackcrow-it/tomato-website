@@ -51,7 +51,7 @@ class RechargeEpayController extends Controller
 
             $requestId = $response['merTrxId'] ?? null;
             if ($requestId == null) {
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors('Mã giao dịch không chính xác.');
             }
 
@@ -63,7 +63,7 @@ class RechargeEpayController extends Controller
                 ])
                 ->first();
             if ($recharge == null) {
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không tồn tại.');
             }
 
@@ -73,7 +73,7 @@ class RechargeEpayController extends Controller
             }
 
             if ($response === false) {
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors('Giao dịch thất bại.');
             }
 
@@ -83,7 +83,7 @@ class RechargeEpayController extends Controller
                 $recharge->status = RechargeStatus::CANCEL;
                 $recharge->save();
 
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors($response['resultMsg']);
             }
 

@@ -66,7 +66,7 @@ class RechargeMomoController extends Controller
 
             $requestId = $response['requestId'] ?? null;
             if ($requestId == null) {
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors('Dữ liệu nhận được không chính xác.');
             }
 
@@ -78,7 +78,7 @@ class RechargeMomoController extends Controller
                 ])
                 ->first();
             if ($recharge == null) {
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không tồn tại.');
             }
 
@@ -93,7 +93,7 @@ class RechargeMomoController extends Controller
                 $recharge->status = RechargeStatus::CANCEL;
                 $recharge->save();
 
-                DB::rollBack();
+                DB::commit();
                 return redirect()->route('user.recharge')->withErrors($response['localMessage']);
             }
 
