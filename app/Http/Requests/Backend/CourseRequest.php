@@ -49,6 +49,7 @@ class CourseRequest extends FormRequest
             '__related_courses.*' => [
                 Rule::exists('courses', 'id')->where('enabled', true),
             ],
+            'buyer_days_owned' => 'nullable|numeric|min:1',
         ];
     }
 }

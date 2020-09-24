@@ -54,7 +54,10 @@ class CourseController extends Controller
                 ->exists(),
             'is_owned' => UserCourse::where('user_id', auth()->user()->id)
                 ->where('course_id', $course->id)
-                ->where('expires_on', '>', now())
+                ->where(function($query) {
+                    $query->orWhere('expires_on', '>', now());
+                    $query->orWhereNull('expires_on');
+                })
                 ->exists(),
             'related_courses' => $relatedCourses,
         ]);
@@ -69,7 +72,10 @@ class CourseController extends Controller
 
         $isOwned = UserCourse::where('user_id', auth()->user()->id)
             ->where('course_id', $course->id)
-            ->where('expires_on', '>', now())
+            ->where(function($query) {
+                $query->orWhere('expires_on', '>', now());
+                $query->orWhereNull('expires_on');
+            })
             ->exists();
 
         if (!$isOwned) {

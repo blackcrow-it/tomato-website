@@ -149,7 +149,7 @@ class CartController extends Controller
                 $userCourse = new UserCourse();
                 $userCourse->user_id = $user->id;
                 $userCourse->course_id = $course->id;
-                $userCourse->expires_on = now()->addYear();
+                $userCourse->expires_on = $course->buyer_days_owned ? now()->addDays($course->buyer_days_owned) : null;
                 $userCourse->save();
             }
 

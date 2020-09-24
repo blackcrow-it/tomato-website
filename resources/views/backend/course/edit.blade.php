@@ -148,6 +148,14 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label>Số ngày sở hữu sau khi mua</label>
+                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Bỏ trống để học viên có thể sở hữu mãi mãi."></i></small>
+                <input type="text" name="buyer_days_owned" placeholder="Số ngày sở hữu sau khi mua" value="{{ $data->buyer_days_owned ?? old('buyer_days_owned') }}" class="form-control currency @error('buyer_days_owned') is-invalid @enderror">
+                @error('buyer_days_owned')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Hiển thị khóa học</label>
                 <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
                 <div>

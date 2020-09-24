@@ -32,7 +32,7 @@
                                         <a href="{{ $item->course->url }}" class="table-course__title">{{ $item->course->title }}</a>
                                     </td>
                                     <td>
-                                        <p class="f-time"><b>{{ $item->expires_on->diffInDays() }}</b></p>
+                                        <p class="f-time"><b>{{ $item->expires_on ? $item->expires_on->diffInDays() : 'Vĩnh viễn' }}</b></p>
                                     </td>
                                     <td><a href="{{ $item->course->url }}" class="btn-link">Chi tiết <i class="fa fa-angle-right"></i></a></td>
                                 </tr>

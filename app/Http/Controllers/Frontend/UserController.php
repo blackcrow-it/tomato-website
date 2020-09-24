@@ -73,7 +73,10 @@ class UserController extends Controller
             }
         ])
             ->where('user_id', Auth::user()->id)
-            ->where('expires_on', '>', now())
+            ->where(function($query) {
+                $query->orWhere('expires_on', '>', now());
+                $query->orWhereNull('expires_on');
+            })
             ->orderBy('created_at', 'desc')
             ->paginate();
 
