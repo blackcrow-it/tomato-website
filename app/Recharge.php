@@ -17,4 +17,8 @@ class Recharge extends Model
         'callback_data',
         'notify_data',
     ];
+
+    protected $hidden = [
+        'request_data', 'callback_data', 'notify_data'
+    ];
 }

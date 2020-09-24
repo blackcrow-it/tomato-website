@@ -21,3 +21,6 @@ require('admin-lte'); // không dùng import được với thằng này, chả 
 
 import bsCustomFileInput from 'bs-custom-file-input'
 window.bsCustomFileInput = bsCustomFileInput;
+
+import Paginate from 'vuejs-paginate';
+Vue.component('paginate', Paginate);

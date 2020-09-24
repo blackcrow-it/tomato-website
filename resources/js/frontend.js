@@ -13,3 +13,6 @@ window.Vue = Vue;
 
 import moment from 'moment';
 window.moment = moment;
+
+import Paginate from 'vuejs-paginate';
+Vue.component('paginate', Paginate);

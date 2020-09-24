@@ -121,48 +121,25 @@
                     <table>
                         <thead>
                             <th>Stt</th>
-                            <th>Tài khoản</th>
+                            <th>Thời gian</th>
                             <th>Số tiền</th>
                             <th>Loại thanh toán</th>
-                            <th>Thời gian</th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td class="f-name">Nguyễn Quốc Khánh</td>
-                                <td class="f-price">500.000đ</td>
-                                <td class="f-card">Momo</td>
-                                <td class="f-date">12-05-2020</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td class="f-name">Nguyễn Quốc Khánh</td>
-                                <td class="f-price">500.000đ</td>
-                                <td class="f-card">Epay</td>
-                                <td class="f-date">12-05-2020</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td class="f-name">Nguyễn Quốc Khánh</td>
-                                <td class="f-price">500.000đ</td>
-                                <td class="f-card">Trực tiêp</td>
-                                <td class="f-date">12-05-2020</td>
+                            <tr v-for="(item, index) in historyData.data">
+                                <td>@{{ (historyData.current_page - 1) * historyData.per_page + index + 1 }}</td>
+                                <td class="f-date">@{{ item.updated_at }}</td>
+                                <td class="f-price">@{{ currency(item.amount) }}</td>
+                                <td class="f-card">
+                                    <span v-if="item.type == '{{ \App\Constants\RechargePartner::MOMO }}'">Momo</span>
+                                    <span v-if="item.type == '{{ \App\Constants\RechargePartner::EPAY }}'">Epay</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <nav class="pagination text-center">
-                    <ul class="pagination__list">
-                        <li><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                        <li><a href="#">1</a></li>
-                        <li class="current"><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
-                    </ul>
-                </nav>
+                <paginate v-model="historyData.current_page" :click-handler="getHistoryData" :page-count="historyData.last_page" :prev-text="'Trước'" :next-text="'Sau'" :container-class="'pagination'" :page-class="'page-item'" :page-link-class="'page-link'" :prev-class="'page-item'" :prev-link-class="'page-link'" :next-class="'page-item'" :next-link-class="'page-link'"></paginate>
             </div>
         </div>
     </div>
@@ -183,6 +160,13 @@
             loading: false,
             validateErrors: {},
             epayRequestAttributes: {},
+            historyData: {
+                current_page: 1,
+                last_page: 0,
+            },
+        },
+        mounted() {
+            this.getHistoryData();
         },
         methods: {
             currency(x) {
@@ -214,6 +198,18 @@
                 }).then(() => {
                     this.loading = false;
                 });
+            },
+            getHistoryData() {
+                axios.get('{{ route("user.recharge_history") }}', {
+                    params: {
+                        page: this.historyData.current_page
+                    }
+                }).then(res => {
+                    this.historyData = res;
+                });
+            },
+            currency(x) {
+                return currency(x);
             },
         },
     });

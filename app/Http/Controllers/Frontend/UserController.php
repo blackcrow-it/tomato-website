@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Constants\ObjectType;
+use App\Constants\RechargeStatus;
 use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\ChangepassRequest;
 use App\Http\Requests\Frontend\UploadAvatarRequest;
 use App\Http\Requests\Frontend\UserInfoRequest;
 use App\InvoiceItem;
+use App\Recharge;
 use App\UserCourse;
 use Auth;
 use DB;
@@ -98,6 +100,25 @@ class UserController extends Controller
     public function recharge()
     {
         return view('frontend.user.recharge');
+    }
+
+    public function rechargeHistory()
+    {
+        $data = Recharge::where('user_id', Auth::user()->id)
+            ->where('status', RechargeStatus::SUCCESS)
+            ->orderBy('updated_at', 'desc')
+            ->paginate();
+
+        $data->getCollection()->transform(function($item) {
+            return [
+                'amount' => $item->amount,
+                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
+                'type' => $item->type,
+            ];
+        });
+
+        return $data;
     }
 
     public function changepass()

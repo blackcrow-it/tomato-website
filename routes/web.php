@@ -52,6 +52,7 @@ Route::namespace('Frontend')
             Route::get('ca-nhan/khoa-hoc-cua-toi', 'UserController@myCourse')->name('user.my_course');
             Route::post('ca-nhan/upload-avatar', 'UserController@uploadAvatar')->name('user.upload_avatar');
             Route::get('ca-nhan/nap-tien', 'UserController@recharge')->name('user.recharge');
+            Route::get('ca-nhan/lich-su-nap-tien', 'UserController@rechargeHistory')->name('user.recharge_history');
             Route::get('ca-nhan/doi-mat-khau', 'UserController@changepass')->name('user.changepass');
             Route::post('ca-nhan/doi-mat-khau', 'UserController@doChangepass')->name('user.changepass');
         });
