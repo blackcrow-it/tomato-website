@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Frontend;
 use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Frontend\ChangepassRequest;
 use App\Http\Requests\Frontend\UploadAvatarRequest;
 use App\Http\Requests\Frontend\UserInfoRequest;
 use App\InvoiceItem;
 use App\UserCourse;
 use Auth;
 use DB;
+use Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Storage;
@@ -96,5 +98,19 @@ class UserController extends Controller
     public function recharge()
     {
         return view('frontend.user.recharge');
+    }
+
+    public function changepass()
+    {
+        return view('frontend.user.changepass');
+    }
+
+    public function doChangepass(ChangepassRequest $request)
+    {
+        $user = Auth::user();
+        $user->password = Hash::make($request->input('new_pass'));
+        $user->save();
+
+        return redirect()->route('user.changepass')->with('success', 'Thay đổi mật khẩu thành công.');
     }
 }

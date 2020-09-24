@@ -26,7 +26,7 @@
                             <li class="{{ request()->routeIs('user.invoice') ? 'current' : '' }}"><a href="{{ route('user.invoice') }}"><i class="fa fa-cart-arrow-down"></i>Lịch sử mua hàng</a></li>
                             <li class="{{ request()->routeIs('user.my_course') ? 'current' : '' }}"><a href="{{ route('user.my_course') }}"><i class="fa fa-server"></i>Khoá học của tôi</a></li>
                             <li class="{{ request()->routeIs('user.recharge') ? 'current' : '' }}"><a href="{{ route('user.recharge') }}"><i class="fa fa-credit-card"></i>Nạp tiền</a></li>
-                            <li class=""><a href=""><i class="fa fa-edit"></i>Thay đổi mật khẩu</a></li>
+                            <li class="{{ request()->routeIs('user.changepass') ? 'current' : '' }}"><a href="{{ route('user.changepass') }}"><i class="fa fa-edit"></i>Thay đổi mật khẩu</a></li>
                             <li><a href="#" onclick="$('#js-logout-form').submit();"><i class="fa fa-sign-out"></i>Đăng xuất</a></li>
                         </ul>
                     </div>
