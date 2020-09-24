@@ -24,6 +24,7 @@ Bài học
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
+            <a href="{{ route('admin.course.list') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
             <a href="{{ route('admin.lesson.add', [ 'course_id' => $course->id ]) }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
         </div>
     </div><!-- /.col -->
