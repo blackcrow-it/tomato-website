@@ -9,13 +9,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
 use App\Invoice;
 use App\InvoiceItem;
+use App\Repositories\UserRepo;
 use App\UserCourse;
 use Auth;
 use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Log;
 
 class CartController extends Controller
 {
+    private $userRepo;
+
+    public function __construct(UserRepo $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
+
     public function index()
     {
         return view('frontend.cart.index');
@@ -124,10 +134,21 @@ class CartController extends Controller
 
     public function paymentComplete()
     {
-        DB::transaction(function () {
-            $user = Auth::user();
+        $user = Auth::user();
 
-            $cart = Cart::where('user_id', $user->id)->get();
+        $cart = Cart::where('user_id', $user->id)->get();
+
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalPrice += $item->amount * $item->price;
+        }
+
+        if ($totalPrice > $user->money) {
+            return redirect()->route('cart.confirm')->withErrors('Số tiền trong tài khoản không đủ, vui lòng nạp thêm để tiếp tục mua hàng.');
+        }
+
+        try {
+            DB::beginTransaction();
 
             $invoice = new Invoice();
             $invoice->user_id = $user->id;
@@ -154,7 +175,15 @@ class CartController extends Controller
             }
 
             Cart::where('user_id', $user->id)->delete();
-        });
+
+            $this->userRepo->removeMoney($user->id, $totalPrice);
+
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            return redirect()->route('cart.confirm')->withErrors('Có lỗi xảy ra, vui lòng thử lại.');
+        }
 
         return view('frontend.cart.complete');
     }

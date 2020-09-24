@@ -21,10 +21,19 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-8 offset-xl-2">
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $msg)
+                                <li>{{ $msg }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="payment-confirmation">
                     <div class="payment-confirmation__inner">
                         <div class="payment-confirmation__header">
-                            <p class="f-user">Tài khoản đặt: <b>{{ auth()->user()->username }}</b></p>
+                            <p class="f-user">Tài khoản: <b>{{ auth()->user()->username }}</b></p>
                             <p class="f-price">Số tiền thanh toán: <b>@{{ currency(totalPrice) }}</b></p>
                             <p class="f-subtitle">Chi tiết đơn hàng:</p>
                         </div>
@@ -77,8 +86,8 @@
                     this.data = res;
 
                     this.totalPrice = this.data.reduce((total, item) => {
-                            return total + item.price * item.amount;
-                        }, 0);
+                        return total + item.price * item.amount;
+                    }, 0);
                 }).then(() => {
                     this.loading = false;
                 });
