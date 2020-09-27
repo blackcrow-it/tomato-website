@@ -41,22 +41,27 @@
                         <div class="widget widget--filterbox d-none d-xl-block">
                             <h2 class="widget__title">Bộ lọc</h2>
 
-                            <form class="form-filter">
+                            <form class="form-filter" method="GET" action="">
                                 <ul>
                                     <li>
                                         <h3>Trình độ</h3>
                                         <label>
-                                            <input type="radio" name="checkbox1">
+                                            <input type="radio" name="filter[level]" value="" {{ request()->input('filter.level') == null ? 'checked' : null }}>
+                                            <span></span>
+                                            <p>Tất cả</p>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="filter[level]" value="{{ \App\Constants\CourseLevel::ELEMENTARY }}" {{ request()->input('filter.level') == \App\Constants\CourseLevel::ELEMENTARY ? 'checked' : null }}>
                                             <span></span>
                                             <p>Sơ cấp</p>
                                         </label>
                                         <label>
-                                            <input type="radio" name="checkbox1">
+                                            <input type="radio" name="filter[level]" value="{{ \App\Constants\CourseLevel::INTERMEDIATE }}" {{ request()->input('filter.level') == \App\Constants\CourseLevel::INTERMEDIATE ? 'checked' : null }}>
                                             <span></span>
                                             <p>Trung cấp</p>
                                         </label>
                                         <label>
-                                            <input type="radio" name="checkbox1">
+                                            <input type="radio" name="filter[level]" value="{{ \App\Constants\CourseLevel::ADVANCED }}" {{ request()->input('filter.level') == \App\Constants\CourseLevel::ADVANCED ? 'checked' : null }}>
                                             <span></span>
                                             <p>Cao cấp</p>
                                         </label>
@@ -64,17 +69,17 @@
                                     <li>
                                         <h3>Chính sách</h3>
                                         <label>
-                                            <input type="radio" name="checkbox2">
+                                            <input type="radio" name="filter[promotion]" value="" {{ request()->input('filter.promotion') == null ? 'checked' : null }}>
                                             <span></span>
-                                            <p>Mặc định</p>
+                                            <p>Tất cả</p>
                                         </label>
                                         <label>
-                                            <input type="radio" name="checkbox2">
+                                            <input type="radio" name="filter[promotion]" value="discount" {{ request()->input('filter.promotion') == 'discount' ? 'checked' : null }}>
                                             <span></span>
                                             <p>Khuyến mãi</p>
                                         </label>
                                         <label>
-                                            <input type="radio" name="checkbox2">
+                                            <input type="radio" name="filter[promotion]" value="free" {{ request()->input('filter.promotion') == 'free' ? 'checked' : null }}>
                                             <span></span>
                                             <p>Miễn phí</p>
                                         </label>
@@ -82,17 +87,22 @@
                                     <li>
                                         <h3>Thời lượng</h3>
                                         <label>
-                                            <input type="radio" name="checkbox3">
+                                            <input type="radio" name="filter[lesson_count]" value="" {{ request()->input('filter.lesson_count') == null ? 'checked' : null }}>
+                                            <span></span>
+                                            <p>Tất cả</p>
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="filter[lesson_count]" value="5" {{ request()->input('filter.lesson_count') == 5 ? 'checked' : null }}>
                                             <span></span>
                                             <p>Dưới 5 bài</p>
                                         </label>
                                         <label>
-                                            <input type="radio" name="checkbox4">
+                                            <input type="radio" name="filter[lesson_count]" value="10" {{ request()->input('filter.lesson_count') == 10 ? 'checked' : null }}>
                                             <span></span>
                                             <p>Dưới 10 bài</p>
                                         </label>
                                         <label>
-                                            <input type="radio" name="checkbox5">
+                                            <input type="radio" name="filter[lesson_count]" value="20" {{ request()->input('filter.lesson_count') == 20 ? 'checked' : null }}>
                                             <span></span>
                                             <p>Dưới 20 bài</p>
                                         </label>

@@ -89,14 +89,30 @@ if (!function_exists('get_posts')) {
 }
 
 if (!function_exists('get_courses')) {
-    function get_courses($category_id = null, $position = null, $paginate = false)
+    function get_courses($category_id = null, $position = null, $paginate = false, $customQueryCallback = null)
     {
+        $lessonsCountQuery = DB::table('lessons')
+            ->where('lessons.enabled', true)
+            ->select([
+                DB::raw('COUNT(lessons.id) as __lesson_count'),
+                'lessons.course_id'
+            ])
+            ->groupBy('lessons.course_id');
+
         $query = (new CourseRepo())
             ->getByFilterQuery([
                 'category_id' => $category_id,
                 'position' => $position
             ])
-            ->where('courses.enabled', true);
+            ->where('courses.enabled', true)
+            ->leftJoinSub($lessonsCountQuery, 'lesson_count', function ($join) {
+                $join->on('courses.id', '=', 'lesson_count.course_id');
+            })
+            ->addSelect('lesson_count.__lesson_count');
+
+        if (is_callable($customQueryCallback)) {
+            $customQueryCallback($query);
+        }
 
         $list = $paginate ? $query->paginate(config('template.paginate.list.' . ObjectType::COURSE)) : $query->get();
 
@@ -104,16 +120,11 @@ if (!function_exists('get_courses')) {
             ->whereIn('id', $list->pluck('category_id'))
             ->get();
 
-        $lessons = Lesson::where('enabled', true)
-            ->whereIn('course_id', $list->pluck('id'))
-            ->get();
-
-        $mapFunction = function ($item) use ($categories, $lessons) {
+        $mapFunction = function ($item) use ($categories) {
             $item->category = $categories->firstWhere('id', $item->category_id);
             $item->url = route('course', ['slug' => $item->slug]);
             $item->created_at = Carbon::parse($item->created_at);
             $item->updated_at = Carbon::parse($item->created_at);
-            $item->__lesson_count = $lessons->where('course_id', $item->id)->count();
             return $item;
         };
 
