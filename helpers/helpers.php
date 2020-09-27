@@ -2,6 +2,7 @@
 
 use App\Category;
 use App\Constants\ObjectType;
+use App\Lesson;
 use App\Repositories\CategoryRepo;
 use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
@@ -103,11 +104,16 @@ if (!function_exists('get_courses')) {
             ->whereIn('id', $list->pluck('category_id'))
             ->get();
 
-        $mapFunction = function ($item) use ($categories) {
+        $lessons = Lesson::where('enabled', true)
+            ->whereIn('course_id', $list->pluck('id'))
+            ->get();
+
+        $mapFunction = function ($item) use ($categories, $lessons) {
             $item->category = $categories->firstWhere('id', $item->category_id);
             $item->url = route('course', ['slug' => $item->slug]);
             $item->created_at = Carbon::parse($item->created_at);
             $item->updated_at = Carbon::parse($item->created_at);
+            $item->__lesson_count = $lessons->where('course_id', $item->id)->count();
             return $item;
         };
 

@@ -7,7 +7,7 @@
             @endif
         </a>
         <div class="lessonbox__body">
-            @if ($course->category)
+            @if($course->category)
                 <div class="lessonbox__cat">
                     <a href="{{ $course->category->url }}">{{ $course->category->title }}</a>
                 </div>
@@ -16,9 +16,22 @@
                 <a href="{{ $course->url }}">{{ $course->title }}</a>
             </h3>
             <ul class="lessonbox__info">
-                <li>Bài học: 15 bài</li>
-                <li>Giảng viên: <a href="#">Bùi Thu Hà</a></li>
-                <li>Trình độ: Mới bắt đầu</li>
+                <li>Bài học: {{ $course->__lesson_count }} bài</li>
+                <li>Giảng viên: <span class="text-danger">{{ $course->lecturer_name }}</span></li>
+                @switch($course->level)
+                    @case(\App\Constants\CourseLevel::ELEMENTARY)
+                        <li>Trình độ: Sơ cấp</li>
+                        @break
+                    @case(\App\Constants\CourseLevel::INTERMEDIATE)
+                        <li>Trình độ: Trung cấp</li>
+                        @break
+                    @case(\App\Constants\CourseLevel::ADVANCED)
+                        <li>Trình độ: Cao cấp</li>
+                        @break
+                    @default
+                        <li>Trình độ: Không phân loại</li>
+                        @break
+                @endswitch
             </ul>
 
             <div class="lessonbox__footer">
