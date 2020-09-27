@@ -134,6 +134,25 @@
                 <textarea name="content" class="editor">{!! $data->content ?? old('content') !!}</textarea>
             </div>
             <div class="form-group">
+                <label>Giảng viên</label>
+                <input type="text" name="lecturer_name" placeholder="Giảng viên" value="{{ $data->lecturer_name ?? old('lecturer_name') }}" class="form-control @error('lecturer_name') is-invalid @enderror">
+                @error('lecturer_name')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Trình độ</label>
+                <select name="level" class="form-control @error('level') is-invalid @enderror">
+                    <option value="">Không phân loại</option>
+                    <option value="{{ \App\Constants\CourseLevel::ELEMENTARY }}" {{ ($data->level ?? old('level')) == App\Constants\CourseLevel::ELEMENTARY ? 'selected' : '' }}>Sơ cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::INTERMEDIATE }}" {{ ($data->level ?? old('level')) == App\Constants\CourseLevel::INTERMEDIATE ? 'selected' : '' }}>Trung cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::ADVANCED }}" {{ ($data->level ?? old('level')) == App\Constants\CourseLevel::ADVANCED ? 'selected' : '' }}>Cao cấp</option>
+                </select>
+                @error('level')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Giá tiền</label>
                 <input type="text" name="price" placeholder="Giá tiền" value="{{ $data->price ?? old('price') }}" class="form-control currency @error('price') is-invalid @enderror">
                 @error('price')

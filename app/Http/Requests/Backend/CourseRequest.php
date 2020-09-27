@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Backend;
 
+use App\Constants\CourseLevel;
 use App\Constants\ObjectType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -50,6 +51,15 @@ class CourseRequest extends FormRequest
                 Rule::exists('courses', 'id')->where('enabled', true),
             ],
             'buyer_days_owned' => 'nullable|numeric|min:1',
+            'lecturer_name' => 'nullable|string',
+            'level' => [
+                'nullable', 'string',
+                Rule::in(
+                    CourseLevel::ELEMENTARY,
+                    CourseLevel::INTERMEDIATE,
+                    CourseLevel::ADVANCED,
+                ),
+            ]
         ];
     }
 }
