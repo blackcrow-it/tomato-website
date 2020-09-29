@@ -70,7 +70,7 @@ Sửa đầu mục
         @endif
     </div>
 @endif
-@switch($data->transcode_status)
+@switch($data->transcode_status ?? null)
     @case(\App\Constants\TranscodeStatus::PENDING)
         <div class="callout callout-info">
             Video đang chờ tới lượt transcode.
