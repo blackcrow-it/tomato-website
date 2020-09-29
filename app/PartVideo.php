@@ -10,6 +10,8 @@ class PartVideo extends Model
 
     protected $fillable = [
         'part_id',
+        's3_path',
+        'transcode_status'
     ];
 
     public function part()
