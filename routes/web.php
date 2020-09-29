@@ -159,6 +159,10 @@ Route::prefix('admin')
             Route::get('part-content/edit/{part_id}', 'PartContentController@edit')->name('part_content.edit');
             Route::post('part-content/edit/{part_id}', 'PartContentController@submitEdit')->name('part_content.edit');
             Route::post('part-content/delete/{part_id}', 'PartContentController@submitDelete')->name('part_content.delete');
+
+            Route::get('part-test/edit/{part_id}', 'PartTestController@edit')->name('part_test.edit');
+            Route::post('part-test/edit/{part_id}', 'PartTestController@submitEdit')->name('part_test.edit');
+            Route::post('part-test/delete/{part_id}', 'PartTestController@submitDelete')->name('part_test.delete');
         });
 
         Route::middleware('guest')->group(function () {

@@ -78,7 +78,7 @@ Thêm đầu mục mới
                         <label class="form-check-label" for="cr-type-3">Bài viết</label>
                     </div>
                     <div class="form-check-inline">
-                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-4" name="type" value="{{ \App\Constants\PartType::TEST }}" {{ ($data->type ?? old('type')) == \App\Constants\PartType::TEST ? 'checked' : '' }} disabled>
+                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-4" name="type" value="{{ \App\Constants\PartType::TEST }}" {{ ($data->type ?? old('type')) == \App\Constants\PartType::TEST ? 'checked' : '' }}>
                         <label class="form-check-label" for="cr-type-4">Trắc nghiệm</label>
                     </div>
                     <div class="form-check-inline">

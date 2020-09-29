@@ -34,6 +34,7 @@ class PartRequest extends FormRequest
                     PartType::VIDEO,
                     PartType::YOUTUBE,
                     PartType::CONTENT,
+                    PartType::TEST,
                 ]),
             ],
         ];
