@@ -210,7 +210,7 @@ Sửa đầu mục
     $('.js-main-form').submit(function (e) {
         e.preventDefault();
 
-        var transcodeStatus = '{{ $data->transcode_status }}';
+        var transcodeStatus = '{{ $data->transcode_status ?? null }}';
         if (
             transcodeStatus != '{{ \App\Constants\TranscodeStatus::COMPLETED }}' &&
             transcodeStatus != '{{ \App\Constants\TranscodeStatus::FAIL }}'
