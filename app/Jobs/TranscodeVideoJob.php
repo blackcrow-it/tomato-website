@@ -16,6 +16,7 @@ use Monolog\Logger;
 use Storage;
 use Streaming\FFMpeg;
 use Streaming\Format\X264;
+use Streaming\Representation;
 
 class TranscodeVideoJob implements ShouldQueue
 {
@@ -36,19 +37,18 @@ class TranscodeVideoJob implements ShouldQueue
         $this->partVideo->save();
 
         try {
-            $s3Dir = pathinfo($this->partVideo->s3_path, PATHINFO_DIRNAME);
-
             printf("Clear transcode folder.\n");
             Storage::deleteDirectory('transcode');
+            Storage::makeDirectory('transcode/hls');
 
             printf("Download video file.\n");
             $s3Driver = Storage::disk('s3')->getDriver();
             $localDriver = Storage::getDriver();
-            $localDriver->writeStream('transcode/input.tmp', $s3Driver->readStream($this->partVideo->s3_path));
+            $localDriver->writeStream('transcode/input.tmp', $s3Driver->readStream($this->partVideo->s3_path . '/input.tmp'));
             gc_collect_cycles();
 
             printf("Delete folder on s3.\n");
-            Storage::disk('s3')->deleteDirectory($s3Dir);
+            Storage::disk('s3')->deleteDirectory($this->partVideo->s3_path);
 
             printf("Init transcoding.\n");
             $config = [
@@ -76,13 +76,16 @@ class TranscodeVideoJob implements ShouldQueue
 
             $saveKeyTo = Storage::path('transcode/secret.key');
             $keyUrl = route('part_video.get_key', [
-                'id' => $this->partVideo->id
+                'id' => $this->partVideo->part->id
             ]);
+
+            $r720p  = (new Representation)->setKiloBitrate(1000)->setResize(1280, 720);
+            $r1080p  = (new Representation)->setKiloBitrate(2000)->setResize(1920, 1080);
 
             $video->hls()
                 ->encryption($saveKeyTo, $keyUrl)
                 ->setFormat($format)
-                ->autoGenerateRepresentations([1080, 720])
+                ->addRepresentations([$r1080p, $r720p])
                 ->save(Storage::path('transcode/hls/playlist.m3u8'));
 
             printf("\rTrancoded complete.\n");
@@ -92,18 +95,17 @@ class TranscodeVideoJob implements ShouldQueue
 
             printf("Upload secret key to s3.\n");
             $key = Storage::get('transcode/secret.key');
-            Storage::disk('s3')->put($s3Dir . '/secret.key', $key);
+            Storage::disk('s3')->put($this->partVideo->s3_path . '/secret.key', $key);
 
             printf("Upload hls to s3.\n");
             foreach (Storage::allFiles('transcode/hls') as $path) {
                 $content = Storage::get($path);
-                Storage::disk('s3')->put($s3Dir . '/' . basename($path), $content, 'public');
+                Storage::disk('s3')->put($this->partVideo->s3_path . '/hls/' . basename($path), $content, 'public');
             }
 
             printf("Clear transcode folder.\n");
             Storage::deleteDirectory('transcode');
 
-            $this->partVideo->s3_path = $s3Dir;
             $this->partVideo->transcode_status = TranscodeStatus::COMPLETED;
             $this->partVideo->transcode_message = null;
             $this->partVideo->save();

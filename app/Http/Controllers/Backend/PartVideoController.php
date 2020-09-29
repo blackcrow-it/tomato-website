@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Constants\TranscodeStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PartVideoRequest;
+use App\Jobs\TranscodeVideoJob;
 use App\Part;
 use App\PartVideo;
 use DB;
@@ -35,6 +37,7 @@ class PartVideoController extends Controller
 
         return view('backend.part.edit_video', [
             'video_url' => $data ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
+            'data' => $data,
             'part' => $part,
             'lesson' => $lesson,
             'course' => $course
@@ -59,6 +62,8 @@ class PartVideoController extends Controller
             $data = $part->part_video ?? new PartVideo();
             $data->part_id = $part_id;
             $data->s3_path = "part_video/c{$course->id}_l{$lesson->id}_p{$part->id}";
+            $data->transcode_status = TranscodeStatus::COMPLETED;
+            $data->transcode_message = null;
             $data->save();
         });
     }
@@ -91,7 +96,7 @@ class PartVideoController extends Controller
         }
     }
 
-    public function upload(Request $request)
+    public function uploadTranscode(Request $request)
     {
         $part = Part::findOrFail($request->input('part_id'));
         $data = $part->part_video;
@@ -133,5 +138,25 @@ class PartVideoController extends Controller
         $data = $part->part_video;
 
         Storage::disk('s3')->deleteDirectory($data->s3_path);
+    }
+
+    public function uploadVideo(Request $request)
+    {
+        $part = Part::findOrFail($request->input('part_id'));
+        $data = $part->part_video;
+
+        $file = $request->file('file');
+
+        Storage::disk('s3')->deleteDirectory($data->s3_path);
+
+        $s3Driver = Storage::disk('s3')->getDriver();
+        $stream = fopen($file->getRealPath(), 'r+');
+        $s3Driver->writeStream($data->s3_path . '/input.tmp', $stream);
+        gc_collect_cycles();
+
+        $data->transcode_status = TranscodeStatus::PENDING;
+        $data->save();
+
+        TranscodeVideoJob::dispatch($data);
     }
 }
