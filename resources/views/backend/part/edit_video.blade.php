@@ -91,8 +91,7 @@ Sửa đầu mục
 <div class="row">
     <div class="col-sm-6">
         <div class="card">
-            <form action="" method="POST" class="js-main-form">
-                @csrf
+            <div id="upload-form">
                 <div class="card-body">
                     <div class="form-group">
                         <label>Loại đầu mục</label>
@@ -121,35 +120,57 @@ Sửa đầu mục
                     </div>
                     <div class="form-group">
                         <label>Tiêu đề</label>
-                        <input type="text" name="title" placeholder="Tiêu đề" value="{{ $part->title ?? old('title') }}" class="form-control @error('title') is-invalid @enderror">
-                        @error('title')
-                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                        @enderror
+                        <input v-model="title" type="text" placeholder="Tiêu đề" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Thư mục stream video</label>
-                        <input type="file" class="d-none js-input-directory" directory webkitdirectory mozdirectory>
-                        <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-info mr-3 js-open-select-directory">Chọn thư mục</button>
-                            <span class="js-selected-directory-name"></span>
+                        <label>Chọn nguồn upload</label>
+                        <div class="form-check">
+                            <input v-model="uploadType" class="form-check-input" type="radio" id="rb-upload-type-1" value="transcode">
+                            <label class="form-check-label" for="rb-upload-type-1">Upload thư mục transcode</label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="uploadType" class="form-check-input" type="radio" id="rb-upload-type-2" value="local_file">
+                            <label class="form-check-label" for="rb-upload-type-2">Upload video, transcode trên server (tối đa 1GB)</label>
+                        </div>
+                        <div class="form-check">
+                            <input v-model="uploadType" class="form-check-input" type="radio" id="rb-upload-type-3" value="drive">
+                            <label class="form-check-label" for="rb-upload-type-3">Upload từ google drive, transcode trên server (tối đa 10GB)</label>
                         </div>
                     </div>
-                    <div class="mb-3">hoặc</div>
-                    <div class="form-group">
-                        <label>Chọn video</label>
-                        <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Việc transcode video sẽ được thực hiện trên server."></i></small>
-                        <br>
-                        <input type="file" class="js-input-file" accept="video/*">
+                    <div v-if="uploadType == 'transcode'" class="form-group">
+                        <label>Chọn thư mục transcode</label>
+                        <input type="file" class="d-none" id="js-input-upload-transcode" directory webkitdirectory mozdirectory @change="inputTranscodeChange">
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="btn btn-info mr-3" @click="openUploadTranscodeDialog">Chọn thư mục</button>
+                            <span>@{{ uploadTranscodeFileCount }}</span>
+                        </div>
                     </div>
-                    <div class="progress js-upload-progress" style="display:none">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
+                    <div v-if="uploadType == 'local_file'" class="form-group">
+                        <label>Chọn video</label>
+                        <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Việc transcode video sẽ được thực hiện trên server.<br>- Dung lượng video tối đa không quá 1GB."></i></small>
+                        <input type="file" class="d-none" id="js-input-upload-local-file" accept="video/*" @change="inputLocalFileChange">
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="btn btn-info mr-3" @click="openUploadLocalFileDialog">Chọn video</button>
+                            <span>@{{ uploadLocalFilename }}</span>
+                        </div>
+                    </div>
+                    <div v-if="uploadType == 'drive'" class="form-group">
+                        <label>Chọn video</label>
+                        <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Việc transcode video sẽ được thực hiện trên server.<br>- Dung lượng video tối đa không quá 10GB."></i></small>
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="btn btn-info mr-3" @click="openUploadDriveDialog">Chọn video</button>
+                            <span>@{{ uploadDriveFilename }}</span>
+                        </div>
+                    </div>
+                    <div v-if="submitting" class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" :style="{ 'width': progressPercent + '%' }">@{{ progressPercent }}%</div>
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-primary js-save-button"><i class="fas fa-save"></i> Lưu</button>
+                    <button type="button" class="btn btn-primary" :disabled="submitting" @click="submitData"><i class="fas fa-save"></i> Lưu</button>
                     <a class="btn btn-warning float-right" href="/TomatoTranscode.exe"><i class="fas fa-download"></i> Download transcode app</a>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     <div class="col-sm-6">
@@ -173,6 +194,7 @@ Sửa đầu mục
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
 
 <script>
     var player = videojs('video');
@@ -187,6 +209,195 @@ Sửa đầu mục
 </script>
 
 <script>
+    new Vue({
+        el: '#upload-form',
+        data: {
+            title: "{{ old('title') ?? $part->title }}",
+            uploadType: 'transcode',
+            uploadTranscodeFileCount: undefined,
+            uploadLocalFilename: undefined,
+            uploadDriveFilename: undefined,
+            developerKey: '{{ config("services.google.api_key") }}',
+            clientId: '{{ config("services.google.client_id") }}',
+            appId: '{{ config("services.google.project_number") }}',
+            scope: [
+                'https://www.googleapis.com/auth/drive.readonly'
+            ],
+            pickerApiLoaded: false,
+            oauthToken: null,
+            submitting: false,
+            progressPercent: 0,
+        },
+        updated() {
+            $('[data-toggle="popover"]').popover({
+                trigger: 'hover',
+                boundary: 'viewport'
+            });
+        },
+        methods: {
+            openUploadTranscodeDialog() {
+                $('#js-input-upload-transcode').trigger('click');
+            },
+            openUploadLocalFileDialog() {
+                $('#js-input-upload-local-file').trigger('click');
+            },
+            inputTranscodeChange(e) {
+                const files = $(e.target).prop('files');
+
+                if (files.length == 0) {
+                    this.uploadTranscodeFileCount = undefined;
+                    return;
+                }
+
+                const webkitRelativePath = files[0].webkitRelativePath;
+                const directoryName = webkitRelativePath.split('/')[0];
+
+                this.uploadTranscodeFileCount = `${directoryName} (${files.length} files)`;
+            },
+            inputLocalFileChange(e) {
+                const files = $(e.target).prop('files');
+
+                if (files.length == 0) {
+                    this.uploadLocalFilename = undefined;
+                    return;
+                }
+
+                const file = files[0];
+
+                this.uploadLocalFilename = file.name;
+            },
+            async openUploadDriveDialog() {
+                console.log("Clicked");
+                await gapi.load("auth2", () => {
+                    console.log("Auth2 Loaded");
+                    gapi.auth2.authorize({
+                            client_id: this.clientId,
+                            scope: this.scope,
+                            immediate: false
+                        },
+                        this.handleAuthResult
+                    );
+                });
+                gapi.load("picker", () => {
+                    console.log("Picker Loaded");
+                    this.pickerApiLoaded = true;
+                    this.createPicker();
+                });
+            },
+            handleAuthResult(authResult) {
+                console.log("Handle Auth result", authResult);
+                if (authResult && !authResult.error) {
+                    this.oauthToken = authResult.access_token;
+                    this.createPicker();
+                }
+            },
+            createPicker() {
+                console.log("Create Picker", google.picker);
+                if (this.pickerApiLoaded && this.oauthToken) {
+                    var picker = new google.picker.PickerBuilder()
+                        .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                        .addView(google.picker.ViewId.DOCS)
+                        .setOAuthToken(this.oauthToken)
+                        .setDeveloperKey(this.developerKey)
+                        .setCallback(this.pickerCallback)
+                        .build();
+                    picker.setVisible(true);
+                }
+            },
+            async pickerCallback(data) {
+                console.log("PickerCallback", data);
+                var url = "nothing";
+                var name = "nothing";
+                if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
+                    // Array of Picked Files
+                    console.log(docs);
+                }
+            },
+            async submitData() {
+                const transcodeStatus = '{{ $data->transcode_status ?? \App\Constants\TranscodeStatus::COMPLETED }}';
+                if (
+                    transcodeStatus != '{{ \App\Constants\TranscodeStatus::COMPLETED }}' &&
+                    transcodeStatus != '{{ \App\Constants\TranscodeStatus::FAIL }}'
+                ) {
+                    alert('Video đang được xử lý, vui lòng thử lại sau.');
+                    return;
+                }
+
+                this.submitting = true;
+
+                await axios.post('{{ route("admin.part_video.edit", [ "part_id" => $part->id, "lesson_id" => $lesson->id ]) }}', {
+                    title: this.title,
+                });
+
+                switch (this.uploadType) {
+                    case 'transcode':
+                        await this.submitTranscode();
+                        break;
+
+                    case 'local_file':
+
+                        break;
+
+                    case 'drive':
+
+                        break;
+                }
+
+                this.submitting = false;
+                window.onbeforeunload = function (e) {
+                    delete e.returnValue;
+                };
+                location.reload();
+            },
+            async submitTranscode() {
+                await axios.post('{{ route("admin.part_video.clear_s3") }}', {
+                    part_id: '{{ $part->id }}'
+                });
+
+                const files = $('#js-input-upload-transcode').prop('files');
+
+                if (files.length == 0) {
+                    location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
+                    return;
+                }
+
+                window.onbeforeunload = function (e) {
+                    e.returnValue = '';
+                };
+
+                try {
+                    for (let index = 0; index < files.length; index++) {
+                        const file = files[index];
+
+                        const webkitRelativePath = file.webkitRelativePath;
+                        const pathSplit = webkitRelativePath.split('/');
+                        pathSplit.splice(0, 1);
+                        const path = pathSplit.join('/');
+
+                        const formData = new FormData();
+                        formData.append('part_id', '{{ $part->id }}');
+                        formData.append('path', path);
+                        formData.append('file', file);
+
+                        await axios.post('{{ route("admin.part_video.upload_transcode") }}', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+
+                        const percent = Math.ceil((index + 1) / files.length * 100);
+                        this.progressPercent = percent;
+                    }
+
+                    alert('Upload video thành công.');
+                } catch {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            },
+        },
+    });
+
+
     $('.js-open-select-directory').click(function () {
         $('.js-input-directory').trigger('click');
     });
