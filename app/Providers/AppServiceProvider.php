@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Setting;
+use Config;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,5 +27,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::defaultView('frontend.paginate');
+
+        $settings = Setting::all();
+        foreach ($settings as $item) {
+            Config::set('settings.' . $item->key, $item->value);
+        }
     }
 }

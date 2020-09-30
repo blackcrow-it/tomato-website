@@ -167,6 +167,9 @@ Route::prefix('admin')
             Route::get('recharge', 'RechargeController@list')->name('recharge.list');
             Route::get('recharge/get-data', 'RechargeController@getData')->name('recharge.get_data');
             Route::post('recharge/recheck', 'RechargeController@recheck')->name('recharge.recheck');
+
+            Route::get('setting/homepage', 'SettingController@editHomepage')->name('setting.homepage');
+            Route::post('setting/submit', 'SettingController@submit')->name('setting.submit');
         });
 
         Route::middleware('guest')->group(function () {

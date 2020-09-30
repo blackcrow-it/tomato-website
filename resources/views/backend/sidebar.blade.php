@@ -35,3 +35,20 @@
         <p>Thành viên</p>
     </a>
 </li>
+<li class="nav-item has-treeview {{ request()->routeIs('admin.setting.homepage') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ request()->routeIs('admin.setting.*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-cogs"></i>
+        <p>
+            Cài đặt
+            <i class="fas fa-angle-left right"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{ route('admin.setting.homepage') }}" class="nav-link {{ request()->routeIs('admin.setting.homepage') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-home"></i>
+                <p>Trang chủ</p>
+            </a>
+        </li>
+    </ul>
+</li>

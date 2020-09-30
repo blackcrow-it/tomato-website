@@ -70775,7 +70775,7 @@ vue__WEBPACK_IMPORTED_MODULE_4___default.a.component('paginate', vuejs_paginate_
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! F:\tomato-website\resources\js\frontend.js */"./resources/js/frontend.js");
+module.exports = __webpack_require__(/*! D:\GitHub\tomato\resources\js\frontend.js */"./resources/js/frontend.js");
 
 
 /***/ })
