@@ -144,7 +144,7 @@ Nạp tiền
             },
             canShowRecheckButton(item) {
                 if (item.status != '{{ \App\Constants\RechargeStatus::PENDING }}') return true;
-                return moment().diff(moment(item.updated_at), 'hours') >= 2;
+                return moment().diff(moment(item.updated_at), 'hours') >= 1;
             },
         },
     });

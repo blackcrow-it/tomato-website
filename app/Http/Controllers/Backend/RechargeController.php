@@ -91,7 +91,7 @@ class RechargeController extends Controller
 
             if ($response === false) return;
 
-            $recharge->notify_data = json_encode($response);
+            $recharge->callback_data = json_encode($response);
             $recharge->amount = $response['amount'];
 
             if ($response['resultCd'] != '00_000') {
