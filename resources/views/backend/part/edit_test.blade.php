@@ -134,7 +134,7 @@ Sửa đầu mục
             <hr>
             <div class="form-group">
                 <label>Số câu cần trả lời đúng</label>
-                <input type="text" name="correct_requirement" placeholder="Tiêu đề" value="{{ $data->correct_requirement }}" class="form-control currency @error('correct_requirement') is-invalid @enderror">
+                <input type="text" name="correct_requirement" placeholder="Tiêu đề" value="{{ $data->correct_requirement ?? null }}" class="form-control currency @error('correct_requirement') is-invalid @enderror">
                 @error('correct_requirement')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
