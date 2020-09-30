@@ -131,6 +131,14 @@ Sửa đầu mục
                 </table>
                 <button type="button" class="btn btn-info" @click="addQuestion"><i class="fas fa-plus"></i> Thêm câu hỏi</button>
             </div>
+            <hr>
+            <div class="form-group">
+                <label>Số câu cần trả lời đúng</label>
+                <input type="text" name="correct_requirement" placeholder="Tiêu đề" value="{{ $data->correct_requirement }}" class="form-control currency @error('correct_requirement') is-invalid @enderror">
+                @error('correct_requirement')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>

@@ -10,7 +10,8 @@ class PartTest extends Model
 
     protected $fillable = [
         'part_id',
-        'data'
+        'data',
+        'correct_requirement',
     ];
 
     protected $casts = [

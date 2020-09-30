@@ -64,8 +64,8 @@ class PartTestController extends Controller
             $part->save();
 
             $data = $part->part_test ?? new PartTest();
+            $data->fill($request->input());
             $data->part_id = $part_id;
-            $data->data = $request->input('data');
             $data->save();
 
             DB::commit();

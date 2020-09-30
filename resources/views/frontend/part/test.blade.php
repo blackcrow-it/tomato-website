@@ -47,7 +47,11 @@
                         <li>Bài thi: <b>{{ $part->title }}</b></li>
                         <li>Câu hỏi <b>@{{ questions.filter(x => x.selected == x.correct).length }}/@{{ questions.length }}</b></li>
                         <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selected == x.correct).length / questions.length * 100) / 10 }}/10</b></li>
-                        <li>Kết quả: <b>Chưa đạt</b></li>
+                        <li>
+                            Kết quả:
+                            <b v-if="questions.filter(x => x.selected == x.correct).length < correct_requirement">Chưa đạt</b>
+                            <b v-else>Đạt</b>
+                        </li>
                     </ul>
                     <div class="quiz-reslut__btn text-left">
                         <button type="button" class="btn" @click="scrollToQuiz">Xem đáp án</button>
@@ -66,6 +70,7 @@
         data: {
             questions: [],
             submited: false,
+            correct_requirement: 0,
         },
         mounted() {
             this.questions = JSON.parse(`{!! json_encode($data->data) !!}`);
@@ -75,6 +80,8 @@
                 return question;
             });
             this.questions = this.shuffle(this.questions);
+
+            this.correct_requirement = parseInt('{{ $data->correct_requirement ?? 0 }}');
         },
         methods: {
             shuffle(arr) {
