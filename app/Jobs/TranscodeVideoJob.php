@@ -34,6 +34,7 @@ class TranscodeVideoJob implements ShouldQueue
         if ($this->partVideo->transcode_status != TranscodeStatus::PENDING) return;
 
         $this->partVideo->transcode_status = TranscodeStatus::PROCESSING;
+        $this->partVideo->transcode_message = '0%';
         $this->partVideo->save();
 
         try {
@@ -114,5 +115,12 @@ class TranscodeVideoJob implements ShouldQueue
             $this->partVideo->transcode_message = $ex->getMessage();
             $this->partVideo->save();
         }
+    }
+
+    public function failed(Exception $ex)
+    {
+        $this->partVideo->transcode_status = TranscodeStatus::FAIL;
+        $this->partVideo->transcode_message = $ex->getMessage();
+        $this->partVideo->save();
     }
 }
