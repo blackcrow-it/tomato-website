@@ -152,7 +152,7 @@ Sửa đầu mục
             },
         },
         mounted() {
-            this.questions = JSON.parse(`{!! json_encode($data->data) !!}`);
+            this.questions = JSON.parse(`{!! json_encode($data->data ?? []) !!}`);
         },
         methods: {
             addQuestion() {
