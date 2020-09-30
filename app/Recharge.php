@@ -21,4 +21,9 @@ class Recharge extends Model
     protected $hidden = [
         'request_data', 'callback_data', 'notify_data'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
 }

@@ -78,6 +78,7 @@ class RechargeEpayController extends Controller
             }
 
             $recharge->callback_data = json_encode($response);
+            $recharge->amount = $response['amount'];
 
             if ($response['resultCd'] != '00_000') {
                 $recharge->status = RechargeStatus::CANCEL;
@@ -127,6 +128,7 @@ class RechargeEpayController extends Controller
             if ($response === false) return;
 
             $recharge->notify_data = json_encode($response);
+            $recharge->amount = $response['amount'];
 
             if ($response['resultCd'] != '00_000') {
                 $recharge->status = RechargeStatus::CANCEL;

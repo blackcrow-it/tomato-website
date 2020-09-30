@@ -88,6 +88,7 @@ class RechargeMomoController extends Controller
             }
 
             $recharge->callback_data = json_encode($response);
+            $recharge->amount = $response['amount'];
 
             if ($response['errorCode'] != 0) {
                 $recharge->status = RechargeStatus::CANCEL;
@@ -135,6 +136,7 @@ class RechargeMomoController extends Controller
             }
 
             $recharge->notify_data = json_encode($response);
+            $recharge->amount = $response['amount'];
 
             if ($response['errorCode'] != 0) {
                 $recharge->status = RechargeStatus::CANCEL;

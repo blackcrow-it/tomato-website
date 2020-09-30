@@ -24,3 +24,6 @@ window.bsCustomFileInput = bsCustomFileInput;
 
 import Paginate from 'vuejs-paginate';
 Vue.component('paginate', Paginate);
+
+import moment from 'moment';
+window.moment = moment;
