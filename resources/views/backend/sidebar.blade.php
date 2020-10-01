@@ -35,7 +35,7 @@
         <p>Thành viên</p>
     </a>
 </li>
-<li class="nav-item has-treeview {{ request()->routeIs('admin.setting.homepage') ? 'menu-open' : '' }}">
+<li class="nav-item has-treeview {{ request()->routeIs('admin.setting.*') ? 'menu-open' : '' }}">
     <a href="#" class="nav-link {{ request()->routeIs('admin.setting.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-cogs"></i>
         <p>
@@ -45,9 +45,15 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-            <a href="{{ route('admin.setting.homepage') }}" class="nav-link {{ request()->routeIs('admin.setting.homepage') ? 'active' : '' }}">
+            <a href="{{ route('admin.setting.edit', [ 'view' => 'homepage' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'homepage' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-home"></i>
                 <p>Trang chủ</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.setting.edit', [ 'view' => 'recharge' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'recharge' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-money-check-alt"></i>
+                <p>Nạp tiền</p>
             </a>
         </li>
     </ul>

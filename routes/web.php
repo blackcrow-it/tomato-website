@@ -168,7 +168,7 @@ Route::prefix('admin')
             Route::get('recharge/get-data', 'RechargeController@getData')->name('recharge.get_data');
             Route::post('recharge/recheck', 'RechargeController@recheck')->name('recharge.recheck');
 
-            Route::get('setting/homepage', 'SettingController@editHomepage')->name('setting.homepage');
+            Route::get('setting/edit/{view}', 'SettingController@edit')->name('setting.edit');
             Route::post('setting/submit', 'SettingController@submit')->name('setting.submit');
             Route::post('setting/upload-image', 'SettingController@uploadImage')->name('setting.upload_image');
         });

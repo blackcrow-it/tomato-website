@@ -1,5 +1,9 @@
 @extends('backend.setting.master')
 
+@section('setting_title')
+Cài đặt trang chủ
+@endsection
+
 @section('setting_content')
 <div class="form-group">
     <label>Title</label>

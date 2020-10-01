@@ -1,7 +1,7 @@
 @extends('backend.master')
 
 @section('title')
-Cài đặt trang chủ
+@yield('setting_title')
 @endsection
 
 @section('content')
@@ -33,7 +33,9 @@ Cài đặt trang chủ
     <form action="{{ route('admin.setting.submit') }}" method="POST">
         @csrf
         <div class="card-header">
-            <h3>Cài đặt trang chủ</h3>
+            <h3>
+                @yield('setting_title')
+            </h3>
         </div>
         <div class="card-body">
             @yield('setting_content')

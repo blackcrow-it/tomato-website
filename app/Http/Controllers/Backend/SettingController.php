@@ -13,9 +13,9 @@ use Storage;
 
 class SettingController extends Controller
 {
-    public function editHomepage()
+    public function edit($view)
     {
-        return view('backend.setting.homepage');
+        return view('backend.setting.' . $view);
     }
 
     public function submit(Request $request)
