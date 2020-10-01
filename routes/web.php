@@ -171,6 +171,8 @@ Route::prefix('admin')
             Route::get('setting/edit/{view}', 'SettingController@edit')->name('setting.edit');
             Route::post('setting/submit', 'SettingController@submit')->name('setting.submit');
             Route::post('setting/upload-image', 'SettingController@uploadImage')->name('setting.upload_image');
+            Route::get('setting/drive/redirect', 'SettingController@redirectAuthGoogleDriveApi')->name('setting.drive.redirect');
+            Route::get('setting/drive/callback', 'SettingController@callbackAuthGoogleDriveApi')->name('setting.drive.callback');
         });
 
         Route::middleware('guest')->group(function () {

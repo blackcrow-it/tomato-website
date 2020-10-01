@@ -85,4 +85,5 @@
     });
 
 </script>
+@yield('setting_script')
 @endsection

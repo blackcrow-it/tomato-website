@@ -9,6 +9,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use Socialite;
 use Storage;
 
 class SettingController extends Controller
@@ -50,5 +51,32 @@ class SettingController extends Controller
         return [
             'src' => $imageUrl . '?t=' . time()
         ];
+    }
+
+    public function redirectAuthGoogleDriveApi()
+    {
+        return Socialite::driver('google')
+            ->scopes([
+                'https://www.googleapis.com/auth/drive.metadata.readonly'
+            ])
+            ->with([
+                // 'access_type' => 'offline',
+                'redirect_uri' => route('admin.setting.drive.callback')
+            ])
+            ->redirect();
+    }
+
+    public function callbackAuthGoogleDriveApi()
+    {
+        $user = Socialite::driver('google')
+            ->scopes([
+                'https://www.googleapis.com/auth/drive.metadata.readonly'
+            ])
+            ->with([
+                // 'access_type' => 'offline',
+                'redirect_uri' => route('admin.setting.drive.callback')
+            ])
+            ->user();
+        dd($user);
     }
 }

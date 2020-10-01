@@ -56,5 +56,11 @@
                 <p>Nạp tiền</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.setting.edit', [ 'view' => 'drive' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'drive' ? 'active' : '' }}">
+                <i class="nav-icon fab fa-google-drive"></i>
+                <p>Google drive</p>
+            </a>
+        </li>
     </ul>
 </li>
