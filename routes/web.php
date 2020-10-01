@@ -170,6 +170,7 @@ Route::prefix('admin')
 
             Route::get('setting/homepage', 'SettingController@editHomepage')->name('setting.homepage');
             Route::post('setting/submit', 'SettingController@submit')->name('setting.submit');
+            Route::post('setting/upload-image', 'SettingController@uploadImage')->name('setting.upload_image');
         });
 
         Route::middleware('guest')->group(function () {
