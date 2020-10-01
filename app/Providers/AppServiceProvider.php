@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Setting;
 use Config;
+use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,9 +30,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('frontend.paginate');
 
-        $settings = Setting::all();
-        foreach ($settings as $item) {
-            Config::set('settings.' . $item->key, $item->value);
+        try {
+            $settings = Setting::all();
+            foreach ($settings as $item) {
+                Config::set('settings.' . $item->key, $item->value);
+            }
+        } catch (Exception $ex) {
+            Log::error($ex);
         }
     }
 }
