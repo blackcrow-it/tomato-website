@@ -38,18 +38,9 @@ class TranscodeVideoJob implements ShouldQueue
         $this->partVideo->save();
 
         try {
-            printf("Clear transcode folder.\n");
-            Storage::deleteDirectory('transcode');
+            printf("Create hls folder.\n");
+            Storage::deleteDirectory('transcode/hls');
             Storage::makeDirectory('transcode/hls');
-
-            printf("Download video file.\n");
-            $s3Driver = Storage::disk('s3')->getDriver();
-            $localDriver = Storage::getDriver();
-            $localDriver->writeStream('transcode/input.tmp', $s3Driver->readStream($this->partVideo->s3_path . '/input.tmp'));
-            gc_collect_cycles();
-
-            printf("Delete folder on s3.\n");
-            Storage::disk('s3')->deleteDirectory($this->partVideo->s3_path);
 
             printf("Init transcoding.\n");
             $config = [
@@ -93,6 +84,9 @@ class TranscodeVideoJob implements ShouldQueue
 
             printf("Delete origin video.\n");
             Storage::delete('transcode/input.tmp');
+
+            $this->partVideo->transcode_message = 'Uploading transcode file.';
+            $this->partVideo->save();
 
             printf("Upload secret key to s3.\n");
             $key = Storage::get('transcode/secret.key');

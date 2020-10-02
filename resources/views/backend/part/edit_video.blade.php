@@ -333,18 +333,20 @@ Sửa đầu mục
                 }
 
                 this.submitting = true;
-                window.onbeforeunload = function (e) {
-                    e.returnValue = '';
-                };
 
                 await axios.post('{{ route("admin.part_video.edit", [ "part_id" => $part->id, "lesson_id" => $lesson->id ]) }}', {
                     title: this.title,
                 });
 
                 if (this.uploadType == undefined) {
+                    alert('Cập nhật thông tin thành công.');
                     location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
                     return;
                 }
+
+                window.onbeforeunload = function (e) {
+                    e.returnValue = '';
+                };
 
                 switch (this.uploadType) {
                     case 'transcode':
@@ -417,7 +419,6 @@ Sửa đầu mục
                             'Content-Type': 'multipart/form-data'
                         },
                         onUploadProgress: event => {
-                            console.log(event);
                             const percent = Math.round((event.loaded * 100) / event.total);
                             this.progressPercent = percent;
                         }

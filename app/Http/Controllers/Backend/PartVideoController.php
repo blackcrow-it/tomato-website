@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Constants\TranscodeStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\PartVideoRequest;
-use App\Jobs\TranscodeVideoJob;
+use App\Jobs\TranscodeFromDriveJob;
+use App\Jobs\TranscodeFromS3Job;
 use App\Part;
 use App\PartVideo;
 use DB;
@@ -158,7 +159,7 @@ class PartVideoController extends Controller
         $data->transcode_status = TranscodeStatus::PENDING;
         $data->save();
 
-        TranscodeVideoJob::dispatch($data);
+        TranscodeFromS3Job::dispatch($data);
     }
 
     public function getGoogleDriveToken()
@@ -181,7 +182,6 @@ class PartVideoController extends Controller
         $data->transcode_status = TranscodeStatus::PENDING;
         $data->save();
 
-        // Call job
-        return $request->input('drive_id');
+        TranscodeFromDriveJob::dispatch($data);
     }
 }
