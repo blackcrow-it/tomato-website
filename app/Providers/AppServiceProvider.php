@@ -28,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Paginator::defaultView('frontend.paginate');
+        if (!request()->routeIs('admin.*')) {
+            Paginator::defaultView('frontend.paginate');
+        }
 
         try {
             $settings = Setting::all();
