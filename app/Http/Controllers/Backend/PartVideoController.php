@@ -10,6 +10,7 @@ use App\Part;
 use App\PartVideo;
 use DB;
 use Exception;
+use Google_Client;
 use Illuminate\Http\Request;
 use Log;
 use Storage;
@@ -158,5 +159,29 @@ class PartVideoController extends Controller
         $data->save();
 
         TranscodeVideoJob::dispatch($data);
+    }
+
+    public function getGoogleDriveToken()
+    {
+        $client = new Google_Client();
+        $client->setClientId(config('services.google.client_id'));
+        $client->setClientSecret(config('services.google.client_secret'));
+
+        $response = $client->fetchAccessTokenWithRefreshToken(config('settings.google_drive_refresh_token'));
+
+        return [
+            'token' => $response['access_token']
+        ];
+    }
+
+    public function uploadDrive(Request $request)
+    {
+        $part = Part::findOrFail($request->input('part_id'));
+        $data = $part->part_video;
+        $data->transcode_status = TranscodeStatus::PENDING;
+        $data->save();
+
+        // Call job
+        return $request->input('drive_id');
     }
 }

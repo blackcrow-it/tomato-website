@@ -125,6 +125,10 @@ Sửa đầu mục
                     <div class="form-group">
                         <label>Chọn nguồn upload</label>
                         <div class="form-check">
+                            <input v-model="uploadType" class="form-check-input" type="radio" id="rb-upload-type-0" :value="undefined">
+                            <label class="form-check-label" for="rb-upload-type-0">Không upload</label>
+                        </div>
+                        <div class="form-check">
                             <input v-model="uploadType" class="form-check-input" type="radio" id="rb-upload-type-1" value="transcode">
                             <label class="form-check-label" for="rb-upload-type-1">Upload thư mục transcode</label>
                         </div>
@@ -213,18 +217,16 @@ Sửa đầu mục
         el: '#upload-form',
         data: {
             title: "{{ old('title') ?? $part->title }}",
-            uploadType: 'transcode',
+            uploadType: undefined,
             uploadTranscodeFileCount: undefined,
             uploadLocalFilename: undefined,
             uploadDriveFilename: undefined,
+            uploadDriveFileId: undefined,
             developerKey: '{{ config("services.google.api_key") }}',
             clientId: '{{ config("services.google.client_id") }}',
             appId: '{{ config("services.google.project_number") }}',
-            scope: [
-                'https://www.googleapis.com/auth/drive.readonly'
-            ],
-            pickerApiLoaded: false,
             oauthToken: null,
+            picker: undefined,
             submitting: false,
             progressPercent: 0,
         },
@@ -267,51 +269,58 @@ Sửa đầu mục
                 this.uploadLocalFilename = file.name;
             },
             async openUploadDriveDialog() {
-                console.log("Clicked");
-                await gapi.load("auth2", () => {
-                    console.log("Auth2 Loaded");
-                    gapi.auth2.authorize({
-                            client_id: this.clientId,
-                            scope: this.scope,
-                            immediate: false
-                        },
-                        this.handleAuthResult
-                    );
-                });
-                gapi.load("picker", () => {
-                    console.log("Picker Loaded");
-                    this.pickerApiLoaded = true;
-                    this.createPicker();
-                });
-            },
-            handleAuthResult(authResult) {
-                console.log("Handle Auth result", authResult);
-                if (authResult && !authResult.error) {
-                    this.oauthToken = authResult.access_token;
-                    this.createPicker();
+                this.uploadDriveFilename = undefined;
+                this.uploadDriveFileId = undefined;
+
+                if (this.picker != undefined) {
+                    this.picker.setVisible(true);
+                    return;
                 }
+
+                if (this.oauthToken == null) {
+                    const response = await axios.post('{{ route("admin.part_video.get_drive_token") }}');
+                    this.oauthToken = response.token;
+                }
+
+                await gapi.load('auth2');
+                gapi.load('picker', () => {
+                    this.createPicker();
+                });
             },
             createPicker() {
-                console.log("Create Picker", google.picker);
-                if (this.pickerApiLoaded && this.oauthToken) {
-                    var picker = new google.picker.PickerBuilder()
-                        .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-                        .addView(google.picker.ViewId.DOCS)
-                        .setOAuthToken(this.oauthToken)
-                        .setDeveloperKey(this.developerKey)
-                        .setCallback(this.pickerCallback)
-                        .build();
-                    picker.setVisible(true);
-                }
+                const viewId = new google.picker.DocsView(google.picker.ViewId.DOCS)
+                    .setOwnedByMe(true)
+                    .setIncludeFolders(true);
+
+                this.picker = new google.picker.PickerBuilder()
+                    .disableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                    .addView(viewId)
+                    .setOAuthToken(this.oauthToken)
+                    .setDeveloperKey(this.developerKey)
+                    .setCallback(this.pickerCallback)
+                    .build();
+
+                this.picker.setVisible(true);
             },
             async pickerCallback(data) {
-                console.log("PickerCallback", data);
-                var url = "nothing";
-                var name = "nothing";
-                if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
-                    // Array of Picked Files
-                    console.log(docs);
+                if (data[google.picker.Response.ACTION] !== google.picker.Action.PICKED) return;
+                if (data.docs.length == 0) return;
+
+                const file = data.docs[0];
+                if (!file.mimeType.startsWith('video/')) {
+                    alert('File bạn chọn không phải video. Vui lòng chọn lại.');
+                    this.picker.setVisible(true);
+                    return;
                 }
+
+                if (file.sizeBytes > 10 * 1024 * 1024 * 1024) {
+                    alert('File bạn chọn vượt quá 10GB. Vui lòng chọn lại.');
+                    this.picker.setVisible(true);
+                    return;
+                }
+
+                this.uploadDriveFilename = file.name;
+                this.uploadDriveFileId = file.id;
             },
             async submitData() {
                 const transcodeStatus = '{{ $data->transcode_status ?? \App\Constants\TranscodeStatus::COMPLETED }}';
@@ -332,6 +341,11 @@ Sửa đầu mục
                     title: this.title,
                 });
 
+                if (this.uploadType == undefined) {
+                    location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
+                    return;
+                }
+
                 switch (this.uploadType) {
                     case 'transcode':
                         await this.submitTranscode();
@@ -342,7 +356,7 @@ Sửa đầu mục
                         break;
 
                     case 'drive':
-
+                        await this.submitDriveFile();
                         break;
                 }
 
@@ -353,16 +367,13 @@ Sửa đầu mục
                 location.reload();
             },
             async submitTranscode() {
+                const files = $('#js-input-upload-transcode').prop('files');
+
+                if (files.length == 0) return;
+
                 await axios.post('{{ route("admin.part_video.clear_s3") }}', {
                     part_id: '{{ $part->id }}'
                 });
-
-                const files = $('#js-input-upload-transcode').prop('files');
-
-                if (files.length == 0) {
-                    location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
-                    return;
-                }
 
                 try {
                     for (let index = 0; index < files.length; index++) {
@@ -387,8 +398,6 @@ Sửa đầu mục
                         const percent = Math.ceil((index + 1) / files.length * 100);
                         this.progressPercent = percent;
                     }
-
-                    alert('Upload video thành công.');
                 } catch {
                     alert('Có lỗi xảy ra, vui lòng thử lại.');
                 }
@@ -397,10 +406,7 @@ Sửa đầu mục
                 try {
                     const files = $('#js-input-upload-local-file').prop('files');
 
-                    if (files.length == 0) {
-                        location.href = '{{ route("admin.part.list", [ "lesson_id" => $lesson->id ]) }}';
-                        return;
-                    }
+                    if (files.length == 0) return;
 
                     const formData = new FormData();
                     formData.append('part_id', '{{ $part->id }}');
@@ -416,12 +422,18 @@ Sửa đầu mục
                             this.progressPercent = percent;
                         }
                     });
-
-                    alert('Upload video thành công.');
                 } catch {
                     alert('Có lỗi xảy ra, vui lòng thử lại.');
                 }
-            }
+            },
+            async submitDriveFile() {
+                if (this.uploadDriveFileId == undefined) return;
+
+                await axios.post('{{ route("admin.part_video.upload_drive") }}', {
+                    part_id: '{{ $part->id }}',
+                    drive_id: this.uploadDriveFileId
+                });
+            },
         },
     });
 

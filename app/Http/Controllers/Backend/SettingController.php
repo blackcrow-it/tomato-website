@@ -7,6 +7,7 @@ use App\Http\Requests\Backend\SettingUploadImageRequest;
 use App\Setting;
 use DB;
 use Exception;
+use Google_Service_Drive;
 use Illuminate\Http\Request;
 use Log;
 use Socialite;
@@ -57,7 +58,7 @@ class SettingController extends Controller
     {
         return Socialite::driver('google')
             ->scopes([
-                'https://www.googleapis.com/auth/drive.metadata.readonly'
+                Google_Service_Drive::DRIVE_READONLY
             ])
             ->with([
                 'access_type' => 'offline',
@@ -70,7 +71,7 @@ class SettingController extends Controller
     {
         $user = Socialite::driver('google')
             ->scopes([
-                'https://www.googleapis.com/auth/drive.metadata.readonly'
+                Google_Service_Drive::DRIVE_READONLY
             ])
             ->with([
                 'access_type' => 'offline',

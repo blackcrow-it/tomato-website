@@ -150,7 +150,9 @@ Route::prefix('admin')
             Route::post('part-video/delete/{part_id}', 'PartVideoController@submitDelete')->name('part_video.delete');
             Route::post('part-video/ajax-upload-transcode', 'PartVideoController@uploadTranscode')->name('part_video.upload_transcode');
             Route::post('part-video/ajax-upload-video', 'PartVideoController@uploadVideo')->name('part_video.upload_video');
+            Route::post('part-video/ajax-upload-drive', 'PartVideoController@uploadDrive')->name('part_video.upload_drive');
             Route::post('part-video/ajax-clear-s3', 'PartVideoController@clearS3')->name('part_video.clear_s3');
+            Route::post('part-video/ajax-get-drive-token', 'PartVideoController@getGoogleDriveToken')->name('part_video.get_drive_token');
 
             Route::get('part-youtube/edit/{part_id}', 'PartYoutubeController@edit')->name('part_youtube.edit');
             Route::post('part-youtube/edit/{part_id}', 'PartYoutubeController@submitEdit')->name('part_youtube.edit');

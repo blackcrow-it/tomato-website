@@ -40,3 +40,11 @@ img {
 .nav-sidebar .nav-treeview {
     padding-left: 10px;
 }
+
+.picker-dialog-bg {
+    z-index: 2000 !important;
+}
+
+.picker-dialog {
+    z-index: 2001 !important;
+}
