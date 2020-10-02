@@ -60,9 +60,9 @@ class SettingController extends Controller
                 'https://www.googleapis.com/auth/drive.metadata.readonly'
             ])
             ->with([
-                // 'access_type' => 'offline',
-                'redirect_uri' => route('admin.setting.drive.callback')
+                'access_type' => 'offline',
             ])
+            ->redirectUrl(route('admin.setting.drive.callback'))
             ->redirect();
     }
 
@@ -73,10 +73,27 @@ class SettingController extends Controller
                 'https://www.googleapis.com/auth/drive.metadata.readonly'
             ])
             ->with([
-                // 'access_type' => 'offline',
-                'redirect_uri' => route('admin.setting.drive.callback')
+                'access_type' => 'offline',
             ])
+            ->redirectUrl(route('admin.setting.drive.callback'))
             ->user();
-        dd($user);
+
+        try {
+            DB::beginTransaction();
+
+            Setting::updateOrInsert([
+                'key' => 'google_drive_refresh_token'
+            ], [
+                'value' => $user->refreshToken
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('admin.setting.edit', [ 'view' => 'drive' ])->with('success', 'Kết nối thành công.');
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            return redirect()->route('admin.setting.edit', [ 'view' => 'drive' ])->withErrors('Kết nối thất bại.');
+        }
     }
 }
