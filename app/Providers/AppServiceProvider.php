@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Log;
+use Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!request()->routeIs('admin.*')) {
+        if (!Str::startsWith(request()->getRequestUri(), '/admin')) {
             Paginator::defaultView('frontend.paginate');
         }
 
