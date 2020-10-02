@@ -83,7 +83,7 @@ class TranscodeVideoJob implements ShouldQueue
             printf("Delete origin video.\n");
             Storage::delete('transcode/input.tmp');
 
-            $this->partVideo->transcode_message = 'Uploading transcode file.';
+            $this->partVideo->transcode_message = 'Uploading transcode file';
             $this->partVideo->save();
 
             printf("Upload secret key to s3.\n");

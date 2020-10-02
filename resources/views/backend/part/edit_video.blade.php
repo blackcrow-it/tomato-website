@@ -34,7 +34,7 @@ Sửa đầu mục
     </div>
 </div>
 <hr>
-<div class="row mb-2">
+<div class="row mb-3">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">Sửa đầu mục</h1>
     </div><!-- /.col -->
