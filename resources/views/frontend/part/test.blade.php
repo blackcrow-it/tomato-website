@@ -18,6 +18,9 @@
                     <li v-for="(question, questionIndex) in questions" class="item">
                         <div class="item__title">
                             <p><b>Câu hỏi số @{{ questionIndex + 1 }}:</b> @{{ question.question }}</p>
+                            <div class="item__control">
+                                <audio v-if="question.audio" :src="question.audio" controls controlsList="nodownload"></audio>
+                            </div>
                         </div>
                         <div class="item__choose">
                             <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && question.correct == option }">

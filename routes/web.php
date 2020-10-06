@@ -165,6 +165,8 @@ Route::prefix('admin')
             Route::get('part-test/edit/{part_id}', 'PartTestController@edit')->name('part_test.edit');
             Route::post('part-test/edit/{part_id}', 'PartTestController@submitEdit')->name('part_test.edit');
             Route::post('part-test/delete/{part_id}', 'PartTestController@submitDelete')->name('part_test.delete');
+            Route::post('part-test/upload-audio', 'PartTestController@uploadAudio')->name('part_test.upload_audio');
+            Route::post('part-test/delete-audio', 'PartTestController@deleteAudio')->name('part_test.delete_audio');
 
             Route::get('recharge', 'RechargeController@list')->name('recharge.list');
             Route::get('recharge/get-data', 'RechargeController@getData')->name('recharge.get_data');

@@ -104,6 +104,21 @@ Sửa đầu mục
                                 <input v-model="question.question" type="text" :name="'data[' + questionIndex + '][question]'" class="form-control" :placeholder="'Câu hỏi số ' + (questionIndex + 1)">
                             </div>
                             <div class="form-group">
+                                <label>File âm thanh (nếu có)</label>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <input type="file" accept="audio/*" :id="'question-index-' + questionIndex" class="d-none" @change="inputAudioFileChanged(questionIndex)">
+                                        <input v-model="question.audio" type="hidden" :name="'data[' + questionIndex + '][audio]'">
+                                        <div v-if="question.uploadingAudio" class="progressm mb-1">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" :style="{ 'width': question.uploadingAudioPercent + '%' }">@{{ question.uploadingAudioPercent }}%</div>
+                                        </div>
+                                        <audio v-if="question.audio" :src="question.audio" controls controlsList="nodownload"></audio>
+                                        <button v-if="question.audio" type="button" class="btn btn-sm btn-danger" :disabled="question.uploadingAudio" @click="deleteAudioFile(questionIndex)">Xóa file</button>
+                                        <button v-else type="button" class="btn btn-sm btn-info" :disabled="question.uploadingAudio" @click="openInputAudioFile(questionIndex)">Chọn file</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label>Đáp án</label>
                                 <table class="table table-borderless">
                                     <tr v-for="(option, optionIndex) in question.options">
@@ -155,8 +170,13 @@ Sửa đầu mục
             questions: [],
             defaultQuestion: {
                 question: '',
-                options: [],
+                options: [
+                    '', '', '', ''
+                ],
                 correct: 0,
+                audio: undefined,
+                uploadingAudio: false,
+                uploadingAudioPercent: 0,
             },
         },
         mounted() {
@@ -168,6 +188,47 @@ Sửa đầu mục
             },
             addOption(question) {
                 question.options.push('');
+            },
+            openInputAudioFile(index) {
+                $('#question-index-' + index).trigger('click');
+            },
+            inputAudioFileChanged(index) {
+                const files = $('#question-index-' + index).prop('files');
+                if (files.length == 0) return;
+
+                const formData = new FormData();
+                formData.append('part_id', '{{ $part->id }}');
+                formData.append('audio', files[0]);
+
+                this.$set(this.questions[index], 'uploadingAudio', true);
+                axios.post('{{ route("admin.part_test.upload_audio") }}', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                    onUploadProgress: event => {
+                        const percent = Math.round((event.loaded * 100) / event.total);
+                        this.$set(this.questions[index], 'uploadingAudioPercent', percent);
+                    }
+                }).then(res => {
+                    this.$set(this.questions[index], 'audio', res.src);
+                }).catch(res => {
+                    alert('Lỗi xảy ra khi upload audio.');
+                }).then(() => {
+                    this.$set(this.questions[index], 'uploadingAudio', false);
+                });
+            },
+            deleteAudioFile(index) {
+                this.$set(this.questions[index], 'uploadingAudio', true);
+                axios.post('{{ route("admin.part_test.delete_audio") }}', {
+                    part_id: '{{ $part->id }}',
+                    src: this.questions[index].audio
+                }).then(res => {
+                    this.$set(this.questions[index], 'audio', undefined);
+                }).catch(res => {
+
+                }).then(() => {
+                    this.$set(this.questions[index], 'uploadingAudio', false);
+                });
             },
         },
     });

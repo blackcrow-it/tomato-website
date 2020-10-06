@@ -10,6 +10,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use Storage;
 
 class PartTestController extends Controller
 {
@@ -31,6 +32,10 @@ class PartTestController extends Controller
         }
 
         $data = $part->part_test;
+        if ($data->s3_path == null) {
+            $data->s3_path = "part_video/c{$course->id}_l{$lesson->id}_p{$part->id}";
+            $data->save();
+        }
 
         return view('backend.part.edit_test', [
             'data' => $data,
@@ -91,6 +96,8 @@ class PartTestController extends Controller
         }
 
         try {
+            Storage::disk('s3')->deleteDirectory($part->part_test->s3_path);
+
             DB::beginTransaction();
             $part->part_test()->delete();
             $part->delete();
@@ -107,5 +114,28 @@ class PartTestController extends Controller
                 ->route('admin.part.list', ['lesson_id' => $request->input('lesson_id')])
                 ->withErrors('Xóa đầu mục thất bại.');
         }
+    }
+
+    public function uploadAudio(Request $request)
+    {
+        $part = Part::findOrFail($request->input('part_id'));
+        $data = $part->part_test;
+
+        $file = $request->file('audio');
+        if ($file == null) return abort(500);
+
+        $path = $file->storePublicly($data->s3_path, 's3');
+
+        return [
+            'src' => Storage::disk('s3')->url($path)
+        ];
+    }
+
+    public function deleteAudio(Request $request) {
+        $part = Part::findOrFail($request->input('part_id'));
+        $data = $part->part_test;
+
+        $filename = basename($request->input('src'));
+        Storage::disk('s3')->delete($data->s3_path . '/' . $filename);
     }
 }
