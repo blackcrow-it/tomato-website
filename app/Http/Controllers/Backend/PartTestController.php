@@ -32,10 +32,6 @@ class PartTestController extends Controller
         }
 
         $data = $part->part_test;
-        if ($data->s3_path == null) {
-            $data->s3_path = "part_video/c{$course->id}_l{$lesson->id}_p{$part->id}";
-            $data->save();
-        }
 
         return view('backend.part.edit_test', [
             'data' => $data,
@@ -71,6 +67,9 @@ class PartTestController extends Controller
             $data = $part->part_test ?? new PartTest();
             $data->fill($request->input());
             $data->part_id = $part_id;
+            $data->s3_path = "part_video/c{$course->id}_l{$lesson->id}_p{$part->id}";
+            $data->data = $data->data ?? [];
+            $data->correct_requirement = $data->correct_requirement ?? 0;
             $data->save();
 
             DB::commit();

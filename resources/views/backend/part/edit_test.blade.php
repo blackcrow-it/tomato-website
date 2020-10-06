@@ -109,7 +109,7 @@ Sửa đầu mục
                                     <div class="col-sm-4">
                                         <input type="file" accept="audio/*" :id="'question-index-' + questionIndex" class="d-none" @change="inputAudioFileChanged(questionIndex)">
                                         <input v-model="question.audio" type="hidden" :name="'data[' + questionIndex + '][audio]'">
-                                        <div v-if="question.uploadingAudio" class="progressm mb-1">
+                                        <div v-if="question.uploadingAudio" class="progress mb-1">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" :style="{ 'width': question.uploadingAudioPercent + '%' }">@{{ question.uploadingAudioPercent }}%</div>
                                         </div>
                                         <audio v-if="question.audio" :src="question.audio" controls controlsList="nodownload"></audio>
@@ -181,6 +181,10 @@ Sửa đầu mục
         },
         mounted() {
             this.questions = JSON.parse(`{!! json_encode($data->data ?? []) !!}`);
+            axios.post(location.href, $('.js-main-form').serialize()).catch(() => {
+                alert('Có lỗi xảy ra. Page sẽ được reload lại.');
+                location.reload();
+            });
         },
         methods: {
             addQuestion() {
