@@ -23,11 +23,11 @@
                             </div>
                         </div>
                         <div class="item__choose">
-                            <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && question.correct == option }">
-                                <input type="radio" v-model="question.selected" :value="option">
+                            <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && question.correct == optionIndex }">
+                                <input type="radio" v-model="question.selectedIndex" :value="optionIndex">
                                 <div class="choose-label__inner">
                                     <span class="choose-label__check">@{{ String.fromCharCode(65 + optionIndex) }}</span>
-                                    <p>@{{ option }}</p>
+                                    <p>@{{ option.value }}</p>
                                 </div>
                             </label>
                         </div>
@@ -48,11 +48,11 @@
                     <ul class="quiz-reslut__list">
                         <li>Họ và tên: <b>{{ auth()->user()->name ?? auth()->user()->username }}</b></li>
                         <li>Bài thi: <b>{{ $part->title }}</b></li>
-                        <li>Câu hỏi <b>@{{ questions.filter(x => x.selected == x.correct).length }}/@{{ questions.length }}</b></li>
-                        <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selected == x.correct).length / questions.length * 100) / 10 }}/10</b></li>
+                        <li>Câu hỏi <b>@{{ questions.filter(x => x.selectedIndex == x.correct).length }}/@{{ questions.length }}</b></li>
+                        <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selectedIndex == x.correct).length / questions.length * 100) / 10 }}/10</b></li>
                         <li>
                             Kết quả:
-                            <b v-if="questions.filter(x => x.selected == x.correct).length < correct_requirement">Chưa đạt</b>
+                            <b v-if="questions.filter(x => x.selectedIndex == x.correct).length < correct_requirement">Chưa đạt</b>
                             <b v-else>Đạt</b>
                         </li>
                     </ul>
@@ -78,8 +78,15 @@
         mounted() {
             this.questions = JSON.parse(`{!! json_encode($data->data) !!}`);
             this.questions = this.questions.map(question => {
-                question.correct = question.options[question.correct];
+                question.options = question.options.map(opt => {
+                    return {
+                        value: opt,
+                        is_correct: false
+                    };
+                });
+                question.options[question.correct].is_correct = true;
                 question.options = this.shuffle(question.options);
+                question.correct = question.options.findIndex(opt => opt.is_correct);
                 return question;
             });
             this.questions = this.shuffle(this.questions);
