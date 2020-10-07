@@ -78,7 +78,9 @@ class PartVideoController extends Controller
         }
 
         try {
-            Storage::disk('s3')->deleteDirectory($part->part_video->s3_path);
+            if ($part->part_video->s3_path ?? false) {
+                Storage::disk('s3')->deleteDirectory($part->part_video->s3_path);
+            }
 
             DB::beginTransaction();
             $part->part_video()->delete();
