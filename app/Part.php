@@ -37,6 +37,11 @@ class Part extends Model
         return $this->hasOne('App\PartTest', 'part_id', 'id');
     }
 
+    public function part_survey()
+    {
+        return $this->hasOne('App\PartSurvey', 'part_id', 'id');
+    }
+
     public function getUrlAttribute()
     {
         return route('part', ['id' => $this->id]);
