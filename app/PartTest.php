@@ -12,6 +12,7 @@ class PartTest extends Model
         'part_id',
         'data',
         'correct_requirement',
+        'random_enabled',
     ];
 
     protected $casts = [

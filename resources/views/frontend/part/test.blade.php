@@ -95,7 +95,7 @@
         },
         methods: {
             shuffle(arr) {
-                return arr.sort(() => Math.random() - 0.5);
+                return parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}') ? arr.sort(() => Math.random() - 0.5) : arr;
             },
             submit() {
                 this.submited = true;

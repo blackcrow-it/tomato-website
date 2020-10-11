@@ -154,6 +154,20 @@ Sửa đầu mục
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
+            <div class="form-group">
+                <label>Sắp xếp ngẫu nhiên câu hỏi và đáp án</label>
+                <div class="form-check">
+                    <input type="radio" name="random_enabled" value="1" id="random_enabled_true" {{ ($data->random_enabled ?? false) == true ? 'checked' : null }}>
+                    <label class="form-check-label" for="random_enabled_true">Có</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="random_enabled" value="0" id="random_enabled_false" {{ ($data->random_enabled ?? false) == false ? 'checked' : null }}>
+                    <label class="form-check-label" for="random_enabled_false">Không</label>
+                </div>
+                @error('random_enabled')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
