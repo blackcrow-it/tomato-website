@@ -332,7 +332,7 @@
                                             <div id="collapse-id-{{ $loop->index }}" class="collapse show" data-parent="#accordion">
                                                 <div class="panel__entry">
                                                     <ul class="collapse__submenu">
-                                                        @foreach ($lesson->parts as $p)
+                                                        @foreach($lesson->parts as $p)
                                                             <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
                                                         @endforeach
                                                     </ul>
@@ -349,4 +349,14 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('footer')
+<script>
+    $('.learning-process__list').animate({
+        scrollTop: $('.learning-process__list .panel .collapse__submenu li.current').position().top - 100
+    }, 500);
+
+</script>
+@yield('part_script')
 @endsection

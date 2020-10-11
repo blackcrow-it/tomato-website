@@ -66,7 +66,7 @@
 </div>
 @endsection
 
-@section('footer')
+@section('part_script')
 <script>
     new Vue({
         el: '#test',
