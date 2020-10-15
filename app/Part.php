@@ -19,27 +19,27 @@ class Part extends Model
 
     public function part_video()
     {
-        return $this->hasOne('App\PartVideo', 'part_id', 'id');
+        return $this->hasOne('App\PartVideo', 'part_id', 'id')->withDefault();
     }
 
     public function part_youtube()
     {
-        return $this->hasOne('App\PartYoutube', 'part_id', 'id');
+        return $this->hasOne('App\PartYoutube', 'part_id', 'id')->withDefault();
     }
 
     public function part_content()
     {
-        return $this->hasOne('App\PartContent', 'part_id', 'id');
+        return $this->hasOne('App\PartContent', 'part_id', 'id')->withDefault();
     }
 
     public function part_test()
     {
-        return $this->hasOne('App\PartTest', 'part_id', 'id');
+        return $this->hasOne('App\PartTest', 'part_id', 'id')->withDefault();
     }
 
     public function part_survey()
     {
-        return $this->hasOne('App\PartSurvey', 'part_id', 'id');
+        return $this->hasOne('App\PartSurvey', 'part_id', 'id')->withDefault();
     }
 
     public function getUrlAttribute()

@@ -96,7 +96,7 @@ Sửa đầu mục
             </div>
             <div class="form-group">
                 <label>Mô tả</label>
-                <textarea name="description" rows="3" placeholder="Mô tả" class="form-control @error('description') is-invalid @enderror">{{ $data->description ?? null }}</textarea>
+                <textarea name="description" rows="3" placeholder="Mô tả" class="form-control @error('description') is-invalid @enderror">{{ $data->description }}</textarea>
                 @error('description')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -114,12 +114,12 @@ Sửa đầu mục
                                 <div class="form-group">
                                     <label>Bắt buộc</label>
                                     <div class="form-check">
-                                        <input v-model="question.required" type="radio" :name="'data[' + questionIndex + '][required]'" :value="true" :id="'question-required-' + questionIndex + '-true'">
-                                        <label class="form-check-label" :for="'question-required-' + questionIndex + '-true'">Bắt buộc</label>
+                                        <input v-model="question.required" type="radio" :name="'data[' + questionIndex + '][required]'" value="1" :id="'question-required-' + questionIndex + '-1'">
+                                        <label class="form-check-label" :for="'question-required-' + questionIndex + '-1'">Bắt buộc</label>
                                     </div>
                                     <div class="form-check">
-                                        <input v-model="question.required" type="radio" :name="'data[' + questionIndex + '][required]'" :value="false" :id="'question-required-' + questionIndex + '-false'">
-                                        <label class="form-check-label" :for="'question-required-' + questionIndex + '-false'">Không bắt buộc</label>
+                                        <input v-model="question.required" type="radio" :name="'data[' + questionIndex + '][required]'" value="0" :id="'question-required-' + questionIndex + '-0'">
+                                        <label class="form-check-label" :for="'question-required-' + questionIndex + '-0'">Không bắt buộc</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -174,11 +174,11 @@ Sửa đầu mục
                 question: '',
                 type: 'textarea',
                 options: [],
-                required: false,
+                required: 0,
             },
         },
         mounted() {
-            this.questions = JSON.parse(`{!! json_encode($data->data ?? []) !!}`).map(question => {
+            this.questions = JSON.parse(`{!! json_encode($data->data) !!}`).map(question => {
                 if (question.options == undefined) question.options = [];
                 return question;
             });
