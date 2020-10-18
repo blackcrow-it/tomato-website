@@ -12255,7 +12255,7 @@ blockquote:before {
   left: 0;
   width: 60px;
   height: 46px;
-  background-image: url(/images/icon-quote.svg?dde29d03de967728610c4b66fe48ba15);
+  background-image: url(/images/icon-quote.svg?7032f925632b202da06c11422a8e5155);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
@@ -12700,7 +12700,7 @@ textarea {
 select {
   height: 45px;
   background-color: transparent;
-  background-image: url(/images/icon-dropdown-select.svg?40175098173d79cb526eb5fb387aabe5);
+  background-image: url(/images/icon-dropdown-select.svg?2310193849f3217bdf3f2f3c8672583b);
   background-repeat: no-repeat;
   background-size: 9px;
   background-position: right 15px center;
@@ -19997,6 +19997,37 @@ section {
   .learning-process__list {
     max-height: 870px;
   }
+}
+
+.test-draggable {
+  background: #f7f7f7;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 15px;
+  border: solid 1px #ccc;
+  display: flex;
+}
+
+.test-draggable-missing-word {
+  background: #5e8bab;
+  padding: 3px 7px;
+  margin: 0px 5px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: move;
+}
+
+.test-draggable-missing-word.wrong {
+  background: #E71D36;
+}
+
+.test-draggable-missing-word.true {
+  background: #77AF41;
+}
+
+.test-draggable-true {
+  color: #77AF41;
+  font-weight: bold;
 }
 
 @media (min-width: 992px) {

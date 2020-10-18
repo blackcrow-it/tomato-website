@@ -96,51 +96,93 @@ Sửa đầu mục
             </div>
             <hr>
             <div id="questions">
-                <table class="table table-borderless table-striped">
+                <table class="table table-bordered table-striped">
                     <tr v-for="(question, questionIndex) in questions">
                         <td>
-                            <div class="form-group">
-                                <label>Câu hỏi số @{{ questionIndex + 1 }}</label>
-                                <input v-model="question.question" type="text" :name="'data[' + questionIndex + '][question]'" class="form-control" :placeholder="'Câu hỏi số ' + (questionIndex + 1)">
-                            </div>
-                            <div class="form-group">
-                                <label>File âm thanh (nếu có)</label>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <input type="file" accept="audio/*" :id="'question-index-' + questionIndex" class="d-none" @change="inputAudioFileChanged(questionIndex)">
-                                        <input v-model="question.audio" type="hidden" :name="'data[' + questionIndex + '][audio]'">
-                                        <div v-if="question.uploadingAudio" class="progress mb-1">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" :style="{ 'width': question.uploadingAudioPercent + '%' }">@{{ question.uploadingAudioPercent }}%</div>
-                                        </div>
-                                        <audio v-if="question.audio" :src="question.audio" controls controlsList="nodownload"></audio>
-                                        <button v-if="question.audio" type="button" class="btn btn-sm btn-danger" :disabled="question.uploadingAudio" @click="deleteAudioFile(questionIndex)">Xóa file</button>
-                                        <button v-else type="button" class="btn btn-sm btn-info" :disabled="question.uploadingAudio" @click="openInputAudioFile(questionIndex)">Chọn file</button>
-                                    </div>
+                            <h4>Câu hỏi số @{{ questionIndex + 1 }}</h4>
+                            <div v-if="question.type == undefined" class="form-group">
+                                <label>Loại câu hỏi</label>
+                                <div class="form-check">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="multiple-choice" :id="'question-type-1-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <label class="form-check-label" :for="'question-type-1-' + questionIndex">Lựa chọn đáp án</label>
+                                </div>
+                                <div class="form-check">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="correct-word-position" :id="'question-type-2-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <label class="form-check-label" :for="'question-type-2-' + questionIndex">Kéo từ còn thiếu vào vị trí đúng</label>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>Đáp án</label>
-                                <table class="table table-borderless">
-                                    <tr v-for="(option, optionIndex) in question.options">
-                                        <td class="align-middle">
-                                            <label class="mb-0">
-                                                <input v-model="question.correct" type="radio" :name="'data[' + questionIndex + '][correct]'" :value="optionIndex">
-                                                @{{ String.fromCharCode(65 + optionIndex) }}
-                                            </label>
-                                        </td class="align-middle">
-                                        <td class="align-middle">
-                                            <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Đáp án ' + String.fromCharCode(65 + optionIndex) + ', tick vào ô bên trái nếu là đáp án đúng'">
-                                        </td>
-                                        <td class="align-middle">
-                                            <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm đáp án</button>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
-                            </div>
+                            <input v-else v-model="question.type" type="hidden" :name="'data[' + questionIndex + '][type]'">
+                            <template v-if="question.type != undefined">
+                                <div class="form-group">
+                                    <label>Câu hỏi</label>
+                                    <textarea v-model="question.question" :name="'data[' + questionIndex + '][question]'" class="editor"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>File âm thanh (nếu có)</label>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <input type="file" accept="audio/*" :id="'question-audio-index-' + questionIndex" class="d-none" @change="inputAudioFileChanged(questionIndex)">
+                                            <input v-model="question.audio" type="hidden" :name="'data[' + questionIndex + '][audio]'">
+                                            <div v-if="question.uploadingAudio" class="progress mb-1">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" :style="{ 'width': question.uploadingAudioPercent + '%' }">@{{ question.uploadingAudioPercent }}%</div>
+                                            </div>
+                                            <audio v-if="question.audio" :src="question.audio" controls controlsList="nodownload"></audio>
+                                            <button v-if="question.audio" type="button" class="btn btn-sm btn-danger" :disabled="question.uploadingAudio" @click="deleteAudioFile(questionIndex)">Xóa file</button>
+                                            <button v-else type="button" class="btn btn-sm btn-info" :disabled="question.uploadingAudio" @click="openInputAudioFile(questionIndex)">Chọn file</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template v-if="question.type == 'multiple-choice'">
+                                <div class="form-group">
+                                    <label>Đáp án</label>
+                                    <table class="table table-bordered">
+                                        <tr v-for="(option, optionIndex) in question.options">
+                                            <td class="align-middle">
+                                                <label class="mb-0">
+                                                    <input v-model="question.correct" type="radio" :name="'data[' + questionIndex + '][correct]'" :value="optionIndex">
+                                                    @{{ String.fromCharCode(65 + optionIndex) }}
+                                                </label>
+                                            </td class="align-middle">
+                                            <td class="align-middle">
+                                                <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Đáp án ' + String.fromCharCode(65 + optionIndex) + ', tick vào ô bên trái nếu là đáp án đúng'">
+                                            </td>
+                                            <td class="align-middle">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm đáp án</button>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
+                                </div>
+                            </template>
+                            <template v-if="question.type == 'correct-word-position'">
+                                <div class="form-group">
+                                    <label>Các thành phần trong câu</label>
+                                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tick vào ô bên trái nếu đó là từ còn thiếu.<br>- Ô trống sẽ được chèn vào giữa các thành phần trong câu."></i></small>
+                                    <table class="table table-bordered">
+                                        <tr v-for="(option, optionIndex) in question.options">
+                                            <td class="align-middle">
+                                                <label class="mb-0">
+                                                    <input v-model="question.correct" type="radio" :name="'data[' + questionIndex + '][correct]'" :value="optionIndex">
+                                                </label>
+                                            </td class="align-middle">
+                                            <td class="align-middle">
+                                                <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" placeholder="Tick vào ô bên trái nếu là từ còn thiếu">
+                                            </td>
+                                            <td class="align-middle">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm thành phần</button>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
+                                </div>
+                            </template>
                         </td>
                     </tr>
                 </table>
@@ -182,36 +224,62 @@ Sửa đầu mục
         el: '#questions',
         data: {
             questions: [],
-            defaultQuestion: {
-                question: '',
-                options: [
-                    '', '', '', ''
-                ],
-                correct: 0,
-                audio: undefined,
-                uploadingAudio: false,
-                uploadingAudioPercent: 0,
-            },
+            defaultQuestion: [
+                {
+                    type: 'multiple-choice',
+                    question: '',
+                    options: [
+                        '', '', '', ''
+                    ],
+                    correct: 0,
+                    audio: undefined,
+                    uploadingAudio: false,
+                    uploadingAudioPercent: 0,
+                },
+                {
+                    type: 'correct-word-position',
+                    question: '',
+                    options: [
+                        '', '', '', ''
+                    ],
+                    correct: 0,
+                    audio: undefined,
+                    uploadingAudio: false,
+                    uploadingAudioPercent: 0,
+                },
+            ],
         },
         mounted() {
             this.questions = JSON.parse(`{!! json_encode($data->data ?? []) !!}`);
-            axios.post(location.href, $('.js-main-form').serialize()).catch(() => {
-                alert('Có lỗi xảy ra. Page sẽ được reload lại.');
-                location.reload();
-            });
+            // Chưa hiểu đoạn này trước để làm gì (?)
+            // axios.post(location.href, $('.js-main-form').serialize()).catch(() => {
+            //     alert('Có lỗi xảy ra. Vui lòng load lại page.');
+            // });
         },
         methods: {
             addQuestion() {
-                this.questions.push(_.cloneDeep(this.defaultQuestion));
+                this.questions.push({
+                    type: undefined,
+                });
+            },
+            loadDefaultQuestion(index) {
+                const type = this.questions[index].type;
+                this.$set(this.questions, index, _.cloneDeep(this.defaultQuestion.find(x => x.type == type)));
+
+                this.$nextTick(() => {
+                    tooltipInit();
+                    ckeditorInit();
+                });
             },
             addOption(question) {
+                console.log(question);
                 question.options.push('');
             },
             openInputAudioFile(index) {
-                $('#question-index-' + index).trigger('click');
+                $('#question-audio-index-' + index).trigger('click');
             },
             inputAudioFileChanged(index) {
-                const files = $('#question-index-' + index).prop('files');
+                const files = $('#question-audio-index-' + index).prop('files');
                 if (files.length == 0) return;
 
                 const formData = new FormData();

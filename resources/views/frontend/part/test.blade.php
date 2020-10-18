@@ -17,12 +17,13 @@
                 <ul class="quiz__list">
                     <li v-for="(question, questionIndex) in questions" class="item">
                         <div class="item__title">
-                            <p><b>Câu hỏi số @{{ questionIndex + 1 }}:</b> @{{ question.question }}</p>
+                            <div class="font-weight-bold">Câu hỏi số @{{ questionIndex + 1 }}:</div>
+                            <div v-html="question.question"></div>
                             <div class="item__control">
                                 <audio v-if="question.audio" :src="question.audio" controls controlsList="nodownload"></audio>
                             </div>
                         </div>
-                        <div class="item__choose">
+                        <div v-if="question.type == 'multiple-choice'" class="item__choose">
                             <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && question.correct == optionIndex }">
                                 <input type="radio" v-model="question.selectedIndex" :value="optionIndex">
                                 <div class="choose-label__inner">
@@ -31,6 +32,27 @@
                                 </div>
                             </label>
                         </div>
+                        <template v-if="question.type == 'correct-word-position'">
+                            <div class="test-draggable">
+                                <draggable class="px-2" :group="'q-sentence-' + questionIndex" @add="question.selectedIndex = 0" @update="question.selectedIndex = 0"></draggable>
+                                <template v-for="(option, optionIndex) in question.options" v-if="optionIndex != question.correct">
+                                    <span class="px-1">@{{ option }}</span>
+                                    <draggable class="px-2" :group="'q-sentence-' + questionIndex" @add="question.selectedIndex = optionIndex + 1" @update="question.selectedIndex = optionIndex + 1"></draggable>
+                                </template>
+                            </div>
+                            <label>Từ còn thiếu (kéo thả vào vị trí thích hợp trong câu trên)</label>
+                            <div class="test-draggable">
+                                <draggable class="p-1" :group="'q-sentence-' + questionIndex" @add="question.selectedIndex = undefined">
+                                    <span v-for="(option, optionIndex) in question.options" v-if="optionIndex == question.correct" class="test-draggable-missing-word" :class="{ 'true': submited && question.selectedIndex == question.correct, 'wrong': submited && question.selectedIndex != question.correct }">@{{ option }}</span>
+                                </draggable>
+                            </div>
+                            <div v-if="submited" class="">
+                                <label>Đáp án</label>
+                                <div class="test-draggable">
+                                    <span v-for="(option, optionIndex) in question.options" class="px-1" :class="{ 'test-draggable-true': optionIndex == question.correct }">@{{ option }} </span>
+                                </div>
+                            </div>
+                        </template>
                     </li>
                 </ul>
 
@@ -78,6 +100,8 @@
         mounted() {
             this.questions = JSON.parse(`{!! json_encode($data->data) !!}`);
             this.questions = this.questions.map(question => {
+                if (question.type != 'multiple-choice') return question;
+
                 question.options = question.options.map(opt => {
                     return {
                         value: opt,
@@ -85,17 +109,22 @@
                     };
                 });
                 question.options[question.correct].is_correct = true;
+
+                if (!parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) return question;
+
                 question.options = this.shuffle(question.options);
                 question.correct = question.options.findIndex(opt => opt.is_correct);
                 return question;
             });
-            this.questions = this.shuffle(this.questions);
+            if (parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) {
+                this.questions = this.shuffle(this.questions);
+            }
 
             this.correct_requirement = parseInt('{{ $data->correct_requirement ?? 0 }}');
         },
         methods: {
             shuffle(arr) {
-                return parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}') ? arr.sort(() => Math.random() - 0.5) : arr;
+                return arr.sort(() => Math.random() - 0.5);
             },
             submit() {
                 this.submited = true;
@@ -109,6 +138,9 @@
                 $('html,body').animate({
                     scrollTop: $('.quiz-wrap').offset().top
                 }, 500);
+            },
+            correctWordPositionSelectedIndex(index) {
+                console.log(index);
             },
         },
     });

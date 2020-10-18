@@ -16,3 +16,6 @@ window.moment = moment;
 
 import Paginate from 'vuejs-paginate';
 Vue.component('paginate', Paginate);
+
+import Draggable from 'vuedraggable';
+Vue.component('draggable', Draggable);

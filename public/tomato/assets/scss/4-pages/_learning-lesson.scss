@@ -1,5 +1,5 @@
 .learning-lesson-page {
-	
+
 }
 
 .learningLesson__entry {
@@ -18,7 +18,7 @@
 
 .learningLesson__footer {
 	padding-top: 80px;
-	
+
 	.commentbox-wrap {
 		margin-top: 0;
 	}
@@ -83,7 +83,7 @@
 			min-height: 40px;
 			padding: 17px 12px;
 			padding-right: 65px;
-			
+
 			.percent {
 				position: absolute;
 				top: 50%;
@@ -114,11 +114,11 @@
 			background-color: #f5ccd1;
 			transition: all .3s ease;
 
-			
+
 			+ li {
 				margin-top: 1px;
 			}
-			
+
 			a {
 				display: block;
 				position: relative;
@@ -138,7 +138,7 @@
 				}
 
 			}
-			
+
 			&:hover,
 			&.current {
 				background-color: #f397a3;
@@ -171,4 +171,34 @@
 	.learning-process__list {
 		max-height: 870px;
 	}
+}
+
+.test-draggable {
+	background: #f7f7f7;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 15px;
+	border: solid 1px #ccc;
+	display: flex;
+}
+
+.test-draggable-missing-word {
+	background: #5e8bab;
+    padding: 3px 7px;
+    margin: 0px 5px;
+    border-radius: 5px;
+    color: #fff;
+	cursor: move;
+
+	&.wrong {
+		background: #E71D36;
+	}
+
+	&.true {
+		background: #77AF41;
+	}
+}
+.test-draggable-true {
+	color: $color-secondary;
+	font-weight: bold;
 }

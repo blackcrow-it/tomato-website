@@ -191,7 +191,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script>
         var __imask = [];
 
-        $(document).ready(function () {
+        function ckeditorInit() {
+            $('.editor:visible').each(function () {
+                var id = Math.random().toString(36).substring(7);
+                $(this).attr('id', id);
+                CKEDITOR.replace(id, {
+                    filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}?type=Files',
+                    filebrowserUploadUrl: '{{ route('ckfinder_connector') }}?command=QuickUpload&type=Files'
+                });
+            });
+        }
+
+        function tooltipInit() {
             $('[data-toggle="tooltip"]').tooltip({
                 trigger: 'hover',
                 boundary: 'viewport'
@@ -201,17 +212,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 trigger: 'hover',
                 boundary: 'viewport'
             });
+        }
+
+        $(document).ready(function () {
+            tooltipInit();
 
             bsCustomFileInput.init();
 
-            $('.editor').each(function () {
-                var id = Math.random().toString(36).substring(7);
-                $(this).attr('id', id);
-                CKEDITOR.replace(id, {
-                    filebrowserBrowseUrl: '{{ route('ckfinder_browser') }}?type=Files',
-                    filebrowserUploadUrl: '{{ route('ckfinder_connector') }}?command=QuickUpload&type=Files'
-                });
-            });
+            ckeditorInit();
 
             $('.currency').each(function() {
                 var id = Math.random().toString(36).substring(7);

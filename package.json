@@ -29,6 +29,7 @@
         "moment": "^2.27.0",
         "popper.js": "^1.16.1",
         "vue": "^2.6.11",
+        "vuedraggable": "^2.24.2",
         "vuejs-paginate": "^2.1.0"
     }
 }
