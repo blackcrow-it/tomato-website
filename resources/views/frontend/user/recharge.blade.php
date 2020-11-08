@@ -87,31 +87,7 @@
                     <div class="form-moneyCard__text">
                         <div class="entry-detail">
                             <h3 class="text-center">Hoặc chuyển khoản trực tiếp</h3>
-                            <br>
-                            <h6>Cách 1 : Nộp tiền trực tiếp qua tài khoản ngân hàng !</h6>
-                            <p>Khi nộp tiền ghi rõ trong phần nội dung chuyển tiền: Email + SĐT (Vd: nguyena@gmail.com + 0987654321).<br><small>( Sau khi chuyển khoản nhắn tin vào số máy 0965.113.913 thông báo số tiền đã thanh toán, số điện thoại và địa chỉ email)</small></p>
-                            <p><b>NGÂN HÀNG HỖ TRỢ THANH TOÁN</b></p>
-                            <ul>
-                                <li>Ngân hàng TMCP Đầu tư và Phát triển Việt Nam (BIDV)</li>
-                                <li>Số tài khoản: <b>32810000813534</b></li>
-                                <li>Chủ TK: CÔNG TY CỔ PHẦN TƯ VẤN VÀ ĐÀO TẠO TOMATO<br>Ngân hàng BIDV chi nhánh Lạch Tray, Hải Phòng.</li>
-                            </ul>
-                            <br>
-                            <h6>Cách 2: Thanh toán qua cổng thanh toán</h6>
-                            <ul>
-                                <li>ZaloPay/MoMo - <b>0942769666</b> VU QUOC CONG</li>
-                                <li>ViettelPay - <b>9704229246814730</b> Chủ TK VU QUOC CONG</li>
-                            </ul>
-                            <br>
-                            <h6>Cách 3: Đến trực tiếp để nộp phí tại cơ sở</h6>
-                            <ul>
-                                <li>Cơ sở 1: 300 Lạch Tray, Lê Chân, Hải Phòng</li>
-                                <li>Cơ sở 2: 65 Quán Nam, Lê Chân, Hải Phòng</li>
-                            </ul>
-                            <br>
-
-                            <h4>Trung tâm Ngoại ngữ - Tin học TOMATO chúc bạn Thành Công</h4>
-                            <p>Mọi thông tin chi tiết xin liên hệ HOTLINE: <a href="#">0965 113 913</a> Mr Nam</p>
+                            {!! config('settings.recharge_direct_info') !!}
                         </div>
                     </div>
                 </div>
