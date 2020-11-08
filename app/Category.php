@@ -17,7 +17,8 @@ class Category extends Model
     protected $fillable = [
         'parent_id', 'title', 'slug', 'icon', 'cover', 'description',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
-        'type', 'url'
+        'type', 'url',
+        'headings'
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -66,6 +67,6 @@ class Category extends Model
 
     public function getUrlAttribute()
     {
-        return $this->attributes['url'] ?? route('category', ['slug' => $this->slug]);
+        return $this->link ?? route('category', ['slug' => $this->slug]);
     }
 }

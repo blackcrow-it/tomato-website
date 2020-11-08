@@ -149,7 +149,7 @@ if (!function_exists('get_categories')) {
             ->where('categories.enabled', true)
             ->get()
             ->map(function ($item) {
-                $item->url = $item->url ?? route('category', ['slug' => $item->slug]);
+                $item->url = $item->link ?? route('category', ['slug' => $item->slug]);
                 return $item;
             });
 

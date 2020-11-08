@@ -103,8 +103,8 @@
             <div class="form-group">
                 <label>Liên kết tùy chỉnh</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Liên kết tùy chỉnh<br>- Bỏ trống nếu không dùng"></i></small>
-                <input type="text" name="url" placeholder="Liên kết tùy chỉnh" value="{{ $data->url ?? old('url') }}" class="form-control @error('url') is-invalid @enderror">
-                @error('url')
+                <input type="text" name="link" placeholder="Liên kết tùy chỉnh" value="{{ $data->link ?? old('link') }}" class="form-control @error('link') is-invalid @enderror">
+                @error('link')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
@@ -228,6 +228,10 @@
                         <img class="image-preview" src="{{ $data->og_image ?? old('og_image') }}" id="ck-og-image-preview">
                     </div>
                 </div>
+            </div>
+            <div class="form-group">
+                <label>Headings</label>
+                <textarea name="headings" class="editor">{!! $data->headings ?? old('headings') !!}</textarea>
             </div>
         </div>
         <div class="card-footer">

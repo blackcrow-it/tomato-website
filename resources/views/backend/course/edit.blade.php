@@ -124,10 +124,7 @@
             </div>
             <div class="form-group">
                 <label>Mô tả nội dung</label>
-                <textarea name="description" rows="3" placeholder="Mô tả nội dung" class="form-control @error('description') is-invalid @enderror">{{ $data->description ?? old('description') }}</textarea>
-                @error('description')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
+                <textarea name="description" class="editor">{!! $data->description ?? old('description') !!}</textarea>
             </div>
             <div class="form-group">
                 <label>Nội dung khóa học</label>
