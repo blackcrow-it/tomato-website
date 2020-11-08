@@ -28,6 +28,8 @@
         <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
     <![endif]-->
 
+    <meta property="fb:app_id" content="141729702951631">
+
     @yield('header')
 </head>
 
@@ -316,26 +318,7 @@
             </div>
             <div class="footer__marqee">
                 <marquee scrolldelay="150">
-                    <h1><a href="http://tomatoonline.edu.vn">Website học ngoại ngữ online</a></h1>
-
-                    <h2><a href="http://tomatoonline.edu.vn">Website học Online</a></h2>
-
-                    <h2><a href="http://tomatoonline.edu.vn">Học ngoại ngữ Online</a></h2>
-
-                    <h3><a href="http://tomatoonline.edu.vn/hoc-tieng-trung-online-video-ct5.html">Học tiếng Trung
-                            online</a></h3>
-
-                    <h3><a href="http://tomatoonline.edu.vn/hoc-tieng-han-online-video-ct8.html">Học Tiếng Hàn
-                            Online</a></h3>
-
-                    <h3><a href="http://tomatoonline.edu.vn/hoc-tieng-nhat-online-video-ct9.html">Học Tiếng
-                            Nhật&nbsp;Online</a></h3>
-
-                    <h3>Học Tiếng Đức Online</h3>
-
-                    <h3>Học Tiếng Anh&nbsp;Online</h3>
-
-                    <h4><a href="http://tomatoonline.edu.vn">Trung tâm ngoại ngữ Tomato</a></h4>
+                    @yield('headings')
                 </marquee>
             </div>
         </footer>
@@ -454,6 +437,26 @@
     <script type="text/javascript" src="{{ asset('tomato/assets/js/main.js') }}?v={{ date('Ymd') }}"></script>
 
     @yield('footer')
+
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '141729702951631',
+          xfbml      : true,
+          version    : 'v3.2'
+        });
+        FB.AppEvents.logPageView();
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/vi_VN/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
 </body>
 
 </html>

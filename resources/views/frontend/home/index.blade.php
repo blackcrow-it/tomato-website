@@ -1,7 +1,19 @@
 @extends('frontend.master')
 
 @section('header')
-<title>Homepage</title>
+<title>{{ config('settings.homepage_title') }}</title>
+<meta name="keywords" content="{{ config('settings.homepage_keywords') }}">
+<meta name="description" content="{{ config('settings.homepage_description') }}">
+<link rel="canonical" href="{{ route('home') }}">
+<meta property="og:title" content="{{ config('settings.homepage_og_title') }}">
+<meta property="og:description" content="{{ config('settings.homepage_og_description') }}">
+<meta property="og:url" content="{{ route('home') }}">
+<meta property="og:image" content="{{ config('settings.homepage_og_image') }}">
+<meta property="og:type" content="website">
+@endsection
+
+@section('headings')
+{!! config('settings.homepage_headings') !!}
 @endsection
 
 @section('body')

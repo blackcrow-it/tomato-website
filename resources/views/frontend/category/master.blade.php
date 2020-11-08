@@ -7,6 +7,12 @@
 <meta property="og:description" content="{{ $category->og_description ?? $category->meta_description ?? $category->description }}">
 <meta property="og:url" content="{{ $category->url }}">
 <meta property="og:image" content="{{ $category->og_image ?? $category->cover }}">
+<meta property="og:type" content="website">
+<link rel="canonical" href="{{ $category->url }}">
+@endsection
+
+@section('headings')
+{!! $category->headings !!}
 @endsection
 
 @section('body')

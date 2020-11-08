@@ -7,6 +7,8 @@
 <meta property="og:description" content="{{ $post->og_description ?? $post->meta_description ?? $post->description }}">
 <meta property="og:url" content="{{ $post->url }}">
 <meta property="og:image" content="{{ $post->og_image ?? $post->cover }}">
+<meta property="og:type" content="website">
+<link rel="canonical" href="{{ $post->url }}">
 @endsection
 
 @section('body')
@@ -148,19 +150,7 @@
             <div class="col-xl-9 offset-xl-3">
                 <div class="commentbox-wrap">
                     <h3 class="title-page-min">Bình luận bài viết</h3>
-
-                    <div class="tabJs">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bình luận Facebook</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                <img src="assets/img/image/comment-facebook.jpg" class="img-fullwidth">
-                            </div>
-                        </div>
-                    </div>
+                    <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"></div>
                 </div>
             </div>
         </div>

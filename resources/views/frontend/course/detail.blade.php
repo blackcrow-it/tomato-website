@@ -7,6 +7,8 @@
 <meta property="og:description" content="{{ $course->og_description ?? $course->meta_description ?? $course->description }}">
 <meta property="og:url" content="{{ $course->url }}">
 <meta property="og:image" content="{{ $course->og_image ?? $course->cover }}">
+<meta property="og:type" content="website">
+<link rel="canonical" href="{{ $course->url }}">
 @endsection
 
 @section('body')
@@ -260,7 +262,7 @@
                         </div>
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
-                                <img src="assets/img/image/comment-facebook.jpg" class="img-fullwidth">
+                                <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10"></div>
                             </div>
                         </div>
                     </div>
