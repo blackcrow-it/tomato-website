@@ -86,7 +86,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-        Route::middleware('admin_login_required')->group(function () {
+        Route::middleware('can_access_admin_dashboard')->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
 
             Route::get('user', 'UserController@list')->name('user.list');
