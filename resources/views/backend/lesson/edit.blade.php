@@ -18,7 +18,7 @@
         <br>
         <a href="{{ route('course', [ 'slug' => $course->slug ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $course->slug ]) }}</em></small></a>
         <br>
-        {{ $course->description }}
+        {!! $course->description !!}
     </div>
 </div>
 <hr>
