@@ -38,10 +38,10 @@ class SyncCommand extends Command
             DB::beginTransaction();
 
             $this->syncCategories();
-            $this->syncPosts();
+            // $this->syncPosts();
             $this->syncCourses();
-            $this->syncUsers();
-            $this->syncUserCourses();
+            // $this->syncUsers();
+            // $this->syncUserCourses();
 
             DB::commit();
         } catch (Exception $ex) {
@@ -157,7 +157,7 @@ class SyncCommand extends Command
 
             $content = preg_replace_callback('/<img(.*?) src="(.*?)"(.*?)>/', function ($matches) {
                 return '<img' . $matches[1] . ' src="' . $this->syncFileToS3($matches[2]) . '"' . $matches[3] . '>';
-            }, $oldCourse->content);
+            }, $oldCourse->gioithieu);
 
             $data = [
                 'title' => $oldCourse->title,
