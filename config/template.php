@@ -21,6 +21,11 @@ return [
             'name' => 'Danh mục tin tức'
         ],
         [
+            'code' => 'book-categories',
+            'type' => ObjectType::CATEGORY,
+            'name' => 'Danh mục sách'
+        ],
+        [
             'code' => 'home-courses',
             'type' => ObjectType::CATEGORY,
             'name' => 'Trang chủ - Giáo trình học online'
@@ -52,11 +57,20 @@ return [
             'name' => 'Trang chủ - Giáo trình học online'
         ],
         // END COURSE POSITION
+
+        // START BOOK POSITION
+        [
+            'code' => 'home-books',
+            'type' => ObjectType::BOOK,
+            'name' => 'Trang chủ - Thư viện sách'
+        ],
+        // END BOOK POSITION
     ],
     'paginate' => [
         'list' => [
             ObjectType::COURSE  => 12,
             ObjectType::POST    => 12,
+            ObjectType::BOOK    => 12,
         ],
     ],
 ];

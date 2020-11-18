@@ -29,6 +29,8 @@ Route::namespace('Frontend')
 
         Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
 
+        Route::get('sach/{slug}.html', 'BookController@index')->name('book');
+
         Route::middleware('auth')->group(function () {
             Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
 
@@ -181,6 +183,18 @@ Route::prefix('admin')
             Route::post('setting/upload-image', 'SettingController@uploadImage')->name('setting.upload_image');
             Route::get('setting/drive/redirect', 'SettingController@redirectAuthGoogleDriveApi')->name('setting.drive.redirect');
             Route::get('setting/drive/callback', 'SettingController@callbackAuthGoogleDriveApi')->name('setting.drive.callback');
+
+            Route::get('book', 'BookController@list')->name('book.list');
+            Route::get('book/add', 'BookController@add')->name('book.add');
+            Route::post('book/add', 'BookController@submitAdd')->name('book.add');
+            Route::get('book/edit/{id}', 'BookController@edit')->name('book.edit');
+            Route::post('book/edit/{id}', 'BookController@submitEdit')->name('book.edit');
+            Route::post('book/enabled', 'BookController@submitEnabled')->name('book.enabled');
+            Route::post('book/delete/{id}', 'BookController@submitDelete')->name('book.delete');
+            Route::post('book/order-in-category', 'BookController@submitOrderInCategory')->name('book.order_in_category');
+            Route::post('book/order-in-position', 'BookController@submitOrderInPosition')->name('book.order_in_position');
+            Route::get('book/search-book', 'BookController@getSearchBook')->name('book.search_book');
+            Route::get('book/get-related-course', 'BookController@getRelatedCourse')->name('book.get_related_course');
         });
 
         Route::middleware('guest')->group(function () {

@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests\Backend;
 
+use App\Constants\CourseLevel;
 use App\Constants\ObjectType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class BookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,31 +27,28 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'parent_id' => 'nullable|numeric|exists:categories,id',
             'title' => 'required|string',
             'slug' => 'nullable|string',
-            'icon' => 'nullable|string',
+            'thumbnail' => 'nullable|url',
             'cover' => 'nullable|url',
             'description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'enabled' => 'required|boolean',
             'meta_title' => 'nullable|string',
             'meta_description' => 'nullable|string',
             'og_title' => 'nullable|string',
             'og_description' => 'nullable|string',
             'og_image' => 'nullable|url',
-            'type' => [
-                'required_if:parent_id,',
-                Rule::in([
-                    ObjectType::COURSE,
-                    ObjectType::POST,
-                    ObjectType::BOOK,
-                ]),
-            ],
-            'url' => 'nullable|url',
-            'enabled' => 'required|boolean',
+            'price' => 'nullable|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
             '__template_position' => 'nullable|array',
             '__template_position.*' => [
-                Rule::in(collect(get_template_position(ObjectType::CATEGORY))->pluck('code'))
-            ]
+                Rule::in(collect(get_template_position(ObjectType::BOOK))->pluck('code'))
+            ],
+            '__related_courses' => 'nullable|array',
+            '__related_courses.*' => [
+                Rule::exists('courses', 'id')->where('enabled', true),
+            ],
         ];
     }
 }

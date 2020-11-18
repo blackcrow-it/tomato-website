@@ -18,6 +18,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin.book.list') }}" class="nav-link {{ request()->routeIs('admin.book.*') ? 'active' : '' }}">
+        <i class="fas fa-book"></i>
+        <p>Sách</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('admin.category.list') }}" class="nav-link {{ request()->routeIs('admin.category.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-list"></i>
         <p>Danh mục</p>

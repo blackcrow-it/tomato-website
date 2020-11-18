@@ -6,4 +6,5 @@ class ObjectType {
     const CATEGORY = 'category';
     const COURSE = 'course';
     const POST = 'post';
+    const BOOK = 'book';
 }
