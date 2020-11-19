@@ -26,6 +26,10 @@ class CategoryController extends Controller
                 return $this->indexForCourse($request, $category);
                 break;
 
+            case ObjectType::BOOK:
+                return $this->indexForBook($category);
+                break;
+
             default:
                 return $this->indexForPost($category);
                 break;
@@ -76,6 +80,15 @@ class CategoryController extends Controller
             'category' => $category,
             'list' => $list,
             'breadcrumb' => Category::ancestorsOf($category->id),
+        ]);
+    }
+
+    private function indexForBook(Category $category)
+    {
+        return view('frontend.category.book', [
+            'category' => $category,
+            'list' => get_books($category->id, null, true),
+            'breadcrumb' => Category::ancestorsOf($category->id)
         ]);
     }
 }

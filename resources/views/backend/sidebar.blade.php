@@ -19,7 +19,7 @@
 </li>
 <li class="nav-item">
     <a href="{{ route('admin.book.list') }}" class="nav-link {{ request()->routeIs('admin.book.*') ? 'active' : '' }}">
-        <i class="fas fa-book"></i>
+        <i class="nav-icon fas fa-book"></i>
         <p>Sách</p>
     </a>
 </li>

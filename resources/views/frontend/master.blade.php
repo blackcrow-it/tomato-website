@@ -90,6 +90,25 @@
                                     @endforeach
                                 </ul>
                             </li>
+                            <li class="menu-has-children">
+                                <a href="">Sách</a>
+                                <ul class="submenu">
+                                    @foreach(get_categories(null, 'book-categories') as $c1)
+                                        <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                            <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                            @if($c1->__subcategory_count > 0)
+                                                <ul class="submenu">
+                                                    @foreach(get_categories($c1->id, 'book-categories') as $c2)
+                                                        <li class="">
+                                                            <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
                             @foreach(get_categories(null, 'navigator') as $c1)
                                 <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
                                     <a href="{{ $c1->url }}">{{ $c1->title }}</a>

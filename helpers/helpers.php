@@ -3,6 +3,7 @@
 use App\Category;
 use App\Constants\ObjectType;
 use App\Lesson;
+use App\Repositories\BookRepo;
 use App\Repositories\CategoryRepo;
 use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
@@ -64,7 +65,13 @@ if (!function_exists('get_posts')) {
             ])
             ->where('posts.enabled', true);
 
-        $list = $paginate ? $query->paginate(config('template.paginate.list.' . ObjectType::POST)) : $query->get();
+        if ($paginate === true) {
+            $list = $query->paginate(config('template.paginate.list.' . ObjectType::POST));
+        } else if ($paginate > 0) {
+            $list = $query->paginate($paginate);
+        } else {
+            $list = $query->get();
+        }
 
         $categories = Category::where('enabled', true)
             ->whereIn('id', $list->pluck('category_id'))
@@ -114,7 +121,13 @@ if (!function_exists('get_courses')) {
             $customQueryCallback($query);
         }
 
-        $list = $paginate ? $query->paginate(config('template.paginate.list.' . ObjectType::COURSE)) : $query->get();
+        if ($paginate === true) {
+            $list = $query->paginate(config('template.paginate.list.' . ObjectType::COURSE));
+        } else if ($paginate > 0) {
+            $list = $query->paginate($paginate);
+        } else {
+            $list = $query->get();
+        }
 
         $categories = Category::where('enabled', true)
             ->whereIn('id', $list->pluck('category_id'))
@@ -162,5 +175,45 @@ if (!function_exists('get_youtube_id_from_url')) {
     {
         preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
         return $match[1] ?? null;
+    }
+}
+
+if (!function_exists('get_books')) {
+    function get_books($category_id = null, $position = null, $paginate = false)
+    {
+        $query = (new BookRepo())
+            ->getByFilterQuery([
+                'category_id' => $category_id,
+                'position' => $position
+            ])
+            ->where('books.enabled', true);
+
+        if ($paginate === true) {
+            $list = $query->paginate(config('template.paginate.list.' . ObjectType::BOOK));
+        } else if ($paginate > 0) {
+            $list = $query->paginate($paginate);
+        } else {
+            $list = $query->get();
+        }
+
+        $categories = Category::where('enabled', true)
+            ->whereIn('id', $list->pluck('category_id'))
+            ->get();
+
+        $mapFunction = function ($item) use ($categories) {
+            $item->category = $categories->firstWhere('id', $item->category_id);
+            $item->url = route('book', ['slug' => $item->slug]);
+            $item->created_at = Carbon::parse($item->created_at);
+            $item->updated_at = Carbon::parse($item->created_at);
+            return $item;
+        };
+
+        if ($paginate) {
+            $list->getCollection()->transform($mapFunction);
+        } else {
+            $list->transform($mapFunction);
+        }
+
+        return $list;
     }
 }
