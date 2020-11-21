@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Book;
 use App\Cart;
+use App\Constants\InvoiceStatus;
 use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
@@ -42,6 +44,10 @@ class CartController extends Controller
         switch ($type) {
             case ObjectType::COURSE:
                 $object = Course::find($object_id);
+                break;
+
+            case ObjectType::BOOK:
+                $object = Book::find($object_id);
                 break;
         }
 
@@ -98,6 +104,9 @@ class CartController extends Controller
                         $item->object = Course::with('category')->find($item->object_id);
                         $item->__enabled_change_amount = false;
                         break;
+                    case ObjectType::BOOK:
+                        $item->object = Book::with('category')->find($item->object_id);
+                        break;
                 }
                 return $item;
             })
@@ -112,10 +121,12 @@ class CartController extends Controller
         return $cart;
     }
 
-    public function submitCart(Request $request)
+    public function paymentConfirm(Request $request)
     {
-        DB::transaction(function () use ($request) {
-            Cart::where('user_id', Auth::user()->id)->delete();
+        $user = Auth::user();
+
+        DB::transaction(function () use ($request, $user) {
+            Cart::where('user_id', $user->id)->delete();
 
             foreach ($request->input('cart') as $item) {
                 $this->add(new Request([
@@ -125,16 +136,6 @@ class CartController extends Controller
                 ]));
             }
         });
-    }
-
-    public function paymentConfirm()
-    {
-        return view('frontend.cart.confirm');
-    }
-
-    public function paymentComplete()
-    {
-        $user = Auth::user();
 
         $cart = Cart::where('user_id', $user->id)->get();
 
@@ -144,14 +145,23 @@ class CartController extends Controller
         }
 
         if ($totalPrice > $user->money) {
-            return redirect()->route('cart.confirm')->withErrors('Số tiền trong tài khoản không đủ, vui lòng nạp thêm để tiếp tục mua hàng.');
+            return response('Số tiền trong tài khoản không đủ, vui lòng nạp thêm để tiếp tục mua hàng.', 500);
         }
 
         try {
             DB::beginTransaction();
 
+            $shipInfo = $request->input('ship_info');
+
             $invoice = new Invoice();
             $invoice->user_id = $user->id;
+            $invoice->name = $shipInfo['name'] ?? $user->name;
+            $invoice->phone = $shipInfo['phone'] ?? $user->phone;
+            $invoice->shipping = $shipInfo['shipping'];
+            $invoice->city = $shipInfo['city'];
+            $invoice->district = $shipInfo['district'];
+            $invoice->address = $shipInfo['address'];
+            $invoice->status = InvoiceStatus::PENDING;
             $invoice->save();
 
             foreach ($cart as $item) {
@@ -182,9 +192,12 @@ class CartController extends Controller
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
-            return redirect()->route('cart.confirm')->withErrors('Có lỗi xảy ra, vui lòng thử lại.');
-        }
 
+            return response('Có lỗi xảy ra, vui lòng thử lại.', 500);
+        }
+    }
+
+    public function paymentComplete() {
         return view('frontend.cart.complete');
     }
 }

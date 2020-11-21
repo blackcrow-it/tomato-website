@@ -18,18 +18,94 @@
 
 <section class="section" id="cartbox__full">
     <div class="container">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $msg)
+                        <li>{{ $msg }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="cart-text-info entry-detail">
-            <h5>Lưu ý</h5>
-            <p>Đối với sản phẩm là <b>Khoá học online</b> học trực tiếp không hỗ trợ vận chuyển</p>
-            <p>Đối với sản phẩm là <b>Sách</b> sẽ có phí vận chuyển tuỳ theo khu vực địa chị nhận hàng của học viên</p>
-            <p>Biểu giá vận chuyển</p>
-            <ul>
-                <li>Đến trực tiếp trung tâm lấy sách: 0đ</li>
-                <li>Nội thành: 20.000đ</li>
-                <li>Ngoại thành: 30.000đ - 50.000đ</li>
-                <li>Vùng sâu, vùng xa, hải đảo: > 50.000đ</li>
-            </ul>
-            <p>Số tiền vận chuyển sẽ được cộng trực tiếp vào giá của sản phẩm</p>
+            <h3>Lưu ý</h3>
+            <div class="">
+                <p>Đối với sản phẩm là <b>Khoá học online</b> học trực tiếp không hỗ trợ vận chuyển</p>
+                <p>Đối với sản phẩm là <b>Sách</b> sẽ có phí vận chuyển tuỳ theo khu vực địa chị nhận hàng của học viên</p>
+            </div>
+            <hr>
+            <h3>Thông tin người nhận</h3>
+            <div class="">
+                <div class="input-item">
+                    <label>Tên người nhận *</label>
+                    <div class="input-item__inner">
+                        <input type="text" v-model="shipInfo.name" class="form-control">
+                    </div>
+                </div>
+                <div class="input-item">
+                    <label>Số điện thoại *</label>
+                    <div class="input-item__inner">
+                        <input type="text" v-model="shipInfo.phone" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <h3>Chọn hình thức giao hàng</h3>
+            <div id="form-address-modal">
+                <ul class="choose-form">
+                    <li class="choose-form__item">
+                        <label class="checkbox-item">
+                            <input type="radio" v-model="shipInfo.shipping" :value="false">
+                            <span class="checkbox-item__check"></span>
+                            <p class="checkbox-item__text">Đến trực tiếp trung tâm lấy (<b class="f-price">Miễn phí</b>)</p>
+                        </label>
+                        <div class="choose-form__content" :class="{ 'show': !shipInfo.shipping }">
+                            <ul>
+                                <li><b>Địa chỉ ĐKKD CS1</b> Số 300 Lạch Tray, Quận. Lê Chân, Tp. Hải Phòng</li>
+                                <li><b>Cơ sở 3: </b>Số 65 Quán Nam, Quận, Lê Chân, Tp. Hải Phòng</li>
+                                <li><b>Cơ sở 4: </b>408 Trường Sơn, An Lão, Tp. Hải Phòng</li>
+                                <li><b>Điện thoại: </b>0225 657 2222 - 0225 628 0123 <br>Support: (Zalo) 0965 113 913 Mr Nam</li>
+                                <li><b>Hotline: </b>0964 299 222</li>
+                                <li><b>Email: </b>ngoaingutomatohp@gmail.com</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="choose-form__item">
+                        <label class="checkbox-item">
+                            <input type="radio" v-model="shipInfo.shipping" :value="true">
+                            <span class="checkbox-item__check"></span>
+                            <p class="checkbox-item__text">Giao hàng đến địa chỉ (<b class="f-price">Tính phí vận chuyển</b>)</p>
+                        </label>
+                        <div class="choose-form__content" :class="{ 'show': shipInfo.shipping }">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-address__item">
+                                        <label>Tỉnh, Thành phố</label>
+                                        <select v-model="shipInfo.city" class="form-control">
+                                            <option v-for="item in local" :value="item.name">@{{ item.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-address__item">
+                                        <label>Quận, Huyện</label>
+                                        <select v-model="shipInfo.district" class="form-control" :disabled="!shipInfo.city">
+                                            <option v-for="item in (shipInfo.city && local.length > 0) ? local.find(x => x.name == shipInfo.city).districts : []" :value="item.name">@{{ item.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div class="input-address__item">
+                                        <label>Nhập địa chỉ</label>
+                                        <textarea v-model="shipInfo.address" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="cart-detail">
             <div class="table-responsive">
@@ -107,14 +183,35 @@
     new Vue({
         el: '#cartbox__full',
         data: {
+            local: [],
             data: [],
             inputData: [],
+            shipInfo: {
+                shipping: false,
+                name: '{{ auth()->user()->name }}',
+                phone: '{{ auth()->user()->phone }}',
+                city: 'Hải Phòng',
+                district: undefined,
+                address: undefined,
+            },
             loading: false,
         },
         mounted() {
             this.getData();
+            this.getLocalData();
+
+            const oldShipInfo = JSON.parse(`{{ json_encode(old("ship_info")) }}`);
+            if (oldShipInfo) {
+                this.shipInfo = oldShipInfo;
+            }
         },
         methods: {
+            getLocalData() {
+                axios.get('{{ url("json/vietnam-db.json") }}').then(res => {
+                    res.sort((a, b) => a.name.localeCompare(b.name));
+                    this.local = res;
+                });
+            },
             getData() {
                 this.loading = true;
                 axios.get("{{ route('cart.get_data') }}").then(res => {
@@ -138,12 +235,29 @@
                 return currency(x);
             },
             submitCart() {
+                if (!this.shipInfo.name || !this.shipInfo.phone) {
+                    alert('Chưa có thông tin người nhận. Vui lòng kiểm tra lại.');
+                    return;
+                }
+
+                if (this.shipInfo.shipping) {
+                    if (!this.shipInfo.city || !this.shipInfo.district || !this.shipInfo.address) {
+                        alert('Địa chỉ giao hàng chưa đầy đủ. Vui lòng kiểm tra lại.');
+                        return;
+                    }
+                }
+
+                const confirmResult = confirm('Bạn chắc chắn muốn thanh toán đơn hàng?');
+                if (!confirmResult) return;
+
                 this.loading = true;
-                axios.post('{{ route("cart.submit") }}', {
-                    cart: this.inputData
+                axios.post('{{ route("cart.confirm") }}', {
+                    cart: this.inputData,
+                    ship_info: this.shipInfo
                 }).then(() => {
-                    location.href = '{{ route("cart.confirm") }}';
-                }).catch(() => {
+                    location.href = '{{ route("cart.complete") }}';
+                }).catch(res => {
+                    alert(res);
                     this.loading = false;
                 });
             },

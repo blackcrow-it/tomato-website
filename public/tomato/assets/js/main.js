@@ -932,7 +932,7 @@
             content = $('.choose-form__content', item);
 
         function showContent() {
-            input.on('click', function () {
+            input.on('change', function () {
                 content.removeClass('show');
                 $(this).closest('.choose-form__item').find('.choose-form__content').addClass('show');
             });
@@ -1126,7 +1126,6 @@
 
 
 
-    popupCheckAddressPrice();
     owlSlideJs();
     headerMobile();
     popupJs();

@@ -42,10 +42,8 @@ Route::namespace('Frontend')
             Route::get('gio-hang/get-data', 'CartController@getData')->name('cart.get_data');
             Route::post('gio-hang/add', 'CartController@add')->name('cart.add');
             Route::post('gio-hang/delete', 'CartController@delete')->name('cart.delete');
-            Route::post('gio-hang/submit', 'CartController@submitCart')->name('cart.submit');
-            Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
-            Route::get('gio-hang/xac-nhan-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
-            Route::post('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentComplete')->name('cart.complete');
+            Route::post('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
+            Route::get('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentComplete')->name('cart.complete');
 
             Route::get('ca-nhan/thong-tin', 'UserController@info')->name('user.info');
             Route::get('ca-nhan/thong-tin/get-data', 'UserController@info_getData')->name('user.info.get_data');

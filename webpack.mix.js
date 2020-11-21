@@ -24,4 +24,6 @@ mix
     .sass('resources/sass/backend.scss', 'public/css')
     .sass('public/tomato/assets/scss/main.scss', 'public/tomato/assets/css')
 
+    .copyDirectory('resources/json', 'public/json')
+
     .version();
