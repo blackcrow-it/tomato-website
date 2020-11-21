@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Book;
 use App\Constants\ObjectType;
 use App\Constants\RechargeStatus;
 use App\Course;
@@ -44,9 +45,10 @@ class UserController extends Controller
 
     public function invoice()
     {
-        $invoiceItems = InvoiceItem::whereHas('invoice', function (Builder $query) {
-            $query->where('user_id', Auth::user()->id);
-        })
+        $invoiceItems = InvoiceItem::with('invoice')
+            ->whereHas('invoice', function (Builder $query) {
+                $query->where('user_id', Auth::user()->id);
+            })
             ->orderBy('created_at', 'desc')
             ->paginate();
 
@@ -55,6 +57,9 @@ class UserController extends Controller
             switch ($item->type) {
                 case ObjectType::COURSE:
                     $item->object = Course::with('category')->find($item->object_id);
+                    break;
+                case ObjectType::BOOK:
+                    $item->object = Book::with('category')->find($item->object_id);
                     break;
             }
             return $item;
@@ -73,7 +78,7 @@ class UserController extends Controller
             }
         ])
             ->where('user_id', Auth::user()->id)
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->orWhere('expires_on', '>', now());
                 $query->orWhereNull('expires_on');
             })
@@ -112,7 +117,7 @@ class UserController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
-        $data->getCollection()->transform(function($item) {
+        $data->getCollection()->transform(function ($item) {
             return [
                 'amount' => $item->amount,
                 'created_at' => $item->created_at->format('Y-m-d H:i:s'),

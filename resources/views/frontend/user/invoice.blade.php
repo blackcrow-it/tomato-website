@@ -15,6 +15,7 @@
                 <th>Sản phẩm</th>
                 <th>Giá</th>
                 <th>Thời gian</th>
+                <th>Trạng thái</th>
             </thead>
             <tbody>
                 @foreach($invoice_items as $item)
@@ -38,6 +39,19 @@
                             </div>
                         </td>
                         <td>{{ $item->created_at->format('Y-m-d') }}</td>
+                        <td>
+                            @switch($item->invoice->status)
+                                @case(\App\Constants\InvoiceStatus::PENDING)
+                                    <span class="badge badge-sm badge-warning">Đang xử lý</span>
+                                    @break
+                                @case(\App\Constants\InvoiceStatus::COMPLETE)
+                                    <span class="badge badge-sm badge-success">Đã hoàn thành</span>
+                                    @break
+                                @case(\App\Constants\InvoiceStatus::CANCEL)
+                                    <span class="badge badge-sm badge-success">Đã hủy bỏ</span>
+                                    @break
+                            @endswitch
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
