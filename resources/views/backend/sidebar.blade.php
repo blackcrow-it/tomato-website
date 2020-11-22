@@ -36,6 +36,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin.invoice.list') }}" class="nav-link {{ request()->routeIs('admin.invoice.*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-shopping-cart"></i>
+        <p>Đơn hàng</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('admin.user.list') }}" class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user-friends"></i>
         <p>Thành viên</p>

@@ -193,6 +193,10 @@ Route::prefix('admin')
             Route::post('book/order-in-position', 'BookController@submitOrderInPosition')->name('book.order_in_position');
             Route::get('book/search-book', 'BookController@getSearchBook')->name('book.search_book');
             Route::get('book/get-related-course', 'BookController@getRelatedCourse')->name('book.get_related_course');
+
+            Route::prefix('invoice')->group(function () {
+                Route::get('/', 'InvoiceController@index')->name('invoice.list');
+            });
         });
 
         Route::middleware('guest')->group(function () {

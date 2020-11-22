@@ -16,4 +16,14 @@ class InvoiceItem extends Model
     {
         return $this->belongsTo('App\Invoice', 'invoice_id', 'id');
     }
+
+    public function book()
+    {
+        return $this->belongsTo(Book::class, 'object_id', 'id');
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'object_id', 'id');
+    }
 }
