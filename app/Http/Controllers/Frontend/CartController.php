@@ -192,10 +192,10 @@ class CartController extends Controller
                 $invoice->user_id = $user->id;
                 $invoice->name = $shipInfo['name'] ?? $user->name;
                 $invoice->phone = $shipInfo['phone'] ?? $user->phone;
-                $invoice->shipping = $shipInfo['shipping'];
-                $invoice->city = $shipInfo['city'];
-                $invoice->district = $shipInfo['district'];
-                $invoice->address = $shipInfo['address'];
+                $invoice->shipping = $shipInfo['shipping'] ?? false;
+                $invoice->city = $invoice->shipping ? $shipInfo['city'] : null;
+                $invoice->district = $invoice->shipping ? $shipInfo['district'] : null;
+                $invoice->address = $invoice->shipping ? $shipInfo['address'] : null;
                 $invoice->status = InvoiceStatus::PENDING;
                 $invoice->save();
 
