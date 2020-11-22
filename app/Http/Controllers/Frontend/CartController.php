@@ -153,35 +153,61 @@ class CartController extends Controller
 
             $shipInfo = $request->input('ship_info');
 
-            $invoice = new Invoice();
-            $invoice->user_id = $user->id;
-            $invoice->name = $shipInfo['name'] ?? $user->name;
-            $invoice->phone = $shipInfo['phone'] ?? $user->phone;
-            $invoice->shipping = $shipInfo['shipping'];
-            $invoice->city = $shipInfo['city'];
-            $invoice->district = $shipInfo['district'];
-            $invoice->address = $shipInfo['address'];
-            $invoice->status = InvoiceStatus::PENDING;
-            $invoice->save();
+            // Process courses
+            $coursesInCart = $cart->where('type', ObjectType::COURSE);
+            if ($coursesInCart->count() > 0) {
+                $invoice = new Invoice();
+                $invoice->user_id = $user->id;
+                $invoice->name = $shipInfo['name'] ?? $user->name;
+                $invoice->phone = $shipInfo['phone'] ?? $user->phone;
+                $invoice->shipping = false;
+                $invoice->status = InvoiceStatus::COMPLETE;
+                $invoice->save();
 
-            foreach ($cart as $item) {
-                $invoiceItem = new InvoiceItem();
-                $invoiceItem->invoice_id = $invoice->id;
-                $invoiceItem->type = $item->type;
-                $invoiceItem->object_id = $item->object_id;
-                $invoiceItem->amount = $item->amount;
-                $invoiceItem->price = $item->price;
-                $invoiceItem->save();
+                foreach ($coursesInCart as $item) {
+                    $invoiceItem = new InvoiceItem();
+                    $invoiceItem->invoice_id = $invoice->id;
+                    $invoiceItem->type = $item->type;
+                    $invoiceItem->object_id = $item->object_id;
+                    $invoiceItem->amount = $item->amount;
+                    $invoiceItem->price = $item->price;
+                    $invoiceItem->save();
+                }
+
+                $courseIds = $coursesInCart->pluck('object_id');
+                $courses = Course::whereIn('id', $courseIds)->get();
+                foreach ($courses as $course) {
+                    $userCourse = new UserCourse();
+                    $userCourse->user_id = $user->id;
+                    $userCourse->course_id = $course->id;
+                    $userCourse->expires_on = $course->buyer_days_owned ? now()->addDays($course->buyer_days_owned) : null;
+                    $userCourse->save();
+                }
             }
 
-            $courseIds = $cart->where('type', ObjectType::COURSE)->pluck('object_id');
-            $courses = Course::whereIn('id', $courseIds)->get();
-            foreach ($courses as $course) {
-                $userCourse = new UserCourse();
-                $userCourse->user_id = $user->id;
-                $userCourse->course_id = $course->id;
-                $userCourse->expires_on = $course->buyer_days_owned ? now()->addDays($course->buyer_days_owned) : null;
-                $userCourse->save();
+            // Process books
+            $booksInCart = $cart->where('type', ObjectType::BOOK);
+            if ($booksInCart->count() > 0) {
+                $invoice = new Invoice();
+                $invoice->user_id = $user->id;
+                $invoice->name = $shipInfo['name'] ?? $user->name;
+                $invoice->phone = $shipInfo['phone'] ?? $user->phone;
+                $invoice->shipping = $shipInfo['shipping'];
+                $invoice->city = $shipInfo['city'];
+                $invoice->district = $shipInfo['district'];
+                $invoice->address = $shipInfo['address'];
+                $invoice->status = InvoiceStatus::PENDING;
+                $invoice->save();
+
+                foreach ($booksInCart as $item) {
+                    $invoiceItem = new InvoiceItem();
+                    $invoiceItem->invoice_id = $invoice->id;
+                    $invoiceItem->type = $item->type;
+                    $invoiceItem->object_id = $item->object_id;
+                    $invoiceItem->amount = $item->amount;
+                    $invoiceItem->price = $item->price;
+                    $invoiceItem->save();
+                }
             }
 
             Cart::where('user_id', $user->id)->delete();
