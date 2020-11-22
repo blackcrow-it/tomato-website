@@ -75,7 +75,7 @@
                         @else
                             <div class="product-detal__btn">
                                 <div class="btn-wrap">
-                                    <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart.confirm') }}" class="btn btn-buy-now">Mua ngay</button>
+                                    <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart') }}" class="btn btn-buy-now">Mua ngay</button>
                                     <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
                                         <span class="add-to-cart-text">Thêm vào giỏ</span>
                                         <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
