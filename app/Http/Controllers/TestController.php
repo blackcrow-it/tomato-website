@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\EpayRechargeMail;
+use App\Invoice;
+use App\Mail\InvoiceMail;
 use Auth;
 use Debugbar;
 use Mail;
@@ -13,14 +14,11 @@ class TestController extends Controller
     {
         Debugbar::disable();
 
-        if (config('settings.email_notification')) {
-            Mail::to('vipboysanhdieu@gmail.com')
-                ->send(
-                    new EpayRechargeMail([
-                        'user' => Auth::user(),
-                        'amount' => 500000
-                    ])
-                );
-        }
+        Mail::to(config('settings.email_notification'))
+            ->send(
+                new InvoiceMail([
+                    'invoice' => Invoice::find(15)
+                ])
+            );
     }
 }

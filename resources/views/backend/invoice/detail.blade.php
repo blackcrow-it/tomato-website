@@ -52,7 +52,7 @@ Chi tiết đơn hàng
                 <div>Họ tên: <b>{{ $invoice->name }}</b></div>
                 <div>Số điện thoại: <b>{{ $invoice->phone }}</b></div>
                 <div>
-                    Hình thức giao hàng:
+                    Hình thức:
                     @if($invoice->shipping)
                         <b>Giao hàng</b>
                     @else

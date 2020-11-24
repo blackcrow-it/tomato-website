@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
 use App\Invoice;
 use App\InvoiceItem;
+use App\Mail\InvoiceMail;
 use App\Repositories\UserRepo;
 use App\UserCourse;
 use Auth;
@@ -18,6 +19,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use Mail;
 
 class CartController extends Controller
 {
@@ -185,6 +187,9 @@ class CartController extends Controller
                 }
             }
 
+            // Notification invoices
+            $notificationInvoices = [];
+
             // Process books
             $booksInCart = $cart->where('type', ObjectType::BOOK);
             if ($booksInCart->count() > 0) {
@@ -208,6 +213,8 @@ class CartController extends Controller
                     $invoiceItem->price = $item->price;
                     $invoiceItem->save();
                 }
+
+                $notificationInvoices[] = $invoice;
             }
 
             Cart::where('user_id', $user->id)->delete();
@@ -215,6 +222,17 @@ class CartController extends Controller
             $this->userRepo->removeMoney($user->id, $totalPrice);
 
             DB::commit();
+
+            if (config('settings.email_notification')) {
+                foreach ($notificationInvoices as $nInvoice) {
+                    Mail::to(config('settings.email_notification'))
+                        ->send(
+                            new InvoiceMail([
+                                'invoice' => $nInvoice
+                            ])
+                        );
+                }
+            }
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
@@ -223,7 +241,8 @@ class CartController extends Controller
         }
     }
 
-    public function paymentComplete() {
+    public function paymentComplete()
+    {
         return view('frontend.cart.complete');
     }
 }
