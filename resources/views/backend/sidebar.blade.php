@@ -74,5 +74,11 @@
                 <p>Google drive</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.setting.edit', [ 'view' => 'email_notification' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'email_notification' ? 'active' : '' }}">
+                <i class="nav-icon far fa-bell"></i>
+                <p>Thông báo qua email</p>
+            </a>
+        </li>
     </ul>
 </li>
