@@ -44,6 +44,7 @@
                 <th>ID</th>
                 <th>Sản phẩm</th>
                 <th class="text-right">Giá trị</th>
+                <th>Thành viên</th>
                 <th>Thời gian</th>
                 <th>Trạng thái</th>
                 <th>Hành động</th>
@@ -71,7 +72,8 @@
                             @endswitch
                         @endforeach
                     </td>
-                    <td class="text-right">{{ currency($invoice->items->sum('price'), '0 ₫') }}</td>
+                    <td class="text-right">{{ currency($invoice->items->sum(function($item) { return $item->price * $item->amount; }), '0 ₫') }}</td>
+                    <td>{{ $invoice->user->username }}</td>
                     <td>{{ $invoice->created_at->format('d-m-Y H:i') }}</td>
                     <td>
                         @switch($invoice->status)
@@ -87,7 +89,7 @@
                         @endswitch
                     </td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-info">
+                        <a href="{{ route('admin.invoice.detail', [ 'id' => $invoice->id ]) }}" class="btn btn-sm btn-info">
                             <i class="fas fa-search"></i>
                             Chi tiết
                         </a>

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\User;
 use DB;
+use Exception;
 
 class UserRepo
 {
@@ -47,6 +48,10 @@ class UserRepo
 
         DB::transaction(function () use ($userId, $money) {
             $user = User::lockForUpdate()->findOrFail($userId);
+            if ($user->money < $money) {
+                throw new Exception('User ' . $user->username . ' do not enough money to remove.');
+            }
+
             $user->money -= $money;
             $user->save();
         }, 1);

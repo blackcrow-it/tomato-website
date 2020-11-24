@@ -194,8 +194,10 @@ Route::prefix('admin')
             Route::get('book/search-book', 'BookController@getSearchBook')->name('book.search_book');
             Route::get('book/get-related-course', 'BookController@getRelatedCourse')->name('book.get_related_course');
 
-            Route::prefix('invoice')->group(function () {
-                Route::get('/', 'InvoiceController@index')->name('invoice.list');
+            Route::prefix('invoice')->name('invoice.')->group(function () {
+                Route::get('/', 'InvoiceController@index')->name('list');
+                Route::get('detail/{id}', 'InvoiceController@detail')->name('detail');
+                Route::post('detail/{id}/change-status', 'InvoiceController@changeStatus')->name('change_status');
             });
         });
 
