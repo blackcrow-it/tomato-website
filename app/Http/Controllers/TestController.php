@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\CourseVideo;
-use App\Jobs\ConvertToHlsJob;
-use Carbon\Carbon;
+use App\Mail\EpayRechargeMail;
+use Auth;
 use Debugbar;
-use Illuminate\Http\Request;
-use Storage;
+use Mail;
 
 class TestController extends Controller
 {
@@ -15,13 +13,14 @@ class TestController extends Controller
     {
         Debugbar::disable();
 
-        $video = CourseVideo::first();
-        if (!$video) return;
-
-        // ConvertToHlsJob::dispatch($video);
-
-        return view('test', [
-            'video_url' => Storage::disk('s3')->url($video->m3u8_path)
-        ]);
+        if (config('settings.email_notification')) {
+            Mail::to('vipboysanhdieu@gmail.com')
+                ->send(
+                    new EpayRechargeMail([
+                        'user' => Auth::user(),
+                        'amount' => 500000
+                    ])
+                );
+        }
     }
 }

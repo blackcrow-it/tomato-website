@@ -6,6 +6,7 @@ use App\Constants\RechargePartner;
 use App\Constants\RechargeStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\RechargeRequest;
+use App\Mail\MomoRechargeMail;
 use App\Recharge;
 use App\Repositories\UserRepo;
 use App\Services\Momo;
@@ -14,6 +15,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use Mail;
 use Str;
 
 class RechargeMomoController extends Controller
@@ -103,7 +105,18 @@ class RechargeMomoController extends Controller
 
             DB::commit();
 
-            $this->userRepo->addMoney(Auth::user()->id, $response['amount']);
+            $this->userRepo->addMoney($recharge->user->id, $response['amount']);
+
+            if (config('settings.email_notification')) {
+                Mail::to(config('settings.email_notification'))
+                    ->send(
+                        new MomoRechargeMail([
+                            'user' => $recharge->user,
+                            'amount' => $response['amount'],
+                            'request_id' => $requestId
+                        ])
+                    );
+            }
 
             return redirect()->route('user.recharge')->with('success', 'Nạp tiền thành công.');
         } catch (Exception $ex) {
@@ -148,7 +161,18 @@ class RechargeMomoController extends Controller
             $recharge->status = RechargeStatus::SUCCESS;
             $recharge->save();
 
-            $this->userRepo->addMoney(Auth::user()->id, $response['amount']);
+            $this->userRepo->addMoney($recharge->user->id, $response['amount']);
+
+            if (config('settings.email_notification')) {
+                Mail::to(config('settings.email_notification'))
+                    ->send(
+                        new MomoRechargeMail([
+                            'user' => $recharge->user,
+                            'amount' => $response['amount'],
+                            'request_id' => $requestId
+                        ])
+                    );
+            }
         });
     }
 }
