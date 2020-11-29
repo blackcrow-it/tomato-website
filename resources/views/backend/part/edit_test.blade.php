@@ -250,7 +250,13 @@ Sửa đầu mục
             ],
         },
         mounted() {
-            this.questions = JSON.parse(`{!! json_encode($data->data ?? []) !!}`);
+            axios.get("{{ route('admin.part_test.get_data', [ 'part_id' => $part->id ]) }}").then(res => {
+                this.questions = res.data;
+                this.$nextTick(() => {
+                    tooltipInit();
+                    ckeditorInit();
+                });
+            });
             // Chưa hiểu đoạn này trước để làm gì (?)
             // axios.post(location.href, $('.js-main-form').serialize()).catch(() => {
             //     alert('Có lỗi xảy ra. Vui lòng load lại page.');

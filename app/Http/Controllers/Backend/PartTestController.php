@@ -41,6 +41,12 @@ class PartTestController extends Controller
         ]);
     }
 
+    public function getData(Request $request, $part_id) {
+        $part = Part::find($part_id);
+        $data = $part->part_test;
+        return $data;
+    }
+
     public function submitEdit(PartVideoRequest $request, $part_id)
     {
         $part = Part::find($part_id);
