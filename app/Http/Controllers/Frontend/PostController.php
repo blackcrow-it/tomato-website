@@ -24,15 +24,18 @@ class PostController extends Controller
         }
 
         $relatedPosts = PostRelatedPost::with('related_post')
-            ->wherehas('related_post', function (Builder $query) {
+            ->whereHas('related_post', function (Builder $query) {
                 $query->where('enabled', true);
             })
             ->where('post_id', $post->id)
             ->get()
             ->pluck('related_post');
 
-        $relatedCourses = PostRelatedCourse::with('related_course')
-            ->wherehas('related_course', function (Builder $query) {
+        $relatedCourses = PostRelatedCourse::with([
+            'related_course',
+            'related_course.teacher'
+        ])
+            ->whereHas('related_course', function (Builder $query) {
                 $query->where('enabled', true);
             })
             ->where('post_id', $post->id)

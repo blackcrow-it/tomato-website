@@ -16,8 +16,15 @@
                 <a href="{{ $course->url }}">{{ $course->title }}</a>
             </h3>
             <ul class="lessonbox__info">
-                <li>Bài học: {{ $course->__lesson_count }} bài</li>
-                <li>Giảng viên: <span class="text-danger">{{ $course->lecturer_name }}</span></li>
+                <li>
+                    Bài học:
+                    @if($course->lessons->count() > 0)
+                        {{ $course->lessons->count() }} bài
+                    @else
+                        Đang cập nhật
+                    @endif
+                </li>
+                <li>Giảng viên: <span class="text-danger">{{ $course->teacher->name ?? 'Tomato Online' }}</span></li>
                 @switch($course->level)
                     @case(\App\Constants\CourseLevel::ELEMENTARY)
                         <li>Trình độ: Sơ cấp</li>

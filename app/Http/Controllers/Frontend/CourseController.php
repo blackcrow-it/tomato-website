@@ -38,8 +38,11 @@ class CourseController extends Controller
                 ->get();
         });
 
-        $relatedCourses = CourseRelatedCourse::with('related_course')
-            ->wherehas('related_course', function (Builder $query) {
+        $relatedCourses = CourseRelatedCourse::with([
+            'related_course',
+            'related_course.teacher'
+        ])
+            ->whereHas('related_course', function (Builder $query) {
                 $query->where('enabled', true);
             })
             ->where('course_id', $course->id)

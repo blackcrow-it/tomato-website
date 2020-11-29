@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Category;
 use App\Constants\ObjectType;
+use App\Course;
 use App\Http\Controllers\Controller;
-use DB;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -48,33 +48,56 @@ class CategoryController extends Controller
 
     private function indexForCourse(Request $request, Category $category)
     {
-        $list = get_courses($category->id, null, true, function ($query) use ($request) {
-            if ($request->input('filter.level') !== null) {
-                $query->where(function ($q) use ($request) {
-                    $q->where('courses.level', $request->input('filter.level'))
-                        ->orWhereNull('courses.level');
-                });
-            }
+        $categoryIds = Category::descendantsAndSelf($category->id)->pluck('id');
 
-            if ($request->input('filter.promotion') !== null) {
-                switch ($request->input('filter.promotion')) {
-                    case 'discount':
-                        $query->whereNotNull('courses.original_price');
-                        break;
+        $query = Course::query()
+            ->with([
+                'category' => function ($q) {
+                    $q->where('enabled', true);
+                },
+                'teacher',
+                'lessons' => function ($q) {
+                    $q->where('enabled', true);
+                },
+                'author',
+                'editor'
+            ])
+            ->where('enabled', true)
+            ->whereIn('category_id', $categoryIds);
 
-                    case 'free':
-                        $query->where(function ($q) {
-                            $q->whereNull('courses.price')
-                                ->orWhere('courses.price', 0);
-                        });
-                        break;
-                }
-            }
+        if ($request->input('filter.level') !== null) {
+            $query->where(function ($q) use ($request) {
+                $q
+                    ->where('courses.level', $request->input('filter.level'))
+                    ->orWhereNull('courses.level');
+            });
+        }
 
-            if ($request->input('filter.lesson_count') !== null) {
-                $query->where('lesson_count.__lesson_count', '<=', $request->input('filter.lesson_count'));
+        if ($request->input('filter.promotion') !== null) {
+            switch ($request->input('filter.promotion')) {
+                case 'discount':
+                    $query->whereNotNull('original_price');
+                    break;
+
+                case 'free':
+                    $query->where(function ($q) {
+                        $q
+                            ->whereNull('price')
+                            ->orWhere('price', 0);
+                    });
+                    break;
             }
-        });
+        }
+
+        if ($request->input('filter.lesson_count') !== null) {
+            $query->has('lessons', '<=', $request->input('filter.lesson_count'));
+        }
+
+        $query
+            ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC')
+            ->orderBy('updated_at', 'DESC');
+
+        $list = $query->paginate(config('template.paginate.list.course'));
 
         return view('frontend.category.course', [
             'category' => $category,
