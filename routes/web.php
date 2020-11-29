@@ -196,9 +196,18 @@ Route::prefix('admin')
             Route::get('book/get-related-course', 'BookController@getRelatedCourse')->name('book.get_related_course');
 
             Route::prefix('invoice')->name('invoice.')->group(function () {
-                Route::get('/', 'InvoiceController@index')->name('list');
+                Route::get('list', 'InvoiceController@list')->name('list');
                 Route::get('detail/{id}', 'InvoiceController@detail')->name('detail');
                 Route::post('detail/{id}/change-status', 'InvoiceController@changeStatus')->name('change_status');
+            });
+
+            Route::prefix('teacher')->name('teacher.')->group(function () {
+                Route::get('list', 'TeacherController@list')->name('list');
+                Route::get('add', 'TeacherController@add')->name('add');
+                Route::post('add', 'TeacherController@submitAdd')->name('add');
+                Route::get('edit/{id}', 'TeacherController@edit')->name('edit');
+                Route::post('edit/{id}', 'TeacherController@submitEdit')->name('edit');
+                Route::post('delete/{id}', 'TeacherController@submitDelete')->name('delete');
             });
         });
 

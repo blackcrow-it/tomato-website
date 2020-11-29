@@ -21,7 +21,7 @@ class InvoiceController extends Controller
         $this->userRepo = $userRepo;
     }
 
-    public function index()
+    public function list()
     {
         $list = Invoice::with('items')
             ->orderBy('created_at', 'desc')

@@ -124,35 +124,25 @@
                             <div class="entry-detail">{!! $course->content !!}</div>
                         </div>
                         <div class="tab-pane fade" id="tab-giangvien" role="tabpanel">
-                            <div class="product-detail__team">
-                                <div class="row">
-                                    <div class="col-md-4 col-xl-4">
-                                        <div class="f-avatar">
-                                            <img src="assets/img/image/teambox-1.jpg">
+                            @if($course->teacher)
+                                <div class="product-detail__team">
+                                    <div class="row">
+                                        <div class="col-md-4 col-xl-4">
+                                            <div class="f-avatar">
+                                                <img src="{{ $course->teacher->avatar }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-8 col-xl-8">
-                                        <div class="f-content">
-                                            <div class="entry-detail">
-                                                <h3>Cô Bùi Thu Hà</h3>
-                                                <p>Giảng viên tại Tomato</p>
-                                                <ul>
-                                                    <li>. Giáo viên tiếng Trung đã có rất nhiều năm giảng dạy, kinh nghiệm cao, Cô sở hữu kênh YOUTUBE TOP 1 về " học tiếng trung"</li>
-                                                    <li>- "Trung tâm ngoại ngữ TOMATO Hải Phòng" đã giúp hàng trăm ngàn học viên học ngoại ngữ tại Việt Nam</li>
-                                                    <li>Trình độ HSK 6.</li>
-                                                    <li>8 năm kinh nghiệm giảng dạy.</li>
-                                                </ul>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                        <div class="col-md-8 col-xl-8">
+                                            <div class="f-content">
+                                                <div class="entry-detail">
+                                                    <h3>{{ $course->teacher->name }}</h3>
+                                                    {!! $course->teacher->description !!}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                         <div class="tab-pane fade" id="tab-giaotrinh" role="tabpanel">
                             <div id="lessonbox-listpost" class="accordionJs product-detail__listPost">

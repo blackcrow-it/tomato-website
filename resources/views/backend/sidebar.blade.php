@@ -30,6 +30,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin.teacher.list') }}" class="nav-link {{ request()->routeIs('admin.teacher.*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-chalkboard-teacher"></i>
+        <p>Giảng viên</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('admin.recharge.list') }}" class="nav-link {{ request()->routeIs('admin.recharge.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-money-check-alt"></i>
         <p>Nạp tiền</p>

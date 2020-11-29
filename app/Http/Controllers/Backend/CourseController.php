@@ -10,6 +10,7 @@ use App\Course;
 use App\CoursePosition;
 use App\CourseRelatedCourse;
 use App\Repositories\CourseRepo;
+use App\Teacher;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
@@ -38,7 +39,8 @@ class CourseController extends Controller
     public function add()
     {
         return view('backend.course.edit', [
-            'categories' => $this->getCategoriesTraverse()
+            'categories' => $this->getCategoriesTraverse(),
+            'teachers' => Teacher::orderBy('name', 'asc')->get()
         ]);
     }
 
@@ -75,7 +77,8 @@ class CourseController extends Controller
 
         return view('backend.course.edit', [
             'data' => $course,
-            'categories' => $this->getCategoriesTraverse()
+            'categories' => $this->getCategoriesTraverse(),
+            'teachers' => Teacher::orderBy('name', 'asc')->get()
         ]);
     }
 

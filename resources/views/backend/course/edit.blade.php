@@ -61,7 +61,7 @@
                 <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                     <option value="">Không phân loại</option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ ($data->category_id ?? old('category_id')) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+                        <option value="{{ $category->id }}" {{ (old('category_id') ?? $data->category_id ?? null) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
                     @endforeach
                 </select>
                 @error('category_id')
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group">
                 <label>Tiêu đề</label>
-                <input type="text" name="title" placeholder="Tiêu đề" value="{{ $data->title ?? old('title') }}" class="form-control @error('title') is-invalid @enderror">
+                <input type="text" name="title" placeholder="Tiêu đề" value="{{ old('title') ?? $data->title ?? null }}" class="form-control @error('title') is-invalid @enderror">
                 @error('title')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -78,7 +78,7 @@
             <div class="form-group">
                 <label>Đường dẫn</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hạn chế thay đổi vì ảnh hưởng tới SEO.<br>- Nếu bỏ trống, hệ thống tự tạo đường dẫn theo tiêu đề."></i></small>
-                <input type="text" name="slug" placeholder="Đường dẫn" value="{{ $data->slug ?? old('slug') }}" class="form-control @error('slug') is-invalid @enderror">
+                <input type="text" name="slug" placeholder="Đường dẫn" value="{{ old('slug') ?? $data->slug ?? null }}" class="form-control @error('slug') is-invalid @enderror">
                 @error('slug')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -88,7 +88,7 @@
                     <div class="form-group">
                         <label>Ảnh thu nhỏ (thumbnail)</label>
                         <div class="input-group">
-                            <input type="text" name="thumbnail" placeholder="Ảnh thu nhỏ" value="{{ $data->thumbnail ?? old('thumbnail') }}" class="form-control @error('thumbnail') is-invalid @enderror" id="ck-thumbnail">
+                            <input type="text" name="thumbnail" placeholder="Ảnh thu nhỏ" value="{{ old('thumbnail') ?? $data->thumbnail ?? null }}" class="form-control @error('thumbnail') is-invalid @enderror" id="ck-thumbnail">
                             @error('thumbnail')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -96,14 +96,14 @@
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-thumbnail', 'ck-thumbnail-preview')">Chọn file</button>
                             </div>
                         </div>
-                        <img class="image-preview" src="{{ $data->thumbnail ?? old('thumbnail') }}" id="ck-thumbnail-preview">
+                        <img class="image-preview" src="{{ old('thumbnail') ?? $data->thumbnail ?? null }}" id="ck-thumbnail-preview">
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Ảnh bìa (cover)</label>
                         <div class="input-group">
-                            <input type="text" name="cover" placeholder="Ảnh bìa" value="{{ $data->cover ?? old('cover') }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
+                            <input type="text" name="cover" placeholder="Ảnh bìa" value="{{ old('cover') ?? $data->cover ?? null }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
                             @error('cover')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -111,29 +111,34 @@
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-cover', 'ck-cover-preview')">Chọn file</button>
                             </div>
                         </div>
-                        <img class="image-preview" src="{{ $data->cover ?? old('cover') }}" id="ck-cover-preview">
+                        <img class="image-preview" src="{{ old('cover') ?? $data->cover ?? null }}" id="ck-cover-preview">
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <label>Intro Youtube ID</label>
-                <input type="text" name="intro_youtube_id" placeholder="Intro Youtube ID" value="{{ $data->intro_youtube_id ?? old('intro_youtube_id') }}" class="form-control @error('intro_youtube_id') is-invalid @enderror">
+                <input type="text" name="intro_youtube_id" placeholder="Intro Youtube ID" value="{{ old('intro_youtube_id') ?? $data->intro_youtube_id ?? null }}" class="form-control @error('intro_youtube_id') is-invalid @enderror">
                 @error('intro_youtube_id')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="form-group">
                 <label>Mô tả nội dung</label>
-                <textarea name="description" class="editor">{!! $data->description ?? old('description') !!}</textarea>
+                <textarea name="description" class="editor">{!! old('description') ?? $data->description ?? null !!}</textarea>
             </div>
             <div class="form-group">
                 <label>Nội dung khóa học</label>
-                <textarea name="content" class="editor">{!! $data->content ?? old('content') !!}</textarea>
+                <textarea name="content" class="editor">{!! old('content') ?? $data->content ?? null !!}</textarea>
             </div>
             <div class="form-group">
                 <label>Giảng viên</label>
-                <input type="text" name="lecturer_name" placeholder="Giảng viên" value="{{ $data->lecturer_name ?? old('lecturer_name') }}" class="form-control @error('lecturer_name') is-invalid @enderror">
-                @error('lecturer_name')
+                <select name="teacher_id" class="form-control">
+                    <option value="">Chọn giảng viên</option>
+                    @foreach ($teachers as $item)
+                        <option value="{{ $item->id }}" {{ (old('teacher_id') ?? $data->teacher_id ?? null) == $item->id ? 'selected' : null }}>{{ $item->name }}</option>
+                    @endforeach
+                </select>
+                @error('teacher_id')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
@@ -141,9 +146,9 @@
                 <label>Trình độ</label>
                 <select name="level" class="form-control @error('level') is-invalid @enderror">
                     <option value="">Không phân loại</option>
-                    <option value="{{ \App\Constants\CourseLevel::ELEMENTARY }}" {{ ($data->level ?? old('level')) == App\Constants\CourseLevel::ELEMENTARY ? 'selected' : '' }}>Sơ cấp</option>
-                    <option value="{{ \App\Constants\CourseLevel::INTERMEDIATE }}" {{ ($data->level ?? old('level')) == App\Constants\CourseLevel::INTERMEDIATE ? 'selected' : '' }}>Trung cấp</option>
-                    <option value="{{ \App\Constants\CourseLevel::ADVANCED }}" {{ ($data->level ?? old('level')) == App\Constants\CourseLevel::ADVANCED ? 'selected' : '' }}>Cao cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::ELEMENTARY }}" {{ (old('level') ?? $data->level ?? null) == App\Constants\CourseLevel::ELEMENTARY ? 'selected' : '' }}>Sơ cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::INTERMEDIATE }}" {{ (old('level') ?? $data->level ?? null) == App\Constants\CourseLevel::INTERMEDIATE ? 'selected' : '' }}>Trung cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::ADVANCED }}" {{ (old('level') ?? $data->level ?? null) == App\Constants\CourseLevel::ADVANCED ? 'selected' : '' }}>Cao cấp</option>
                 </select>
                 @error('level')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -151,14 +156,14 @@
             </div>
             <div class="form-group">
                 <label>Giá tiền</label>
-                <input type="text" name="price" placeholder="Giá tiền" value="{{ $data->price ?? old('price') }}" class="form-control currency @error('price') is-invalid @enderror">
+                <input type="text" name="price" placeholder="Giá tiền" value="{{ old('price') ?? $data->price ?? null }}" class="form-control currency @error('price') is-invalid @enderror">
                 @error('price')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="form-group">
                 <label>Giá gốc</label>
-                <input type="text" name="original_price" placeholder="Giá gốc" value="{{ $data->original_price ?? old('original_price') }}" class="form-control currency @error('original_price') is-invalid @enderror">
+                <input type="text" name="original_price" placeholder="Giá gốc" value="{{ old('original_price') ?? $data->original_price ?? null }}" class="form-control currency @error('original_price') is-invalid @enderror">
                 @error('original_price')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -166,14 +171,14 @@
             <div class="form-group">
                 <label>Số ngày sở hữu sau khi mua</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Bỏ trống để học viên có thể sở hữu mãi mãi."></i></small>
-                <input type="text" name="buyer_days_owned" placeholder="Số ngày sở hữu sau khi mua" value="{{ $data->buyer_days_owned ?? old('buyer_days_owned') }}" class="form-control currency @error('buyer_days_owned') is-invalid @enderror">
+                <input type="text" name="buyer_days_owned" placeholder="Số ngày sở hữu sau khi mua" value="{{ old('buyer_days_owned') ?? $data->buyer_days_owned ?? null }}" class="form-control currency @error('buyer_days_owned') is-invalid @enderror">
                 @error('buyer_days_owned')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="form-group">
                 <label>Hiển thị khóa học</label>
-                <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
+                <?php $enabled = old('enabled') ?? $data->enabled ?? null ?? true; ?>
                 <div>
                     <div class="form-check-inline">
                         <input class="form-check-input @error('enabled') is-invalid @enderror" type="radio" id="cr-enabled-1" name="enabled" value="1" {{ $enabled == true ? 'checked' : '' }}>
@@ -271,7 +276,7 @@
             <div class="form-group">
                 <label>Meta Title</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
-                <input type="text" name="meta_title" placeholder="Meta Title" value="{{ $data->meta_title ?? old('meta_title') }}" class="form-control @error('meta_title') is-invalid @enderror">
+                <input type="text" name="meta_title" placeholder="Meta Title" value="{{ old('meta_title') ?? $data->meta_title ?? null }}" class="form-control @error('meta_title') is-invalid @enderror">
                 @error('meta_title')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -279,7 +284,7 @@
             <div class="form-group">
                 <label>Meta description</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
-                <textarea name="meta_description" rows="3" placeholder="Meta description" class="form-control @error('meta_description') is-invalid @enderror">{{ $data->meta_description ?? old('meta_description') }}</textarea>
+                <textarea name="meta_description" rows="3" placeholder="Meta description" class="form-control @error('meta_description') is-invalid @enderror">{{ old('meta_description') ?? $data->meta_description ?? null }}</textarea>
                 @error('meta_description')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -287,7 +292,7 @@
             <div class="form-group">
                 <label>OG Title</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
-                <input type="text" name="og_title" placeholder="OG Title" value="{{ $data->og_title ?? old('og_title') }}" class="form-control @error('og_title') is-invalid @enderror">
+                <input type="text" name="og_title" placeholder="OG Title" value="{{ old('og_title') ?? $data->og_title ?? null }}" class="form-control @error('og_title') is-invalid @enderror">
                 @error('og_title')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -295,7 +300,7 @@
             <div class="form-group">
                 <label>OG description</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
-                <textarea name="og_description" rows="3" placeholder="OG description" class="form-control @error('og_description') is-invalid @enderror">{{ $data->og_description ?? old('og_description') }}</textarea>
+                <textarea name="og_description" rows="3" placeholder="OG description" class="form-control @error('og_description') is-invalid @enderror">{{ old('og_description') ?? $data->og_description ?? null }}</textarea>
                 @error('og_description')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -306,7 +311,7 @@
                         <label>OG Image</label>
                         <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hình ảnh hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo ảnh bìa."></i></small>
                         <div class="input-group">
-                            <input type="text" name="og_image" placeholder="OG Image" value="{{ $data->og_image ?? old('og_image') }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
+                            <input type="text" name="og_image" placeholder="OG Image" value="{{ old('og_image') ?? $data->og_image ?? null }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
                             @error('og_image')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -314,7 +319,7 @@
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-og-image', 'ck-og-image-preview')">Chọn file</button>
                             </div>
                         </div>
-                        <img class="image-preview" src="{{ $data->og_image ?? old('og_image') }}" id="ck-og-image-preview">
+                        <img class="image-preview" src="{{ old('og_image') ?? $data->og_image ?? null }}" id="ck-og-image-preview">
                     </div>
                 </div>
             </div>

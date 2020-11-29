@@ -18,7 +18,7 @@ class Course extends Model
         'category_id', 'order_in_category',
         'price', 'original_price', 'intro_youtube_id',
         'buyer_days_owned',
-        'lecturer_name', 'level'
+        'teacher_id', 'level'
     ];
 
     public function author()
@@ -73,5 +73,10 @@ class Course extends Model
     public function user_courses()
     {
         return $this->hasMany('App\UserCourse', 'course_id', 'id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
     }
 }

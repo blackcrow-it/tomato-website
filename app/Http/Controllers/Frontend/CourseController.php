@@ -16,10 +16,11 @@ class CourseController extends Controller
 {
     public function index($slug)
     {
-        $course = Course::firstWhere([
-            'slug' => $slug,
-            'enabled' => true
-        ]);
+        $course = Course::with('teacher')
+            ->firstWhere([
+                'slug' => $slug,
+                'enabled' => true
+            ]);
 
         if ($course == null) {
             return redirect()->route('home');
@@ -54,7 +55,7 @@ class CourseController extends Controller
                 ->exists(),
             'is_owned' => UserCourse::where('user_id', auth()->user()->id)
                 ->where('course_id', $course->id)
-                ->where(function($query) {
+                ->where(function ($query) {
                     $query->orWhere('expires_on', '>', now());
                     $query->orWhereNull('expires_on');
                 })
@@ -72,7 +73,7 @@ class CourseController extends Controller
 
         $isOwned = UserCourse::where('user_id', auth()->user()->id)
             ->where('course_id', $course->id)
-            ->where(function($query) {
+            ->where(function ($query) {
                 $query->orWhere('expires_on', '>', now());
                 $query->orWhereNull('expires_on');
             })

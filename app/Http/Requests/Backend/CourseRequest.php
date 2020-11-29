@@ -51,7 +51,7 @@ class CourseRequest extends FormRequest
                 Rule::exists('courses', 'id')->where('enabled', true),
             ],
             'buyer_days_owned' => 'nullable|numeric|min:1',
-            'lecturer_name' => 'nullable|string',
+            'teacher_id' => 'nullable|exists:teachers,id',
             'level' => [
                 'nullable', 'string',
                 Rule::in(
