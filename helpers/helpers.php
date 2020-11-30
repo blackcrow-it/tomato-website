@@ -2,12 +2,21 @@
 
 use App\Category;
 use App\Constants\ObjectType;
-use App\Lesson;
+use App\Course;
+use App\CoursePosition;
 use App\Repositories\BookRepo;
 use App\Repositories\CategoryRepo;
 use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+
+if (!function_exists('ddsql')) {
+    function ddsql($query)
+    {
+        dd(Str::replaceArray("?", $query->getBindings(), str_replace('?', "'?'", $query->toSql())));
+    }
+}
 
 if (!function_exists('categories_traverse')) {
     function categories_traverse($nodes, $prefix = '|--- ')
@@ -96,55 +105,50 @@ if (!function_exists('get_posts')) {
 }
 
 if (!function_exists('get_courses')) {
-    function get_courses($category_id = null, $position = null, $paginate = false, $customQueryCallback = null)
+    function get_courses($category_id = null, $position = null, $paginate = false)
     {
-        $lessonsCountQuery = DB::table('lessons')
-            ->where('lessons.enabled', true)
-            ->select([
-                DB::raw('COUNT(lessons.id) as __lesson_count'),
-                'lessons.course_id'
+        $query = Course::query()
+            ->with([
+                'category' => function ($q) {
+                    $q->where('enabled', true);
+                },
+                'teacher',
+                'lessons' => function ($q) {
+                    $q->where('enabled', true);
+                },
+                'author',
+                'editor'
             ])
-            ->groupBy('lessons.course_id');
+            ->where('enabled', true);
 
-        $query = (new CourseRepo())
-            ->getByFilterQuery([
-                'category_id' => $category_id,
-                'position' => $position
-            ])
-            ->where('courses.enabled', true)
-            ->leftJoinSub($lessonsCountQuery, 'lesson_count', function ($join) {
-                $join->on('courses.id', '=', 'lesson_count.course_id');
-            })
-            ->addSelect('lesson_count.__lesson_count');
-
-        if (is_callable($customQueryCallback)) {
-            $customQueryCallback($query);
+        if ($category_id) {
+            $categoryIds = Category::descendantsAndSelf($category_id)->pluck('id');
+            $query
+                ->whereIn('category_id', $categoryIds)
+                ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC');
         }
 
+        if ($position) {
+            $coursePosition = CoursePosition::query()
+                ->select([
+                    'course_id',
+                    'order_in_position'
+                ])
+                ->where('code', $position);
+
+            $query
+                ->joinSub($coursePosition, 'course_position', 'course_position.course_id', '=', 'courses.id')
+                ->orderByRaw('CASE WHEN course_position.order_in_position > 0 THEN 0 ELSE 1 END, course_position.order_in_position asc');
+        }
+
+        $query->orderBy('courses.updated_at', 'desc');
+
         if ($paginate === true) {
-            $list = $query->paginate(config('template.paginate.list.' . ObjectType::COURSE));
+            $list = $query->paginate(config('template.paginate.list.course'));
         } else if ($paginate > 0) {
             $list = $query->paginate($paginate);
         } else {
             $list = $query->get();
-        }
-
-        $categories = Category::where('enabled', true)
-            ->whereIn('id', $list->pluck('category_id'))
-            ->get();
-
-        $mapFunction = function ($item) use ($categories) {
-            $item->category = $categories->firstWhere('id', $item->category_id);
-            $item->url = route('course', ['slug' => $item->slug]);
-            $item->created_at = Carbon::parse($item->created_at);
-            $item->updated_at = Carbon::parse($item->created_at);
-            return $item;
-        };
-
-        if ($paginate) {
-            $list->getCollection()->transform($mapFunction);
-        } else {
-            $list->transform($mapFunction);
         }
 
         return $list;
