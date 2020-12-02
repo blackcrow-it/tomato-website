@@ -86,10 +86,6 @@
                 </div>
             @endforeach
         </div>
-
-        <div class="text-center pt-40">
-            <a href="thithudauvao.html" target="_blank" class="btn">Kiểm tra kiến thức</a>
-        </div>
     </div>
 </section>
 
@@ -112,24 +108,20 @@
                         </a>
                         <div class="post__body">
                             <div class="post__meta">
-                                @if ($post->category)
+                                @if($post->category)
                                     <span class="meta-cat"><a href="{{ $post->category->url }}">{{ $post->category->title }}</a></span>
                                 @endif
                                 <span class="meta-date">{{ $post->updated_at->format('d/m/Y') }}</span>
                             </div>
                             <h3 class="post__title">
                                 <a href="{{ $post->url }}">{{ $post->title }}</a>
-                                </h3>
+                            </h3>
                             <p class="post__text">{{ $post->description }}</p>
                             <a href="{{ $post->url }}" class="btn btn--sm btn--outline">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
             @endforeach
-        </div>
-
-        <div class="text-center pt-30 wow fadeInUp" data-wow-delay=".2s">
-            <a href="tintuc.html" class="btn">Xem tất cả</a>
         </div>
     </div>
 </section>
@@ -202,10 +194,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="text-center btn-padding wow fadeInUp">
-            <a href="sach.html" class="btn">Xem tất cả</a>
         </div>
     </div>
 </section>
@@ -483,101 +471,32 @@
         <div class="row">
             <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                 <div class="title wow fadeInUp">
-                    <h2 class="title__title">Độ ngũ giáo viên</h2>
+                    <h2 class="title__title">Đội ngũ giáo viên</h2>
                 </div>
             </div>
         </div>
 
         <div class="team-slide-mobile wow fadeInUp" data-wow-delay=".2s">
             <div class="owl-carousel">
-                <div class="item">
-                    <div class="teambox">
-                        <div class="teambox__img">
-                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
-                        </div>
+                @foreach(get_teachers() as $item)
+                    <div class="item">
+                        <div class="teambox">
+                            <div class="teambox__img">
+                                <img src="{{ $item->avatar }}">
+                            </div>
 
-                        <div class="teambox__body">
-                            <h3 class="teambox__name">Bùi Thu Hà</h3>
-                            <p class="teambox__position">Giảng viên</p>
-                        </div>
+                            <div class="teambox__body">
+                                <h3 class="teambox__name">{{ $item->name }}</h3>
+                                <p class="teambox__position">Giảng viên</p>
+                            </div>
 
-                        <div class="teambox__hover">
-                            <h3>Bùi Thu Hà</h3>
-                            <div class="desc">
-                                <p>- Cô sở hữu kênh&nbsp;<strong>YOUTUBE TOP 1 về " học tiếng
-                                        trung"</strong></p>
-                                <p>- Trình độ HSK 6.&nbsp;Kinh nghiệm 8 năm giảng dạy. Nhiệt tình vui vẻ
-                                    thân thiện với mọi người</p>
+                            <div class="teambox__hover">
+                                <h3>{{ $item->name }}</h3>
+                                <div class="desc">{!! $item->description !!}</div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="item">
-                    <div class="teambox">
-                        <div class="teambox__img">
-                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
-                        </div>
-
-                        <div class="teambox__body">
-                            <h3 class="teambox__name">Bùi Thu Hà</h3>
-                            <p class="teambox__position">Giảng viên</p>
-                        </div>
-
-                        <div class="teambox__hover">
-                            <h3>Bùi Thu Hà</h3>
-                            <div class="desc">
-                                <p>- Cô sở hữu kênh&nbsp;<strong>YOUTUBE TOP 1 về " học tiếng
-                                        trung"</strong></p>
-                                <p>- Trình độ HSK 6.&nbsp;Kinh nghiệm 8 năm giảng dạy. Nhiệt tình vui vẻ
-                                    thân thiện với mọi người</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="teambox">
-                        <div class="teambox__img">
-                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
-                        </div>
-
-                        <div class="teambox__body">
-                            <h3 class="teambox__name">Bùi Thu Hà</h3>
-                            <p class="teambox__position">Giảng viên</p>
-                        </div>
-
-                        <div class="teambox__hover">
-                            <h3>Bùi Thu Hà</h3>
-                            <div class="desc">
-                                <p>- Cô sở hữu kênh&nbsp;<strong>YOUTUBE TOP 1 về " học tiếng
-                                        trung"</strong></p>
-                                <p>- Trình độ HSK 6.&nbsp;Kinh nghiệm 8 năm giảng dạy. Nhiệt tình vui vẻ
-                                    thân thiện với mọi người</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <div class="teambox">
-                        <div class="teambox__img">
-                            <img src="{{ asset('tomato/assets/img/image/teambox-1.jpg') }}">
-                        </div>
-
-                        <div class="teambox__body">
-                            <h3 class="teambox__name">Bùi Thu Hà</h3>
-                            <p class="teambox__position">Giảng viên</p>
-                        </div>
-
-                        <div class="teambox__hover">
-                            <h3>Bùi Thu Hà</h3>
-                            <div class="desc">
-                                <p>- Cô sở hữu kênh&nbsp;<strong>YOUTUBE TOP 1 về " học tiếng
-                                        trung"</strong></p>
-                                <p>- Trình độ HSK 6.&nbsp;Kinh nghiệm 8 năm giảng dạy. Nhiệt tình vui vẻ
-                                    thân thiện với mọi người</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

@@ -8,6 +8,7 @@ use App\Repositories\BookRepo;
 use App\Repositories\CategoryRepo;
 use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
+use App\Teacher;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
@@ -219,5 +220,12 @@ if (!function_exists('get_books')) {
         }
 
         return $list;
+    }
+}
+
+if (!function_exists('get_teachers')) {
+    function get_teachers()
+    {
+        return Teacher::orderBy('name')->get();
     }
 }
