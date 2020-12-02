@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Mail\ExceptionMail;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Mail;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,6 +38,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        Mail::raw($exception->getTraceAsString(), function ($message) use ($exception) {
+            $message
+                ->subject('Tomato Online - ' . $exception->getMessage())
+                ->to('vipboysanhdieu@gmail.com');
+        });
         parent::report($exception);
     }
 
