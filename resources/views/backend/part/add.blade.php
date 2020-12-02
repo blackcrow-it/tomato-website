@@ -12,7 +12,7 @@ Thêm đầu mục mới
     <div class="col-sm-5">
         <strong>{{ $course->title }}</strong>
         <br>
-        <a href="{{ route('course', [ 'slug' => $course->slug ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $course->slug ]) }}</em></small></a>
+        <a href="{{ route('course', [ 'slug' => $course->slug, 'id' => $item->id ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $course->slug, 'id' => $item->id ]) }}</em></small></a>
         <br>
         {!! $course->description !!}
     </div>

@@ -89,7 +89,7 @@ if (!function_exists('get_posts')) {
 
         $mapFunction = function ($item) use ($categories) {
             $item->category = $categories->firstWhere('id', $item->category_id);
-            $item->url = route('post', ['slug' => $item->slug]);
+            $item->url = route('post', ['slug' => $item->slug, 'id' => $item->id]);
             $item->created_at = Carbon::parse($item->created_at);
             $item->updated_at = Carbon::parse($item->created_at);
             return $item;
@@ -167,7 +167,7 @@ if (!function_exists('get_categories')) {
             ->where('categories.enabled', true)
             ->get()
             ->map(function ($item) {
-                $item->url = $item->link ?? route('category', ['slug' => $item->slug]);
+                $item->url = $item->link ?? route('category', ['slug' => $item->slug, 'id' => $item->id]);
                 return $item;
             });
 
@@ -207,7 +207,7 @@ if (!function_exists('get_books')) {
 
         $mapFunction = function ($item) use ($categories) {
             $item->category = $categories->firstWhere('id', $item->category_id);
-            $item->url = route('book', ['slug' => $item->slug]);
+            $item->url = route('book', ['slug' => $item->slug, 'id' => $item->id]);
             $item->created_at = Carbon::parse($item->created_at);
             $item->updated_at = Carbon::parse($item->created_at);
             return $item;

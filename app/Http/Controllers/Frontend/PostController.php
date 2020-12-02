@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index($slug)
+    public function index(Request $request, $slug, $id)
     {
         $post = Post::firstWhere([
             'slug' => $slug,

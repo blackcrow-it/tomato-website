@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request, $slug)
+    public function index(Request $request, $slug, $id)
     {
         $category = Category::firstWhere([
             'slug' => $slug,

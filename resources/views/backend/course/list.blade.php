@@ -96,7 +96,7 @@ Khóa học
                     <td>
                         {{ $item->title }}
                         <br>
-                        <a href="{{ route('course', [ 'slug' => $item->slug ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $item->slug ]) }}</em></small></a>
+                        <a href="{{ route('course', [ 'slug' => $item->slug, 'id' => $item->id ]) }}" target="_blank"><small><em>{{ route('course', [ 'slug' => $item->slug, 'id' => $item->id ]) }}</em></small></a>
                         <br>
                         <small>
                             <i class="fas fa-eye" data-toggle="tooltip" title="Lượt xem"></i> {{ $item->view }}

@@ -23,7 +23,8 @@ class Book extends Model
     {
         return SlugOptions::create()
             ->generateSlugsFrom($this->slug ? 'slug' : 'title')
-            ->saveSlugsTo('slug');
+            ->saveSlugsTo('slug')
+            ->allowDuplicateSlugs();
     }
 
     public function position()
@@ -33,7 +34,7 @@ class Book extends Model
 
     public function getUrlAttribute()
     {
-        return route('book', ['slug' => $this->slug]);
+        return route('book', ['slug' => $this->slug, 'id' => $this->id]);
     }
 
     public function category()

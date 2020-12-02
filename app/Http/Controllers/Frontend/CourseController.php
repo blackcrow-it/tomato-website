@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function index($slug)
+    public function index(Request $request, $slug, $id)
     {
         $course = Course::with('teacher')
             ->firstWhere([

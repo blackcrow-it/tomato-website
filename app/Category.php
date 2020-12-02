@@ -25,7 +25,8 @@ class Category extends Model
     {
         return SlugOptions::create()
             ->generateSlugsFrom($this->slug ? 'slug' : 'title')
-            ->saveSlugsTo('slug');
+            ->saveSlugsTo('slug')
+            ->allowDuplicateSlugs();
     }
 
     public static function booted()
@@ -67,6 +68,6 @@ class Category extends Model
 
     public function getUrlAttribute()
     {
-        return $this->link ?? route('category', ['slug' => $this->slug]);
+        return $this->link ?? route('category', ['slug' => $this->slug, 'id' => $this->id]);
     }
 }

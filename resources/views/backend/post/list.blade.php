@@ -95,7 +95,7 @@ Bài viết
                     <td>
                         {{ $item->title }}
                         <br>
-                        <a href="{{ route('post', [ 'slug' => $item->slug ]) }}" target="_blank"><small><em>{{ route('post', [ 'slug' => $item->slug ]) }}</em></small></a>
+                        <a href="{{ route('post', [ 'slug' => $item->slug, 'id' => $item->id ]) }}" target="_blank"><small><em>{{ route('post', [ 'slug' => $item->slug, 'id' => $item->id ]) }}</em></small></a>
                         <br>
                         <small>
                             <i class="fas fa-eye" data-toggle="tooltip" title="Lượt xem"></i> {{ $item->view }}

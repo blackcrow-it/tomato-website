@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function index($slug)
+    public function index(Request $request, $slug, $id)
     {
         $book = Book::firstWhere([
             'slug' => $slug,

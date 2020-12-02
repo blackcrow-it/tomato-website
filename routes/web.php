@@ -23,13 +23,13 @@ Route::namespace('Frontend')
 
         Route::get('/', 'HomeController@index')->name('home');
 
-        Route::get('danh-muc/{slug}.html', 'CategoryController@index')->name('category');
+        Route::get('{slug}-ct{id}.html', 'CategoryController@index')->name('category')->where(['slug' => '.*', 'id' => '\d+']);
 
-        Route::get('tin-tuc/{slug}.html', 'PostController@index')->name('post');
+        Route::get('{slug}-p{id}.html', 'PostController@index')->name('post')->where(['slug' => '.*', 'id' => '\d+']);
 
-        Route::get('khoa-hoc/{slug}.html', 'CourseController@index')->name('course');
+        Route::get('{slug}-c{id}.html', 'CourseController@index')->name('course')->where(['slug' => '.*', 'id' => '\d+']);
 
-        Route::get('sach/{slug}.html', 'BookController@index')->name('book');
+        Route::get('{slug}-b{id}.html', 'BookController@index')->name('book')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::middleware('auth')->group(function () {
             Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
