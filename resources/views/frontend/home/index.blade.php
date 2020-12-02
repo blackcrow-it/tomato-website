@@ -137,63 +137,25 @@
         </div>
 
         <div class="owl-carousel bookBox-slide wow fadeInUp" data-wow-delay=".2s" data-slide-four-item>
+            @foreach (get_books(null, 'home-books') as $book)
             <div class="bookBox">
-                <a href="chitietsach.html" class="bookBox__img">
-                    <img src="assets/img/image/bookBox-1.jpg" alt="">
-                    <span class="sale">-50%</span>
+                <a href="{{ $book->url }}" class="bookBox__img">
+                    <img src="{{ $book->thumbnail }}" alt="{{ $book->title }}">
+                    @if($book->original_price)
+                        <span class="sale">-{{ ceil(100 - $book->price / $book->original_price * 100) }}%</span>
+                    @endif
                 </a>
                 <div class="bookBox__body">
-                    <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                    <h3 class="bookBok__title"><a href="{{ $book->url }}">{{ $book->title }}</a></h3>
                     <div class="bookBok__price">
-                        <ins>499.000đ</ins>
-                        <del>899.000đ</del>
+                        <ins>{{ currency($book->price) }}</ins>
+                        @if($book->original_price)
+                            <del>{{ currency($book->original_price) }}</del>
+                        @endif
                     </div>
                 </div>
             </div>
-            <div class="bookBox">
-                <a href="chitietsach.html" class="bookBox__img">
-                    <img src="assets/img/image/bookBox-1.jpg" alt="">
-                </a>
-                <div class="bookBox__body">
-                    <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                    <div class="bookBok__price">
-                        <ins>499.000đ</ins>
-                    </div>
-                </div>
-            </div>
-            <div class="bookBox">
-                <a href="chitietsach.html" class="bookBox__img">
-                    <img src="assets/img/image/bookBox-1.jpg" alt="">
-                </a>
-                <div class="bookBox__body">
-                    <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                    <div class="bookBok__price">
-                        <ins>499.000đ</ins>
-                    </div>
-                </div>
-            </div>
-            <div class="bookBox">
-                <a href="chitietsach.html" class="bookBox__img">
-                    <img src="assets/img/image/bookBox-1.jpg" alt="">
-                </a>
-                <div lass="bookBox__body">
-                    <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                    <div class="bookBok__price">
-                        <ins>499.000đ</ins>
-                    </div>
-                </div>
-            </div>
-            <div class="bookBox">
-                <a href="chitietsach.html" class="bookBox__img">
-                    <img src="assets/img/image/bookBox-1.jpg" alt="">
-                </a>
-                <div class="bookBox__body">
-                    <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                    <div class="bookBok__price">
-                        <ins>499.000đ</ins>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
