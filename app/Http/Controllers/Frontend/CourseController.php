@@ -56,7 +56,7 @@ class CourseController extends Controller
             'added_to_cart' => Cart::where('type', ObjectType::COURSE)
                 ->where('object_id', $course->id)
                 ->exists(),
-            'is_owned' => UserCourse::where('user_id', auth()->user()->id)
+            'is_owned' => !auth()->check() ? false : UserCourse::where('user_id', auth()->user()->id)
                 ->where('course_id', $course->id)
                 ->where(function ($query) {
                     $query->orWhere('expires_on', '>', now());
