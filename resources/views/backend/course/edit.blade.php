@@ -131,6 +131,10 @@
                 <textarea name="content" class="editor">{!! old('content') ?? $data->content ?? null !!}</textarea>
             </div>
             <div class="form-group">
+                <label>Ghi chú cho người đã mua khóa học (Hiển thị dưới video)</label>
+                <textarea name="video_footer_text" class="editor">{!! old('video_footer_text') ?? $data->video_footer_text ?? null !!}</textarea>
+            </div>
+            <div class="form-group">
                 <label>Giảng viên</label>
                 <select name="teacher_id" class="form-control">
                     <option value="">Chọn giảng viên</option>

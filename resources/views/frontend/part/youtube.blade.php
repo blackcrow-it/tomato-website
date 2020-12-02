@@ -11,6 +11,15 @@
 @endsection
 
 @section('learning_footer')
+
+@if($course->video_footer_text)
+    <div class="card bg-light">
+        <div class="card-body">
+            {!! $course->video_footer_text !!}
+        </div>
+    </div>
+@endif
+
 <div class="product-detail__detail">
     <div class="tabJs">
         <ul class="nav nav-tabs" id="myTab" role="tablist">

@@ -18,7 +18,8 @@ class Course extends Model
         'category_id', 'order_in_category',
         'price', 'original_price', 'intro_youtube_id',
         'buyer_days_owned',
-        'teacher_id', 'level'
+        'teacher_id', 'level',
+        'video_footer_text'
     ];
 
     public function author()
