@@ -632,9 +632,6 @@
 
                 $('#consultationForm-modal').find('.show-name').text(name);
                 $('#consultationForm-modal').find('.show-course').text(course);
-
-                $('#consultationForm-modal').modal('show');
-                // form.submit(); // khi dung se submit form
             }
         });
     }

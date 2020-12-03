@@ -491,15 +491,15 @@
                                 <div class="input-item">
                                     <div class="input-item__inner">
                                         <select class="form-control" name="course">
-                                            <option>Khoá học tiếng Hàn</option>
-                                            <option>Khoá học tiếng Trung</option>
-                                            <option>Khoá học tiếng Nhật</option>
+                                            @foreach (get_categories(null, 'course-categories') as $item)
+                                                <option>{{ $item->title }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="input-item">
                                     <div class="input-item__inner">
-                                        <textarea type="text" name="name" placeholder="Nội dung" class="form-control"></textarea>
+                                        <textarea type="text" name="content" placeholder="Nội dung" class="form-control"></textarea>
                                     </div>
                                 </div>
 

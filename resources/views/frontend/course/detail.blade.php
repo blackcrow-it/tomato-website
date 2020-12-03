@@ -301,15 +301,15 @@
                                 <div class="input-item">
                                     <div class="input-item__inner">
                                         <select class="form-control" name="course">
-                                            <option>Khoá học tiếng Hàn</option>
-                                            <option>Khoá học tiếng Trung</option>
-                                            <option>Khoá học tiếng Nhật</option>
+                                            @foreach (get_categories(null, 'course-categories') as $item)
+                                                <option>{{ $item->title }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="input-item">
                                     <div class="input-item__inner">
-                                        <textarea type="text" name="name" placeholder="Nội dung" class="form-control"></textarea>
+                                        <textarea type="text" name="content" placeholder="Nội dung" class="form-control"></textarea>
                                     </div>
                                 </div>
 
@@ -321,7 +321,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="consultationForm__bg" style="background-image: url(assets/img/image/consultationForm-bg.jpg);"></div>
+                    <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/consultationForm-bg.jpg') }});"></div>
                 </div>
             </div>
         </div>

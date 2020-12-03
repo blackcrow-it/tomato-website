@@ -132,7 +132,7 @@
                                     @endif
                                 </li>
                             @endforeach
-                            <li><a href="lienhe.html">Liên hệ</a></li>
+                            <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                         </ul>
                     </nav>
 
@@ -231,7 +231,7 @@
                                 @endif
                             </li>
                         @endforeach
-                        <li><a href="lienhe.html">Liên hệ</a></li>
+                        <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                     </ul>
                 </nav>
                 <div class="menu-mobile__footer">
@@ -288,7 +288,7 @@
                                             <li><a href="khoahoc.html">Khoá học</a></li>
                                             <li><a href="tintuc.html">Tin tức</a></li>
                                             <li><a href="top-diemcao.html">Thi thử</a></li>
-                                            <li><a href="lienhe.html">Liên hệ</a></li>
+                                            <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -303,8 +303,8 @@
                                     <div class="footer__widget widget-menu">
                                         <h3 class="footer__widget-title">Website liên kết</h3>
                                         <ul>
-                                            <li><a href="#">http://tomatoonline.edu.vn</a></li>
-                                            <li><a href="#">ngoaingutomato.edu.vn</a></li>
+                                            <li><a href="{{ route('home') }}">{{ route('home') }}</a></li>
+                                            <li><a href="https://ngoaingutomato.edu.vn/">https://ngoaingutomato.edu.vn/</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -454,27 +454,55 @@
 
     </script>
     <script type="text/javascript" src="{{ asset('tomato/assets/js/main.js') }}?v={{ date('Ymd') }}"></script>
+    <script>
+        $('#consultationForm form').submit(function (e) {
+            e.preventDefault();
+
+            const check = confirm('Tin nhắn của bạn sẽ được gửi tới hộp thư của Tomato Online. Tiếp tục?');
+            if (!check) return;
+
+            $(this).find('.button-item button').prop('disabled', true);
+
+            const formData = new FormData(e.target);
+            axios.post("{{ route('contact') }}", formData)
+                .then(() => {
+                    $('#consultationForm-modal').modal('show');
+                    $(this).trigger('reset');
+                })
+                .catch(() => {
+                    alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                })
+                .then(() => {
+                    $(this).find('.button-item button').prop('disabled', false);
+                });
+        });
+
+    </script>
 
     @yield('footer')
 
     <div id="fb-root"></div>
     <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '141729702951631',
-          xfbml      : true,
-          version    : 'v3.2'
-        });
-        FB.AppEvents.logPageView();
-      };
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '141729702951631',
+                xfbml: true,
+                version: 'v3.2'
+            });
+            FB.AppEvents.logPageView();
+        };
 
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "https://connect.facebook.net/vi_VN/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/vi_VN/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
     </script>
 </body>
 

@@ -82,6 +82,9 @@ Route::namespace('Frontend')
         });
 
         Route::post('dang-xuat', 'LogoutController@logout')->name('logout');
+
+        Route::get('lienhe.html', 'ContactController@index')->name('contact');
+        Route::post('lienhe.html', 'ContactController@submit')->name('contact');
     });
 
 Route::prefix('admin')
