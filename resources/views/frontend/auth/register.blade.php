@@ -98,7 +98,7 @@
                                             <div class="login-social">
                                                 <span>hoặc đăng nhập bằng</span>
                                                 <div class="login-social__btn">
-                                                    <a href="" class="login-facebook" onclick="alert('Đang trong quá trình xây dựng'); return false;"><i class="fa fa-facebook"></i> Facebook</a>
+                                                    <a href="{{ route('auth.facebook') }}" class="login-facebook"><i class="fa fa-facebook"></i> Facebook</a>
                                                     <a href="{{ route('auth.google') }}" class="login-google"><i class="fa fa-google-plus"></i> Google</a>
                                                 </div>
                                             </div>

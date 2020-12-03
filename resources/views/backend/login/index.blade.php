@@ -64,7 +64,7 @@
                 </form>
                 <div class="social-auth-links text-center mb-3">
                     <p>- HOẶC -</p>
-                    <a href="" class="btn btn-block btn-primary" onclick="alert('Đang trong quá trình xây dựng'); return false;">
+                    <a href="{{ route('auth.facebook') }}" class="btn btn-block btn-primary">
                         <i class="fab fa-facebook mr-2"></i> Đăng nhập bằng Facebook
                     </a>
                     <a href="{{ route('auth.google') }}" class="btn btn-block btn-danger">

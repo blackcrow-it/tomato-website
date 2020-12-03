@@ -38,4 +38,10 @@ return [
         'project_number' => env('GOOGLE_PROJECT_NUMBER'),
     ],
 
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
+        'redirect' => env('FACEBOOK_AUTH_CALLBACK', env('APP_URL') . '/auth/facebook/callback'),
+    ],
+
 ];

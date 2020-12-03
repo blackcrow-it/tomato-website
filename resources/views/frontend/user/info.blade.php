@@ -52,6 +52,20 @@
             </tr>
             <tr>
                 <td class="td-label">
+                    <p>Facebook</p>
+                </td>
+                <td class="td-content">
+                    <p v-if="user.facebook_id" class="collapse-text f-email">fb:@{{ user.facebook_id }}</p>
+                    <a v-else href="{{ route('auth.facebook') }}">Liên kết với tài khoản Facebook</a>
+                </td>
+                <td class="td-action">
+                    <span v-if="user.facebook_id" class="btn-lock" data-toggle="tooltip" data-placement="top" title="Trường không thể sửa">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
                     <p>Ngày sinh</p>
                 </td>
                 <td class="td-content">

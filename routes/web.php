@@ -18,6 +18,9 @@ Route::any('test', 'TestController@index');
 Route::get('auth/google', 'SocialiteController@loginWithGoogle')->name('auth.google');
 Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback')->name('auth.google.callback');
 
+Route::get('auth/facebook', 'SocialiteController@loginWithFacebook')->name('auth.facebook');
+Route::get('auth/facebook/callback', 'SocialiteController@loginWithFacebookCallback')->name('auth.facebook.callback');
+
 Route::namespace('Frontend')
     ->group(function () {
 

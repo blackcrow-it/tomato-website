@@ -41,4 +41,33 @@ class SocialiteController extends Controller
 
         return redirect()->intended(route('home'));
     }
+
+    public function loginWithFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function loginWithFacebookCallback()
+    {
+        $facebookUser = Socialite::driver('facebook')->user();
+
+        $user = Auth::user() ?? User::where('facebook_id', $facebookUser->id)->first();
+
+        if ($user == null) {
+            $user = new User;
+            $user->username = 'fb' . $facebookUser->id;
+            $user->password = Hash::make(Str::random());
+        }
+
+        $user->facebook_id = $facebookUser->id;
+        $user->email = $user->email ?? $facebookUser->email;
+        $user->avatar = $user->avatar ?? $facebookUser->avatar;
+        $user->name = $user->name ?? $facebookUser->name;
+
+        $user->save();
+
+        Auth::login($user);
+
+        return redirect()->intended(route('home'));
+    }
 }
