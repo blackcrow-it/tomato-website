@@ -38,11 +38,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        Mail::raw($exception->getTraceAsString(), function ($message) use ($exception) {
-            $message
-                ->subject('Tomato Online - ' . $exception->getMessage())
-                ->to('vipboysanhdieu@gmail.com');
-        });
+        // Mail::raw($exception->getTraceAsString(), function ($message) use ($exception) {
+        //     $message
+        //         ->subject('Tomato Online - ' . $exception->getMessage())
+        //         ->to('vipboysanhdieu@gmail.com');
+        // });
         parent::report($exception);
     }
 
