@@ -24,7 +24,7 @@ class RechargeRequest extends FormRequest
     public function rules()
     {
         return [
-            'money' => 'required|integer|min:1000|max:2000000000'
+            'money' => 'required|integer|min:2000|max:2000000000'
         ];
     }
 

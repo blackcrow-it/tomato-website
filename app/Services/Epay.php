@@ -32,7 +32,7 @@ class Epay
             'payType'       => 'NO',
             'callBackUrl'   => route('recharge.epay.callback'),
             'notiUrl'       => route('recharge.epay.notify'),
-            'reqDomain'     => url()->to('/'),
+            'reqDomain'     => 'http://tomatoonline.edu.vn', // url()->to('/')
             'vat'           => 0,
             'fee'           => 0,
             'notax'         => 0,
