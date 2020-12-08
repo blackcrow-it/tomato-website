@@ -102,9 +102,12 @@ class OldVideoTranscode extends Command
 
                 printf("Set current trancode.\n");
 
-                DB::connection('old_db')->table('video')->where('video_id', $video->video_id)->update([
-                    'stream_url' => 0
-                ]);
+                DB::connection('old_db')
+                    ->table('video')
+                    ->where('video_id', $video->video_id)
+                    ->update([
+                        'stream_url' => 0
+                    ]);
 
                 $client->fetchAccessTokenWithRefreshToken($refreshToken);
 
@@ -214,11 +217,15 @@ class OldVideoTranscode extends Command
 
                 Storage::deleteDirectory('transcode/' . $video->video_id);
             } catch (\Throwable $th) {
-                printf("Exception, revert current trancode.\n");
+                printf("Exception: \n" . $th->getMessage() . "\nRevert current trancode.\n");
 
-                DB::connection('old_db')->table('video')->where('video_id', $video->video_id)->update([
-                    'stream_url' => null
-                ]);
+                DB::connection('old_db')
+                    ->table('video')
+                    ->where('video_id', $video->video_id)
+                    ->where('stream_url', 0)
+                    ->update([
+                        'stream_url' => null
+                    ]);
             }
         }
     }
