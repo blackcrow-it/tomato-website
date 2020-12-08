@@ -108,9 +108,9 @@ class OldVideoTranscode extends Command
 
                 $client->fetchAccessTokenWithRefreshToken($refreshToken);
 
-                $mp4Path = 'transcode/' . $video->video_id . '.mp4';
-                $keyPath = 'transcode/secret.key';
-                $m3u8Path = 'transcode/hls/playlist.m3u8';
+                $mp4Path = 'transcode/' . $video->video_id . '/video.mp4';
+                $keyPath = 'transcode/' . $video->video_id . '/secret.key';
+                $m3u8Path = 'transcode/' . $video->video_id . '/hls/playlist.m3u8';
 
                 printf("Download video.\n");
 
@@ -120,8 +120,8 @@ class OldVideoTranscode extends Command
 
                 if (!Storage::exists($mp4Path) || Storage::size($mp4Path) != $file->getSize()) {
                     printf("Re-create transcode directory.\n");
-                    Storage::deleteDirectory('transcode');
-                    Storage::makeDirectory('transcode');
+                    Storage::deleteDirectory('transcode/' . $video->video_id);
+                    Storage::makeDirectory('transcode/' . $video->video_id);
 
                     // Get the authorized Guzzle HTTP client
                     $http = $client->authorize();
@@ -160,8 +160,8 @@ class OldVideoTranscode extends Command
 
                 printf("Start transcode.\n");
 
-                Storage::deleteDirectory('transcode/hls');
-                Storage::makeDirectory('transcode/hls');
+                Storage::deleteDirectory('transcode/' . $video->video_id . '/hls');
+                Storage::makeDirectory('transcode/' . $video->video_id . '/hls');
 
                 $videoHandle = $ffmpeg->customInput(Storage::path($mp4Path), $usingCuda ? ['-hwaccel', 'cuda'] : []);
 
@@ -194,8 +194,8 @@ class OldVideoTranscode extends Command
 
                     try {
                         printf("Transferring secret key.\n");
-                        $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
-                        $this->uploadDirectoryToS3('transcode/hls/', 'streaming/' . $video->video_id . '/hls/', true);
+                        $this->uploadFileToS3('transcode/' . $video->video_id . '/secret.key', 'streaming/' . $video->video_id . '/secret.key');
+                        $this->uploadDirectoryToS3('transcode/' . $video->video_id . '/hls/', 'streaming/' . $video->video_id . '/hls/', true);
 
                         break;
                     } catch (Exception $ex) {
@@ -212,7 +212,7 @@ class OldVideoTranscode extends Command
 
                 printf("Delete transcode directory.\n");
 
-                Storage::deleteDirectory('transcode');
+                Storage::deleteDirectory('transcode/' . $video->video_id);
             } catch (\Throwable $th) {
                 printf("Exception, revert current trancode.\n");
 
