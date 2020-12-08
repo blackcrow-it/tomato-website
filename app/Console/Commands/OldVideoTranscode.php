@@ -159,6 +159,8 @@ class OldVideoTranscode extends Command
 
                     // close the file pointer
                     fclose($fp);
+
+                    gc_collect_cycles();
                 }
 
                 printf("Start transcode.\n");
