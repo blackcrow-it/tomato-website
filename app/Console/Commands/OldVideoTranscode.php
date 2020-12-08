@@ -75,8 +75,6 @@ class OldVideoTranscode extends Command
             'timeout'          => config('ffmpeg.timeout'),
         ];
 
-        $usingCuda = config('ffmpeg.using_cuda');
-
         $log = null;
         if (config('ffmpeg.enable_logging')) {
             $log = new Logger('FFmpeg_Streaming');
@@ -143,7 +141,7 @@ class OldVideoTranscode extends Command
             Storage::deleteDirectory('transcode/hls');
             Storage::makeDirectory('transcode/hls');
 
-            $videoHandle = $ffmpeg->customInput(Storage::path($mp4Path), $usingCuda ? ['-hwaccel', 'cuda'] : []);
+            $videoHandle = $ffmpeg->open(Storage::path($mp4Path));
 
             $format = new X264();
             $format->on('progress', function ($video, $format, $percentage) {
@@ -175,19 +173,6 @@ class OldVideoTranscode extends Command
                 try {
                     printf("Transferring secret key.\n");
                     $this->uploadFileToS3('transcode/secret.key', 'streaming/' . $video->video_id . '/secret.key');
-
-                    // $allFiles = scandir(Storage::path('transcode/hls'));
-                    // $allFiles = array_filter($allFiles, function($item) {
-                    //     return $item != '.' && $item != '..';
-                    // });
-                    // foreach ($allFiles as $file) {
-                    //     $localPath = "transcode/hls/$file";
-                    //     $s3Path = 'streaming/' . $video->video_id . '/hls/' . basename($localPath);
-                    //     if (Storage::disk('s3')->exists($s3Path)) continue;
-                    //     printf("Transferring $localPath -> $s3Path\n");
-                    //     $this->uploadFileToS3($localPath, $s3Path, true);
-                    // }
-
                     $this->uploadDirectoryToS3('transcode/hls/', 'streaming/' . $video->video_id . '/hls/', true);
 
                     break;
