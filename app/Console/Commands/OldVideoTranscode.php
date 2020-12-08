@@ -85,14 +85,14 @@ class OldVideoTranscode extends Command
 
         $ffmpeg = FFMpeg::create($ffmpegConfig, $log);
 
-        printf("Get videos data.\n");
-
+        $fileDownloadHandle = null;
         while (true) {
+            printf("Get next video.\n");
+
             $video = DB::connection('old_db')
                 ->table('video')
                 ->where('drive_id', '!=', '')
                 ->whereNull('stream_url')
-                // ->orderBy('video_id', 'desc')
                 ->first();
 
             if ($video == null) break;
@@ -130,7 +130,7 @@ class OldVideoTranscode extends Command
                     $http = $client->authorize();
 
                     // Open a file for writing
-                    $fp = fopen(Storage::path($mp4Path), 'w');
+                    $fileDownloadHandle = fopen(Storage::path($mp4Path), 'w');
 
                     // Download in 10 MB chunks
                     $chunkSizeBytes = 10 * 1024 * 1024;
@@ -150,17 +150,16 @@ class OldVideoTranscode extends Command
                             ]
                         );
                         $chunkStart = $chunkEnd + 1;
-                        fwrite($fp, $response->getBody()->getContents());
+                        fwrite($fileDownloadHandle, $response->getBody()->getContents());
 
                         $percentage = floor($chunkStart / $file->getSize() * 100);
+                        if ($percentage > 100) $percentage = 100;
                         printf("\rDownloading...(%s/%sMB) [%s%s]", round($chunkStart / 1024 / 1024), round($file->getSize() / 1024 / 1024), str_repeat('#', $percentage), str_repeat('-', (100 - $percentage)));
                     }
                     printf("\r\nDownload complete.\n");
 
                     // close the file pointer
-                    fclose($fp);
-
-                    gc_collect_cycles();
+                    fclose($fileDownloadHandle);
                 }
 
                 printf("Start transcode.\n");
@@ -195,6 +194,7 @@ class OldVideoTranscode extends Command
                 printf("Start upload to s3.\n");
 
                 while (true) {
+                    printf("Delete streaming video directory on s3.\n");
                     Storage::disk('s3')->deleteDirectory('streaming/' . $video->video_id);
 
                     try {
@@ -219,16 +219,19 @@ class OldVideoTranscode extends Command
 
                 Storage::deleteDirectory('transcode/' . $video->video_id);
             } catch (\Throwable $th) {
-                printf("Exception: \n" . $th->getMessage() . "\nRevert current trancode.\n");
+                printf("Exception: \nLine " . $th->getLine() . ": " . $th->getMessage() . "\nRevert current trancode.\n");
 
                 DB::connection('old_db')
                     ->table('video')
                     ->where('video_id', $video->video_id)
-                    ->where('stream_url', 0)
+                    ->where('stream_url', '0')
                     ->update([
                         'stream_url' => null
                     ]);
             }
+
+            if (is_resource($fileDownloadHandle)) fclose($fileDownloadHandle);
+            gc_collect_cycles();
         }
     }
 
