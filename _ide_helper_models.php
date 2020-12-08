@@ -12,6 +12,107 @@
 
 namespace App{
 /**
+ * App\Book
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $slug
+ * @property string|null $thumbnail
+ * @property string|null $cover
+ * @property string|null $description
+ * @property string|null $content
+ * @property int $view
+ * @property bool $enabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $meta_title
+ * @property string|null $meta_description
+ * @property string|null $og_title
+ * @property string|null $og_description
+ * @property string|null $og_image
+ * @property int|null $category_id
+ * @property int $order_in_category
+ * @property int|null $price
+ * @property int|null $original_price
+ * @property-read \App\Category|null $category
+ * @property-read mixed $url
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\BookPosition[] $position
+ * @property-read int|null $position_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Book newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Book newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Book query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCover($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereOgDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereOgImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereOgTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereOrderInCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereOriginalPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereThumbnail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Book whereView($value)
+ */
+	class Book extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\BookPosition
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $code
+ * @property int $book_id
+ * @property int $order_in_position
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition whereBookId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition whereOrderInPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookPosition whereUpdatedAt($value)
+ */
+	class BookPosition extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\BookRelatedCourse
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $book_id
+ * @property int $related_course_id
+ * @property-read \App\Book $book
+ * @property-read \App\Course $related_course
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse query()
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse whereBookId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse whereRelatedCourseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BookRelatedCourse whereUpdatedAt($value)
+ */
+	class BookRelatedCourse extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\Cart
  *
  * @property int $id
@@ -148,8 +249,8 @@ namespace App{
  * @property int|null $original_price
  * @property string|null $intro_youtube_id
  * @property int|null $buyer_days_owned
- * @property string|null $lecturer_name
  * @property string|null $level
+ * @property int|null $teacher_id
  * @property-read \App\User|null $author
  * @property-read \App\Category|null $category
  * @property-read \App\User|null $editor
@@ -158,6 +259,7 @@ namespace App{
  * @property-read int|null $lessons_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\CoursePosition[] $position
  * @property-read int|null $position_count
+ * @property-read \App\Teacher|null $teacher
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\UserCourse[] $user_courses
  * @property-read int|null $user_courses_count
  * @method static \Illuminate\Database\Eloquent\Builder|Course newModelQuery()
@@ -173,7 +275,6 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereEnabled($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereIntroYoutubeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Course whereLecturerName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereMetaDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereMetaTitle($value)
@@ -184,6 +285,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereOriginalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Course whereTeacherId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereThumbnail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereUpdatedAt($value)
@@ -247,13 +349,28 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $user_id
+ * @property string $name
+ * @property string $phone
+ * @property bool $shipping
+ * @property string|null $city
+ * @property string|null $district
+ * @property string|null $address
+ * @property string $status
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\InvoiceItem[] $items
  * @property-read int|null $items_count
+ * @property-read \App\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereCity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereDistrict($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereShipping($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereUserId($value)
  */
@@ -272,6 +389,8 @@ namespace App{
  * @property int $object_id
  * @property int $amount
  * @property int|null $price
+ * @property-read \App\Book $book
+ * @property-read \App\Course $course
  * @property-read \App\Invoice $invoice
  * @method static \Illuminate\Database\Eloquent\Builder|InvoiceItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|InvoiceItem newQuery()
@@ -655,6 +774,31 @@ namespace App{
 
 namespace App{
 /**
+ * App\Teacher
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $name
+ * @property string|null $avatar
+ * @property string|null $description
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Course[] $courses
+ * @property-read int|null $courses_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Teacher whereUpdatedAt($value)
+ */
+	class Teacher extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\User
  *
  * @property int $id
@@ -673,12 +817,19 @@ namespace App{
  * @property string|null $phone
  * @property string|null $birthday
  * @property string|null $address
+ * @property bool $is_super_admin
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read int|null $roles_count
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthday($value)
@@ -688,6 +839,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsSuperAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMoney($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
@@ -711,16 +863,21 @@ namespace App{
  * @property int $user_id
  * @property int $course_id
  * @property \Illuminate\Support\Carbon|null $expires_on
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Course $course
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse newQuery()
+ * @method static \Illuminate\Database\Query\Builder|UserCourse onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse query()
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereCourseId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereExpiresOn($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCourse whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|UserCourse withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|UserCourse withoutTrashed()
  */
 	class UserCourse extends \Eloquent {}
 }
