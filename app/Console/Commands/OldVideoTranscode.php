@@ -75,6 +75,8 @@ class OldVideoTranscode extends Command
             'timeout'          => config('ffmpeg.timeout'),
         ];
 
+        $usingCuda = config('ffmpeg.using_cuda');
+
         $log = null;
         if (config('ffmpeg.enable_logging')) {
             $log = new Logger('FFmpeg_Streaming');
@@ -141,7 +143,7 @@ class OldVideoTranscode extends Command
             Storage::deleteDirectory('transcode/hls');
             Storage::makeDirectory('transcode/hls');
 
-            $videoHandle = $ffmpeg->open(Storage::path($mp4Path));
+            $videoHandle = $ffmpeg->customInput(Storage::path($mp4Path), $usingCuda ? ['-hwaccel', 'cuda'] : []);
 
             $format = new X264();
             $format->on('progress', function ($video, $format, $percentage) {
