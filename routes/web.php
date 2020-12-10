@@ -40,6 +40,7 @@ Route::namespace('Frontend')
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
             Route::get('bai-giang/{id}', 'PartController@index')->name('part');
+            Route::get('part-test/get-data/{id}', 'PartTestController@getData')->name('part_test.get_data');
 
             Route::get('gio-hang', 'CartController@index')->name('cart');
             Route::get('gio-hang/get-data', 'CartController@getData')->name('cart.get_data');

@@ -97,8 +97,8 @@
             submited: false,
             correct_requirement: 0,
         },
-        mounted() {
-            this.questions = JSON.parse(`{!! json_encode($data->data) !!}`);
+        async mounted() {
+            this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
             this.questions = this.questions.map(question => {
                 if (question.type != 'multiple-choice') return question;
 
