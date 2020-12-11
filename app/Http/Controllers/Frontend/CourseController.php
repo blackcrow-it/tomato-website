@@ -49,20 +49,29 @@ class CourseController extends Controller
             ->get()
             ->pluck('related_course');
 
+        $isUserOwnedThisCourse = auth()->check()
+            ? UserCourse::query()
+            ->where('user_id', auth()->user()->id)
+            ->where('course_id', $course->id)
+            ->where(function ($query) {
+                $query->orWhere('expires_on', '>', now());
+                $query->orWhereNull('expires_on');
+            })
+            ->exists()
+            : false;
+
+        $addedToCart = Cart::query()
+            ->where('user_id', auth()->user()->id)
+            ->where('type', ObjectType::COURSE)
+            ->where('object_id', $course->id)
+            ->exists();
+
         return view('frontend.course.detail', [
             'course' => $course,
             'lessons' => $lessons,
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
-            'added_to_cart' => Cart::where('type', ObjectType::COURSE)
-                ->where('object_id', $course->id)
-                ->exists(),
-            'is_owned' => !auth()->check() ? false : UserCourse::where('user_id', auth()->user()->id)
-                ->where('course_id', $course->id)
-                ->where(function ($query) {
-                    $query->orWhere('expires_on', '>', now());
-                    $query->orWhereNull('expires_on');
-                })
-                ->exists(),
+            'added_to_cart' => $addedToCart,
+            'is_owned' => $isUserOwnedThisCourse,
             'related_courses' => $relatedCourses,
         ]);
     }
