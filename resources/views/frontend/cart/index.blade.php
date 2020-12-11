@@ -28,7 +28,7 @@
             </div>
         @endif
 
-        <div class="cart-text-info entry-detail">
+        <div class="cart-text-info entry-detail mb-3">
             <div class="h3">Lưu ý</div>
             <div class="">
                 <p>Đối với sản phẩm là <b>Khoá học online</b> học trực tiếp không hỗ trợ vận chuyển</p>
@@ -50,62 +50,64 @@
                     </div>
                 </div>
             </div>
-            <hr>
-            <div class="h3">Chọn hình thức giao hàng</div>
-            <div id="form-address-modal">
-                <ul class="choose-form">
-                    <li class="choose-form__item">
-                        <label class="checkbox-item">
-                            <input type="radio" v-model="shipInfo.shipping" :value="false">
-                            <span class="checkbox-item__check"></span>
-                            <p class="checkbox-item__text">Đến trực tiếp trung tâm lấy (<b class="f-price">Miễn phí</b>)</p>
-                        </label>
-                        <div class="choose-form__content" :class="{ 'show': !shipInfo.shipping }">
-                            <ul>
-                                <li><b>Địa chỉ ĐKKD CS1</b> Số 300 Lạch Tray, Quận. Lê Chân, Tp. Hải Phòng</li>
-                                <li><b>Cơ sở 3: </b>Số 65 Quán Nam, Quận, Lê Chân, Tp. Hải Phòng</li>
-                                <li><b>Cơ sở 4: </b>408 Trường Sơn, An Lão, Tp. Hải Phòng</li>
-                                <li><b>Điện thoại: </b>0225 657 2222 - 0225 628 0123 <br>Support: (Zalo) 0965 113 913 Mr Nam</li>
-                                <li><b>Hotline: </b>0964 299 222</li>
-                                <li><b>Email: </b>ngoaingutomatohp@gmail.com</li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="choose-form__item">
-                        <label class="checkbox-item">
-                            <input type="radio" v-model="shipInfo.shipping" :value="true">
-                            <span class="checkbox-item__check"></span>
-                            <p class="checkbox-item__text">Giao hàng đến địa chỉ (<b class="f-price">Tính phí vận chuyển</b>)</p>
-                        </label>
-                        <div class="choose-form__content" :class="{ 'show': shipInfo.shipping }">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="input-address__item">
-                                        <label>Tỉnh, Thành phố</label>
-                                        <select v-model="shipInfo.city" class="form-control">
-                                            <option v-for="item in local" :value="item.name">@{{ item.name }}</option>
-                                        </select>
+            <template v-if="showShipInfo">
+                <hr>
+                <div class="h3">Chọn hình thức giao hàng</div>
+                <div id="form-address-modal">
+                    <ul class="choose-form">
+                        <li class="choose-form__item">
+                            <label class="checkbox-item">
+                                <input type="radio" v-model="shipInfo.shipping" :value="false">
+                                <span class="checkbox-item__check"></span>
+                                <p class="checkbox-item__text">Đến trực tiếp trung tâm lấy (<b class="f-price">Miễn phí</b>)</p>
+                            </label>
+                            <div class="choose-form__content" :class="{ 'show': !shipInfo.shipping }">
+                                <ul>
+                                    <li><b>Địa chỉ ĐKKD CS1</b> Số 300 Lạch Tray, Quận. Lê Chân, Tp. Hải Phòng</li>
+                                    <li><b>Cơ sở 3: </b>Số 65 Quán Nam, Quận, Lê Chân, Tp. Hải Phòng</li>
+                                    <li><b>Cơ sở 4: </b>408 Trường Sơn, An Lão, Tp. Hải Phòng</li>
+                                    <li><b>Điện thoại: </b>0225 657 2222 - 0225 628 0123 <br>Support: (Zalo) 0965 113 913 Mr Nam</li>
+                                    <li><b>Hotline: </b>0964 299 222</li>
+                                    <li><b>Email: </b>ngoaingutomatohp@gmail.com</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="choose-form__item">
+                            <label class="checkbox-item">
+                                <input type="radio" v-model="shipInfo.shipping" :value="true">
+                                <span class="checkbox-item__check"></span>
+                                <p class="checkbox-item__text">Giao hàng đến địa chỉ (<b class="f-price">Tính phí vận chuyển</b>)</p>
+                            </label>
+                            <div class="choose-form__content" :class="{ 'show': shipInfo.shipping }">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-address__item">
+                                            <label>Tỉnh, Thành phố</label>
+                                            <select v-model="shipInfo.city" class="form-control">
+                                                <option v-for="item in local" :value="item.name">@{{ item.name }}</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="input-address__item">
-                                        <label>Quận, Huyện</label>
-                                        <select v-model="shipInfo.district" class="form-control" :disabled="!shipInfo.city">
-                                            <option v-for="item in (shipInfo.city && local.length > 0) ? local.find(x => x.name == shipInfo.city).districts : []" :value="item.name">@{{ item.name }}</option>
-                                        </select>
+                                    <div class="col-md-6">
+                                        <div class="input-address__item">
+                                            <label>Quận, Huyện</label>
+                                            <select v-model="shipInfo.district" class="form-control" :disabled="!shipInfo.city">
+                                                <option v-for="item in (shipInfo.city && local.length > 0) ? local.find(x => x.name == shipInfo.city).districts : []" :value="item.name">@{{ item.name }}</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-12">
-                                    <div class="input-address__item">
-                                        <label>Nhập địa chỉ</label>
-                                        <textarea v-model="shipInfo.address" class="form-control"></textarea>
+                                    <div class="col-xl-12">
+                                        <div class="input-address__item">
+                                            <label>Nhập địa chỉ</label>
+                                            <textarea v-model="shipInfo.address" class="form-control"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                        </li>
+                    </ul>
+                </div>
+            </template>
         </div>
         <div class="cart-detail">
             <div class="table-responsive">
@@ -125,7 +127,8 @@
                                     <img class="f-info__img" :src="item.object.thumbnail">
                                     <div class="f-info__body">
                                         <div class="f-info__title">@{{ item.object.title }}</div>
-                                        <span v-if="item.object.category" class="f-info__type">Thể loại: <b>@{{ item.object.category.title }}</b></span>
+                                        <div v-if="item.object.category" class="f-info__type">Thể loại: <b>@{{ item.object.category.title }}</b></div>
+                                        <small v-if="item.type == '{{ \App\Constants\ObjectType::COURSE }}'" class="text-danger">* Khoá học online học trực tiếp không hỗ trợ vận chuyển</small>
                                     </div>
                                 </div>
                             </td>
@@ -194,6 +197,7 @@
                 district: undefined,
                 address: undefined,
             },
+            showShipInfo: false,
             loading: false,
         },
         mounted() {
@@ -217,6 +221,10 @@
                 axios.get("{{ route('cart.get_data') }}").then(res => {
                     this.data = res;
                     this.inputData = _.cloneDeep(this.data);
+
+                    if (this.data.filter(x => x.type != '{{ \App\Constants\ObjectType::COURSE }}').length > 0) {
+                        this.showShipInfo = true;
+                    }
                 }).then(() => {
                     this.loading = false;
                 });

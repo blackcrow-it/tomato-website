@@ -365,7 +365,7 @@
                             <span class="close" @click="removeCartItem(item.id)"><i class="fa fa-close"></i></span>
                             <div>
                                 <img :src="item.object.thumbnail">
-                                <div class="h4"><a :href="item.__object_url">@{{ item.object.title }}</a></div>
+                                <a :href="item.__object_url">@{{ item.object.title }}</a>
                                 <p>
                                     @{{ item.amount }} x <b>@{{ currency(item.price) }}</b>
                                 </p>

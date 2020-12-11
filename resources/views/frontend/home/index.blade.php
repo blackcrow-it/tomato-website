@@ -113,7 +113,7 @@
                                 @endif
                                 <span class="meta-date">{{ $post->updated_at->format('d/m/Y') }}</span>
                             </div>
-                            <div class="post__title">
+                            <div class="post__title font-weight-bold">
                                 <a href="{{ $post->url }}">{{ $post->title }}</a>
                             </div>
                             <p class="post__text">{{ $post->description }}</p>
