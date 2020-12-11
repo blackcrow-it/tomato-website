@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Frontend\LoginController;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -38,6 +39,7 @@ class SocialiteController extends Controller
         $user->save();
 
         Auth::login($user);
+        app(LoginController::class)->setLoginToken();
 
         return redirect()->intended(route('home'));
     }
@@ -67,6 +69,7 @@ class SocialiteController extends Controller
         $user->save();
 
         Auth::login($user);
+        app(LoginController::class)->setLoginToken();
 
         return redirect()->intended(route('home'));
     }

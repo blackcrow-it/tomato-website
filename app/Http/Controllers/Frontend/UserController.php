@@ -136,9 +136,13 @@ class UserController extends Controller
 
     public function doChangepass(ChangepassRequest $request)
     {
+        $password = $request->input('new_pass');
+
         $user = Auth::user();
-        $user->password = Hash::make($request->input('new_pass'));
+        $user->password = Hash::make($password);
         $user->save();
+
+        Auth::logoutOtherDevices($password);
 
         return redirect()->route('user.changepass')->with('success', 'Thay đổi mật khẩu thành công.');
     }
