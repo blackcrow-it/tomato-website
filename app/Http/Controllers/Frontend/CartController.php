@@ -9,6 +9,7 @@ use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
+use App\Http\Requests\Frontend\AddToCartRequest;
 use App\Invoice;
 use App\InvoiceItem;
 use App\Mail\InvoiceMail;
@@ -35,7 +36,7 @@ class CartController extends Controller
         return view('frontend.cart.index');
     }
 
-    public function add(Request $request)
+    public function add(AddToCartRequest $request)
     {
         $type = $request->input('type');
         $object_id = $request->input('object_id');
@@ -131,7 +132,7 @@ class CartController extends Controller
             Cart::where('user_id', $user->id)->delete();
 
             foreach ($request->input('cart') as $item) {
-                $this->add(new Request([
+                $this->add(new AddToCartRequest([
                     'type' => $item['type'],
                     'object_id' => $item['object_id'],
                     'amount' => $item['amount']
@@ -144,10 +145,32 @@ class CartController extends Controller
         $totalPrice = 0;
         foreach ($cart as $item) {
             $totalPrice += $item->amount * $item->price;
+
+            if ($item->type != ObjectType::COURSE) continue;
+            $exists = UserCourse::where([
+                'course_id' => $item->object_id,
+                'user_id' => auth()->id()
+            ]);
+            if ($exists) {
+                $course = Course::find($item->object_id);
+                $request->validate([
+                    'cart' => [
+                        function ($attribute, $value, $fail) use ($course) {
+                            $fail('Bạn đã sở hữu khóa học "' . $course->title . '".');
+                        }
+                    ]
+                ]);
+            }
         }
 
         if ($totalPrice > $user->money) {
-            return response('Số tiền trong tài khoản không đủ, vui lòng nạp thêm để tiếp tục mua hàng.', 500);
+            $request->validate([
+                'cart' => [
+                    function ($attribute, $value, $fail) {
+                        $fail('Số tiền trong tài khoản không đủ, vui lòng nạp thêm để tiếp tục mua hàng.');
+                    }
+                ]
+            ]);
         }
 
         try {
@@ -237,7 +260,13 @@ class CartController extends Controller
             DB::rollBack();
             Log::error($ex);
 
-            return response('Có lỗi xảy ra, vui lòng thử lại.', 500);
+            $request->validate([
+                'cart' => [
+                    function ($attribute, $value, $fail) {
+                        $fail('Có lỗi xảy ra. Vui lòng thử lại.');
+                    }
+                ]
+            ]);
         }
     }
 

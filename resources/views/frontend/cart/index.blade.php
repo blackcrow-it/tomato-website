@@ -256,8 +256,9 @@
                     ship_info: this.shipInfo
                 }).then(() => {
                     location.href = '{{ route("cart.complete") }}';
-                }).catch(res => {
-                    alert(res);
+                }).catch(err => {
+                    const msg = Object.values(err.errors).map(x => x.join("\n")).join("\n");
+                    alert(msg);
                     this.loading = false;
                 });
             },

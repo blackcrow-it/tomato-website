@@ -546,7 +546,9 @@
                 self.addClass('added');
                 $('.cartbox').addClass('cartbox--show');
                 vueCartbox.getData();
-            }).fail(function () {
+            }).fail(function (err) {
+                var msg = Object.values(err.responseJSON.errors).map(x => x.join("\n")).join("\n");
+                alert(msg);
                 self.removeClass('loading');
             });
         });
@@ -571,7 +573,9 @@
 
             $.post(form.attr('action'), form.serialize()).done(function () {
                 location.href = self.data('redirect');
-            }).fail(function () {
+            }).fail(function (err) {
+                var msg = Object.values(err.responseJSON.errors).map(x => x.join("\n")).join("\n");
+                alert(msg);
                 self.prop('disabled', false);
             });
         });

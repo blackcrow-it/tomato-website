@@ -60,11 +60,13 @@ class CourseController extends Controller
             ->exists()
             : false;
 
-        $addedToCart = Cart::query()
+        $addedToCart = !$isUserOwnedThisCourse
+            ? Cart::query()
             ->where('user_id', auth()->user()->id)
             ->where('type', ObjectType::COURSE)
             ->where('object_id', $course->id)
-            ->exists();
+            ->exists()
+            : false;
 
         return view('frontend.course.detail', [
             'course' => $course,
