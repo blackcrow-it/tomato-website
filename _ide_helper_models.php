@@ -251,6 +251,7 @@ namespace App{
  * @property int|null $buyer_days_owned
  * @property string|null $level
  * @property int|null $teacher_id
+ * @property string|null $video_footer_text
  * @property-read \App\User|null $author
  * @property-read \App\Category|null $category
  * @property-read \App\User|null $editor
@@ -290,6 +291,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Course whereVideoFooterText($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Course whereView($value)
  */
 	class Course extends \Eloquent {}
@@ -349,8 +351,8 @@ namespace App{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $user_id
- * @property string $name
- * @property string $phone
+ * @property string|null $name
+ * @property string|null $phone
  * @property bool $shipping
  * @property string|null $city
  * @property string|null $district
@@ -818,6 +820,8 @@ namespace App{
  * @property string|null $birthday
  * @property string|null $address
  * @property bool $is_super_admin
+ * @property string|null $facebook_id
+ * @property string|null $login_token
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
@@ -837,9 +841,11 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFacebookId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereGoogleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsSuperAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLoginToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMoney($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
