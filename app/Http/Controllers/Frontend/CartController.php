@@ -147,10 +147,13 @@ class CartController extends Controller
             $totalPrice += $item->amount * $item->price;
 
             if ($item->type != ObjectType::COURSE) continue;
-            $exists = UserCourse::where([
-                'course_id' => $item->object_id,
-                'user_id' => auth()->id()
-            ]);
+            $exists = UserCourse::query()
+                ->where([
+                    'course_id' => $item->object_id,
+                    'user_id' => auth()->id()
+                ])
+                ->whereDate('expires_on', '<', now())
+                ->exists();
             if ($exists) {
                 $course = Course::find($item->object_id);
                 $request->validate([
