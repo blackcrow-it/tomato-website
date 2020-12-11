@@ -29,13 +29,13 @@
         @endif
 
         <div class="cart-text-info entry-detail">
-            <h3>Lưu ý</h3>
+            <div class="h3">Lưu ý</div>
             <div class="">
                 <p>Đối với sản phẩm là <b>Khoá học online</b> học trực tiếp không hỗ trợ vận chuyển</p>
                 <p>Đối với sản phẩm là <b>Sách</b> sẽ có phí vận chuyển tuỳ theo khu vực địa chị nhận hàng của học viên</p>
             </div>
             <hr>
-            <h3>Thông tin người nhận</h3>
+            <div class="h3">Thông tin người nhận</div>
             <div class="">
                 <div class="input-item">
                     <label>Tên người nhận *</label>
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <hr>
-            <h3>Chọn hình thức giao hàng</h3>
+            <div class="h3">Chọn hình thức giao hàng</div>
             <div id="form-address-modal">
                 <ul class="choose-form">
                     <li class="choose-form__item">
@@ -124,7 +124,7 @@
                                 <div class="f-info">
                                     <img class="f-info__img" :src="item.object.thumbnail">
                                     <div class="f-info__body">
-                                        <h4 class="f-info__title">@{{ item.object.title }}</h4>
+                                        <div class="f-info__title">@{{ item.object.title }}</div>
                                         <span v-if="item.object.category" class="f-info__type">Thể loại: <b>@{{ item.object.category.title }}</b></span>
                                     </div>
                                 </div>

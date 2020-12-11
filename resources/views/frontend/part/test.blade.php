@@ -8,8 +8,8 @@
                 <p>Họ và tên <span>{{ auth()->user()->name ?? auth()->user()->username }}</span></p>
             </div>
             <div class="header-right">
-                <h3 class="header-subtitle">Trung tâm ngoại ngữ Tomato</h3>
-                <h2 class="header-title">Kiểm tra hiểu bài</h2>
+                <div class="header-subtitle">Trung tâm ngoại ngữ Tomato</div>
+                <div class="header-title">Kiểm tra hiểu bài</div>
             </div>
         </div>
         <div class="quiz-wrap__inner" :class="{ 'pointerEventsNone': submited }">

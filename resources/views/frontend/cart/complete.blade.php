@@ -23,7 +23,7 @@
             <div class="col-xl-8 offset-xl-2">
                 <div class="payment-success">
                     <span class="f-icon"><img src="{{ asset('tomato/assets/img/icon/icon-pay-success.png') }}"></span>
-                    <h4 class="f-title">Đơn hàng của bạn đã được thanh toán thành công. Chúng tôi sẽ liên hệ với bạn sớm nhất.</h4>
+                    <div class="f-title">Đơn hàng của bạn đã được thanh toán thành công. Chúng tôi sẽ liên hệ với bạn sớm nhất.</div>
                     <p class="f-text">Cảm ơn bạn đã tin tưởng, sử dụng dịch vụ của <b>Tomato Online</b></p>
 
                     <div>

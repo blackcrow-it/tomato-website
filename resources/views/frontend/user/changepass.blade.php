@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h2 class="user-page__title">Thay đổi mật khẩu</h2>
+<div class="user-page__title">Thay đổi mật khẩu</div>
 
 <div class="form-reset-password">
     <div class="row">

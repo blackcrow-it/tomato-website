@@ -42,7 +42,7 @@
                                 <div class="f-info">
                                     <img class="f-info__img" :src="item.object.thumbnail">
                                     <div class="f-info__body">
-                                        <h4 class="f-info__title">@{{ item.object.title }}</h4>
+                                        <div class="f-info__title">@{{ item.object.title }}</div>
                                         <ul class="f-info__list">
                                             <li v-if="item.object.category">Thể loại: <b>@{{ item.object.category.title }}</b></li>
                                             <li>Số lượng: <b>@{{ item.amount }} x @{{ currency(item.price) }}</b></li>

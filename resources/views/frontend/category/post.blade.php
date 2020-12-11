@@ -8,7 +8,7 @@
                 <div class="col-xl-3">
                     <div class="layout-sidebar">
                         <div class="widget widget--category">
-                            <h2 class="widget__title">Chuyên mục</h2>
+                            <div class="widget__title">Chuyên mục</div>
                             <div class="f-scroll">
                                 <ul>
                                     @foreach(get_categories(null, 'post-categories') as $c1)
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="widget widget--course d-none d-xl-block">
-                            <h2 class="widget__title">Khoá học</h2>
+                            <div class="widget__title">Khoá học</div>
 
                             <ul>
                                 @foreach(get_categories(null, 'course-categories') as $c1)
@@ -47,18 +47,18 @@
                                             <span class="item__icon">
                                                 <img src="{{ $c1->icon }}" alt="{{ $c1->title }}">
                                             </span>
-                                            <h3 class="item__title">{{ $c1->title }}</h3>
+                                            <div class="item__title">{{ $c1->title }}</div>
                                         </a>
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
                         <div class="widget widget--book d-none d-xl-block">
-                            <h2 class="widget__title">Sách</h2>
+                            <div class="widget__title">Sách</div>
                             <div class="owl-carousel">
                                 <a href="chitietsach.html" class="item">
                                     <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__title">Giáo trình hán ngữ</div>
                                     <div class="item__price">
                                         <ins>499.000đ</ins>
                                         <del>899.000đ</del>
@@ -66,7 +66,7 @@
                                 </a>
                                 <a href="chitietsach.html" class="item">
                                     <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__title">Giáo trình hán ngữ</div>
                                     <div class="item__price">
                                         <ins>499.000đ</ins>
                                         <del>899.000đ</del>
@@ -74,7 +74,7 @@
                                 </a>
                                 <a href="chitietsach.html" class="item">
                                     <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__title">Giáo trình hán ngữ</div>
                                     <div class="item__price">
                                         <ins>499.000đ</ins>
                                         <del>899.000đ</del>
@@ -96,9 +96,9 @@
                                         <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
                                         <span class="meta-date">{{ $item->updated_at->format('d/m/Y') }}</span>
                                     </div>
-                                    <h3 class="post-featured__title">
+                                    <div class="post-featured__title">
                                         <a href="{{ $item->url }}">{{ $item->title }}</a>
-                                    </h3>
+                                    </div>
                                     <p class="post-featured__text">{{ $item->description }}</p>
                                     <a href="{{ $item->url }}" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
                                 </div>
@@ -116,7 +116,7 @@
                                             <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
                                         <span class="meta-date">{{ $item->updated_at->format('d/m/Y') }}</span>
                                         </div>
-                                        <h3 class="post-list__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
+                                        <div class="post-list__title"><a href="{{ $item->url }}">{{ $item->title }}</a></div>
                                         <p class="post-list__text">{{ $item->description }}</p>
                                         <a href="{{ $item->url }}" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
                                     </div>
@@ -131,7 +131,7 @@
 
             <div class="layout-mobile-last d-xl-none">
                 <div class="widget widget--course">
-                    <h2 class="widget__title">Khoá học</h2>
+                    <div class="widget__title">Khoá học</div>
 
                     <ul>
                         @foreach(get_categories(null, 'course-categories') as $c1)
@@ -140,18 +140,18 @@
                                     <span class="item__icon">
                                         <img src="{{ $c1->icon }}" alt="{{ $c1->title }}">
                                     </span>
-                                    <h3 class="item__title">{{ $c1->title }}</h3>
+                                    <div class="item__title">{{ $c1->title }}</div>
                                 </a>
                             </li>
                         @endforeach
                     </ul>
                 </div>
                 <div class="widget widget--book">
-                    <h2 class="widget__title">Sách</h2>
+                    <div class="widget__title">Sách</div>
                     <div class="owl-carousel">
                         <a href="chitietsach.html" class="item">
                             <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                            <h3 class="item__title">Giáo trình hán ngữ</h3>
+                            <div class="item__title">Giáo trình hán ngữ</div>
                             <div class="item__price">
                                 <ins>499.000đ</ins>
                                 <del>899.000đ</del>
@@ -159,7 +159,7 @@
                         </a>
                         <a href="chitietsach.html" class="item">
                             <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                            <h3 class="item__title">Giáo trình hán ngữ</h3>
+                            <div class="item__title">Giáo trình hán ngữ</div>
                             <div class="item__price">
                                 <ins>499.000đ</ins>
                                 <del>899.000đ</del>
@@ -167,7 +167,7 @@
                         </a>
                         <a href="chitietsach.html" class="item">
                             <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                            <h3 class="item__title">Giáo trình hán ngữ</h3>
+                            <div class="item__title">Giáo trình hán ngữ</div>
                             <div class="item__price">
                                 <ins>499.000đ</ins>
                                 <del>899.000đ</del>

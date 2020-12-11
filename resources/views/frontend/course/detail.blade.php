@@ -135,7 +135,7 @@
                                         <div class="col-md-8 col-xl-8">
                                             <div class="f-content">
                                                 <div class="entry-detail">
-                                                    <h3>{{ $course->teacher->name }}</h3>
+                                                    <div class="h3">{{ $course->teacher->name }}</div>
                                                     {!! $course->teacher->description !!}
                                                 </div>
                                             </div>
@@ -148,9 +148,9 @@
                             <div id="lessonbox-listpost" class="accordionJs product-detail__listPost">
                                 @foreach($lessons as $lesson)
                                     <div class="panel">
-                                        <h3 class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-{{ $loop->index }}" aria-expanded="true" aria-controls="lessonbox-listpost-id-{{ $loop->index }}">
+                                        <div class="panel__title" data-toggle="collapse" data-target="#lessonbox-listpost-id-{{ $loop->index }}" aria-expanded="true" aria-controls="lessonbox-listpost-id-{{ $loop->index }}">
                                             {{ $lesson->title }}
-                                        </h3>
+                                        </div>
                                         <div id="lessonbox-listpost-id-{{ $loop->index }}" class="collapse show" data-parent="#lessonbox-listpost">
                                             <div class="panel__entry">
                                                 <ul>
@@ -173,7 +173,7 @@
                                             <span class="sale">-50%</span>
                                         </a>
                                         <div class="bookBox__body">
-                                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                            <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                             <div class="bookBok__price">
                                                 <ins>499.000đ</ins>
                                                 <del>899.000đ</del>
@@ -189,7 +189,7 @@
                                             <span class="sale">-50%</span>
                                         </a>
                                         <div class="bookBox__body">
-                                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                            <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                             <div class="bookBok__price">
                                                 <ins>499.000đ</ins>
                                                 <del>899.000đ</del>
@@ -205,7 +205,7 @@
                                             <span class="sale">-50%</span>
                                         </a>
                                         <div class="bookBox__body">
-                                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                            <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                             <div class="bookBok__price">
                                                 <ins>499.000đ</ins>
                                                 <del>899.000đ</del>
@@ -221,7 +221,7 @@
                                             <span class="sale">-50%</span>
                                         </a>
                                         <div class="bookBox__body">
-                                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                            <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                             <div class="bookBok__price">
                                                 <ins>499.000đ</ins>
                                                 <del>899.000đ</del>
@@ -237,7 +237,7 @@
                                             <span class="sale">-50%</span>
                                         </a>
                                         <div class="bookBox__body">
-                                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                            <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                             <div class="bookBok__price">
                                                 <ins>499.000đ</ins>
                                                 <del>899.000đ</del>
@@ -261,7 +261,7 @@
 
             <div class="product-detail__relate">
                 <div class="title">
-                    <h2 class="title__title">Khoá học liên quan</h2>
+                    <div class="title__title">Khoá học liên quan</div>
                 </div>
 
                 <div class="owl-carousel lessonbox-wrap-min lessonbox-related-slide">
@@ -281,7 +281,7 @@
                 <div class="col-md-6">
                     <div class="consultationForm__content">
                         <div class="consultationForm__fix">
-                            <h2 class="consultationForm__title">Đăng ký nhận tin</h2>
+                            <div class="consultationForm__title">Đăng ký nhận tin</div>
                             <form class="consultationForm__form">
                                 <div class="input-item">
                                     <div class="input-item__inner">

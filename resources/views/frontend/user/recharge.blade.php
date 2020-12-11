@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h2 class="user-page__title">Nạp tiền</h2>
+<div class="user-page__title">Nạp tiền</div>
 
 <div class="user-page__moneyCard" id="recharge">
     <div class="tabJs">
@@ -44,7 +44,7 @@
                 @endif
                 <div class="form-moneyCard">
                     <div class="form-moneyCard__header">
-                        <h3 class="f-title">Nhập số tiền bạn muốn nạp vào ví Tomato Online</h3>
+                        <div class="f-title">Nhập số tiền bạn muốn nạp vào ví Tomato Online</div>
                         <p class="f-subtitle">Số tiền bạn sẽ nạp: <b>@{{ currency(money) }}</b></p>
                     </div>
                     <div class="input-item form-moneyCard__input">
@@ -86,7 +86,7 @@
                     </div>
                     <div class="form-moneyCard__text">
                         <div class="entry-detail">
-                            <h3 class="text-center">Hoặc chuyển khoản trực tiếp</h3>
+                            <div class="text-center">Hoặc chuyển khoản trực tiếp</div>
                             {!! config('settings.recharge_direct_info') !!}
                         </div>
                     </div>

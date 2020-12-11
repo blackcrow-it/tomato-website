@@ -8,7 +8,7 @@
                 <div class="col-xl-3">
                     <div class="layout-sidebar">
                         <div class="widget widget--lessonCat">
-                            <h2 class="widget__title">Khoá học</h2>
+                            <div class="widget__title">Khoá học</div>
                             <div class="f-scroll">
                                 <ul>
                                     @foreach(get_categories(null, 'course-categories') as $c1)
@@ -39,12 +39,12 @@
                         </div>
 
                         <div class="widget widget--filterbox d-none d-xl-block">
-                            <h2 class="widget__title">Bộ lọc</h2>
+                            <div class="widget__title">Bộ lọc</div>
 
                             <form class="form-filter" method="GET" action="">
                                 <ul>
                                     <li>
-                                        <h3>Trình độ</h3>
+                                        <div class="h3">Trình độ</div>
                                         <label>
                                             <input type="radio" name="filter[level]" value="" {{ request()->input('filter.level') == null ? 'checked' : null }}>
                                             <span></span>
@@ -67,7 +67,7 @@
                                         </label>
                                     </li>
                                     <li>
-                                        <h3>Chính sách</h3>
+                                        <div class="h3">Chính sách</div>
                                         <label>
                                             <input type="radio" name="filter[promotion]" value="" {{ request()->input('filter.promotion') == null ? 'checked' : null }}>
                                             <span></span>
@@ -85,7 +85,7 @@
                                         </label>
                                     </li>
                                     <li>
-                                        <h3>Thời lượng</h3>
+                                        <div class="h3">Thời lượng</div>
                                         <label>
                                             <input type="radio" name="filter[lesson_count]" value="" {{ request()->input('filter.lesson_count') == null ? 'checked' : null }}>
                                             <span></span>
@@ -115,7 +115,7 @@
                         </div>
 
                         <div class="widget widget--docLive">
-                            <h2 class="widget__title">Tài liệu livestream</h2>
+                            <div class="widget__title">Tài liệu livestream</div>
                             <ul>
                                 <li><a href="#">23/10 + clip</a></li>
                                 <li><a href="#">23/10 + clip</a></li>
@@ -124,7 +124,7 @@
                         </div>
 
                         <div class="widget widget--mockTest d-none d-xl-block">
-                            <h2 class="widget__title">Kiểm tra kiến thức</h2>
+                            <div class="widget__title">Kiểm tra kiến thức</div>
                             <div class="f-content">
                                 <a href="thithudauvao.html" class="btn btn--secondary">Vào thi</a>
                             </div>

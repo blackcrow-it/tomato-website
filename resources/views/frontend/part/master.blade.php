@@ -39,16 +39,16 @@
                     <div class="layout-sidebar">
                         <div class="learning-process">
                             <div class="learning-process__header">
-                                <h3 class="f-title">Tiến trình học tập</h3>
+                                <div class="f-title">Tiến trình học tập</div>
                             </div>
 
                             <div class="learning-process__list">
                                 <div id="accordion" class="accordionJs">
                                     @foreach($lessons as $lesson)
                                         <div class="panel">
-                                            <h3 class="panel__title" data-toggle="collapse" data-target="#collapse-id-{{ $loop->index }}" aria-expanded="true" aria-controls="collapse-id-{{ $loop->index }}">
+                                            <div class="panel__title" data-toggle="collapse" data-target="#collapse-id-{{ $loop->index }}" aria-expanded="true" aria-controls="collapse-id-{{ $loop->index }}">
                                                 {{ $lesson->title }}
-                                            </h3>
+                                            </div>
                                             <div id="collapse-id-{{ $loop->index }}" class="collapse show" data-parent="#accordion">
                                                 <div class="panel__entry">
                                                     <ul class="collapse__submenu">

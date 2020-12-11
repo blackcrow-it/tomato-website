@@ -45,7 +45,7 @@
                                     @if($prev_post)
                                         <div class="f-item__inner">
                                             <a href="{{ $prev_post->url }}">
-                                                <h3>{{ $prev_post->title }}</h3>
+                                                <div class="h3">{{ $prev_post->title }}</div>
                                                 <span><i class="fa fa-long-arrow-left"></i> Bài trước</span>
                                             </a>
                                         </div>
@@ -55,7 +55,7 @@
                                     @if($next_post)
                                         <div class="f-item__inner">
                                             <a href="{{ $next_post->url }}">
-                                                <h3>{{ $next_post->title }}</h3>
+                                                <div class="h3">{{ $next_post->title }}</div>
                                                 <span>Bài tiếp theo <i class="fa fa-long-arrow-right"></i></span>
                                             </a>
                                         </div>
@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="post-detail__relatedCourse">
-                            <h2 class="title-page-min">Khoá học liên quan</h2>
+                            <div class="title-page-min">Khoá học liên quan</div>
                             <div class="owl-carousel fixheight lessonbox-wrap-min">
                                 @foreach($related_courses as $item)
                                     @include('frontend.category.course_item', [ 'course' => $item ])
@@ -77,14 +77,14 @@
                 <div class="col-xl-3 order-xl-1">
                     <div class="layout-sidebar">
                         <div class="widget widget--relatePost">
-                            <h2 class="widget__title">Bài viết liên quan</h2>
+                            <div class="widget__title">Bài viết liên quan</div>
 
                             <ul>
                                 @foreach($related_posts as $item)
                                     <li>
                                         <a href="{{ $item->url }}">
                                             <img src="{{ $item->thumbnail }}">
-                                            <h3>{{ $item->title }}</h3>
+                                            <div class="h3">{{ $item->title }}</div>
                                             <span><i class="fa fa-clock-o"></i>{{ $item->updated_at->format('d/m/Y') }}</span>
                                         </a>
                                     </li>
@@ -92,7 +92,7 @@
                             </ul>
                         </div>
                         <div class="widget widget--course">
-                            <h2 class="widget__title">Khoá học</h2>
+                            <div class="widget__title">Khoá học</div>
 
                             <ul>
                                 @foreach(get_categories(null, 'course-categories') as $c1)
@@ -101,7 +101,7 @@
                                             <span class="item__icon">
                                                 <img src="{{ $c1->icon }}" alt="{{ $c1->title }}">
                                             </span>
-                                            <h3 class="item__title">{{ $c1->title }}</h3>
+                                            <div class="item__title">{{ $c1->title }}</div>
                                         </a>
                                     </li>
                                 @endforeach
@@ -109,11 +109,11 @@
                         </div>
 
                         <div class="widget widget--book">
-                            <h2 class="widget__title">Sách liên quan</h2>
+                            <div class="widget__title">Sách liên quan</div>
                             <div class="owl-carousel">
                                 <a href="chitietsach.html" class="item">
                                     <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__title">Giáo trình hán ngữ</div>
                                     <div class="item__price">
                                         <ins>499.000đ</ins>
                                         <del>899.000đ</del>
@@ -121,7 +121,7 @@
                                 </a>
                                 <a href="chitietsach.html" class="item">
                                     <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__title">Giáo trình hán ngữ</div>
                                     <div class="item__price">
                                         <ins>499.000đ</ins>
                                         <del>899.000đ</del>
@@ -129,7 +129,7 @@
                                 </a>
                                 <a href="chitietsach.html" class="item">
                                     <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <h3 class="item__title">Giáo trình hán ngữ</h3>
+                                    <div class="item__title">Giáo trình hán ngữ</div>
                                     <div class="item__price">
                                         <ins>499.000đ</ins>
                                         <del>899.000đ</del>
@@ -149,7 +149,7 @@
         <div class="row">
             <div class="col-xl-9 offset-xl-3">
                 <div class="commentbox-wrap">
-                    <h3 class="title-page-min">Bình luận bài viết</h3>
+                    <div class="title-page-min">Bình luận bài viết</div>
                     <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"></div>
                 </div>
             </div>

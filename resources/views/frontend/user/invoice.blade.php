@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h2 class="user-page__title">Lịch sử mua hàng</h2>
+<div class="user-page__title">Lịch sử mua hàng</div>
 
 <div class="user-page__productHistory">
     <div class="table-responsive">
@@ -24,7 +24,7 @@
                         <td>
                             <div class="f-product">
                                 <img class="f-product__img" src="{{ $item->object->thumbnail }}">
-                                <h3 class="f-product__name"><a href="{{ $item->object->url }}" target="blank">{{ $item->object->title }}</a></h3>
+                                <div class="f-product__name"><a href="{{ $item->object->url }}" target="blank">{{ $item->object->title }}</a></div>
                                 <ul class="f-product__info">
                                     <li>Số lượng: <span>{{ $item->amount }}</span></li>
                                     @if($item->object->category)

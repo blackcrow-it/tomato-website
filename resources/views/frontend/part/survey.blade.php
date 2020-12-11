@@ -4,7 +4,7 @@
 <div class="learningLesson__quiz" id="survey">
     <div class="quiz-wrap">
         <div class="survey-question__header">
-            <h2 class="f-title">{{ $part->title }}</h2>
+            <div class="f-title">{{ $part->title }}</div>
             <div class="f-text">
                 <p>{{ $data->description }}</p>
                 <p class="text-primary">*Bắt buộc</p>
@@ -12,7 +12,7 @@
         </div>
         <div class="survey-question__content">
             <div class="survey-question__item">
-                <h4 class="f-label">Họ và tên <span>*</span></h4>
+                <div class="f-label">Họ và tên <span>*</span></div>
                 <div class="f-content">
                     <div class="input-item">
                         <div class="input-item__inner">
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="survey-question__item">
-                <h4 class="f-label">Sinh năm <span>*</span></h4>
+                <div class="f-label">Sinh năm <span>*</span></div>
                 <div class="f-content">
                     <div class="row">
                         <div class="col-6 col-md-4 col-xl-2">
@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="survey-question__item">
-                <h4 class="f-label">Công việc hiện tại của bạn <span>*</span></h4>
+                <div class="f-label">Công việc hiện tại của bạn <span>*</span></div>
                 <div class="f-content">
                     <div class="input-item">
                         <div class="input-item__inner">
@@ -63,10 +63,10 @@
                 </div>
             </div>
             <div v-for="(question, questionIndex) in questions" class="survey-question__item">
-                <h4 class="f-label">
+                <div class="f-label">
                     @{{ questionIndex + 1 }}. @{{ question.question }}
                     <span v-if="question.required == 1">*</span>
-                </h4>
+                </div>
                 <input type="hidden" :name="'data[' + questionIndex + '][question]'" :value="question.question">
                 <input type="hidden" :name="'data[' + questionIndex + '][type]'" :value="question.type">
                 <template v-if="question.type == 'radio'">
@@ -79,7 +79,7 @@
                             </label>
                         </div>
                     </div>
-                    <h4 class="f-label">Nhận xét</h4>
+                    <div class="f-label">Nhận xét</div>
                     <div class="f-content">
                         <div class="input-item">
                             <div class="input-item__inner">

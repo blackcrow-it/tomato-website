@@ -39,7 +39,7 @@
                 <div class="col-md-6">
                     <div class="consultationForm__content">
                         <div class="consultationForm__fix">
-                            <h2 class="consultationForm__title">Đăng ký nhận tin</h2>
+                            <div class="consultationForm__title">Đăng ký nhận tin</div>
                             <form class="consultationForm__form">
                                 <div class="input-item">
                                     <div class="input-item__inner">

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h2 class="user-page__title">Thông tin cá nhân</h2>
+<div class="user-page__title">Thông tin cá nhân</div>
 
 <div class="user-page__infoPersonal" id="app">
     <table>

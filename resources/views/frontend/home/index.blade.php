@@ -28,7 +28,7 @@
         @endforeach
     </div>
     <div class="sec-hero__sidebar wow fadeInLeft">
-        <h2 class="f-title">Danh mục khoá học</h2>
+        <div class="f-title">Danh mục khoá học</div>
         <ul class="f-list">
             @foreach(get_categories(null, 'course-categories') as $c1)
                 <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
@@ -65,7 +65,7 @@
         <div class="row">
             <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                 <div class="title  wow fadeInUp">
-                    <h2 class="title__title">Giáo trình học online Tomato</h2>
+                    <div class="title__title">Giáo trình học online Tomato</div>
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
             @foreach(get_categories(null, 'home-courses') as $category)
                 <div class="lessonbox-wrap__item wow fadeInUp" data-wow-delay=".2s">
                     <div class="lessonbox-wrap__header">
-                        <h3 class="lessonbox-wrap__title"><a href="{{ $category->url }}">{{ $category->title }}</a></h3>
+                        <div class="lessonbox-wrap__title"><a href="{{ $category->url }}">{{ $category->title }}</a></div>
                         <a href="{{ $category->url }}" class="btn-link">Xem tất cả <i class="fa fa-angle-right"></i></a>
                     </div>
 
@@ -94,7 +94,7 @@
         <div class="row">
             <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                 <div class="title wow fadeInUp">
-                    <h2 class="title__title">Tin tức nổi bật</h2>
+                    <div class="title__title">Tin tức nổi bật</div>
                 </div>
             </div>
         </div>
@@ -113,9 +113,9 @@
                                 @endif
                                 <span class="meta-date">{{ $post->updated_at->format('d/m/Y') }}</span>
                             </div>
-                            <h3 class="post__title">
+                            <div class="post__title">
                                 <a href="{{ $post->url }}">{{ $post->title }}</a>
-                            </h3>
+                            </div>
                             <p class="post__text">{{ $post->description }}</p>
                             <a href="{{ $post->url }}" class="btn btn--sm btn--outline">Xem chi tiết</a>
                         </div>
@@ -131,7 +131,7 @@
         <div class="row">
             <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                 <div class="title wow fadeInUp">
-                    <h2 class="title__title">Thư viện sách Tomato</h2>
+                    <div class="title__title">Thư viện sách Tomato</div>
                 </div>
             </div>
         </div>
@@ -146,7 +146,7 @@
                     @endif
                 </a>
                 <div class="bookBox__body">
-                    <h3 class="bookBok__title"><a href="{{ $book->url }}">{{ $book->title }}</a></h3>
+                    <div class="bookBok__title"><a href="{{ $book->url }}">{{ $book->title }}</a></div>
                     <div class="bookBok__price">
                         <ins>{{ currency($book->price) }}</ins>
                         @if($book->original_price)
@@ -166,55 +166,55 @@
             <div class="section-testWhy__inner last">
                 <div class="wow fadeInRight" data-wow-delay=".2s">
                     <div class="title">
-                        <h2 class="title__title">Tại sao chọn Tomato Online</h2>
+                        <div class="title__title">Tại sao chọn Tomato Online</div>
                     </div>
                     <div class="row">
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-teacher.svg') }}"></span>
-                                <h3 class="featuredText__title">Giảng viên</h3>
+                                <div class="featuredText__title">Giảng viên</div>
                                 <p class="featuredText__text">có nhiều năm kinh nghiệm</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-listF.svg') }}"></span>
-                                <h3 class="featuredText__title">Bài giảng</h3>
+                                <div class="featuredText__title">Bài giảng</div>
                                 <p class="featuredText__text">dựa theo tài liệu mới nhất</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-platform.svg') }}"></span>
-                                <h3 class="featuredText__title">Đa nền tảng</h3>
+                                <div class="featuredText__title">Đa nền tảng</div>
                                 <p class="featuredText__text">chỉ cần thiết bị có kết nối internet</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-24-house.svg') }}"></span>
-                                <h3 class="featuredText__title">24/7</h3>
+                                <div class="featuredText__title">24/7</div>
                                 <p class="featuredText__text">bất kể thời gian nào</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-payOne.svg') }}"></span>
-                                <h3 class="featuredText__title">Thanh toán 1 lần</h3>
+                                <div class="featuredText__title">Thanh toán 1 lần</div>
                                 <p class="featuredText__text">linh hoạt và nhanh gọn</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-saleF.svg') }}"></span>
-                                <h3 class="featuredText__title">Ưu đãi</h3>
+                                <div class="featuredText__title">Ưu đãi</div>
                                 <p class="featuredText__text">luôn luôn được cập nhật</p>
                             </div>
                         </div>
                         <div class="col-4 col-xl-4">
                             <div class="featuredText">
                                 <span class="featuredText__icon"><img src="{{ asset('tomato/assets/img/icon/icon-faqF.svg') }}"></span>
-                                <h3 class="featuredText__title">Giải đáp</h3>
+                                <div class="featuredText__title">Giải đáp</div>
                                 <p class="featuredText__text">mọi câu hỏi của học viên</p>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
 
                 <div class="f-fix wow fadeInLeft">
                     <div class="title">
-                        <h2 class="title__title">Cảm nhận của học viên</h2>
+                        <div class="title__title">Cảm nhận của học viên</div>
                     </div>
 
                     <div class="testimonial-slide">
@@ -244,7 +244,7 @@
                                     đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
 
                                 <div class="testimonial__info">
-                                    <h3 class="testimonial__name">Nguyễn Quốc Khánh</h3>
+                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
@@ -255,7 +255,7 @@
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
                                     đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
                                 <div class="testimonial__info">
-                                    <h3 class="testimonial__name">Nguyễn Quốc Khánh</h3>
+                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
@@ -266,7 +266,7 @@
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
                                     đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
                                 <div class="testimonial__info">
-                                    <h3 class="testimonial__name">Nguyễn Quốc Khánh</h3>
+                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
@@ -277,7 +277,7 @@
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
                                     đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
                                 <div class="testimonial__info">
-                                    <h3 class="testimonial__name">Nguyễn Quốc Khánh</h3>
+                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
@@ -288,7 +288,7 @@
                                     mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
                                     đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
                                 <div class="testimonial__info">
-                                    <h3 class="testimonial__name">Nguyễn Quốc Khánh</h3>
+                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
@@ -312,7 +312,7 @@
         <div class="row">
             <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                 <div class="title wow fadeInUp">
-                    <h2 class="title__title">Câu hỏi thường gặp</h2>
+                    <div class="title__title">Câu hỏi thường gặp</div>
                 </div>
             </div>
         </div>
@@ -320,9 +320,9 @@
             <div class="col-lg-6">
                 <div id="faq" class="accordionJs wow fadeInLeft" data-wow-delay=".2s">
                     <div class="panel">
-                        <h3 class="panel__title" data-toggle="collapse" data-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                        <div class="panel__title" data-toggle="collapse" data-target="#faq1" aria-expanded="true" aria-controls="faq1">
                             Tôi không rành về vi tính, vậy tôi có học được không?
-                        </h3>
+                        </div>
                         <div id="faq1" class="collapse show" data-parent="#faq">
                             <div class="panel__entry">
                                 <p>Lớp học Online có thao tác cực kỳ đơn giản bất kỳ ai cũng có thể thực
@@ -336,9 +336,9 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3 class="panel__title" data-toggle="collapse" data-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                        <div class="panel__title" data-toggle="collapse" data-target="#faq2" aria-expanded="false" aria-controls="faq2">
                             Tôi cần chuẩn bị gì cho lớp học Online này?
-                        </h3>
+                        </div>
                         <div id="faq2" class="panel__content collapse" data-parent="#faq">
                             <div class="panel__entry">
                                 <p>Để học được lớp bạn tất yếu phải có 1 máy tính xách tay hoặc máy bàn, có
@@ -350,10 +350,10 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3 class="panel__title" data-toggle="collapse" data-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                        <div class="panel__title" data-toggle="collapse" data-target="#faq3" aria-expanded="false" aria-controls="faq3">
                             Những nội dung học online tôi có thể nhận được tài liệu bằng file word hay
                             không?
-                        </h3>
+                        </div>
                         <div id="faq3" class="panel__content collapse" data-parent="#faq">
                             <div class="panel__entry">
                                 <p>Không, chúng tôi soạn bài trên nền Web do đó không có file Word.</p>
@@ -366,9 +366,9 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3 class="panel__title" data-toggle="collapse" data-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                        <div class="panel__title" data-toggle="collapse" data-target="#faq4" aria-expanded="false" aria-controls="faq4">
                             Sau khi học xong có được làm bài thi thử không?
-                        </h3>
+                        </div>
                         <div id="faq4" class="panel__content collapse" data-parent="#faq">
                             <div class="panel__entry">
                                 <p>Chương trình học có kỳ thi thử.</p>
@@ -385,9 +385,9 @@
                         </div>
                     </div>
                     <div class="panel">
-                        <h3 class="panel__title" data-toggle="collapse" data-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                        <div class="panel__title" data-toggle="collapse" data-target="#faq5" aria-expanded="false" aria-controls="faq5">
                             Có thể học online qua Ipad hay điện thoại di động không?
-                        </h3>
+                        </div>
                         <div id="faq5" class="panel__content collapse" data-parent="#faq">
                             <div class="panel__entry">
                                 <p>Chương trình học chỉ chạy ổn định trên máy tính bàn hoặc laptop. Trường
@@ -414,8 +414,8 @@
             <div class="ctabox__wrap">
                 <div class="row">
                     <div class="col-lg-8">
-                        <h2 class="ctabox__title">Đăng ký nhận tư vấn để được tham gia vào môi trường dạy và
-                            học ngoại ngữ Online tốt nhất Hải Phòng</h2>
+                        <div class="ctabox__title">Đăng ký nhận tư vấn để được tham gia vào môi trường dạy và
+                            học ngoại ngữ Online tốt nhất Hải Phòng</div>
                     </div>
                     <div class="col-lg-4">
                         <div class="ctabox__btn">
@@ -433,7 +433,7 @@
         <div class="row">
             <div class="col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                 <div class="title wow fadeInUp">
-                    <h2 class="title__title">Đội ngũ giáo viên</h2>
+                    <div class="title__title">Đội ngũ giáo viên</div>
                 </div>
             </div>
         </div>
@@ -448,12 +448,12 @@
                             </div>
 
                             <div class="teambox__body">
-                                <h3 class="teambox__name">{{ $item->name }}</h3>
+                                <div class="teambox__name">{{ $item->name }}</div>
                                 <p class="teambox__position">Giảng viên</p>
                             </div>
 
                             <div class="teambox__hover">
-                                <h3>{{ $item->name }}</h3>
+                                <div class="h3">{{ $item->name }}</div>
                                 <div class="desc">{!! $item->description !!}</div>
                             </div>
                         </div>
@@ -471,7 +471,7 @@
                 <div class="col-md-6">
                     <div class="consultationForm__content">
                         <div class="consultationForm__fix wow fadeInUp">
-                            <h2 class="consultationForm__title">Đăng ký nhận tin</h2>
+                            <div class="consultationForm__title">Đăng ký nhận tin</div>
                             <form class="consultationForm__form">
                                 <div class="input-item">
                                     <div class="input-item__inner">

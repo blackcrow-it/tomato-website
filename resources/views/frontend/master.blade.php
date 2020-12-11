@@ -189,7 +189,7 @@
                                 <button type="submit" class="btn-submit">Tìm kiếm</button>
                             </form>
 
-                            <h3>Từ khoá được tìm nhiều nhất</h3>
+                            <div class="h3">Từ khoá được tìm nhiều nhất</div>
                             <ul>
                                 <li><a href="#">Giáo tình tiếng Trung</a></li>
                                 <li><a href="#">Học tiếng Trung hiệu quả</a></li>
@@ -260,7 +260,7 @@
                 <div class="footer__content">
                     <div class="row">
                         <div class="col-xl-6">
-                            <h2 class="footer__logo">Công Ty Cổ Tư Vấn Và Đào Tạo TOMATO</h2>
+                            <div class="footer__logo">Công Ty Cổ Tư Vấn Và Đào Tạo TOMATO</div>
                         </div>
                     </div>
 
@@ -282,7 +282,7 @@
                             <div class="row">
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-6">
                                     <div class="footer__widget widget-menu">
-                                        <h3 class="footer__widget-title">Menu</h3>
+                                        <div class="footer__widget-title">Menu</div>
                                         <ul>
                                             <li><a href="gioithieu.html">Giới thiệu</a></li>
                                             <li><a href="khoahoc.html">Khoá học</a></li>
@@ -294,14 +294,14 @@
                                 </div>
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-6">
                                     <div class="footer__widget widget-menu">
-                                        <h3 class="footer__widget-title">Lớp offline</h3>
+                                        <div class="footer__widget-title">Lớp offline</div>
                                         <ul>
                                             <li><a href="https://ngoaingutomato.edu.vn/lich-khai-giang-cc1416.html" target="_blank">Lịch khai giảng</a></li>
                                             <li><a href="https://ngoaingutomato.edu.vn/tuyen-dung-cc1417.html" target="_blank">Tuyển dụng</a></li>
                                         </ul>
                                     </div>
                                     <div class="footer__widget widget-menu">
-                                        <h3 class="footer__widget-title">Website liên kết</h3>
+                                        <div class="footer__widget-title">Website liên kết</div>
                                         <ul>
                                             <li><a href="{{ route('home') }}">{{ route('home') }}</a></li>
                                             <li><a href="https://ngoaingutomato.edu.vn/">https://ngoaingutomato.edu.vn/</a></li>
@@ -310,7 +310,7 @@
                                 </div>
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-6">
                                     <div class="footer__widget">
-                                        <h3 class="footer__widget-title">Chứng nhận</h3>
+                                        <div class="footer__widget-title">Chứng nhận</div>
                                         <a class="footer__certification">
                                             <img alt="Thông báo bộ công thương Tomato" class="Thông Tomato báo bộ công thương" longdesc="Thông báo bộ công thương Tomato" src="http://tomatoonline.edu.vn/upload/images/dathongbao.png" style="height:65px; width:170px" title="Thông báo bộ công thương Tomato">
                                         </a>
@@ -318,7 +318,7 @@
                                 </div>
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-6">
                                     <div class="footer__widget">
-                                        <h3 class="footer__widget-title">Mạng xã hội</h3>
+                                        <div class="footer__widget-title">Mạng xã hội</div>
                                         <div class="footer__social">
                                             <a href="#"><i class="fa fa-facebook"></i></a>
                                             <a href="#"><i class="fa fa-youtube-play"></i></a>
@@ -354,7 +354,7 @@
         <div class="cartbox__inner">
             <span class="cartbox__close"><i class="fa fa-close"></i></span>
             <div class="cartbox__flex d-flex align-items-start flex-column">
-                <h3 class="cartbox__title">Giỏ hàng (@{{ data.length }} sản phẩm)</h3>
+                <div class="cartbox__title">Giỏ hàng (@{{ data.length }} sản phẩm)</div>
 
                 <div class="cartbox__list">
                     <div v-if="loading" class="spinner-border text-primary" role="status">
@@ -365,7 +365,7 @@
                             <span class="close" @click="removeCartItem(item.id)"><i class="fa fa-close"></i></span>
                             <div>
                                 <img :src="item.object.thumbnail">
-                                <h4><a :href="item.__object_url">@{{ item.object.title }}</a></h4>
+                                <div class="h4"><a :href="item.__object_url">@{{ item.object.title }}</a></div>
                                 <p>
                                     @{{ item.amount }} x <b>@{{ currency(item.price) }}</b>
                                 </p>

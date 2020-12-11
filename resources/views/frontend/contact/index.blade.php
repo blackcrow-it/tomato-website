@@ -43,7 +43,7 @@
             <div class="col-md-6">
                 <div class="item-first">
                     <div class="title">
-                        <h2 class="title__title">Gửi lời nhắn</h2>
+                        <div class="title__title">Gửi lời nhắn</div>
                     </div>
                     <form class="fom-contact">
                         <div class="input-item">
@@ -76,7 +76,7 @@
             <div class="col-md-6">
                 <div class="item-last">
                     <div class="title">
-                        <h2 class="title__title">Công Ty Cổ Tư Vấn Và Đào Tạo TOMATO</h2>
+                        <div class="title__title">Công Ty Cổ Tư Vấn Và Đào Tạo TOMATO</div>
                     </div>
 
                     <ul class="contact-inner__list">

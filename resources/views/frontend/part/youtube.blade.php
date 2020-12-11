@@ -52,7 +52,7 @@
                             <div class="col-md-8 col-xl-8">
                                 <div class="f-content">
                                     <div class="entry-detail">
-                                        <h3>{{ $course->teacher->name }}</h3>
+                                        <div class="h3">{{ $course->teacher->name }}</div>
                                         {!! $course->teacher->description !!}
                                     </div>
                                 </div>
@@ -70,7 +70,7 @@
                                 <span class="sale">-50%</span>
                             </a>
                             <div class="bookBox__body">
-                                <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                 <div class="bookBok__price">
                                     <ins>499.000đ</ins>
                                     <del>899.000đ</del>
@@ -86,7 +86,7 @@
                                 <span class="sale">-50%</span>
                             </a>
                             <div class="bookBox__body">
-                                <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                 <div class="bookBok__price">
                                     <ins>499.000đ</ins>
                                     <del>899.000đ</del>
@@ -102,7 +102,7 @@
                                 <span class="sale">-50%</span>
                             </a>
                             <div class="bookBox__body">
-                                <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                 <div class="bookBok__price">
                                     <ins>499.000đ</ins>
                                     <del>899.000đ</del>
@@ -118,7 +118,7 @@
                                 <span class="sale">-50%</span>
                             </a>
                             <div class="bookBox__body">
-                                <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                 <div class="bookBok__price">
                                     <ins>499.000đ</ins>
                                     <del>899.000đ</del>
@@ -134,7 +134,7 @@
                                 <span class="sale">-50%</span>
                             </a>
                             <div class="bookBox__body">
-                                <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                                <div class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></div>
                                 <div class="bookBok__price">
                                     <ins>499.000đ</ins>
                                     <del>899.000đ</del>

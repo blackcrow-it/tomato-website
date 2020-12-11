@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<h2 class="user-page__title">Khoá học</h2>
+<div class="user-page__title">Khoá học</div>
 
 <div class="user-page__course">
     <div class="tabJs">
