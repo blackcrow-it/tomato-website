@@ -51,7 +51,7 @@ class CourseController extends Controller
 
         $isUserOwnedThisCourse = auth()->check()
             ? UserCourse::query()
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', auth()->id())
             ->where('course_id', $course->id)
             ->where(function ($query) {
                 $query->orWhere('expires_on', '>', now());
@@ -60,9 +60,9 @@ class CourseController extends Controller
             ->exists()
             : false;
 
-        $addedToCart = !$isUserOwnedThisCourse
+        $addedToCart = !$isUserOwnedThisCourse && auth()->check()
             ? Cart::query()
-            ->where('user_id', auth()->user()->id)
+            ->where('user_id', auth()->id())
             ->where('type', ObjectType::COURSE)
             ->where('object_id', $course->id)
             ->exists()
