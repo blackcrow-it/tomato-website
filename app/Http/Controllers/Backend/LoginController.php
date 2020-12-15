@@ -5,13 +5,17 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
+use Route;
 use Str;
 
 class LoginController extends Controller
 {
     public function index() {
-        $redirectUrl = url()->previous();
-        if (Str::startsWith($redirectUrl, route('admin.login'))) {
+        $redirectUrl = url()->previous(route('admin.home'));
+
+        $previousRoute = Route::getRoutes()->match(Request::create($redirectUrl));
+        $previousRouteName = $previousRoute ? $previousRoute->getName() : null;
+        if (Str::startsWith($previousRouteName, 'auth.login') || !Str::startsWith($previousRouteName, 'auth.')) {
             $redirectUrl = route('admin.home');
         }
 
