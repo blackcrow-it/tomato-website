@@ -560,7 +560,7 @@
             }, 300);
         });
 
-        $('.btn-buy-now').on('click', function (e) {
+        $('.btn-buy-now[type="button"]').on('click', function (e) {
             e.preventDefault();
             var self = $(this);
             self.prop('disabled', true);

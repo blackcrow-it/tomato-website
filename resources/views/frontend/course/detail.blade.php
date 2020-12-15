@@ -28,15 +28,7 @@
 
 <section class="section">
     <div class="container">
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach($errors->all() as $msg)
-                        <li>{{ $msg }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('frontend.session_alert')
         <div class="product-detail">
             <div class="row">
                 <div class="col-md-6 col-xl-7">
@@ -75,7 +67,11 @@
                         @else
                             <div class="product-detal__btn">
                                 <div class="btn-wrap">
-                                    <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart') }}" class="btn btn-buy-now">Mua ngay</button>
+                                    <form action="{{ route('cart.instant_buy') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="course_id" value="{{ $course->id }}">
+                                        <button type="submit" class="btn btn-buy-now">Mua ngay</button>
+                                    </form>
                                     <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
                                         <span class="add-to-cart-text">Thêm vào giỏ</span>
                                         <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>

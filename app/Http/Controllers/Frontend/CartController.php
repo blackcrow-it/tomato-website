@@ -10,6 +10,7 @@ use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
 use App\Http\Requests\Frontend\AddToCartRequest;
+use App\Http\Requests\Frontend\InstantBuyRequest;
 use App\Invoice;
 use App\InvoiceItem;
 use App\Mail\InvoiceMail;
@@ -21,6 +22,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Log;
 use Mail;
+use Throwable;
 
 class CartController extends Controller
 {
@@ -259,9 +261,9 @@ class CartController extends Controller
                         );
                 }
             }
-        } catch (Exception $ex) {
+        } catch (Throwable $th) {
             DB::rollBack();
-            Log::error($ex);
+            Log::error($th);
 
             $request->validate([
                 'cart' => [
@@ -276,5 +278,58 @@ class CartController extends Controller
     public function paymentComplete()
     {
         return view('frontend.cart.complete');
+    }
+
+    public function instantBuy(InstantBuyRequest $request)
+    {
+        $course = Course::find($request->input('course_id'));
+        $user = Auth::user();
+
+        try {
+            DB::beginTransaction();
+
+            Cart::where([
+                'object_id' => $course->id,
+                'user_id' => $user->id,
+                'type' => ObjectType::COURSE
+            ])->delete();
+
+            $invoice = new Invoice();
+            $invoice->user_id = $user->id;
+            $invoice->name = $user->name;
+            $invoice->phone = $user->phone;
+            $invoice->shipping = false;
+            $invoice->status = InvoiceStatus::COMPLETE;
+            $invoice->save();
+
+            $invoiceItem = new InvoiceItem();
+            $invoiceItem->invoice_id = $invoice->id;
+            $invoiceItem->type = ObjectType::COURSE;
+            $invoiceItem->object_id = $course->id;
+            $invoiceItem->amount = 1;
+            $invoiceItem->price = $course->price;
+            $invoiceItem->save();
+
+            $userCourse = new UserCourse();
+            $userCourse->user_id = $user->id;
+            $userCourse->course_id = $course->id;
+            $userCourse->expires_on = $course->buyer_days_owned ? now()->addDays($course->buyer_days_owned) : null;
+            $userCourse->save();
+
+            $this->userRepo->removeMoney($user->id, $course->price);
+
+            DB::commit();
+
+            return redirect()
+                ->route('course', ['id' => $course->id, 'slug' => $course->slug])
+                ->with('success', 'Bạn đã mua khóa học thành công.');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            Log::error($th);
+
+            return redirect()
+                ->route('course', ['id' => $course->id, 'slug' => $course->slug])
+                ->withErrors('Có lỗi xảy ra trong quá trình mua khóa học. Vui lòng thử lại.');
+        }
     }
 }
