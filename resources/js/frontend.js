@@ -19,3 +19,6 @@ Vue.component('paginate', Paginate);
 
 import Draggable from 'vuedraggable';
 Vue.component('draggable', Draggable);
+
+import bootbox from 'bootbox';
+window.bootbox = bootbox;

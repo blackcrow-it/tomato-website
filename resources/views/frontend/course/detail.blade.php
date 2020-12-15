@@ -67,7 +67,7 @@
                         @else
                             <div class="product-detal__btn">
                                 <div class="btn-wrap">
-                                    <form action="{{ route('cart.instant_buy') }}" method="POST">
+                                    <form action="{{ route('cart.instant_buy') }}" method="POST" id="instant_buy_form">
                                         @csrf
                                         <input type="hidden" name="course_id" value="{{ $course->id }}">
                                         <button type="submit" class="btn btn-buy-now">Mua ngay</button>
@@ -297,7 +297,7 @@
                                 <div class="input-item">
                                     <div class="input-item__inner">
                                         <select class="form-control" name="course">
-                                            @foreach (get_categories(null, 'course-categories') as $item)
+                                            @foreach(get_categories(null, 'course-categories') as $item)
                                                 <option>{{ $item->title }}</option>
                                             @endforeach
                                         </select>
@@ -323,4 +323,30 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('footer')
+<script>
+    $('#instant_buy_form button[type="submit"]').click(function (e) {
+        e.preventDefault();
+        bootbox.confirm({
+            message: 'Bạn chắc chắn muốn mua khóa học <b>{{ $course->title }}</b>?',
+            buttons: {
+                confirm: {
+                    label: 'Xác nhận',
+                    className: 'btn--sm btn--success'
+                },
+                cancel: {
+                    label: 'Hủy bỏ',
+                    className: 'btn--sm bg-dark'
+                }
+            },
+            callback: r => {
+                if (!r) return;
+                $('#instant_buy_form').submit();
+            }
+        });
+    });
+
+</script>
 @endsection

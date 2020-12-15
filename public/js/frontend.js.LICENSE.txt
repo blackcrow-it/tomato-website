@@ -35,6 +35,14 @@
  * Date: 2020-05-04T22:49Z
  */
 
+/*! @preserve
+ * bootbox.js
+ * version: 5.5.2
+ * author: Nick Payne <nick@kurai.co.uk>
+ * license: MIT
+ * http://bootboxjs.com/
+ */
+
 /**
  * @license
  * Lodash <https://lodash.com/>
