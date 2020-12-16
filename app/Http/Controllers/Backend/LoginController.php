@@ -34,6 +34,8 @@ class LoginController extends Controller
             return redirect()->route('admin.login')->withErrors('Tài khoản hoặc mật khẩu không chính xác.');
         }
 
-        return redirect()->intended(route('home'));
+        app(\App\Http\Controllers\Frontend\LoginController::class)->setLoginToken();
+
+        return redirect()->intended(route('admin.home'));
     }
 }
