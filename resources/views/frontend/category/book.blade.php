@@ -67,23 +67,7 @@
                         <div class="row spacing-custom">
                             @foreach($list as $item)
                                 <div class="col-6 col-md-4 col-lg-3">
-                                    <div class="bookBox">
-                                        <a href="{{ $item->url }}" class="bookBox__img">
-                                            <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">
-                                            @if ($item->original_price)
-                                                <span class="sale">-{{ 100 - ceil($item->price / $item->original_price * 100) }}%</span>
-                                            @endif
-                                        </a>
-                                        <div class="bookBox__body">
-                                            <div class="bookBok__title"><a href="{{ $item->url }}">{{ $item->title }}</a></div>
-                                            <div class="bookBok__price">
-                                                <ins>{{ currency($item->price) }}</ins>
-                                                @if ($item->original_price)
-                                                    <del>{{ currency($item->original_price) }}</del>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('frontend.category.book_item', [ 'book' => $item ])
                                 </div>
                             @endforeach
                         </div>

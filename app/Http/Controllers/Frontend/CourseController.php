@@ -6,6 +6,7 @@ use App\Cart;
 use App\Category;
 use App\Constants\ObjectType;
 use App\Course;
+use App\CourseRelatedBook;
 use App\CourseRelatedCourse;
 use App\Http\Controllers\Controller;
 use App\UserCourse;
@@ -38,16 +39,26 @@ class CourseController extends Controller
                 ->get();
         });
 
-        $relatedCourses = CourseRelatedCourse::with([
-            'related_course',
-            'related_course.teacher'
-        ])
+        $relatedCourses = CourseRelatedCourse::query()
+            ->with([
+                'related_course',
+                'related_course.teacher'
+            ])
             ->whereHas('related_course', function (Builder $query) {
                 $query->where('enabled', true);
             })
             ->where('course_id', $course->id)
             ->get()
             ->pluck('related_course');
+
+        $relatedBooks = CourseRelatedBook::query()
+            ->with('related_book')
+            ->whereHas('related_book', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('course_id', $course->id)
+            ->get()
+            ->pluck('related_book');
 
         $isUserOwnedThisCourse = auth()->check()
             ? UserCourse::query()
@@ -75,6 +86,7 @@ class CourseController extends Controller
             'added_to_cart' => $addedToCart,
             'is_owned' => $isUserOwnedThisCourse,
             'related_courses' => $relatedCourses,
+            'related_books' => $relatedBooks
         ]);
     }
 
