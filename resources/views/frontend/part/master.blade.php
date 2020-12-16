@@ -74,7 +74,7 @@
 @section('footer')
 <script>
     $('.learning-process__list').animate({
-        scrollTop: $('.learning-process__list .panel .collapse__submenu li.current').position().top - 100
+        scrollTop: $('.learning-process__list .panel .collapse__submenu li.current').offset().top - $('.learning-process__list').offset().top
     }, 500);
 
 </script>
