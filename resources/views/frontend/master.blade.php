@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" href="{{ asset('tomato/favicon.ico') }}" type="image/vnd.microsoft.icon">
+    <link rel="shortcut icon" href="{{ config('settings.favicon') ?? asset('tomato/favicon.ico') }}" type="image/vnd.microsoft.icon">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -55,7 +55,7 @@
                 <div class="header__content">
                     <div class="header__logo">
                         <a href="{{ route('home') }}">
-                            <img src="{{ asset('tomato/assets/img/logo.png') }}">
+                            <img src="{{ config('settings.logo') ?? asset('tomato/assets/img/logo.png') }}">
                         </a>
                     </div>
 

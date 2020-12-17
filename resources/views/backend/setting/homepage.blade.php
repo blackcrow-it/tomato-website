@@ -5,6 +5,34 @@ Cài đặt trang chủ
 @endsection
 
 @section('setting_content')
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Favicon</label>
+            <div class="input-group">
+                <input type="text" name="favicon" placeholder="Favicon" :value="getValue('favicon', '{{ config('settings.favicon') }}')" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" class="input-group-text" @click="uploadImage('favicon')">Chọn file</button>
+                </div>
+            </div>
+            <img class="image-preview" :src="getValue('favicon', '{{ config('settings.favicon') }}')">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Logo</label>
+            <div class="input-group">
+                <input type="text" name="logo" placeholder="Logo" :value="getValue('logo', '{{ config('settings.logo') }}')" class="form-control">
+                <div class="input-group-append">
+                    <button type="button" class="input-group-text" @click="uploadImage('logo')">Chọn file</button>
+                </div>
+            </div>
+            <img class="image-preview" :src="getValue('logo', '{{ config('settings.logo') }}')">
+        </div>
+    </div>
+</div>
 <div class="form-group">
     <label>Title</label>
     <input type="text" name="homepage_title" value="{{ config('settings.homepage_title') }}" class="form-control" placeholder="Title">
