@@ -46,10 +46,18 @@
                         <li><a href="https://ngoaingutomato.edu.vn/lich-khai-giang-cc1416.html" target="_blank">Lớp Offline</a></li>
                     </ul>
                     <div class="fix"></div>
-                    <ul>
-                        <li><b>Điện thoại:</b><a href="#"> 0225 657 2222</a> - <a href="#">0225 628 0123</a></li>
-                        <li><b>Support: (Zalo):</b> <a href="#">0965 113 913 Mr Nam</a></li>
-                    </ul>
+                    <div class="text-white">
+                        Điện thoại: {{ config('settings.hotline1') }}
+                        @if(config('settings.hotline2'))
+                            <span> - {{ config('settings.hotline2') }}</span>
+                        @endif
+                        @if(config('settings.hotline3'))
+                            <span> - {{ config('settings.hotline3') }}</span>
+                        @endif
+                        @if(config('settings.hotline4'))
+                            <span> - {{ config('settings.hotline4') }}</span>
+                        @endif
+                    </div>
                 </div>
 
                 <div class="header__content">
@@ -236,12 +244,18 @@
                 </nav>
                 <div class="menu-mobile__footer">
                     <ul>
-                        <li><a href="https://ngoaingutomato.edu.vn/" target="_blank">Hệ thống đào tạo Ngoại ngữ - Tin
-                                học Online Tomato</a></li>
-                        <li><a href="https://ngoaingutomato.edu.vn/lich-khai-giang-cc1416.html" target="_blank">Lớp
-                                Offline</a></li>
-                        <li><b>Điện thoại:</b><a href="#"> 0225 657 2222</a> - <a href="#">0225 628 0123</a></li>
-                        <li><b>Support: (Zalo):</b> <a href="#">0965 113 913 Mr Nam</a></li>
+                        <li><a href="https://ngoaingutomato.edu.vn/" target="_blank">Hệ thống đào tạo Ngoại ngữ - Tin học Online Tomato</a></li>
+                        <li><a href="https://ngoaingutomato.edu.vn/lich-khai-giang-cc1416.html" target="_blank">Lớp Offline</a></li>
+                        <li>Hotline chính: {{ config('settings.hotline1') }}</li>
+                        @if(config('settings.hotline2'))
+                            <li>Điện thoại: {{ config('settings.hotline2') }}</li>
+                        @endif
+                        @if(config('settings.hotline3'))
+                            <li>Điện thoại: {{ config('settings.hotline3') }}</li>
+                        @endif
+                        @if(config('settings.hotline4'))
+                            <li>Điện thoại: {{ config('settings.hotline4') }}</li>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -258,23 +272,39 @@
         <footer class="footer">
             <div class="container">
                 <div class="footer__content">
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <div class="footer__logo">Công Ty Cổ Tư Vấn Và Đào Tạo TOMATO</div>
-                        </div>
-                    </div>
+                    <div class="footer__logo">{{ config('settings.company') }}</div>
 
                     <div class="row">
                         <div class="col-xl-6">
                             <div class="footer__widget widget-contact">
                                 <ul>
-                                    <li><b>Địa chỉ ĐKKD CS1</b> Số 300 Lạch Tray, Quận. Lê Chân, Tp. Hải Phòng</li>
-                                    <li><b>Cơ sở 3:</b>Số 65 Quán Nam, Quận, Lê Chân, Tp. Hải Phòng</li>
-                                    <li><b>Cơ sở 4:</b>408 Trường Sơn, An Lão, Tp. Hải Phòng</li>
-                                    <li><b>Điện thoại:</b>0225 657 2222 - 0225 628 0123 <br>Support: (Zalo) 0965 113 913
-                                        Mr Nam</li>
-                                    <li><b>Hotline:</b>0964 299 222</li>
-                                    <li><b>Email:</b>ngoaingutomatohp@gmail.com</li>
+                                    <li><b>Địa chỉ ĐKKD CS1:</b> {{ config('settings.address1') }}</li>
+                                    @if(config('settings.address2'))
+                                        <li><b>Cơ sở 2:</b> {{ config('settings.address2') }}</li>
+                                    @endif
+                                    @if(config('settings.address3'))
+                                        <li><b>Cơ sở 3:</b> {{ config('settings.address3') }}</li>
+                                    @endif
+                                    @if(config('settings.address4'))
+                                        <li><b>Cơ sở 4:</b> {{ config('settings.address4') }}</li>
+                                    @endif
+                                    @if(config('settings.address5'))
+                                        <li><b>Cơ sở 5:</b> {{ config('settings.address5') }}</li>
+                                    @endif
+                                    @if(config('settings.address6'))
+                                        <li><b>Cơ sở 6:</b> {{ config('settings.address6') }}</li>
+                                    @endif
+                                    <li><b>Hotline chính:</b> {{ config('settings.hotline1') }}</li>
+                                    @if(config('settings.hotline2'))
+                                        <li><b>Điện thoại:</b> {{ config('settings.hotline2') }}</li>
+                                    @endif
+                                    @if(config('settings.hotline3'))
+                                        <li><b>Điện thoại:</b> {{ config('settings.hotline3') }}</li>
+                                    @endif
+                                    @if(config('settings.hotline4'))
+                                        <li><b>Điện thoại:</b> {{ config('settings.hotline4') }}</li>
+                                    @endif
+                                    <li><b>Email:</b> {{ config('settings.email') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -310,20 +340,16 @@
                                 </div>
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-6">
                                     <div class="footer__widget">
-                                        <div class="footer__widget-title">Chứng nhận</div>
-                                        <a class="footer__certification">
-                                            <img alt="Thông báo bộ công thương Tomato" class="Thông Tomato báo bộ công thương" longdesc="Thông báo bộ công thương Tomato" src="http://tomatoonline.edu.vn/upload/images/dathongbao.png" style="height:65px; width:170px" title="Thông báo bộ công thương Tomato">
-                                        </a>
+                                        {!! config('settings.certification') !!}
                                     </div>
                                 </div>
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-6">
                                     <div class="footer__widget">
                                         <div class="footer__widget-title">Mạng xã hội</div>
                                         <div class="footer__social">
-                                            <a href="#"><i class="fa fa-facebook"></i></a>
-                                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                                            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="12.327" height="14.031" viewBox="0 0 12.327 14.031">
-                                                    <path d="M43.743,3.9a3.535,3.535,0,0,1-2.136-.714A3.536,3.536,0,0,1,40.2.39H37.9V6.65l0,3.429a2.077,2.077,0,1,1-1.424-1.968V5.785a4.508,4.508,0,0,0-.661-.049,4.393,4.393,0,0,0-3.3,1.476,4.305,4.305,0,0,0,.194,5.936,4.469,4.469,0,0,0,.414.361,4.393,4.393,0,0,0,2.693.91,4.508,4.508,0,0,0,.661-.049,4.378,4.378,0,0,0,2.446-1.223A4.289,4.289,0,0,0,40.21,10.1L40.2,4.976A5.805,5.805,0,0,0,43.75,6.183V3.9h-.007Z" transform="translate(-31.423 -0.39)" fill="#fff" /></svg></a>
+                                            @if (config('settings.facebook'))
+                                                <a href="{{ config('settings.facebook') }}" target="_blank"><i class="fa fa-facebook"></i></a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

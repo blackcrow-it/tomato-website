@@ -76,16 +76,36 @@
             <div class="col-md-6">
                 <div class="item-last">
                     <div class="title">
-                        <div class="title__title">Công Ty Cổ Tư Vấn Và Đào Tạo TOMATO</div>
+                        <div class="title__title">{{ config('settings.company') }}</div>
                     </div>
-
                     <ul class="contact-inner__list">
-                        <li><b>Địa chỉ ĐKKD CS1</b> Số 300 Lạch Tray, Quận. Lê Chân, Tp. Hải Phòng</li>
-                        <li><b>Cơ sở 3:</b>Số 65 Quán Nam, Quận, Lê Chân, Tp. Hải Phòng</li>
-                        <li><b>Cơ sở 4:</b>408 Trường Sơn, An Lão, Tp. Hải Phòng</li>
-                        <li><b>Điện thoại:</b>0225 657 2222 - 0225 628 0123 <br>Support: (Zalo) 0965 113 913 Mr Nam</li>
-                        <li><b>Hotline:</b>0964 299 222</li>
-                        <li><b>Email:</b>ngoaingutomatohp@gmail.com</li>
+                        <li><b>Địa chỉ ĐKKD CS1:</b> {{ config('settings.address1') }}</li>
+                        @if(config('settings.address2'))
+                            <li><b>Cơ sở 2:</b> {{ config('settings.address2') }}</li>
+                        @endif
+                        @if(config('settings.address3'))
+                            <li><b>Cơ sở 3:</b> {{ config('settings.address3') }}</li>
+                        @endif
+                        @if(config('settings.address4'))
+                            <li><b>Cơ sở 4:</b> {{ config('settings.address4') }}</li>
+                        @endif
+                        @if(config('settings.address5'))
+                            <li><b>Cơ sở 5:</b> {{ config('settings.address5') }}</li>
+                        @endif
+                        @if(config('settings.address6'))
+                            <li><b>Cơ sở 6:</b> {{ config('settings.address6') }}</li>
+                        @endif
+                        <li><b>Hotline chính:</b> {{ config('settings.hotline1') }}</li>
+                        @if(config('settings.hotline2'))
+                            <li><b>Điện thoại:</b> {{ config('settings.hotline2') }}</li>
+                        @endif
+                        @if(config('settings.hotline3'))
+                            <li><b>Điện thoại:</b> {{ config('settings.hotline3') }}</li>
+                        @endif
+                        @if(config('settings.hotline4'))
+                            <li><b>Điện thoại:</b> {{ config('settings.hotline4') }}</li>
+                        @endif
+                        <li><b>Email:</b> {{ config('settings.email') }}</li>
                     </ul>
                 </div>
             </div>

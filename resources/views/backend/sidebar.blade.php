@@ -69,6 +69,12 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('admin.setting.edit', [ 'view' => 'info' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'info' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-info-circle"></i>
+                <p>Thông tin</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('admin.setting.edit', [ 'view' => 'recharge' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'recharge' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-money-check-alt"></i>
                 <p>Nạp tiền</p>
