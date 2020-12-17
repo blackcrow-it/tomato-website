@@ -118,7 +118,18 @@
                         <th>Xóa</th>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in inputData" :key="item.id">
+                        <tr v-if="inputData.length == 0" class="bg-light">
+                            <td colspan="99" class="text-left">
+                                Bạn chưa có sản phẩm nào trong giỏ hàng
+                            </td>
+                        </tr>
+                        <tr v-if="inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}').length > 0" class="bg-light">
+                            <td colspan="99" class="text-left">
+                                <b>Khóa học online</b><br>
+                                <small class="text-danger">* Khoá học online học trực tiếp không hỗ trợ vận chuyển</small>
+                            </td>
+                        </tr>
+                        <tr v-for="(item, index) in inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}')" :key="item.id">
                             <td>@{{ index + 1 }}</td>
                             <td>
                                 <div class="f-info">
@@ -126,7 +137,42 @@
                                     <div class="f-info__body">
                                         <div class="f-info__title">@{{ item.object.title }}</div>
                                         <div v-if="item.object.category" class="f-info__type">Thể loại: <b>@{{ item.object.category.title }}</b></div>
-                                        <small v-if="item.type == '{{ \App\Constants\ObjectType::COURSE }}'" class="text-danger">* Khoá học online học trực tiếp không hỗ trợ vận chuyển</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div v-if="item.__enabled_change_amount" class="f-quantity">
+                                    <input type="number" class="form-control" v-model="item.amount" min="1">
+                                    <span>
+                                        x <b>@{{ currency(item.price) }}</b>
+                                    </span>
+                                </div>
+                                <div v-else class="f-quantity">
+                                    <span>
+                                        <b>@{{ currency(item.price) }}</b>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="f-price">@{{ currency(item.amount * item.price) }}</span>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn--sm" @click="removeCartItem(item.id)"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr v-if="inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::BOOK }}').length > 0" class="bg-light">
+                            <td colspan="99" class="text-left">
+                                <b>Tài liệu</b>
+                            </td>
+                        </tr>
+                        <tr v-for="(item, index) in inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::BOOK }}')" :key="item.id">
+                            <td>@{{ index + 1 }}</td>
+                            <td>
+                                <div class="f-info">
+                                    <img class="f-info__img" :src="item.object.thumbnail">
+                                    <div class="f-info__body">
+                                        <div class="f-info__title">@{{ item.object.title }}</div>
+                                        <div v-if="item.object.category" class="f-info__type">Thể loại: <b>@{{ item.object.category.title }}</b></div>
                                     </div>
                                 </div>
                             </td>
@@ -152,7 +198,7 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr>
+                        <tr class="bg-light">
                             <td colspan="3">Mã giảm giá</td>
                             <td colspan="2">
                                 <input type="text" class="form-control">
@@ -220,9 +266,7 @@
                     this.data = res;
                     this.inputData = _.cloneDeep(this.data);
 
-                    if (this.data.filter(x => x.type != '{{ \App\Constants\ObjectType::COURSE }}').length > 0) {
-                        this.showShipInfo = true;
-                    }
+                    this.updateShowShipInfo();
                 }).then(() => {
                     this.loading = false;
                 });
@@ -269,6 +313,9 @@
                     alert(msg);
                     this.loading = false;
                 });
+            },
+            updateShowShipInfo() {
+                this.showShipInfo = this.inputData.filter(x => x.type != '{{ \App\Constants\ObjectType::COURSE }}').length > 0;
             },
         },
     });
