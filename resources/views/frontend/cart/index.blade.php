@@ -31,7 +31,7 @@
         <div v-if="showShipInfo" class="cart-text-info entry-detail mb-3">
             <div class="h3">Lưu ý</div>
             <div class="">
-                <p><b>Khoá học online</b> trực tiếp trên website tomatoonline.edu.vn, không có hình thức vận chuyển.</p>
+                <p>Sản phẩm <b>Khoá học online</b> trực tiếp trên website tomatoonline.edu.vn, không có hình thức vận chuyển.</p>
                 <p>Đối với sản phẩm là <b>Tài liệu</b> sẽ có phí vận chuyển tuỳ theo khu vực địa chị nhận hàng của học viên.</p>
             </div>
             <hr>
@@ -147,7 +147,7 @@
                         <tr v-if="inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}').length > 0" class="bg-light">
                             <td colspan="99" class="text-left">
                                 <b>Khóa học online</b><br>
-                                <small class="text-danger">* Khoá học online học trực tiếp không hỗ trợ vận chuyển</small>
+                                <small class="text-danger">* Khoá học online trực tiếp trên website tomatoonline.edu.vn, không có hình thức vận chuyển.</small>
                             </td>
                         </tr>
                         <tr v-for="(item, index) in inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}')" :key="item.id">
