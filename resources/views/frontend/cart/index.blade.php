@@ -31,8 +31,8 @@
         <div v-if="showShipInfo" class="cart-text-info entry-detail mb-3">
             <div class="h3">Lưu ý</div>
             <div class="">
-                <p>Đối với sản phẩm là <b>Khoá học online</b> học trực tiếp không hỗ trợ vận chuyển</p>
-                <p>Đối với sản phẩm là <b>Sách</b> sẽ có phí vận chuyển tuỳ theo khu vực địa chị nhận hàng của học viên</p>
+                <p><b>Khoá học online</b> trực tiếp trên website tomatoonline.edu.vn, không có hình thức vận chuyển.</p>
+                <p>Đối với sản phẩm là <b>Tài liệu</b> sẽ có phí vận chuyển tuỳ theo khu vực địa chị nhận hàng của học viên.</p>
             </div>
             <hr>
             <div class="h3">Thông tin người nhận</div>

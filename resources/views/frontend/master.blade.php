@@ -99,7 +99,7 @@
                                 </ul>
                             </li>
                             <li class="menu-has-children">
-                                <a href="">Sách</a>
+                                <a href="">Tài liệu</a>
                                 <ul class="submenu">
                                     @foreach(get_categories(null, 'book-categories') as $c1)
                                         <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
