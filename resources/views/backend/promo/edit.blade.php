@@ -135,7 +135,8 @@
                 });
             },
             getItem() {
-                axios.get("{{ route('admin.promo.get_item', [ 'id' => $promo->id ]) }}").then(res => {
+                axios.get("{{ route('admin.promo.get_item', [ 'id' => $promo->id ?? 0 ]) }}").then(res => {
+                    if (!res) return;
                     this.promo = res;
                 });
             }
