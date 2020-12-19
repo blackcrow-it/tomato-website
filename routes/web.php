@@ -49,6 +49,7 @@ Route::namespace('Frontend')
             Route::post('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentConfirm')->name('cart.confirm');
             Route::get('gio-hang/hoan-tat-thanh-toan', 'CartController@paymentComplete')->name('cart.complete');
             Route::post('gio-hang/mua-ngay', 'CartController@instantBuy')->name('cart.instant_buy');
+            Route::post('gio-hang/get-promo', 'CartController@getPromo')->name('cart.get_promo');
 
             Route::get('ca-nhan/thong-tin', 'UserController@info')->name('user.info');
             Route::get('ca-nhan/thong-tin/get-data', 'UserController@info_getData')->name('user.info.get_data');

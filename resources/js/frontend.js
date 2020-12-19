@@ -22,3 +22,6 @@ Vue.component('draggable', Draggable);
 
 import bootbox from 'bootbox';
 window.bootbox = bootbox;
+bootbox.setDefaults({
+    centerVertical: true
+});

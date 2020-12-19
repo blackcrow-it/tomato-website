@@ -14,6 +14,7 @@ use App\Http\Requests\Frontend\InstantBuyRequest;
 use App\Invoice;
 use App\InvoiceItem;
 use App\Mail\InvoiceMail;
+use App\Promo;
 use App\Repositories\UserRepo;
 use App\UserCourse;
 use Auth;
@@ -103,11 +104,9 @@ class CartController extends Controller
             ->get()
             ->map(function ($item) {
                 $item->object = null;
-                $item->__enabled_change_amount = true;
                 switch ($item->type) {
                     case ObjectType::COURSE:
                         $item->object = Course::with('category')->find($item->object_id);
-                        $item->__enabled_change_amount = false;
                         break;
                     case ObjectType::BOOK:
                         $item->object = Book::with('category')->find($item->object_id);
@@ -143,6 +142,11 @@ class CartController extends Controller
         });
 
         $cart = Cart::where('user_id', $user->id)->get();
+
+        $promo = Promo::query()
+            ->where('code', $request->input('promo_code'))
+            ->whereDate('expires_on', '>', now())
+            ->first();
 
         $totalPrice = 0;
         foreach ($cart as $item) {
@@ -331,5 +335,13 @@ class CartController extends Controller
                 ->route('course', ['id' => $course->id, 'slug' => $course->slug])
                 ->withErrors('Có lỗi xảy ra trong quá trình mua khóa học. Vui lòng thử lại.');
         }
+    }
+
+    public function getPromo(Request $request)
+    {
+        return Promo::query()
+            ->where('code', $request->input('code'))
+            ->whereDate('expires_on', '>', now())
+            ->firstOrFail();
     }
 }

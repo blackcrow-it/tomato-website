@@ -2,7 +2,7 @@
 	.table-responsive {
 		border: 1px solid $color-border;
 	}
-	
+
 	table {
 		width: 100%;
 
@@ -109,13 +109,10 @@
 	}
 
 	.f-quantity {
-		display: flex;
-		align-items: center;
-
 		.form-control {
 			width: 50px;
 			padding: 0 10px;
-			margin-bottom: 0;
+			margin: 0 auto;
 			text-align: center;
 			line-height: 30px;
 		}
@@ -207,7 +204,7 @@
 
 
 .payment-confirmation {
-	
+
 }
 
 .payment-confirmation__header {
@@ -240,7 +237,7 @@
 		padding: 30px;
 	}
 }
-	
+
 
 .payment-confirmatio__list {
 	.f-list__item {

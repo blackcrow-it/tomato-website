@@ -134,6 +134,7 @@
                     <thead class="text-center">
                         <th>#</th>
                         <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
                         <th>Số lượng</th>
                         <th>Tổng tiền</th>
                         <th>Xóa</th>
@@ -162,16 +163,17 @@
                                 </div>
                             </td>
                             <td>
-                                <div v-if="item.__enabled_change_amount" class="f-quantity">
-                                    <input type="number" class="form-control" v-model="item.amount" min="1">
-                                    <span>
-                                        x <b>@{{ currency(item.price) }}</b>
-                                    </span>
+                                <div class="f-quantity text-center">
+                                    <span><b>@{{ currency(item.price) }}</b></span>
+                                    <template v-if="item.del_price">
+                                        <br>
+                                        <small><del>@{{ currency(item.del_price) }}</del></small>
+                                    </template>
                                 </div>
-                                <div v-else class="f-quantity">
-                                    <span>
-                                        <b>@{{ currency(item.price) }}</b>
-                                    </span>
+                            </td>
+                            <td>
+                                <div class="f-quantity text-center">
+                                    <span><b>1</b></span>
                                 </div>
                             </td>
                             <td>
@@ -198,16 +200,17 @@
                                 </div>
                             </td>
                             <td>
-                                <div v-if="item.__enabled_change_amount" class="f-quantity">
-                                    <input type="number" class="form-control" v-model="item.amount" min="1">
-                                    <span>
-                                        x <b>@{{ currency(item.price) }}</b>
-                                    </span>
+                                <div class="f-quantity text-center">
+                                    <span><b>@{{ currency(item.price) }}</b></span>
+                                    <template v-if="item.del_price">
+                                        <br>
+                                        <small><del>@{{ currency(item.del_price) }}</del></small>
+                                    </template>
                                 </div>
-                                <div v-else class="f-quantity">
-                                    <span>
-                                        <b>@{{ currency(item.price) }}</b>
-                                    </span>
+                            </td>
+                            <td>
+                                <div class="f-quantity text-center">
+                                    <input type="number" class="form-control" v-model="item.amount" min="1">
                                 </div>
                             </td>
                             <td>
@@ -220,16 +223,34 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-light">
-                            <td colspan="3">Mã giảm giá</td>
+                            <td colspan="4">Mã giảm giá</td>
                             <td colspan="2">
-                                <input type="text" class="form-control">
-                                <button type="button" class="btn btn--secondary">Áp dụng</button>
+                                <div v-if="promoData === undefined">
+                                    <input type="text" v-model="promoCode" class="form-control">
+                                    <button type="button" class="btn btn--secondary" :disabled="promoCode === undefined" @click="getPromo">Áp dụng</button>
+                                </div>
+                                <div v-else class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-primary font-weight-bold">@{{ promoCode }}</div>
+                                        <div v-if="promoData.type == '{{ \App\Constants\PromoType::DISCOUNT }}'">
+                                            Giảm giá @{{ promoData.value }}%
+                                        </div>
+                                        <div v-if="promoData.type == '{{ \App\Constants\PromoType::SAME_PRICE }}'">
+                                            Đồng giá @{{ currency(promoData.value) }}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="button" title="Xóa mã giảm giá" @click="clearPromo">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3">Tổng tiền</td>
+                            <td colspan="4">Tổng tiền</td>
                             <td colspan="2">
-                                <p class="f-totalPrice">@{{ currency(inputData.reduce((t, i) => t + i.amount * i.price, 0)) }}</p>
+                                <p class="f-totalPrice">@{{ currency(totalPrice()) }}</p>
                             </td>
                         </tr>
                     </tfoot>
@@ -264,6 +285,8 @@
             },
             showShipInfo: false,
             loading: false,
+            promoCode: undefined,
+            promoData: undefined,
         },
         mounted() {
             this.getData();
@@ -285,11 +308,32 @@
                 this.loading = true;
                 axios.get("{{ route('cart.get_data') }}").then(res => {
                     this.data = res;
-                    this.inputData = _.cloneDeep(this.data);
+                    this.inputData = _.cloneDeep(this.data).map(item => {
+                        if (this.promoData === undefined) return item;
+                        if (item.price == 0) return item;
+
+                        switch (this.promoData.type) {
+                            case '{{ \App\Constants\PromoType::DISCOUNT }}':
+                                item.del_price = item.price;
+                                item.price = Math.ceil(item.price - item.price * this.promoData.value / 100);
+                                break;
+
+                            case '{{ \App\Constants\PromoType::SAME_PRICE }}':
+                                if (this.promoData.value >= item.price) return item;
+                                item.del_price = item.price;
+                                item.price = this.promoData.value;
+                                break;
+                        }
+                        return item;
+                    });
 
                     this.updateShowShipInfo();
                 }).then(() => {
                     this.loading = false;
+
+                    $('html, body').animate({
+                        scrollTop: $('.cart-detail').offset().top - $(window).height() / 5
+                    }, 500);
                 });
             },
             removeCartItem(id) {
@@ -326,7 +370,8 @@
                 this.loading = true;
                 axios.post('{{ route("cart.confirm") }}', {
                     cart: this.inputData,
-                    ship_info: this.shipInfo
+                    ship_info: this.shipInfo,
+                    promo_code: this.promoCode
                 }).then(() => {
                     location.href = '{{ route("cart.complete") }}';
                 }).catch(err => {
@@ -338,6 +383,27 @@
             updateShowShipInfo() {
                 this.showShipInfo = this.inputData.filter(x => x.type != '{{ \App\Constants\ObjectType::COURSE }}').length > 0;
             },
+            getPromo() {
+                axios.post("{{ route('cart.get_promo') }}", {
+                    code: this.promoCode
+                }).then(res => {
+                    this.promoData = res;
+                    this.getData();
+                }).catch(() => {
+                    this.promoCode = undefined;
+                    bootbox.alert('Mã khuyến mãi đã hết hạn hoặc không tồn tại.');
+                });
+            },
+            clearPromo() {
+                this.promoData = undefined;
+                this.promoCode = undefined;
+                this.getData();
+            },
+            totalPrice() {
+                return this.inputData.reduce((total, item) => {
+                    return total + item.amount * item.price;
+                }, 0);
+            }
         },
     });
 

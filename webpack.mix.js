@@ -26,4 +26,5 @@ mix
 
     .copyDirectory('resources/json', 'public/json')
 
+    .sourceMaps()
     .version();
