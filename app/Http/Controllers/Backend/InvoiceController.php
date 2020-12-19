@@ -27,6 +27,13 @@ class InvoiceController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate();
 
+        $list->getCollection()->transform(function ($invoice) {
+            $invoice->total_price = $invoice->items->sum(function ($item) use ($invoice) {
+                return $item->price * $item->amount;
+            });
+            return $invoice;
+        });
+
         return view('backend.invoice.list', [
             'list' => $list
         ]);
@@ -36,7 +43,8 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::with([
             'items',
-            'user'
+            'user',
+            'promo'
         ])->find($id);
         if ($invoice == null) {
             return redirect()->route('admin.invoice.list')->withErrors('Đơn hàng không tồn tại hoặc đã bị xóa.');

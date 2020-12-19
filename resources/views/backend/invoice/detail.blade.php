@@ -82,6 +82,25 @@ Chi tiết đơn hàng
         </div>
     </div>
 
+    @if ($invoice->promo)
+        <div class="mb-3">
+            <div>
+                <b>Mã khuyến mãi</b>
+            </div>
+            <div class="text-danger">{{ $invoice->promo->code }}</div>
+            <div>
+                @switch($invoice->promo->type)
+                    @case(\App\Constants\PromoType::DISCOUNT)
+                        Giảm giá {{ $invoice->promo->value }}%
+                        @break
+                    @case(\App\Constants\PromoType::SAME_PRICE)
+                        Đồng giá {{ currency($invoice->promo->value) }}
+                        @break
+                @endswitch
+            </div>
+        </div>
+    @endif
+
     <div class="table-responsive mb-3">
         <table class="table table-striped table-bordered">
             <thead>

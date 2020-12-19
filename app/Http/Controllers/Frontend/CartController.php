@@ -172,23 +172,24 @@ class CartController extends Controller
             }
         }
 
-        $totalPrice = 0;
-        foreach ($cart as $item) {
-            $itemPrice = $item->price;
-
-            if ($promo) {
+        if ($promo) {
+            $cart->transform(function ($item) use ($promo) {
                 switch ($promo->type) {
                     case PromoType::DISCOUNT:
-                        $itemPrice = ceil($itemPrice - $itemPrice * $promo->value / 100);
+                        $item->price = ceil($item->price - $item->price * $promo->value / 100);
                         break;
 
                     case PromoType::SAME_PRICE:
-                        $itemPrice = min($itemPrice, $promo->value);
+                        $item->price = min($item->price, $promo->value);
                         break;
                 }
-            }
+                return $item;
+            });
+        }
 
-            $totalPrice += $item->amount * $itemPrice;
+        $totalPrice = 0;
+        foreach ($cart as $item) {
+            $totalPrice += $item->amount * $item->price;
 
             if ($item->type != ObjectType::COURSE) continue;
             $exists = UserCourse::query()

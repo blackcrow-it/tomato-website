@@ -72,7 +72,7 @@
                             @endswitch
                         @endforeach
                     </td>
-                    <td class="text-right">{{ currency($invoice->items->sum(function($item) { return $item->price * $item->amount; }), '0 ₫') }}</td>
+                    <td class="text-right">{{ currency($invoice->total_price, '0 ₫') }}</td>
                     <td>{{ $invoice->user->username }}</td>
                     <td>{{ $invoice->created_at->format('d-m-Y H:i') }}</td>
                     <td>
