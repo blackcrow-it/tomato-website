@@ -48,6 +48,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a href="{{ route('admin.promo.list') }}" class="nav-link {{ request()->routeIs('admin.promo.*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-hand-holding-usd"></i>
+        <p>Mã khuyến mãi</p>
+    </a>
+</li>
+<li class="nav-item">
     <a href="{{ route('admin.user.list') }}" class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-user-friends"></i>
         <p>Thành viên</p>

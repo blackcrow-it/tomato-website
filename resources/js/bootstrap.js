@@ -42,3 +42,39 @@ window.currency = (number, defaultText = 'Miễn phí') => {
         currency: 'VND'
     }).format(number);
 }
+
+window.redirectPost = (url, postData) => {
+    var form = document.createElement('form');
+    form.method = 'post';
+    form.action = url;
+
+    document.body.appendChild(form);
+
+    postData._token = document.querySelector('meta[name="csrf-token"]').content;
+
+    (function buildInputTag(data, prefix = '') {
+        for (var name in data) {
+            var inputName = prefix ? (prefix + '[' + name + ']') : name;
+
+            if (typeof(data[name]) === 'object') {
+                buildInputTag(data[name], inputName);
+            } else {
+                if (data[name] === undefined) continue;
+                if (data[name] == null) {
+                    data[name] = '';
+                }
+                if (typeof(data[name]) === 'boolean') {
+                    data[name] = data[name] ? 1 : 0;
+                }
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = inputName;
+                input.value = data[name];
+                form.appendChild(input);
+            }
+        }
+    })(postData);
+
+    form.submit();
+}

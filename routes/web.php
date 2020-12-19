@@ -218,6 +218,16 @@ Route::prefix('admin')
                 Route::post('edit/{id}', 'TeacherController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'TeacherController@submitDelete')->name('delete');
             });
+
+            Route::prefix('promo')->name('promo.')->group(function () {
+                Route::get('list', 'PromoController@list')->name('list');
+                Route::get('get-item/{id}', 'PromoController@getItem')->name('get_item');
+                Route::get('add', 'PromoController@add')->name('add');
+                Route::post('add', 'PromoController@submitAdd')->name('add');
+                Route::get('edit/{id}', 'PromoController@edit')->name('edit');
+                Route::post('edit/{id}', 'PromoController@submitEdit')->name('edit');
+                Route::post('delete/{id}', 'PromoController@submitDelete')->name('delete');
+            });
         });
 
         Route::middleware('guest')->group(function () {

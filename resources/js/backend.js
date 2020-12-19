@@ -27,3 +27,17 @@ Vue.component('paginate', Paginate);
 
 import moment from 'moment';
 window.moment = moment;
+
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
+import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
+Vue.component('datetimepicker', VueCtkDateTimePicker);
+
+import VueCurrencyInput from 'vue-currency-input'
+Vue.use(VueCurrencyInput, {
+    globalOptions: {
+        currency: null,
+        distractionFree: false,
+        precision: 0,
+        allowNegative: false
+    }
+});
