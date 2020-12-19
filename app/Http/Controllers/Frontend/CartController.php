@@ -6,6 +6,7 @@ use App\Book;
 use App\Cart;
 use App\Constants\InvoiceStatus;
 use App\Constants\ObjectType;
+use App\Constants\PromoType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCourseToCartRequest;
@@ -143,14 +144,51 @@ class CartController extends Controller
 
         $cart = Cart::where('user_id', $user->id)->get();
 
-        $promo = Promo::query()
-            ->where('code', $request->input('promo_code'))
-            ->whereDate('expires_on', '>', now())
-            ->first();
+        $promo = null;
+        if ($request->input('promo_code')) {
+            $promo = Promo::query()
+                ->where('code', $request->input('promo_code'))
+                ->whereDate('expires_on', '>', now())
+                ->first();
+
+            if ($promo == null) {
+                $request->validate([
+                    'cart' => [
+                        function ($attribute, $value, $fail) {
+                            $fail('Mã khuyến mãi đã hết hạn hoặc không tồn tại.');
+                        }
+                    ]
+                ]);
+            }
+
+            if ($promo->used_many_times == false && $promo->invoices()->exists()) {
+                $request->validate([
+                    'cart' => [
+                        function ($attribute, $value, $fail) {
+                            $fail('Mã khuyến mãi đã được sử dụng. Vui lòng không sử dụng lại.');
+                        }
+                    ]
+                ]);
+            }
+        }
 
         $totalPrice = 0;
         foreach ($cart as $item) {
-            $totalPrice += $item->amount * $item->price;
+            $itemPrice = $item->price;
+
+            if ($promo) {
+                switch ($promo->type) {
+                    case PromoType::DISCOUNT:
+                        $itemPrice = ceil($itemPrice - $itemPrice * $promo->value / 100);
+                        break;
+
+                    case PromoType::SAME_PRICE:
+                        $itemPrice = min($itemPrice, $promo->value);
+                        break;
+                }
+            }
+
+            $totalPrice += $item->amount * $itemPrice;
 
             if ($item->type != ObjectType::COURSE) continue;
             $exists = UserCourse::query()
@@ -176,7 +214,7 @@ class CartController extends Controller
             $request->validate([
                 'cart' => [
                     function ($attribute, $value, $fail) {
-                        $fail('Số tiền trong tài khoản không đủ, vui lòng nạp thêm để tiếp tục mua hàng.');
+                        $fail('Số dư trong tài khoản của bạn không đủ. Vui lòng <a href="' . route('user.recharge') . '" target="_blank"><b>nạp thêm vào tài khoản</b></a>.');
                     }
                 ]
             ]);
@@ -196,6 +234,7 @@ class CartController extends Controller
                 $invoice->phone = $shipInfo['phone'] ?? $user->phone;
                 $invoice->shipping = false;
                 $invoice->status = InvoiceStatus::COMPLETE;
+                $invoice->promo_id = $promo->id ?? null;
                 $invoice->save();
 
                 foreach ($coursesInCart as $item) {
@@ -234,6 +273,7 @@ class CartController extends Controller
                 $invoice->district = $invoice->shipping ? $shipInfo['district'] : null;
                 $invoice->address = $invoice->shipping ? $shipInfo['address'] : null;
                 $invoice->status = InvoiceStatus::PENDING;
+                $invoice->promo_id = $promo->id ?? null;
                 $invoice->save();
 
                 foreach ($booksInCart as $item) {
@@ -339,9 +379,31 @@ class CartController extends Controller
 
     public function getPromo(Request $request)
     {
-        return Promo::query()
+        $promo = Promo::query()
             ->where('code', $request->input('code'))
             ->whereDate('expires_on', '>', now())
-            ->firstOrFail();
+            ->first();
+
+        if ($promo == null) {
+            $request->validate([
+                'code' => [
+                    function ($attribute, $value, $fail) {
+                        $fail('Mã khuyến mãi đã hết hạn hoặc không tồn tại.');
+                    }
+                ]
+            ]);
+        }
+
+        if ($promo->used_many_times == false && $promo->invoices()->exists()) {
+            $request->validate([
+                'code' => [
+                    function ($attribute, $value, $fail) {
+                        $fail('Mã khuyến mãi đã được sử dụng. Vui lòng không sử dụng lại.');
+                    }
+                ]
+            ]);
+        }
+
+        return $promo;
     }
 }

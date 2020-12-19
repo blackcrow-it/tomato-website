@@ -352,32 +352,46 @@
             submitCart() {
                 if (this.showShipInfo) {
                     if (!this.shipInfo.name || !this.shipInfo.phone) {
-                        alert('Chưa có thông tin người nhận. Vui lòng kiểm tra lại.');
+                        bootbox.alert('Chưa có thông tin người nhận. Vui lòng kiểm tra lại.');
                         return;
                     }
 
                     if (this.shipInfo.shipping) {
                         if (!this.shipInfo.city || !this.shipInfo.district || !this.shipInfo.address) {
-                            alert('Địa chỉ giao hàng chưa đầy đủ. Vui lòng kiểm tra lại.');
+                            bootbox.alert('Địa chỉ giao hàng chưa đầy đủ. Vui lòng kiểm tra lại.');
                             return;
                         }
                     }
                 }
 
-                const confirmResult = confirm('Bạn chắc chắn muốn thanh toán đơn hàng?');
-                if (!confirmResult) return;
+                bootbox.confirm({
+                    message: 'Bạn chắc chắn muốn thanh toán đơn hàng?',
+                    buttons: {
+                        confirm: {
+                            label: 'Xác nhận',
+                            className: 'btn--sm btn--success'
+                        },
+                        cancel: {
+                            label: 'Hủy bỏ',
+                            className: 'btn--sm bg-dark'
+                        }
+                    },
+                    callback: r => {
+                        if (!r) return;
 
-                this.loading = true;
-                axios.post('{{ route("cart.confirm") }}', {
-                    cart: this.inputData,
-                    ship_info: this.shipInfo,
-                    promo_code: this.promoCode
-                }).then(() => {
-                    location.href = '{{ route("cart.complete") }}';
-                }).catch(err => {
-                    const msg = Object.values(err.errors).map(x => x.join("\n")).join("\n");
-                    alert(msg);
-                    this.loading = false;
+                        this.loading = true;
+                        axios.post('{{ route("cart.confirm") }}', {
+                            cart: this.inputData,
+                            ship_info: this.shipInfo,
+                            promo_code: this.promoCode
+                        }).then(() => {
+                            location.href = '{{ route("cart.complete") }}';
+                        }).catch(err => {
+                            const msg = Object.values(err.errors).map(x => x.join("\n")).join("\n");
+                            bootbox.alert(msg);
+                            this.loading = false;
+                        });
+                    }
                 });
             },
             updateShowShipInfo() {
@@ -389,9 +403,11 @@
                 }).then(res => {
                     this.promoData = res;
                     this.getData();
-                }).catch(() => {
+                }).catch(err => {
                     this.promoCode = undefined;
-                    bootbox.alert('Mã khuyến mãi đã hết hạn hoặc không tồn tại.');
+
+                    const msg = Object.values(err.errors).map(x => x.join("\n")).join("\n");
+                    bootbox.alert(msg);
                 });
             },
             clearPromo() {
