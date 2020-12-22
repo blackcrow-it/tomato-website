@@ -116,6 +116,22 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>Hình ảnh chi tiết</label>
+                <div class="card bg-light" id="detail-images">
+                    <input type="hidden" v-for="image in images" name="detail_images[]" :value="image">
+                    <div class="card-body">
+                        <div class="detail-images">
+                            <div v-for="(image, index) in images" class="image">
+                                <img :src="image" class="img">
+                                <button type="button" class="btn btn-danger btn-sm btn-delete" @click="removeImage(index)">Xóa</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <button type="button" class="btn btn-primary btn-sm" @click="openCkfinder">Thêm ảnh</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label>Mô tả nội dung</label>
                 <textarea name="description" class="editor">{!! $data->description ?? old('description') !!}</textarea>
             </div>
@@ -341,6 +357,23 @@
                         this.isSearching = false;
                     });
                 }, 1000);
+            }
+        }
+    });
+
+    new Vue({
+        el: '#detail-images',
+        data: {
+            images: JSON.parse('{!! json_encode(old("detail_images") ?? $data->detail_images ?? []) !!}'),
+        },
+        methods: {
+            openCkfinder() {
+                selectFileWithCKFinder('ck-detail-images', undefined, 'Files', url => {
+                    this.images.push(url);
+                });
+            },
+            removeImage(index) {
+                this.images.splice(index, 1);
             }
         }
     });

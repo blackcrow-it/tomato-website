@@ -16,7 +16,12 @@ class Book extends Model
         'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'view', 'enabled',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image',
         'category_id', 'order_in_category',
-        'price', 'original_price'
+        'price', 'original_price',
+        'detail_images'
+    ];
+
+    protected $casts = [
+        'detail_images' => 'array'
     ];
 
     public function getSlugOptions(): SlugOptions

@@ -254,7 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
 
-        function selectFileWithCKFinder(inputId, previewId, type) {
+        function selectFileWithCKFinder(inputId, previewId, type, callback) {
             CKFinder.modal({
                 chooseFiles: true,
                 resourceType: type != undefined ? type : 'Files',
@@ -262,16 +262,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 height: 600,
                 onInit: function (finder) {
                     finder.on('files:choose', function (evt) {
-                        var file = evt.data.files.first();
-                        var url = file.getUrl();
-                        $('#' + inputId).val(url);
-                        $('#' + previewId).attr('src', url);
+                        evt.data.files.each(function(file) {
+                            var url = file.getUrl();
+                            $('#' + inputId).val(url);
+                            $('#' + previewId).attr('src', url);
+
+                            if (typeof(callback) === 'function') callback(url);
+                        });
                     });
 
                     finder.on('file:choose:resizedImage', function (evt) {
                         var url = evt.data.resizedUrl;
                         $('#' + inputId).val(url);
                         $('#' + previewId).attr('src', url);
+
+                        if (typeof(callback) === 'function') callback(url);
                     });
                 }
             });

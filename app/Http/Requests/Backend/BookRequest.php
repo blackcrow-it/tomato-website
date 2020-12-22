@@ -49,6 +49,8 @@ class BookRequest extends FormRequest
             '__related_courses.*' => [
                 Rule::exists('courses', 'id')->where('enabled', true),
             ],
+            'detail_images' => 'nullable|array',
+            'detail_images.*' => 'url'
         ];
     }
 }
