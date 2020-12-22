@@ -19586,7 +19586,7 @@ section {
 
 @media (min-width: 768px) {
   .product-detail__img .book-detail-img {
-    max-width: 80%;
+    max-width: 400px;
   }
 }
 

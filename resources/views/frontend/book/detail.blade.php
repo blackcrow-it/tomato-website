@@ -40,7 +40,16 @@
         <div class="product-detail">
             <div class="row">
                 <div class="col-md-6 col-xl-7">
-                    <img src="{{ $book->cover ?? $book->thumbnail }}" alt="{{ $book->title }}">
+                    <div class="product-detail__img">
+                        <div class="book-detail-img">
+                            <div class="owl-carousel">
+                                <img src="{{ $book->cover ?? $book->thumbnail }}">
+                            </div>
+                            <ul class="owl-dot-custom owl-dots">
+                                <li class="owl-dot"><span style="background-image: url('{{ $book->cover ?? $book->thumbnail }}')"></span></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 col-xl-5">
                     <div class="product-detail__price">
@@ -56,23 +65,32 @@
                         @endif
                     </div>
 
-                    <div>
+                    <div class="product-detail__meta">
                         {!! $book->description !!}
                     </div>
 
                     @if(auth()->check())
-                        <div class="product-detal__btn">
-                            <div class="btn-wrap">
-                                <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart') }}" class="btn btn-buy-now">Mua ngay</button>
-                                <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart">
-                                    <span class="add-to-cart-text">Thêm vào giỏ</span>
-                                    <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
-                                    <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
-                                </button>
+                        <form action="{{ route('cart.add') }}" id="add-to-cart">
+                            <div class="product-detail__quantity">
+                                <label>Số lượng: </label>
+                                <div class="input-quantity">
+                                    <input type="number" name="amount" class="input-quantity-text form-control" value="1" data-min="1">
+                                    <button type="button" class="input-quantity-number input-quantity-down">-</button>
+                                    <button type="button" class="input-quantity-number input-quantity-up">+</button>
+                                </div>
                             </div>
-                            <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
-                        </div>
-                        <form action="{{ route('cart.add') }}" id="add-to-cart" class="invisible">
+
+                            <div class="product-detal__btn">
+                                <div class="btn-wrap">
+                                    <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart') }}" class="btn btn-buy-now">Mua ngay</button>
+                                    <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart">
+                                        <span class="add-to-cart-text">Thêm vào giỏ</span>
+                                        <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
+                                        <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
+                                    </button>
+                                </div>
+                                <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
+                            </div>
                             <input type="hidden" name="object_id" value="{{ $book->id }}">
                             <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::BOOK }}">
                         </form>
@@ -89,7 +107,10 @@
                 <div class="tabJs">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#tabgioithieu" role="tab" aria-controls="tabgioithieu" aria-selected="true">Nội dung</a>
+                            <a class="nav-link active" data-toggle="tab" href="#tabgioithieu" role="tab" aria-controls="tabgioithieu" aria-selected="true">Giới thiệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-khoahoc" role="tab" aria-controls="tab-khoahoc" aria-selected="false">Khoá học đi kèm</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Bình luận</a>
@@ -97,7 +118,16 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="tabgioithieu" role="tabpanel">
-                            <div class="entry-detail">{!! $book->content !!}</div>
+                            <div class="entry-detail">
+                                {!! $book->content !!}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-khoahoc" role="tabpanel">
+                            <div class="owl-carousel lessonbox-wrap-min lessonbox-related-slide">
+                                @foreach($related_courses as $item)
+                                    @include('frontend.category.course_item', [ 'course' => $item ])
+                                @endforeach
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
@@ -110,13 +140,75 @@
 
             <div class="product-detail__relate">
                 <div class="title">
-                    <div class="title__title">Khoá học liên quan</div>
+                    <h2 class="title__title">Sách liên quan</h2>
                 </div>
 
-                <div class="owl-carousel lessonbox-wrap-min lessonbox-related-slide">
-                    @foreach($related_courses as $item)
-                        @include('frontend.category.course_item', [ 'course' => $item ])
-                    @endforeach
+                <div class="owl-carousel" data-slide-four-item>
+                    <div class="bookBox">
+                        <a href="#" class="bookBox__img">
+                            <img src="assets/img/image/bookBox-1.jpg" alt="">
+                            <span class="sale">-50%</span>
+                        </a>
+                        <div class="bookBox__body">
+                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                            <div class="bookBok__price">
+                                <ins>499.000đ</ins>
+                                <del>899.000đ</del>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bookBox">
+                        <a href="#" class="bookBox__img">
+                            <img src="assets/img/image/bookBox-1.jpg" alt="">
+                            <span class="sale">-50%</span>
+                        </a>
+                        <div class="bookBox__body">
+                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                            <div class="bookBok__price">
+                                <ins>499.000đ</ins>
+                                <del>899.000đ</del>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bookBox">
+                        <a href="#" class="bookBox__img">
+                            <img src="assets/img/image/bookBox-1.jpg" alt="">
+                            <span class="sale">-50%</span>
+                        </a>
+                        <div class="bookBox__body">
+                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                            <div class="bookBok__price">
+                                <ins>499.000đ</ins>
+                                <del>899.000đ</del>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bookBox">
+                        <a href="#" class="bookBox__img">
+                            <img src="assets/img/image/bookBox-1.jpg" alt="">
+                            <span class="sale">-50%</span>
+                        </a>
+                        <div class="bookBox__body">
+                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                            <div class="bookBok__price">
+                                <ins>499.000đ</ins>
+                                <del>899.000đ</del>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bookBox">
+                        <a href="#" class="bookBox__img">
+                            <img src="assets/img/image/bookBox-1.jpg" alt="">
+                            <span class="sale">-50%</span>
+                        </a>
+                        <div class="bookBox__body">
+                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
+                            <div class="bookBok__price">
+                                <ins>499.000đ</ins>
+                                <del>899.000đ</del>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
