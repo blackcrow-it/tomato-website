@@ -43,14 +43,14 @@
                     <div class="product-detail__img">
                         <div class="book-detail-img">
                             <div class="owl-carousel">
-                                @foreach ($book->detail_images as $image)
+                                @foreach ($book->detail_images ?? [] as $image)
                                     <div class="book-detail-img-block">
                                         <img src="{{ $image }}" alt="{{ $book->title }}">
                                     </div>
                                 @endforeach
                             </div>
                             <ul class="owl-dot-custom owl-dots">
-                                @foreach ($book->detail_images as $image)
+                                @foreach ($book->detail_images ?? [] as $image)
                                     <li class="owl-dot">
                                         <img src="{{ $image }}" alt="{{ $book->title }}">
                                     </li>
