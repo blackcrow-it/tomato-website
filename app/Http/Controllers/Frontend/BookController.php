@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Book;
+use App\BookRelatedBook;
 use App\BookRelatedCourse;
 use App\Category;
 use App\Http\Controllers\Controller;
@@ -30,10 +31,19 @@ class BookController extends Controller
             ->get()
             ->pluck('related_course');
 
+        $relatedBooks = BookRelatedBook::with('related_book')
+            ->wherehas('related_book', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('book_id', $book->id)
+            ->get()
+            ->pluck('related_book');
+
         return view('frontend.book.detail', [
             'book' => $book,
             'breadcrumb' => Category::ancestorsAndSelf($book->category_id),
             'related_courses' => $relatedCourses,
+            'related_books' => $relatedBooks,
         ]);
     }
 }

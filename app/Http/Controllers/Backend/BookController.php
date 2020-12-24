@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\BookRequest;
 use App\Book;
 use App\BookPosition;
+use App\BookRelatedBook;
 use App\BookRelatedCourse;
 use App\Repositories\BookRepo;
 use DB;
@@ -129,6 +130,15 @@ class BookController extends Controller
             $related->related_course_id = $relatedCourseId;
             $related->save();
         }
+
+        BookRelatedBook::where('book_id', $book->id)->delete();
+        $relatedBookIds = $request->input('__related_books', []);
+        foreach ($relatedBookIds as $relatedBookId) {
+            $related = new BookRelatedBook();
+            $related->book_id = $book->id;
+            $related->related_book_id = $relatedBookId;
+            $related->save();
+        }
     }
 
     public function submitDelete($id)
@@ -218,5 +228,14 @@ class BookController extends Controller
             ->where('book_id', $id)
             ->get()
             ->pluck('related_course');
+    }
+
+    public function getRelatedBook(Request $request)
+    {
+        $id = $request->input('id');
+        return BookRelatedBook::with('related_book')
+            ->where('book_id', $id)
+            ->get()
+            ->pluck('related_book');
     }
 }

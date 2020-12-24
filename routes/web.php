@@ -204,6 +204,7 @@ Route::prefix('admin')
             Route::post('book/order-in-position', 'BookController@submitOrderInPosition')->name('book.order_in_position');
             Route::get('book/search-book', 'BookController@getSearchBook')->name('book.search_book');
             Route::get('book/get-related-course', 'BookController@getRelatedCourse')->name('book.get_related_course');
+            Route::get('book/get-related-book', 'BookController@getRelatedBook')->name('book.get_related_book');
 
             Route::prefix('invoice')->name('invoice.')->group(function () {
                 Route::get('list', 'InvoiceController@list')->name('list');

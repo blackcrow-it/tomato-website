@@ -152,71 +152,9 @@
                 </div>
 
                 <div class="owl-carousel" data-slide-four-item>
-                    <div class="bookBox">
-                        <a href="#" class="bookBox__img">
-                            <img src="assets/img/image/bookBox-1.jpg" alt="">
-                            <span class="sale">-50%</span>
-                        </a>
-                        <div class="bookBox__body">
-                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                            <div class="bookBok__price">
-                                <ins>499.000đ</ins>
-                                <del>899.000đ</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bookBox">
-                        <a href="#" class="bookBox__img">
-                            <img src="assets/img/image/bookBox-1.jpg" alt="">
-                            <span class="sale">-50%</span>
-                        </a>
-                        <div class="bookBox__body">
-                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                            <div class="bookBok__price">
-                                <ins>499.000đ</ins>
-                                <del>899.000đ</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bookBox">
-                        <a href="#" class="bookBox__img">
-                            <img src="assets/img/image/bookBox-1.jpg" alt="">
-                            <span class="sale">-50%</span>
-                        </a>
-                        <div class="bookBox__body">
-                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                            <div class="bookBok__price">
-                                <ins>499.000đ</ins>
-                                <del>899.000đ</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bookBox">
-                        <a href="#" class="bookBox__img">
-                            <img src="assets/img/image/bookBox-1.jpg" alt="">
-                            <span class="sale">-50%</span>
-                        </a>
-                        <div class="bookBox__body">
-                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                            <div class="bookBok__price">
-                                <ins>499.000đ</ins>
-                                <del>899.000đ</del>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bookBox">
-                        <a href="#" class="bookBox__img">
-                            <img src="assets/img/image/bookBox-1.jpg" alt="">
-                            <span class="sale">-50%</span>
-                        </a>
-                        <div class="bookBox__body">
-                            <h3 class="bookBok__title"><a href="chitietsach.html">Giáo trình hán ngữ</a></h3>
-                            <div class="bookBok__price">
-                                <ins>499.000đ</ins>
-                                <del>899.000đ</del>
-                            </div>
-                        </div>
-                    </div>
+                    @foreach($related_books as $item)
+                        @include('frontend.category.book_item', [ 'book' => $item ])
+                    @endforeach
                 </div>
             </div>
         </div>
