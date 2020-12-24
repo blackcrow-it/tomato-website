@@ -52,7 +52,7 @@
                                     <li>
                                         <a href="{{ $item->url }}">
                                             <img src="{{ $item->thumbnail }}">
-                                            <div class="h3">{{ $item->title }}</div>
+                                            <div class="font-weight-bold mb-3" style="line-height: 1.1rem">{{ $item->title }}</div>
                                             <span><i class="fa fa-clock-o"></i>{{ $item->updated_at->format('d-m-Y H:i') }}</span>
                                         </a>
                                     </li>
