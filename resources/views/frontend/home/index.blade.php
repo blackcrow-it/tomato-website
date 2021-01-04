@@ -74,7 +74,7 @@
             @foreach(get_categories(null, 'home-courses') as $category)
                 <div class="lessonbox-wrap__item wow fadeInUp" data-wow-delay=".2s">
                     <div class="lessonbox-wrap__header">
-                        <div class="lessonbox-wrap__title"><a href="{{ $category->url }}">{{ $category->title }}</a></div>
+                        <div class="lessonbox-wrap__title"><a href="{{ $category->url }}" class="font-weight-bold">{{ $category->title }}</a></div>
                         <a href="{{ $category->url }}" class="btn-link">Xem tất cả <i class="fa fa-angle-right"></i></a>
                     </div>
 
