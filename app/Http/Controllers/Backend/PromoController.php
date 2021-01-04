@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Constants\PromoType;
+use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\AddEditPromoRequest;
 use App\Http\Requests\Backend\PromoRequest;
@@ -10,7 +12,8 @@ use Illuminate\Http\Request;
 
 class PromoController extends Controller
 {
-    public function list() {
+    public function list()
+    {
         $list = Promo::orderBy('created_at', 'desc')->paginate();
 
         return view('backend.promo.list', [
@@ -18,8 +21,20 @@ class PromoController extends Controller
         ]);
     }
 
-    public function getItem($id) {
-        return Promo::find($id);
+    public function getItem($id)
+    {
+        $promo = Promo::find($id);
+        if (!$promo) return null;
+
+        $comboCourses = Course::where('enabled', true)
+            ->whereIn('id', $promo->combo_courses ?? [])
+            ->orderBy('title', 'asc')
+            ->get();
+
+        return [
+            'promo' => $promo,
+            'combo_courses' => $comboCourses
+        ];
     }
 
     public function add()
@@ -29,7 +44,7 @@ class PromoController extends Controller
 
     public function submitAdd(PromoRequest $request)
     {
-        $this->processCourseFromRequest($request, new Promo());
+        $this->processPromoFromRequest($request, new Promo());
 
         return redirect()
             ->route('admin.promo.list')
@@ -55,14 +70,15 @@ class PromoController extends Controller
             return redirect()->route('admin.promo.list')->withErrors('Mã khuyến mãi không tồn tại hoặc đã bị xóa.');
         }
 
-        $this->processCourseFromRequest($request, $promo);
+        $this->processPromoFromRequest($request, $promo);
 
         return redirect()
             ->route('admin.promo.list')
             ->with('success', 'Mã khuyến mãi thay đổi thành công.');
     }
 
-    private function processCourseFromRequest(Request $request, Promo $promo) {
+    private function processPromoFromRequest(Request $request, Promo $promo)
+    {
         $promo->fill($request->input('promo'));
         $promo->save();
     }

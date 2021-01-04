@@ -40,6 +40,10 @@ class PromoRequest extends FormRequest
                 ])
             ],
             'promo.value' => 'required|numeric',
+            'combo_courses' => 'nullable|array',
+            'combo_courses.*' => [
+                Rule::exists('courses', 'id')->where('enabled', true),
+            ],
             'promo.expires_on' => 'required|date_format:Y-m-d H:i',
             'promo.used_many_times' => 'required:boolean'
         ];

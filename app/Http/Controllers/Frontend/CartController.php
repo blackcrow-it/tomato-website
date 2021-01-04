@@ -170,6 +170,22 @@ class CartController extends Controller
                     ]
                 ]);
             }
+
+            if (!empty($promo->combo_courses)) {
+                $buyCourseIds = $cart->where('type', ObjectType::COURSE)->pluck('object_id');
+                $courseIdsNotInCombo = collect($promo->combo_courses)->filter(function ($courseId) use ($buyCourseIds) {
+                    return !$buyCourseIds->contains($courseId);
+                });
+                if (!$courseIdsNotInCombo->isEmpty()) {
+                    $request->validate([
+                        'cart' => [
+                            function ($attribute, $value, $fail) {
+                                $fail('Giỏ hàng không đủ điều kiện để áp dụng mã khuyến mại.');
+                            }
+                        ]
+                    ]);
+                }
+            }
         }
 
         if ($promo) {

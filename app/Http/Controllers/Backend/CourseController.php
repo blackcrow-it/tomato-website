@@ -217,7 +217,7 @@ class CourseController extends Controller
         if (empty($keyword)) return [];
 
         $query = Course::where('enabled', true)
-            ->orderBy('updated_at', 'desc');
+            ->orderBy('title', 'asc');
 
         if (strpos($keyword, config('app.url')) === 0) {
             $route = Route::getRoutes()->match(Request::create($keyword));

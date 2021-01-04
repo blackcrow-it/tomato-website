@@ -74,10 +74,89 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label>Giá trị</label>
+        <div v-if="promo.type == '{{ \App\Constants\PromoType::DISCOUNT }}'" class="form-group">
+            <label>Phần trăm giảm giá</label>
             <div>
-                <currency-input v-model="promo.value" class="form-control" />
+                <currency-input v-model="promo.value" class="form-control" placeholder="Phần trăm giảm giá" />
+            </div>
+            @error('promo.value')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+        <div v-if="promo.type == '{{ \App\Constants\PromoType::SAME_PRICE }}'" class="form-group">
+            <label>Đồng giá</label>
+            <div>
+                <currency-input v-model="promo.value" class="form-control" placeholder="Đồng giá" />
+            </div>
+            @error('promo.value')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+        <div class="form-group">
+            <label>Chọn khóa học có trong combo</label>
+            <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Khuyến mãi chỉ áp dụng khi người dùng mua đúng những khóa học có trong danh sách.<br>- Bỏ trống để áp dụng với tất cả các khóa học."></i></small>
+            <div class="form-group">
+                <div id="js-related-course">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <tr v-for="item in comboCourses" :key="item.id">
+                                    <td>
+                                        @{{ item.id }}
+                                    </td>
+                                    <td>
+                                        <img :src="item.thumbnail" class="img-thumbnail">
+                                    </td>
+                                    <td>@{{ item.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteCourse(item.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddCourseModal"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-related-course-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn khóa học</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm khóa học" v-model="keyword">
+                                    </div>
+                                    <div class="text-center" v-if="isSearching">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="item in searchResult" :key="item.id">
+                                            <td>@{{ item.id }}</td>
+                                            <td>
+                                                <img :src="item.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ item.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addCourse(item)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('combo_courses')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
             </div>
             @error('promo.value')
                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
@@ -121,15 +200,22 @@
                 code: undefined,
                 type: '{{ \App\Constants\PromoType::DISCOUNT }}',
                 value: undefined,
+                combo_courses: [],
                 expires_on: undefined,
                 used_many_times: true
-            }
+            },
+            comboCourses: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
         },
         mounted() {
             this.getItem();
         },
         methods: {
             submit() {
+                this.promo.combo_courses = _.map(this.comboCourses, 'id');
                 redirectPost(location.href, {
                     promo: this.promo
                 });
@@ -137,10 +223,39 @@
             getItem() {
                 axios.get("{{ route('admin.promo.get_item', [ 'id' => $promo->id ?? 0 ]) }}").then(res => {
                     if (!res) return;
-                    this.promo = res;
+                    this.promo = res.promo;
+                    this.comboCourses = res.combo_courses;
                 });
+            },
+            showAddCourseModal() {
+                $('#js-related-course-modal').modal('show');
+            },
+            addCourse(item) {
+                this.comboCourses.push(item);
+            },
+            deleteCourse(id) {
+                const index = this.comboCourses.findIndex(x => x.id == id);
+                this.comboCourses.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.course.search_course") }}', {
+                        params: {
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res;
+                    }).then(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
             }
         }
     });
+
 </script>
 @endsection

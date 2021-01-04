@@ -308,9 +308,17 @@
                 this.loading = true;
                 axios.get("{{ route('cart.get_data') }}").then(res => {
                     this.data = res;
-                    this.inputData = _.cloneDeep(this.data).map(item => {
-                        if (this.promoData === undefined) return item;
+                    this.inputData = _.cloneDeep(this.data);
+
+                    const applyPromo = this.validatePromo();
+                    if (!applyPromo) {
+                        this.promoData = undefined;
+                        this.promoCode = undefined;
+                    }
+
+                    this.inputData = this.inputData.map(item => {
                         if (item.price == 0) return item;
+                        if (!applyPromo) return item;
 
                         switch (this.promoData.type) {
                             case '{{ \App\Constants\PromoType::DISCOUNT }}':
@@ -402,6 +410,13 @@
                     code: this.promoCode
                 }).then(res => {
                     this.promoData = res;
+
+                    if (!this.validatePromo()) {
+                        bootbox.alert('Giỏ hàng không đủ điều kiện để áp dụng mã khuyến mại.');
+                        this.promoData = undefined;
+                        this.promoCode = undefined;
+                    }
+
                     this.getData();
                 }).catch(err => {
                     this.promoCode = undefined;
@@ -419,6 +434,18 @@
                 return this.inputData.reduce((total, item) => {
                     return total + item.amount * item.price;
                 }, 0);
+            },
+            validatePromo() {
+                const data = this.inputData;
+                if (this.promoData === undefined) return false;
+
+                if (this.promoData.combo_courses.length == 0) return true;
+
+                const courseIds = data.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}').map(x => parseInt(x.object_id));
+                const courseIdsNotInCombo = this.promoData.combo_courses.filter(id => !courseIds.includes(parseInt(id)));
+                if (courseIdsNotInCombo.length == 0) return true;
+
+                return false;
             }
         },
     });
