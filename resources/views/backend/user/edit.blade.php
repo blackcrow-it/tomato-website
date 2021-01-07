@@ -110,6 +110,96 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Khóa học đã sở hữu</label>
+                <div id="js-user-courses">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Ảnh đại diện</th>
+                                        <th>Tiêu đề</th>
+                                        <th>Thời gian mua</th>
+                                        <th>
+                                            Hết hạn lúc
+                                            <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Bỏ trống nếu học viên sở hữu khóa học vĩnh viễn."></i></small>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in userCourses" :key="item.id">
+                                        <td>
+                                            @{{ item.course.id }}
+                                            <input type="hidden" :name="'__user_courses[' + index + '][course_id]'" :value="item.course.id">
+                                        </td>
+                                        <td>
+                                            <img :src="item.course.thumbnail" class="img-thumbnail">
+                                        </td>
+                                        <td>@{{ item.course.title }}</td>
+                                        <td>
+                                            @{{ item.created_at }}
+                                            <input type="hidden" :name="'__user_courses[' + index + '][created_at]'" :value="item.created_at">
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <datetimepicker v-model="item.expires_on" format="YYYY-MM-DD hh:mm:ss" formatted="YYYY-MM-DD hh:mm:ss" :no-label="true" />
+                                            </div>
+                                            <input type="hidden" :name="'__user_courses[' + index + '][expires_on]'" :value="item.expires_on">
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="deleteCourse(item.course.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddCourseModal"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-user-courses-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn khóa học liên quan</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm khóa học" v-model="keyword">
+                                    </div>
+                                    <div class="text-center" v-if="isSearching">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="course in searchResult" :key="course.id">
+                                            <td>@{{ course.id }}</td>
+                                            <td>
+                                                <img :src="course.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ course.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addCourse(course)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('__user_courses')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
@@ -132,6 +222,60 @@
 
         $('#js-password-input').select();
         document.execCommand('copy');
+    });
+
+    new Vue({
+        el: '#js-user-courses',
+        data: {
+            userCourses: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
+        },
+        mounted() {
+            axios.get('{{ route("admin.user.get_user_courses", [ "id" => $data->id ?? 0 ]) }}').then(res => {
+                this.userCourses = res;
+            });
+        },
+        methods: {
+            showAddCourseModal() {
+                $('#js-user-courses-modal').modal('show');
+            },
+            addCourse(course) {
+                const exists = this.userCourses.find(x => x.course.id == course.id) !== undefined;
+                if (exists) {
+                    alert('Học viên đã sở hữu khóa học này rồi.');
+                    return;
+                }
+                this.userCourses.push({
+                    created_at: moment().format('YYYY-MM-DD hh:mm:ss'),
+                    expires_on: course.buyer_days_owned ? moment().add(course.buyer_days_owned, 'days').format('YYYY-MM-DD hh:mm:ss') : null,
+                    course: course
+                });
+            },
+            deleteCourse(courseId) {
+                const index = this.userCourses.findIndex(x => x.course.id == courseId);
+                this.userCourses.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.course.search_course") }}', {
+                        params: {
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res;
+                    }).then(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
+            }
+        }
     });
 </script>
 @endsection

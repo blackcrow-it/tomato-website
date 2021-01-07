@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\UserRequest;
 use App\Repositories\UserRepo;
 use App\User;
+use App\UserCourse;
+use DB;
 use Hash;
 use Illuminate\Http\Request;
 
@@ -42,6 +45,17 @@ class UserController extends Controller
 
         if ($request->input('money') !== null) {
             $this->userRepo->setMoney($user->id, $request->input('money'));
+        }
+
+        foreach ($request->input('__user_courses', []) as $item) {
+            UserCourse::insert([
+                'course_id' => $item['course_id'],
+                'user_id' => $user->id,
+                'expires_on' => $item['expires_on'],
+                'deleted_at' => null,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
         }
 
         return redirect()
@@ -90,6 +104,20 @@ class UserController extends Controller
             $this->userRepo->setMoney($user->id, $request->input('money'));
         }
 
+        DB::transaction(function () use ($request, $user) {
+            UserCourse::where('user_id', $user->id)->delete();
+            foreach ($request->input('__user_courses', []) as $item) {
+                UserCourse::insert([
+                    'course_id' => $item['course_id'],
+                    'user_id' => $user->id,
+                    'expires_on' => $item['expires_on'],
+                    'deleted_at' => null,
+                    'created_at' => $item['created_at'],
+                    'updated_at' => now()
+                ]);
+            }
+        });
+
         return redirect()
             ->route('admin.user.list')
             ->with('success', 'Thông tin thành viên thay đổi thành công.');
@@ -107,5 +135,14 @@ class UserController extends Controller
         return redirect()
             ->route('admin.user.list')
             ->with('success', 'Xóa thành viên thành công.');
+    }
+
+    public function getUserCourses($id)
+    {
+        return UserCourse::query()
+            ->with('course')
+            ->where('user_id', $id)
+            ->orderBy('created_at', 'asc')
+            ->get();
     }
 }

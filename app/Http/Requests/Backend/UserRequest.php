@@ -45,7 +45,11 @@ class UserRequest extends FormRequest
                 'string',
                 'min:6'
             ],
-            'money' => 'nullable|numeric|min:0'
+            'money' => 'nullable|numeric|min:0',
+            '__user_courses' => 'nullable|array',
+            '__user_courses.*.course_id' => 'exists:courses,id',
+            '__user_courses.*.expires_on' => 'nullable|date_format:Y-m-d H:i:s',
+            '__user_courses.*.created_at' => 'nullable|date_format:Y-m-d H:i:s',
         ];
     }
 }

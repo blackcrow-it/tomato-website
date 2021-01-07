@@ -98,12 +98,15 @@ Route::prefix('admin')
         Route::middleware('can_access_admin_dashboard')->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
 
-            Route::get('user', 'UserController@list')->name('user.list');
-            Route::get('user/add', 'UserController@add')->name('user.add');
-            Route::post('user/add', 'UserController@submitAdd')->name('user.add');
-            Route::get('user/edit/{id}', 'UserController@edit')->name('user.edit');
-            Route::post('user/edit/{id}', 'UserController@submitEdit')->name('user.edit');
-            Route::post('user/delete/{id}', 'UserController@submitDelete')->name('user.delete');
+            Route::prefix('user')->name('user.')->group(function() {
+                Route::get('/', 'UserController@list')->name('list');
+                Route::get('add', 'UserController@add')->name('add');
+                Route::post('add', 'UserController@submitAdd')->name('add');
+                Route::get('edit/{id}', 'UserController@edit')->name('edit');
+                Route::post('edit/{id}', 'UserController@submitEdit')->name('edit');
+                Route::post('delete/{id}', 'UserController@submitDelete')->name('delete');
+                Route::get('get-user-courses/{id}', 'UserController@getUserCourses')->name('get_user_courses');
+            });
 
             Route::get('post', 'PostController@list')->name('post.list');
             Route::get('post/add', 'PostController@add')->name('post.add');
