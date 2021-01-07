@@ -144,6 +144,24 @@ class CartController extends Controller
 
         $cart = Cart::where('user_id', $user->id)->get();
 
+        foreach ($cart->where('type', ObjectType::COURSE) as $item) {
+            $exists = UserCourse::query()
+                ->where('user_id', Auth::id())
+                ->where('course_id', $item->object_id)
+                ->whereDate('expires_on', '>', now())
+                ->exists();
+            if ($exists) {
+                $course = Course::find($item->object_id);
+                $request->validate([
+                    'cart' => [
+                        function ($attribute, $value, $fail) use ($course) {
+                            $fail('Bạn đã sở hữu khóa học <b>' . $course->title . '</b>. Vui lòng gỡ khỏi giỏ hàng trước khi thanh toán.');
+                        }
+                    ]
+                ]);
+            }
+        }
+
         $promo = null;
         if ($request->input('promo_code')) {
             $promo = Promo::query()
@@ -206,25 +224,6 @@ class CartController extends Controller
         $totalPrice = 0;
         foreach ($cart as $item) {
             $totalPrice += $item->amount * $item->price;
-
-            if ($item->type != ObjectType::COURSE) continue;
-            $exists = UserCourse::query()
-                ->where([
-                    'course_id' => $item->object_id,
-                    'user_id' => auth()->id()
-                ])
-                ->whereDate('expires_on', '<', now())
-                ->exists();
-            if ($exists) {
-                $course = Course::find($item->object_id);
-                $request->validate([
-                    'cart' => [
-                        function ($attribute, $value, $fail) use ($course) {
-                            $fail('Bạn đã sở hữu khóa học "' . $course->title . '".');
-                        }
-                    ]
-                ]);
-            }
         }
 
         if ($totalPrice > $user->money) {
