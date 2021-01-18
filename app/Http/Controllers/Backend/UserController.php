@@ -21,10 +21,28 @@ class UserController extends Controller
         $this->userRepo = $userRepo;
     }
 
-    public function list()
+    public function list(Request $request)
     {
+        $query = User::query();
+
+        if ($request->input('filter.id')) {
+            $query->where('id', $request->input('filter.id'));
+        }
+
+        if ($request->input('filter.username')) {
+            $query->where('username', 'ilike', '%' . $request->input('filter.username') .  '%');
+        }
+
+        if ($request->input('filter.email')) {
+            $query->where('email', 'ilike', '%' . $request->input('filter.email') .  '%');
+        }
+
+        if ($request->input('filter.name')) {
+            $query->where('name', 'ilike', '%' . $request->input('filter.name') .  '%');
+        }
+
         return view('backend.user.list', [
-            'list' => User::orderBy('id', 'DESC')->paginate()
+            'list' => $query->orderBy('created_at', 'desc')->paginate()
         ]);
     }
 

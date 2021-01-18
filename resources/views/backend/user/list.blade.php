@@ -15,24 +15,57 @@ Thành viên
         </div>
     </div><!-- /.col -->
 </div>
+
+<form action="" method="GET">
+    @csrf
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" class="form-control" name="filter[id]" value="{{ request()->input('filter.id') }}" placeholder="ID">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label>Tài khoản</label>
+                <input type="text" class="form-control" name="filter[username]" value="{{ request()->input('filter.username') }}" placeholder="Tài khoản">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" name="filter[email]" value="{{ request()->input('filter.email') }}" placeholder="Email">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label>Họ tên</label>
+                <input type="text" class="form-control" name="filter[name]" value="{{ request()->input('filter.name') }}" placeholder="Họ tên">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </div>
+</form>
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -56,7 +89,7 @@ Thành viên
             </tr>
         </thead>
         <tbody>
-            @foreach ($list as $item)
+            @foreach($list as $item)
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>
@@ -64,7 +97,7 @@ Thành viên
                     </td>
                     <td>{{ $item->username }}</td>
                     <td>
-                        @if ($item->email_verified_at)
+                        @if($item->email_verified_at)
                             {{ $item->email }}
                         @else
                             <em class="text-secondary" data-toggle="tooltip" data-placement="top" title="Email chưa được xác thực">{{ $item->email }}</em>
