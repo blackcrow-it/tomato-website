@@ -15,8 +15,6 @@ class PartVideoController extends Controller
     {
         \Debugbar::disable();
 
-        if (!Auth::check()) return response('Unauthorized.', 500);
-
         $part = Part::findOrFail($id);
 
         $lesson = $part->lesson;
