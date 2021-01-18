@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Backend;
 use App\Course;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\UserRequest;
+use App\Mail\UserMoneyChangedMail;
 use App\Repositories\UserRepo;
 use App\User;
 use App\UserCourse;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
+use Mail;
 
 class UserController extends Controller
 {
@@ -63,6 +65,18 @@ class UserController extends Controller
 
         if ($request->input('money') !== null) {
             $this->userRepo->setMoney($user->id, $request->input('money'));
+            $user->refresh();
+        }
+
+        if ($user->money > 0 && config('settings.email_notification')) {
+            Mail::to(config('settings.email_notification'))
+                ->send(
+                    new UserMoneyChangedMail([
+                        'user' => $user,
+                        'old_money' => 0,
+                        'amount' => $user->money
+                    ])
+                );
         }
 
         foreach ($request->input('__user_courses', []) as $item) {
@@ -120,6 +134,20 @@ class UserController extends Controller
 
         if ($request->input('money') !== null) {
             $this->userRepo->setMoney($user->id, $request->input('money'));
+        }
+
+        $oldMoney = $user->money;
+        $user->refresh();
+
+        if ($user->money != $oldMoney && config('settings.email_notification')) {
+            Mail::to(config('settings.email_notification'))
+                ->send(
+                    new UserMoneyChangedMail([
+                        'user' => $user,
+                        'old_money' => $oldMoney,
+                        'amount' => $user->money - $oldMoney
+                    ])
+                );
         }
 
         DB::transaction(function () use ($request, $user) {
