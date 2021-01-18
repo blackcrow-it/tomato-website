@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PartVideo extends Model
+class PartVideo extends BaseModel
 {
     protected $table = 'part_video';
 

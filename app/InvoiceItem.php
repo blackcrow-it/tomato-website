@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class InvoiceItem extends Model
+class InvoiceItem extends BaseModel
 {
     protected $table = 'invoice_items';
 

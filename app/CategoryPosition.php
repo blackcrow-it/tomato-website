@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class CategoryPosition extends Model
+class CategoryPosition extends BaseModel
 {
     protected $table = 'category_position';
     protected $fillable = [

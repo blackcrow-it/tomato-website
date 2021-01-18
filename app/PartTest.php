@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PartTest extends Model
+class PartTest extends BaseModel
 {
     protected $table = 'part_test';
 

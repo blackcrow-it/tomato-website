@@ -2,13 +2,7 @@
 
 namespace App;
 
-use App\Constants\PromoType;
-use Illuminate\Database\Eloquent\Model;
-use Throwable;
-
-use function GuzzleHttp\json_decode;
-
-class Promo extends Model
+class Promo extends BaseModel
 {
     protected $table = 'promo';
 

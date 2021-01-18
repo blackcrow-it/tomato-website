@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PostPosition extends Model
+class PostPosition extends BaseModel
 {
     protected $table = 'post_position';
     protected $fillable = [

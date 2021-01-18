@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PartContent extends Model
+class PartContent extends BaseModel
 {
     protected $table = 'part_content';
 

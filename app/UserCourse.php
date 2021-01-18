@@ -2,7 +2,6 @@
 
 namespace App;
 
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -19,11 +18,6 @@ class UserCourse extends Model
     protected $dates = [
         'expires_on'
     ];
-
-    protected function serializeDate(DateTimeInterface $date)
-	{
-		return $date->format('Y-m-d H:i:s');
-	}
 
     public function course()
     {

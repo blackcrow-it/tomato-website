@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Recharge extends Model
+class Recharge extends BaseModel
 {
     protected $table = 'recharge';
     protected $fillable = [

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PartSurvey extends Model
+class PartSurvey extends BaseModel
 {
     protected $table = 'part_survey';
 

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class CourseRelatedCourse extends Model
+class CourseRelatedCourse extends BaseModel
 {
     protected $table = 'course_related_courses';
     protected $fillable = [

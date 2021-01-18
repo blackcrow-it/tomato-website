@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class PostRelatedPost extends Model
+class PostRelatedPost extends BaseModel
 {
     protected $table = 'post_related_posts';
     protected $fillable = [
