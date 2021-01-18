@@ -40,8 +40,8 @@ class SyncCommand extends Command
             // $this->syncCategories();
             // $this->syncPosts();
             // $this->syncCourses();
-            $this->syncUsers();
-            // $this->syncUserCourses();
+            // $this->syncUsers();
+            $this->syncUserCourses();
 
             DB::commit();
         } catch (Exception $ex) {
@@ -61,6 +61,11 @@ class SyncCommand extends Command
         echo "Found: " . $oldUserCourses->count() . "\n";
 
         foreach ($oldUserCourses as $item) {
+            $newUser = User::find($item->user_id);
+            $course = Course::find($item->course_id);
+
+            if (!$newUser || !$course) continue;
+
             $newData = new UserCourse();
             $newData->user_id = $item->user_id;
             $newData->course_id = $item->course_id;
