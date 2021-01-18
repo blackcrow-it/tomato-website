@@ -61,12 +61,23 @@ class RechargeEpayController extends Controller
                 ->where([
                     'trans_id' => $requestId,
                     'type' => RechargePartner::EPAY,
-                    'status' => RechargeStatus::PENDING,
+                    // 'status' => RechargeStatus::PENDING,
                 ])
                 ->first();
+
             if ($recharge == null) {
                 DB::commit();
                 return redirect()->route('user.recharge')->withErrors('Yêu cầu nạp tiền không tồn tại.');
+            }
+
+            if ($recharge->status == RechargeStatus::SUCCESS) {
+                DB::commit();
+                return redirect()->route('user.recharge')->with('success', 'Nạp tiền thành công.');
+            }
+
+            if ($recharge->status == RechargeStatus::CANCEL) {
+                DB::commit();
+                return redirect()->route('user.recharge')->withErrors('Có lỗi xảy ra. Vui lòng thử lại.');
             }
 
             $isValidResponse = $this->epay->verifyMerchantToken($response);
