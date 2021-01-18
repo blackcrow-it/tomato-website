@@ -56,30 +56,20 @@
                         <div class="widget widget--book d-none d-xl-block">
                             <div class="widget__title">Sách</div>
                             <div class="owl-carousel">
-                                <a href="chitietsach.html" class="item">
-                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <div class="item__title">Giáo trình hán ngữ</div>
-                                    <div class="item__price">
-                                        <ins>499.000đ</ins>
-                                        <del>899.000đ</del>
-                                    </div>
-                                </a>
-                                <a href="chitietsach.html" class="item">
-                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <div class="item__title">Giáo trình hán ngữ</div>
-                                    <div class="item__price">
-                                        <ins>499.000đ</ins>
-                                        <del>899.000đ</del>
-                                    </div>
-                                </a>
-                                <a href="chitietsach.html" class="item">
-                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <div class="item__title">Giáo trình hán ngữ</div>
-                                    <div class="item__price">
-                                        <ins>499.000đ</ins>
-                                        <del>899.000đ</del>
-                                    </div>
-                                </a>
+                                @foreach($featured_books as $item)
+                                    <a href="{{ $item->url }}" class="item">
+                                        <div class="item__img">
+                                            <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">
+                                        </div>
+                                        <div class="item__title">{{ $item->title }}</div>
+                                        <div class="item__price">
+                                            <ins>{{ currency($item->price) }}</ins>
+                                            @if($item->original_price)
+                                                <del>{{ currency($item->original_price) }}</del>
+                                            @endif
+                                        </div>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -93,13 +83,15 @@
                                 </a>
                                 <div class="post-featured__body">
                                     <div class="post-featured__meta">
-                                        <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
-                                        <span class="meta-date">{{ $item->updated_at->format('d/m/Y') }}</span>
+                                        @if($item->category)
+                                            <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
+                                        @endif
+                                        <span class="meta-date">{{ $item->created_at->format('d/m/Y H:i') }}</span>
                                     </div>
                                     <div class="post-featured__title">
                                         <a href="{{ $item->url }}">{{ $item->title }}</a>
                                     </div>
-                                    <p class="post-featured__text">{{ $item->description }}</p>
+                                    <p class="post-featured__text">{!! $item->description !!}</p>
                                     <a href="{{ $item->url }}" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
                                 </div>
                             </div>
@@ -113,8 +105,10 @@
                                     </a>
                                     <div class="post-list__body">
                                         <div class="post-list__meta">
-                                            <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
-                                        <span class="meta-date">{{ $item->updated_at->format('d/m/Y') }}</span>
+                                            @if($item->category)
+                                                <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
+                                            @endif
+                                            <span class="meta-date">{{ $item->created_at->format('d/m/Y H:i') }}</span>
                                         </div>
                                         <div class="post-list__title"><a href="{{ $item->url }}">{{ $item->title }}</a></div>
                                         <p class="post-list__text">{{ $item->description }}</p>

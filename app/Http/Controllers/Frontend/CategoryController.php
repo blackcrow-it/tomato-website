@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Book;
 use App\Category;
 use App\Constants\ObjectType;
 use App\Course;
@@ -42,7 +43,8 @@ class CategoryController extends Controller
             'category' => $category,
             'list' => get_posts($category->id, null, true),
             'featured_posts' => get_posts($category->id, 'category-top-news'),
-            'breadcrumb' => Category::ancestorsOf($category->id)
+            'breadcrumb' => Category::ancestorsOf($category->id),
+            'featured_books' => Book::orderBy('created_at', 'desc')->take(5)->get()
         ]);
     }
 
