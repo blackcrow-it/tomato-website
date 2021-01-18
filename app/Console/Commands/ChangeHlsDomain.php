@@ -45,7 +45,7 @@ class ChangeHlsDomain extends Command
                 printf($dir . '/hls/playlist_1080p.m3u8' . PHP_EOL);
                 $contents = Storage::disk('s3')->get($dir . '/hls/playlist_1080p.m3u8');
                 $contents = str_replace('http://serve.tomatoonline.edu.vn/', 'https://tomatoonline.edu.vn/', $contents);
-                Storage::disk('s3')->put($dir . '/hls/playlist_1080p.m3u8', $contents);
+                Storage::disk('s3')->put($dir . '/hls/playlist_1080p.m3u8', $contents, 'public');
             } catch (Throwable $th) {
                 printf($th->getMessage() . PHP_EOL);
             }
@@ -54,7 +54,7 @@ class ChangeHlsDomain extends Command
                 printf($dir . '/hls/playlist_720p.m3u8' . PHP_EOL);
                 $contents = Storage::disk('s3')->get($dir . '/hls/playlist_720p.m3u8');
                 $contents = str_replace('http://serve.tomatoonline.edu.vn/', 'https://tomatoonline.edu.vn/', $contents);
-                Storage::disk('s3')->put($dir . '/hls/playlist_720p.m3u8', $contents);
+                Storage::disk('s3')->put($dir . '/hls/playlist_720p.m3u8', $contents, 'public');
             } catch (Throwable $th) {
                 printf($th->getMessage() . PHP_EOL);
             }
