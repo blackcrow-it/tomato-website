@@ -29,8 +29,6 @@ class PartVideoController extends Controller
 
         $key = Storage::disk('s3')->get($partVideo->s3_path . '/secret.key');
 
-        return response($key)->withHeaders([
-            'Access-Control-Allow-Origin' => 'http://tomatoonline.edu.vn'
-        ]);
+        return $key;
     }
 }

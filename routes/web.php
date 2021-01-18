@@ -35,7 +35,7 @@ Route::namespace('Frontend')
         Route::get('{slug}-b{id}.html', 'BookController@index')->name('book')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::middleware('auth')->group(function () {
-            Route::get('get-video-key/{id}', 'PartVideoController@getKey')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
+            Route::get('get-video-key/{id}', 'PartVideoController@getKey')->middleware('cors')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
 
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
