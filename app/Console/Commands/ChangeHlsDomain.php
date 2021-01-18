@@ -40,11 +40,11 @@ class ChangeHlsDomain extends Command
     {
         $dirs = Storage::disk('s3')->directories('part_video');
         foreach ($dirs as $dir) {
-            $contents = Storage::disk('s3')->get($dir . 'hls/playlist_1080p.m3u8');
+            $contents = Storage::disk('s3')->get($dir . '/hls/playlist_1080p.m3u8');
             $contents = str_replace('http://serve.tomatoonline.edu.vn/', 'https://tomatoonline.edu.vn/', $contents);
             Storage::disk('s3')->put($dir . '/hls/playlist_1080p.m3u8', $contents);
 
-            $contents = Storage::disk('s3')->get($dir . 'hls/playlist_720p.m3u8');
+            $contents = Storage::disk('s3')->get($dir . '/hls/playlist_720p.m3u8');
             $contents = str_replace('http://serve.tomatoonline.edu.vn/', 'https://tomatoonline.edu.vn/', $contents);
             Storage::disk('s3')->put($dir . '/hls/playlist_720p.m3u8', $contents);
         }
