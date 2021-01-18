@@ -50,16 +50,9 @@
                         @endif
                     </div>
 
-                    <ul class="product-detail__meta">
-                        <li>Trình độ: Mới bắt đầu</li>
-                        <li>Bài học: 15 bài</li>
-                        <li>Giảng viên: Bùi Thu Hà</li>
-                        <li>Học viên tham gia: 300</li>
-                        <li>Kiến thức nền tảng cho việc học Hán ngữ</li>
-                        <li>Nắm được ngữ âm cơ bản và sử dụng thành thạo cách đọc, ghi phiên âm</li>
-                        <li>Hỗ trợ Link download giáo trình và giải đáp các câu hỏi kiến thức trực tiếp từ giảng viên</li>
-                        <li>Sở hữu mãi mãi</li>
-                    </ul>
+                    <div class="mb-3">
+                        {!! $course->description !!}
+                    </div>
 
                     @if(auth()->check())
                         @if($is_owned)
