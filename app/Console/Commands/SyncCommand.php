@@ -28,7 +28,7 @@ class SyncCommand extends Command
     {
         parent::__construct();
 
-        $this->oldConn = DB::connection('mysql');
+        $this->oldConn = DB::connection('old_db');
         $this->newConn = DB::connection('pgsql');
     }
 
@@ -37,10 +37,10 @@ class SyncCommand extends Command
         try {
             DB::beginTransaction();
 
-            $this->syncCategories();
+            // $this->syncCategories();
             // $this->syncPosts();
-            $this->syncCourses();
-            // $this->syncUsers();
+            // $this->syncCourses();
+            $this->syncUsers();
             // $this->syncUserCourses();
 
             DB::commit();
@@ -50,48 +50,21 @@ class SyncCommand extends Command
         }
     }
 
-    private function syncUserCourses() {
-        echo "syncUsers\n";
+    private function syncUserCourses()
+    {
+        echo "syncUserCourses\n";
 
-        $oldUserCourses = $this->oldConn->table('user_course')
-            ->leftJoin('user', 'user.user_id', '=', 'user_course.user_id')
-            ->leftJoin('course', 'course.course_id', '=', 'user_course.course_id')
-            ->select([
-                'user_course.user_course_id',
-                'user.email',
-                'course.title',
-                'user_course.time',
-                'user_course.expired_days',
-            ])
-            ->get();
+        $oldUserCourses = $this->oldConn->table('user_course')->get();
 
         $syncErrors = [];
 
         echo "Found: " . $oldUserCourses->count() . "\n";
 
         foreach ($oldUserCourses as $item) {
-            $expiresOn = Carbon::createFromTimestamp($item->time)->addDays($item->expired_days);
-            if ($item->expired_days != '-1' && $expiresOn < Carbon::now()) {
-                continue;
-            }
-
-            if ($item->email == null || $item->title == null) {
-                $syncErrors[] = $item;
-                continue;
-            }
-
-            $newUser = User::where('email', $item->email)->first();
-            $newCourse = Course::where('title', $item->title)->first();
-
-            if ($newUser == null || $newCourse == null) {
-                $syncErrors[] = $item;
-                continue;
-            }
-
             $newData = new UserCourse();
-            $newData->user_id = $newUser->id;
-            $newData->course_id = $newCourse->id;
-            $newData->expires_on = $item->expired_days != '-1' ? $expiresOn : null;
+            $newData->user_id = $item->user_id;
+            $newData->course_id = $item->course_id;
+            $newData->expires_on = $item->expired_days != '-1' ? Carbon::createFromTimestamp($item->time)->addDays($item->expired_days) : null;
             $newData->save();
         }
 
@@ -102,10 +75,7 @@ class SyncCommand extends Command
     {
         echo "syncUsers\n";
 
-        $oldUsers = $this->oldConn->table('user')
-            ->get();
-
-        echo "Found: " . $oldUsers->count() . "\n";
+        $oldUsers = $this->oldConn->table('user')->get();
 
         for ($i = 0; $i < $oldUsers->count(); $i++) {
             $user = $oldUsers[$i];
@@ -126,9 +96,8 @@ class SyncCommand extends Command
                 $data[$attr] = null;
             }
 
-            if (User::where('email', $user->email)->exists()) continue;
-
-            $newUser = new User();
+            $newUser = User::find($user->user_id) ?? new User();
+            $newUser->id = $user->user_id;
             $newUser->fill($data);
             $newUser->email_verified_at = Carbon::now();
             $newUser->google_id = $user->google_id ?: null;
