@@ -142,7 +142,7 @@ if (!function_exists('get_courses')) {
                 ->orderByRaw('CASE WHEN course_position.order_in_position > 0 THEN 0 ELSE 1 END, course_position.order_in_position asc');
         }
 
-        $query->orderBy('courses.updated_at', 'desc');
+        $query->orderBy('courses.created_at', 'desc');
 
         if ($paginate === true) {
             $list = $query->paginate(config('template.paginate.list.course'));

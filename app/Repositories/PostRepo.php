@@ -35,7 +35,7 @@ class PostRepo
             }
         }
 
-        $query->orderBy('updated_at', 'DESC');
+        $query->orderBy('created_at', 'DESC');
 
         return $query;
     }
