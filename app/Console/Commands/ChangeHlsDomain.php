@@ -46,7 +46,11 @@ class ChangeHlsDomain extends Command
                 $contents = Storage::disk('s3')->get($dir . '/hls/playlist_1080p.m3u8');
                 $contents = str_replace('http://serve.tomatoonline.edu.vn/', 'https://tomatoonline.edu.vn/', $contents);
                 Storage::disk('s3')->put($dir . '/hls/playlist_1080p.m3u8', $contents);
+            } catch (Throwable $th) {
+                printf($th->getMessage() . PHP_EOL);
+            }
 
+            try {
                 printf($dir . '/hls/playlist_720p.m3u8' . PHP_EOL);
                 $contents = Storage::disk('s3')->get($dir . '/hls/playlist_720p.m3u8');
                 $contents = str_replace('http://serve.tomatoonline.edu.vn/', 'https://tomatoonline.edu.vn/', $contents);
