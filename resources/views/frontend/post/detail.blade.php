@@ -109,32 +109,22 @@
                         </div>
 
                         <div class="widget widget--book">
-                            <div class="widget__title">Sách liên quan</div>
+                            <div class="widget__title">Sách</div>
                             <div class="owl-carousel">
-                                <a href="chitietsach.html" class="item">
-                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <div class="item__title">Giáo trình hán ngữ</div>
-                                    <div class="item__price">
-                                        <ins>499.000đ</ins>
-                                        <del>899.000đ</del>
-                                    </div>
-                                </a>
-                                <a href="chitietsach.html" class="item">
-                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <div class="item__title">Giáo trình hán ngữ</div>
-                                    <div class="item__price">
-                                        <ins>499.000đ</ins>
-                                        <del>899.000đ</del>
-                                    </div>
-                                </a>
-                                <a href="chitietsach.html" class="item">
-                                    <div class="item__img"><img src="assets/img/image/bookBox-1.jpg"></div>
-                                    <div class="item__title">Giáo trình hán ngữ</div>
-                                    <div class="item__price">
-                                        <ins>499.000đ</ins>
-                                        <del>899.000đ</del>
-                                    </div>
-                                </a>
+                                @foreach($featured_books as $item)
+                                    <a href="{{ $item->url }}" class="item">
+                                        <div class="item__img">
+                                            <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">
+                                        </div>
+                                        <div class="item__title">{{ $item->title }}</div>
+                                        <div class="item__price">
+                                            <ins>{{ currency($item->price) }}</ins>
+                                            @if($item->original_price)
+                                                <del>{{ currency($item->original_price) }}</del>
+                                            @endif
+                                        </div>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>

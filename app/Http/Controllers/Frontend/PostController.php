@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Book;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
@@ -57,6 +58,7 @@ class PostController extends Controller
             'breadcrumb' => Category::ancestorsAndSelf($post->category_id),
             'related_posts' => $relatedPosts,
             'related_courses' => $relatedCourses,
+            'featured_books' => Book::orderBy('created_at', 'desc')->take(5)->get(),
             'next_post' => $nextPost,
             'prev_post' => $prevPost,
         ]);
