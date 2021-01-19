@@ -5,7 +5,6 @@ cd /var/www/tomato
 git reset --hard
 git pull
 composer install
-npm install
 php artisan config:cache
 php artisan migrate
 chown -R apache storage
