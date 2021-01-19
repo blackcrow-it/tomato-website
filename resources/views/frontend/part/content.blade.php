@@ -5,3 +5,9 @@
     {!! $data->content !!}
 </div>
 @endsection
+
+@section('footer')
+    <script>
+        $('.entry-detail img').css('height', 'auto');
+    </script>
+@endsection
