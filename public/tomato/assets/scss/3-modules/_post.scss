@@ -38,7 +38,6 @@
 .post-featured__meta,
 .post-list__meta {
 	font-size: 10px;
-	margin-bottom: 8px;
 
 	a {
 		color: $color-secondary;
@@ -118,6 +117,7 @@
 //
 .post-featured {
 	margin-bottom: 50px;
+	position: relative;
 }
 
 .post-featured__img {
@@ -129,9 +129,8 @@
 }
 
 .post-featured__body {
-	padding: 30px 20px;
+	padding: 20px 30px;
 	background-color: #f3f3f3;
-	border-top-left-radius: 0;
 }
 
 .post-featured__cat {
@@ -146,7 +145,6 @@
 
 .post-featured__title {
 	font-size: 22px;
-	margin-bottom: 15px;
 
 	&:hover {
 		color: $color-primary;
@@ -154,7 +152,7 @@
 }
 
 .post-featured__text {
-	margin-bottom: 30px;
+
 }
 
 @include media-breakpoint-down(sm) {
@@ -166,12 +164,11 @@
 
 @include media-breakpoint-up(md) {
 	.post-featured__body {
-		position: relative;
+		position: absolute;
 		z-index: 1;
-		max-width: 85%;
-		border-radius: 5px;
-		padding: 50px 40px;
-		margin-top: -120px;
+		padding: 20px 30px;
+		width: 100%;
+		bottom: 0;
 	}
 
 	.post-featured__title {

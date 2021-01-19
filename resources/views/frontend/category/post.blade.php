@@ -79,7 +79,7 @@
                         @foreach($featured_posts as $item)
                             <div class="post-featured">
                                 <a href="{{ $item->url }}" class="post-featured__img">
-                                    <img src="{{ $item->cover }}" alt="{{ $item->title }}">
+                                    <img src="{{ $item->cover ?? $item->thumbnail }}" alt="{{ $item->title }}">
                                 </a>
                                 <div class="post-featured__body">
                                     <div class="post-featured__meta">
@@ -91,7 +91,7 @@
                                     <div class="post-featured__title">
                                         <a href="{{ $item->url }}">{{ $item->title }}</a>
                                     </div>
-                                    <p class="post-featured__text">{!! $item->description !!}</p>
+                                    <div>{!! $item->description !!}</div>
                                     <a href="{{ $item->url }}" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
                                 </div>
                             </div>
