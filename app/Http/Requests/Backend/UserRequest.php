@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Backend;
 
+use App\Rules\Lowercase;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -38,6 +39,7 @@ class UserRequest extends FormRequest
                 'nullable',
                 'email',
                 'max:255',
+                new Lowercase,
                 Rule::unique('users', 'email')->ignore($userId ?? null)
             ],
             'password' => [

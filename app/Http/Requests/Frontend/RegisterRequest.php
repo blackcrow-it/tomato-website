@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Frontend;
 
+use App\Rules\Lowercase;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -27,7 +28,13 @@ class RegisterRequest extends FormRequest
             'username' => 'required|string|between:5,255|unique:users,username',
             'password' => 'required|string|min:6|confirmed',
             'name' => 'nullable|string',
-            'email' => 'nullable|email|max:255|unique:users,email',
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                new Lowercase,
+                'unique:users,email'
+            ],
             'phone' => 'nullable|numeric',
             'checkbox_requirement' => 'required',
         ];
