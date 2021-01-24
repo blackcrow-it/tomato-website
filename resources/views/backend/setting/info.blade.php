@@ -58,6 +58,10 @@ Cài đặt thông tin chung
     <input type="text" name="facebook" value="{{ config('settings.facebook') }}" class="form-control" placeholder="Facebook">
 </div>
 <div class="form-group">
+    <label>Youtube</label>
+    <input type="text" name="youtube" value="{{ config('settings.youtube') }}" class="form-control" placeholder="Youtube">
+</div>
+<div class="form-group">
     <label>Chứng nhận Bộ công thương</label>
     <textarea name="certification" class="editor">{!! config('settings.certification') !!}</textarea>
 </div>

@@ -350,6 +350,9 @@
                                             @if (config('settings.facebook'))
                                                 <a href="{{ config('settings.facebook') }}" target="_blank"><i class="fa fa-facebook"></i></a>
                                             @endif
+                                            @if (config('settings.youtube'))
+                                                <a href="{{ config('settings.youtube') }}" target="_blank"><i class="fa fa-youtube"></i></a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
