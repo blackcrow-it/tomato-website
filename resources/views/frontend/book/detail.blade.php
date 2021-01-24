@@ -42,15 +42,12 @@
                 <div class="col-md-6 col-xl-7">
                     <div class="product-detail__img">
                         <div class="book-detail-img">
-                            <div class="owl-carousel">
-                                @foreach ($book->detail_images ?? [] as $image)
-                                    <div class="book-detail-img-block">
-                                        <img src="{{ $image }}" alt="{{ $book->title }}">
-                                    </div>
-                                @endforeach
+                            <div class="detail-images">
+                                <img src="{{ $book->thumbnail }}" alt="{{ $book->title }}">
+                                <div class="detail-images-preview"></div>
                             </div>
                             <ul class="owl-dot-custom owl-dots">
-                                @foreach ($book->detail_images ?? [] as $image)
+                                @foreach($book->detail_images ?? [] as $image)
                                     <li class="owl-dot">
                                         <img src="{{ $image }}" alt="{{ $book->title }}">
                                     </li>
@@ -60,54 +57,56 @@
                     </div>
                 </div>
                 <div class="col-md-6 col-xl-5">
-                    <div class="product-detail__price">
-                        <div>
-                            <ins>{{ currency($book->price) }}</ins>
+                    <div class="product-detail__image-preview-wrapper">
+                        <div class="product-detail__price">
+                            <div>
+                                <ins>{{ currency($book->price) }}</ins>
+                                @if($book->original_price)
+                                    <del>{{ currency($book->original_price) }}</del>
+                                @endif
+                            </div>
+
                             @if($book->original_price)
-                                <del>{{ currency($book->original_price) }}</del>
+                                <span class="sale">-{{ ceil(100 - $book->price / $book->original_price * 100) }}%</span>
                             @endif
                         </div>
 
-                        @if($book->original_price)
-                            <span class="sale">-{{ ceil(100 - $book->price / $book->original_price * 100) }}%</span>
-                        @endif
-                    </div>
+                        <div class="product-detail__meta">
+                            {!! $book->description !!}
+                        </div>
 
-                    <div class="product-detail__meta">
-                        {!! $book->description !!}
-                    </div>
-
-                    @if(auth()->check())
-                        <form action="{{ route('cart.add') }}" id="add-to-cart">
-                            <div class="product-detail__quantity">
-                                <label>Số lượng: </label>
-                                <div class="input-quantity">
-                                    <input type="number" name="amount" class="input-quantity-text form-control" value="1" data-min="1">
-                                    <button type="button" class="input-quantity-number input-quantity-down">-</button>
-                                    <button type="button" class="input-quantity-number input-quantity-up">+</button>
+                        @if(auth()->check())
+                            <form action="{{ route('cart.add') }}" id="add-to-cart">
+                                <div class="product-detail__quantity">
+                                    <label>Số lượng: </label>
+                                    <div class="input-quantity">
+                                        <input type="number" name="amount" class="input-quantity-text form-control" value="1" data-min="1">
+                                        <button type="button" class="input-quantity-number input-quantity-down">-</button>
+                                        <button type="button" class="input-quantity-number input-quantity-up">+</button>
+                                    </div>
                                 </div>
-                            </div>
 
+                                <div class="product-detal__btn">
+                                    <div class="btn-wrap">
+                                        <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart') }}" class="btn btn-buy-now">Mua ngay</button>
+                                        <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart">
+                                            <span class="add-to-cart-text">Thêm vào giỏ</span>
+                                            <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
+                                            <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
+                                        </button>
+                                    </div>
+                                    <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
+                                </div>
+                                <input type="hidden" name="object_id" value="{{ $book->id }}">
+                                <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::BOOK }}">
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="btn">Đăng nhập để tiếp tục</a>
                             <div class="product-detal__btn">
-                                <div class="btn-wrap">
-                                    <button type="button" data-form="#add-to-cart" data-redirect="{{ route('cart') }}" class="btn btn-buy-now">Mua ngay</button>
-                                    <button type="button" data-form="#add-to-cart" class="btn btn--secondary btn-add-to-cart">
-                                        <span class="add-to-cart-text">Thêm vào giỏ</span>
-                                        <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
-                                        <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
-                                    </button>
-                                </div>
                                 <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
                             </div>
-                            <input type="hidden" name="object_id" value="{{ $book->id }}">
-                            <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::BOOK }}">
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="btn">Đăng nhập để tiếp tục</a>
-                        <div class="product-detal__btn">
-                            <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
             </div>
 
@@ -217,7 +216,26 @@
 @endsection
 
 @section('footer')
-    <script>
-        $('.entry-detail img').css('height', 'auto');
-    </script>
+<script>
+    $('.entry-detail img').css('height', 'auto');
+
+    $('.owl-dots .owl-dot').click(function () {
+        $('.owl-dots .owl-dot').removeClass('active');
+        $(this).addClass('active');
+        $('.detail-images img').attr('src', $(this).find('img').attr('src'));
+    });
+
+    new Drift(document.querySelector('.detail-images img'), {
+        sourceAttribute: 'src',
+        paneContainer: document.querySelector('.detail-images-preview'),
+        zoomFactor: 2,
+        onShow: function() {
+            $('.detail-images-preview').show();
+        },
+        onHide: function() {
+            $('.detail-images-preview').hide();
+        }
+    });
+
+</script>
 @endsection

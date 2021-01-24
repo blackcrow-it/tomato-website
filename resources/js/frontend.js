@@ -25,3 +25,6 @@ window.bootbox = bootbox;
 bootbox.setDefaults({
     centerVertical: true
 });
+
+import Drift from 'drift-zoom';
+window.Drift = Drift;
