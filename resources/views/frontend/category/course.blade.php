@@ -113,22 +113,6 @@
                                 </ul>
                             </form>
                         </div>
-
-                        <div class="widget widget--docLive">
-                            <div class="widget__title">Tài liệu livestream</div>
-                            <ul>
-                                <li><a href="#">23/10 + clip</a></li>
-                                <li><a href="#">23/10 + clip</a></li>
-                                <li><a href="#">23/10 + clip</a></li>
-                            </ul>
-                        </div>
-
-                        <div class="widget widget--mockTest d-none d-xl-block">
-                            <div class="widget__title">Kiểm tra kiến thức</div>
-                            <div class="f-content">
-                                <a href="thithudauvao.html" class="btn btn--secondary">Vào thi</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-xl-9">
