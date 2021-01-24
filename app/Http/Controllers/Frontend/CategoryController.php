@@ -97,7 +97,7 @@ class CategoryController extends Controller
 
         $query
             ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC')
-            ->orderBy('updated_at', 'DESC');
+            ->orderBy('created_at', 'desc');
 
         $list = $query->paginate(config('template.paginate.list.course'));
 

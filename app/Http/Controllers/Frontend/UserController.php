@@ -114,7 +114,7 @@ class UserController extends Controller
     {
         $data = Recharge::where('user_id', Auth::user()->id)
             ->where('status', RechargeStatus::SUCCESS)
-            ->orderBy('updated_at', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate();
 
         $data->getCollection()->transform(function ($item) {

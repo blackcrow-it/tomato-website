@@ -15,6 +15,64 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    public function all(Request $request) {
+        $query = Course::query()
+            ->with([
+                'category' => function ($q) {
+                    $q->where('enabled', true);
+                },
+                'teacher',
+                'lessons' => function ($q) {
+                    $q->where('enabled', true);
+                },
+                'author',
+                'editor'
+            ])
+            ->where('enabled', true);
+
+        if ($request->input('filter.level') !== null) {
+            $query->where(function ($q) use ($request) {
+                $q
+                    ->where('courses.level', $request->input('filter.level'))
+                    ->orWhereNull('courses.level');
+            });
+        }
+
+        if ($request->input('filter.promotion') !== null) {
+            switch ($request->input('filter.promotion')) {
+                case 'discount':
+                    $query->whereNotNull('original_price');
+                    break;
+
+                case 'free':
+                    $query->where(function ($q) {
+                        $q
+                            ->whereNull('price')
+                            ->orWhere('price', 0);
+                    });
+                    break;
+            }
+        }
+
+        if ($request->input('filter.lesson_count') !== null) {
+            $query->has('lessons', '<=', $request->input('filter.lesson_count'));
+        }
+
+        $query->orderBy('created_at', 'desc');
+
+        $list = $query->paginate(config('template.paginate.list.course'));
+
+        $category = new Category();
+        $category->title = 'Tất cả khóa học';
+        $category->link = route('course.all');
+
+        return view('frontend.category.course', [
+            'category' => $category,
+            'list' => $list,
+            'breadcrumb' => [],
+        ]);
+    }
+
     public function index(Request $request, $slug, $id)
     {
         $course = Course::with('teacher')

@@ -71,7 +71,7 @@
                         <ul class="menu-list">
                             <li><a href="{{ route('home') }}">Trang chủ</a></li>
                             <li class="menu-has-children">
-                                <a href="">Khóa học</a>
+                                <a href="{{ route('course.all') }}">Khóa học</a>
                                 <ul class="submenu">
                                     @foreach(get_categories(null, 'course-categories') as $c1)
                                         <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">

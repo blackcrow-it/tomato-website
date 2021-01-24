@@ -44,13 +44,13 @@ class PostController extends Controller
             ->pluck('related_course');
 
         $nextPost = Post::where('enabled', true)
-            ->where('updated_at', '>', $post->updated_at)
-            ->orderBy('updated_at', 'asc')
+            ->where('created_at', '>', $post->created_at)
+            ->orderBy('created_at', 'asc')
             ->first();
 
         $prevPost = Post::where('enabled', true)
-            ->where('updated_at', '<', $post->updated_at)
-            ->orderBy('updated_at', 'desc')
+            ->where('created_at', '<', $post->created_at)
+            ->orderBy('created_at', 'desc')
             ->first();
 
         return view('frontend.post.detail', [

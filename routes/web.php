@@ -34,6 +34,8 @@ Route::namespace('Frontend')
 
         Route::get('{slug}-b{id}.html', 'BookController@index')->name('book')->where(['slug' => '.*', 'id' => '\d+']);
 
+        Route::get('khoa-hoc/tat-ca', 'CourseController@all')->name('course.all');
+
         Route::middleware('auth')->group(function () {
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 

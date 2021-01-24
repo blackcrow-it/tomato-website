@@ -210,7 +210,7 @@ class PostController extends Controller
         if (empty($keyword)) return [];
 
         $query = Post::where('enabled', true)
-            ->orderBy('updated_at', 'desc');
+            ->orderBy('created_at', 'desc');
 
         if (strpos($keyword, config('app.url')) === 0) {
             $route = Route::getRoutes()->match(Request::create($keyword));
