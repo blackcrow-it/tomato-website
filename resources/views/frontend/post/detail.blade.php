@@ -140,7 +140,7 @@
             <div class="col-xl-9 offset-xl-3">
                 <div class="commentbox-wrap">
                     <div class="title-page-min">Bình luận bài viết</div>
-                    <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"></div>
+                    <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
                 </div>
             </div>
         </div>

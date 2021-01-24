@@ -513,9 +513,10 @@
             FB.init({
                 appId: '141729702951631',
                 xfbml: true,
-                version: 'v3.2'
+                version: 'v9.0'
             });
             FB.AppEvents.logPageView();
+            FB.CustomerChat.showDialog();
         };
 
         (function (d, s, id) {
@@ -525,10 +526,9 @@
             }
             js = d.createElement(s);
             js.id = id;
-            js.src = "https://connect.facebook.net/vi_VN/sdk.js";
+            js.src = "https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
-
     </script>
 </body>
 

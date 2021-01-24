@@ -164,7 +164,7 @@
                         </div>
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
-                                <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10"></div>
+                                <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
                             </div>
                         </div>
                     </div>
