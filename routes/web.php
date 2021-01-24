@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::any('healthcheck', function () {
+    return 'OK';
+});
+
 Route::any('test', 'TestController@index');
 
 Route::get('auth/google', 'SocialiteController@loginWithGoogle')->name('auth.google');
@@ -100,7 +104,7 @@ Route::prefix('admin')
         Route::middleware('can_access_admin_dashboard')->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
 
-            Route::prefix('user')->name('user.')->group(function() {
+            Route::prefix('user')->name('user.')->group(function () {
                 Route::get('/', 'UserController@list')->name('list');
                 Route::get('add', 'UserController@add')->name('add');
                 Route::post('add', 'UserController@submitAdd')->name('add');
