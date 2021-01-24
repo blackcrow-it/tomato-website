@@ -12,6 +12,19 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+    public function all()
+    {
+        $category = new Category();
+        $category->title = 'Tất cả tài liệu';
+        $category->link = route('book.all');
+
+        return view('frontend.category.book', [
+            'category' => $category,
+            'list' => get_books(null, null, true),
+            'breadcrumb' => []
+        ]);
+    }
+
     public function index(Request $request, $slug, $id)
     {
         $book = Book::firstWhere([
