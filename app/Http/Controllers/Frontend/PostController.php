@@ -29,6 +29,7 @@ class PostController extends Controller
                 $query->where('enabled', true);
             })
             ->where('post_id', $post->id)
+            ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_post');
 
@@ -40,6 +41,7 @@ class PostController extends Controller
                 $query->where('enabled', true);
             })
             ->where('post_id', $post->id)
+            ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_course');
 

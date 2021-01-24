@@ -41,6 +41,7 @@ class BookController extends Controller
                 $query->where('enabled', true);
             })
             ->where('book_id', $book->id)
+            ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_course');
 
@@ -49,6 +50,7 @@ class BookController extends Controller
                 $query->where('enabled', true);
             })
             ->where('book_id', $book->id)
+            ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_book');
 

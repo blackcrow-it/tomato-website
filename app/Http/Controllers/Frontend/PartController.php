@@ -30,6 +30,7 @@ class PartController extends Controller
                 $query->where('enabled', true);
             })
             ->where('course_id', $course->id)
+            ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_book');
 
