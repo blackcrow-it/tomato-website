@@ -98,7 +98,11 @@
                         @endforeach
 
                         <div class="post-list">
+                            <?php $featuredPostIds = $featured_posts->pluck('id'); ?>
                             @foreach($list as $item)
+                                @if($featuredPostIds->contains($item->id))
+                                    @continue
+                                @endif
                                 <div class="post-list__item">
                                     <a href="{{ $item->url }}" class="post-list__img">
                                         <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">
