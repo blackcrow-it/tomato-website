@@ -92,7 +92,7 @@
                                                 @enderror
                                             </div>
                                             <div class="button-item text-right">
-                                                <button type="submit" class="btn btn--secondary btn--block">Đăng ký</button>
+                                                <button type="submit" class="btn btn--secondary btn--block">Tạo tài khoản</button>
                                             </div>
 
                                             <div class="login-social">

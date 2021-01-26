@@ -75,7 +75,7 @@
                                             <div class="login-social">
                                                 <span>hoặc</span>
                                                 <div class="login-social__btn">
-                                                    <a href="{{ route('register') }}" class="register"><i class="fa fa-sign-in"></i> Đăng ký ngay</a>
+                                                    <a href="{{ route('register') }}" class="register"><i class="fa fa-sign-in"></i> Tạo tài khoản</a>
                                                 </div>
                                             </div>
                                         </form>
