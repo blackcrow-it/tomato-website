@@ -76,33 +76,8 @@
                 </div>
                 <div class="col-xl-9">
                     <div class="layout-content">
-                        @foreach($featured_posts as $item)
-                            <div class="post-featured">
-                                <a href="{{ $item->url }}" class="post-featured__img">
-                                    <img src="{{ $item->cover ?? $item->thumbnail }}" alt="{{ $item->title }}">
-                                </a>
-                                <div class="post-featured__body">
-                                    <div class="post-featured__meta">
-                                        @if($item->category)
-                                            <span class="meta-cat"><a href="{{ $item->category->url }}">{{ $item->category->title }}</a></span>
-                                        @endif
-                                        <span class="meta-date">{{ $item->created_at->format('d/m/Y H:i') }}</span>
-                                    </div>
-                                    <div class="post-featured__title">
-                                        <a href="{{ $item->url }}">{{ $item->title }}</a>
-                                    </div>
-                                    <div>{!! $item->description !!}</div>
-                                    <a href="{{ $item->url }}" class="btn-link">Xem chi tiết <i class="fa fa-angle-right"></i></a>
-                                </div>
-                            </div>
-                        @endforeach
-
                         <div class="post-list">
-                            <?php $featuredPostIds = $featured_posts->pluck('id'); ?>
                             @foreach($list as $item)
-                                @if($featuredPostIds->contains($item->id))
-                                    @continue
-                                @endif
                                 <div class="post-list__item">
                                     <a href="{{ $item->url }}" class="post-list__img">
                                         <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">

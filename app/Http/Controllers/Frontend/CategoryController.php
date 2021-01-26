@@ -42,7 +42,6 @@ class CategoryController extends Controller
         return view('frontend.category.post', [
             'category' => $category,
             'list' => get_posts($category->id, null, true),
-            'featured_posts' => get_posts($category->id, 'category-top-news'),
             'breadcrumb' => Category::ancestorsOf($category->id),
             'featured_books' => Book::orderBy('created_at', 'desc')->take(5)->get()
         ]);

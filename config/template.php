@@ -43,11 +43,6 @@ return [
             'type' => ObjectType::POST,
             'name' => 'Trang chủ - Tin nổi bật'
         ],
-        [
-            'code' => 'category-top-news',
-            'type' => ObjectType::POST,
-            'name' => 'Danh mục - Tin nổi bật'
-        ],
         // END POST POSITION
 
         // START COURSE POSITION
