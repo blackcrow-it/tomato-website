@@ -35,7 +35,6 @@ class SocialiteController extends Controller
         }
 
         $user->google_id = $googleUser->id;
-
         $user->save();
 
         Auth::login($user);
@@ -53,18 +52,19 @@ class SocialiteController extends Controller
     {
         $facebookUser = Socialite::driver('facebook')->user();
 
-        $user = Auth::user() ?? User::where('facebook_id', $facebookUser->id)->first();
+        $user = Auth::user() ?? User::where('facebook_id', $facebookUser->id)->first() ?? User::where('email', $facebookUser->email)->first();
 
         if ($user == null) {
             $user = new User;
             $user->username = 'fb' . $facebookUser->id;
             $user->password = Hash::make(Str::random());
-            $user->facebook_id = $facebookUser->id;
             $user->email = $user->email ?? $facebookUser->email;
             $user->avatar = $user->avatar ?? $facebookUser->avatar;
             $user->name = $user->name ?? $facebookUser->name;
-            $user->save();
         }
+
+        $user->facebook_id = $facebookUser->id;
+        $user->save();
 
         Auth::login($user);
         app(LoginController::class)->setLoginToken();
