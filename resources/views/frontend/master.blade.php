@@ -347,10 +347,10 @@
                                     <div class="footer__widget">
                                         <div class="footer__widget-title">Mạng xã hội</div>
                                         <div class="footer__social">
-                                            @if (config('settings.facebook'))
+                                            @if(config('settings.facebook'))
                                                 <a href="{{ config('settings.facebook') }}" target="_blank"><i class="fa fa-facebook"></i></a>
                                             @endif
-                                            @if (config('settings.youtube'))
+                                            @if(config('settings.youtube'))
                                                 <a href="{{ config('settings.youtube') }}" target="_blank"><i class="fa fa-youtube"></i></a>
                                             @endif
                                         </div>
@@ -372,9 +372,9 @@
         </footer>
         <!-- End/Footer -->
 
-        <a href="#" id="backtotop">
+        {{-- <a href="#" id="backtotop">
             <span><i class="fa fa-angle-up"></i></span>
-        </a>
+        </a> --}}
     </div>
 
     <!-- Cart -->
@@ -510,29 +510,30 @@
 
     @yield('footer')
 
+    <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>
     <script>
         window.fbAsyncInit = function () {
             FB.init({
-                appId: '141729702951631',
                 xfbml: true,
                 version: 'v9.0'
             });
-            FB.AppEvents.logPageView();
-            FB.CustomerChat.showDialog();
         };
 
         (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
+            if (d.getElementById(id)) return;
             js = d.createElement(s);
             js.id = id;
-            js.src = "https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js";
+            js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
     </script>
+
+    <!-- Your Chat Plugin code -->
+    <div class="fb-customerchat" attribution=setup_tool page_id="436195250152726" theme_color="#e71d36" logged_in_greeting="Kính chào quý khách! Chúng tôi có thể giúp gì được cho quý khách?" logged_out_greeting="Kính chào quý khách! Chúng tôi có thể giúp gì được cho quý khách?">
+    </div>
 </body>
 
 </html>
