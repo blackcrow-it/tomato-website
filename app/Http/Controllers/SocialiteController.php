@@ -10,6 +10,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Socialite;
 use Str;
+use Throwable;
 
 class SocialiteController extends Controller
 {
@@ -20,7 +21,11 @@ class SocialiteController extends Controller
 
     public function loginWithGoogleCallback()
     {
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (Throwable $th) {
+            return redirect()->intended(route('home'));
+        }
 
         $user = Auth::user() ?? User::where('google_id', $googleUser->id)->first() ?? User::where('email', $googleUser->email)->first();
 
@@ -50,7 +55,11 @@ class SocialiteController extends Controller
 
     public function loginWithFacebookCallback()
     {
-        $facebookUser = Socialite::driver('facebook')->user();
+        try {
+            $facebookUser = Socialite::driver('facebook')->user();
+        } catch (Throwable $th) {
+            return redirect()->intended(route('home'));
+        }
 
         $user = Auth::user() ?? User::where('facebook_id', $facebookUser->id)->first() ?? User::where('email', $facebookUser->email)->first();
 
