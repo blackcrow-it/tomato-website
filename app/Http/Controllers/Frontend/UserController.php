@@ -72,11 +72,11 @@ class UserController extends Controller
 
     public function myCourse()
     {
-        $userCourses = UserCourse::with([
-            'course' => function ($query) {
+        $userCourses = UserCourse::query()
+            ->with('course')
+            ->whereHas('course', function ($query) {
                 $query->where('enabled', true);
-            }
-        ])
+            })
             ->where('user_id', Auth::user()->id)
             ->where(function ($query) {
                 $query->orWhere('expires_on', '>', now());
