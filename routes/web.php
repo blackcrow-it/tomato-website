@@ -42,6 +42,8 @@ Route::namespace('Frontend')
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
         Route::middleware('auth')->group(function () {
+            Route::get('get-video-key/{id}', 'PartVideoController@getKey')->middleware('cors')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
+
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
             Route::get('bai-giang/{id}', 'PartController@index')->name('part');
@@ -80,7 +82,6 @@ Route::namespace('Frontend')
         Route::post('recharge/epay-notify', 'RechargeEpayController@processNotify')->name('recharge.epay.notify');
 
         Route::get('old-get-video-key/{id}', 'VideoController@oldGetKey')->name('video.old_key');
-        Route::get('get-video-key/{id}', 'PartVideoController@getKey')->middleware('cors')->name('part_video.get_key'); // Không được đổi dù bất cứ lý do gì
 
         Route::middleware('guest')->group(function () {
             Route::get('dang-nhap', 'LoginController@index')->name('login');
