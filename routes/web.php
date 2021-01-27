@@ -105,8 +105,8 @@ Route::prefix('admin')
         Route::middleware('can_access_admin_dashboard')->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
 
-            Route::prefix('user')->name('user.')->group(function () {
-                Route::get('/', 'UserController@list')->name('list');
+            Route::prefix('user')->name('user.')->middleware('can:admin')->group(function () {
+                Route::get('list', 'UserController@list')->name('list');
                 Route::get('add', 'UserController@add')->name('add');
                 Route::post('add', 'UserController@submitAdd')->name('add');
                 Route::get('edit/{id}', 'UserController@edit')->name('edit');
@@ -115,123 +115,149 @@ Route::prefix('admin')
                 Route::get('get-user-courses/{id}', 'UserController@getUserCourses')->name('get_user_courses');
             });
 
-            Route::get('post', 'PostController@list')->name('post.list');
-            Route::get('post/add', 'PostController@add')->name('post.add');
-            Route::post('post/add', 'PostController@submitAdd')->name('post.add');
-            Route::get('post/edit/{id}', 'PostController@edit')->name('post.edit');
-            Route::post('post/edit/{id}', 'PostController@submitEdit')->name('post.edit');
-            Route::post('post/enabled', 'PostController@submitEnabled')->name('post.enabled');
-            Route::post('post/delete/{id}', 'PostController@submitDelete')->name('post.delete');
-            Route::post('post/order-in-category', 'PostController@submitOrderInCategory')->name('post.order_in_category');
-            Route::post('post/order-in-position', 'PostController@submitOrderInPosition')->name('post.order_in_position');
-            Route::get('post/search-post', 'PostController@getSearchPost')->name('post.search_post');
-            Route::get('post/get-related-post', 'PostController@getRelatedPost')->name('post.get_related_post');
-            Route::get('post/get-related-course', 'PostController@getRelatedCourse')->name('post.get_related_course');
+            Route::prefix('post')->name('post.')->group(function () {
+                Route::get('list', 'PostController@list')->name('list')->middleware('can:post.list');
+                Route::get('add', 'PostController@add')->name('add')->middleware('can:post.add');
+                Route::post('add', 'PostController@submitAdd')->name('add')->middleware('can:post.add');
+                Route::get('edit/{id}', 'PostController@edit')->name('edit')->middleware('can:post.edit');
+                Route::post('edit/{id}', 'PostController@submitEdit')->name('edit')->middleware('can:post.edit');
+                Route::post('enabled', 'PostController@submitEnabled')->name('enabled')->middleware('can:post.edit');
+                Route::post('delete/{id}', 'PostController@submitDelete')->name('delete')->middleware('can:post.delete');
+                Route::post('order-in-category', 'PostController@submitOrderInCategory')->name('order_in_category')->middleware('can:post.edit');
+                Route::post('order-in-position', 'PostController@submitOrderInPosition')->name('order_in_position')->middleware('can:post.edit');
+                Route::get('search-post', 'PostController@getSearchPost')->name('search_post');
+                Route::get('get-related-post', 'PostController@getRelatedPost')->name('get_related_post');
+                Route::get('get-related-course', 'PostController@getRelatedCourse')->name('get_related_course');
+            });
 
-            Route::get('category/list', 'CategoryController@list')->name('category.list');
-            Route::get('category/add', 'CategoryController@add')->name('category.add');
-            Route::post('category/add', 'CategoryController@submitAdd')->name('category.add');
-            Route::get('category/edit/{id}', 'CategoryController@edit')->name('category.edit');
-            Route::post('category/edit/{id}', 'CategoryController@submitEdit')->name('category.edit');
-            Route::post('category/delete/{id}', 'CategoryController@submitDelete')->name('category.delete');
-            Route::post('category/enabled', 'CategoryController@submitEnabled')->name('category.enabled');
-            Route::post('category/order-in-position', 'CategoryController@submitOrderInPosition')->name('category.order_in_position');
+            Route::prefix('category')->name('category.')->group(function () {
+                Route::get('list', 'CategoryController@list')->name('list')->middleware('can:category.list');
+                Route::get('add', 'CategoryController@add')->name('add')->middleware('can:category.add');
+                Route::post('add', 'CategoryController@submitAdd')->name('add')->middleware('can:category.add');
+                Route::get('edit/{id}', 'CategoryController@edit')->name('edit')->middleware('can:category.edit');
+                Route::post('edit/{id}', 'CategoryController@submitEdit')->name('edit')->middleware('can:category.edit');
+                Route::post('delete/{id}', 'CategoryController@submitDelete')->name('delete')->middleware('can:category.delete');
+                Route::post('enabled', 'CategoryController@submitEnabled')->name('enabled')->middleware('can:category.edit');
+                Route::post('order-in-position', 'CategoryController@submitOrderInPosition')->name('order_in_position')->middleware('can:category.edit');
+            });
 
-            Route::get('course', 'CourseController@list')->name('course.list');
-            Route::get('course/add', 'CourseController@add')->name('course.add');
-            Route::post('course/add', 'CourseController@submitAdd')->name('course.add');
-            Route::get('course/edit/{id}', 'CourseController@edit')->name('course.edit');
-            Route::post('course/edit/{id}', 'CourseController@submitEdit')->name('course.edit');
-            Route::post('course/enabled', 'CourseController@submitEnabled')->name('course.enabled');
-            Route::post('course/delete/{id}', 'CourseController@submitDelete')->name('course.delete');
-            Route::post('course/order-in-category', 'CourseController@submitOrderInCategory')->name('course.order_in_category');
-            Route::post('course/order-in-position', 'CourseController@submitOrderInPosition')->name('course.order_in_position');
-            Route::get('course/search-course', 'CourseController@getSearchCourse')->name('course.search_course');
-            Route::get('course/get-related-course', 'CourseController@getRelatedCourse')->name('course.get_related_course');
-            Route::get('course/get-related-book', 'CourseController@getRelatedBook')->name('course.get_related_book');
+            Route::prefix('course')->name('course.')->group(function () {
+                Route::get('list', 'CourseController@list')->name('list')->middleware('can:course.list');
+                Route::get('add', 'CourseController@add')->name('add')->middleware('can:course.add');
+                Route::post('add', 'CourseController@submitAdd')->name('add')->middleware('can:course.add');
+                Route::get('edit/{id}', 'CourseController@edit')->name('edit')->middleware('can:course.edit');
+                Route::post('edit/{id}', 'CourseController@submitEdit')->name('edit')->middleware('can:course.edit');
+                Route::post('enabled', 'CourseController@submitEnabled')->name('enabled')->middleware('can:course.edit');
+                Route::post('delete/{id}', 'CourseController@submitDelete')->name('delete')->middleware('can:course.delete');
+                Route::post('order-in-category', 'CourseController@submitOrderInCategory')->name('order_in_category')->middleware('can:course.edit');
+                Route::post('order-in-position', 'CourseController@submitOrderInPosition')->name('order_in_position')->middleware('can:course.edit');
+                Route::get('search-course', 'CourseController@getSearchCourse')->name('search_course');
+                Route::get('get-related-course', 'CourseController@getRelatedCourse')->name('get_related_course');
+                Route::get('get-related-book', 'CourseController@getRelatedBook')->name('get_related_book');
+            });
 
-            Route::get('lesson', 'LessonController@list')->name('lesson.list');
-            Route::get('lesson/add', 'LessonController@add')->name('lesson.add');
-            Route::post('lesson/add', 'LessonController@submitAdd')->name('lesson.add');
-            Route::get('lesson/edit/{id}', 'LessonController@edit')->name('lesson.edit');
-            Route::post('lesson/edit/{id}', 'LessonController@submitEdit')->name('lesson.edit');
-            Route::post('lesson/enabled', 'LessonController@submitEnabled')->name('lesson.enabled');
-            Route::post('lesson/delete/{id}', 'LessonController@submitDelete')->name('lesson.delete');
-            Route::post('lesson/order-in-course', 'LessonController@submitOrderInCourse')->name('lesson.order_in_course');
+            Route::prefix('lesson')->name('lesson.')->group(function () {
+                Route::get('list', 'LessonController@list')->name('list')->middleware('can:course.list');
+                Route::get('add', 'LessonController@add')->name('add')->middleware('can:course.add');
+                Route::post('add', 'LessonController@submitAdd')->name('add')->middleware('can:course.add');
+                Route::get('edit/{id}', 'LessonController@edit')->name('edit')->middleware('can:course.edit');
+                Route::post('edit/{id}', 'LessonController@submitEdit')->name('edit')->middleware('can:course.edit');
+                Route::post('enabled', 'LessonController@submitEnabled')->name('enabled')->middleware('can:course.edit');
+                Route::post('delete/{id}', 'LessonController@submitDelete')->name('delete')->middleware('can:course.delete');
+                Route::post('order-in-course', 'LessonController@submitOrderInCourse')->name('order_in_course')->middleware('can:course.edit');
+            });
 
-            Route::get('part', 'PartController@list')->name('part.list');
-            Route::get('part/add', 'PartController@add')->name('part.add');
-            Route::post('part/add', 'PartController@submitAdd')->name('part.add');
-            Route::post('part/enabled', 'PartController@submitEnabled')->name('part.enabled');
-            Route::post('part/order-in-lesson', 'PartController@submitOrderInLesson')->name('part.order_in_lesson');
+            Route::prefix('part')->name('part.')->group(function () {
+                Route::get('list', 'PartController@list')->name('list')->middleware('can:course.list');
+                Route::get('add', 'PartController@add')->name('add')->middleware('can:course.add');
+                Route::post('add', 'PartController@submitAdd')->name('add')->middleware('can:course.add');
+                Route::post('enabled', 'PartController@submitEnabled')->name('enabled')->middleware('can:course.edit');
+                Route::post('order-in-lesson', 'PartController@submitOrderInLesson')->name('order_in_lesson')->middleware('can:course.edit');
+            });
 
-            Route::get('part-video/edit/{part_id}', 'PartVideoController@edit')->name('part_video.edit');
-            Route::post('part-video/edit/{part_id}', 'PartVideoController@submitEdit')->name('part_video.edit');
-            Route::post('part-video/delete/{part_id}', 'PartVideoController@submitDelete')->name('part_video.delete');
-            Route::post('part-video/ajax-upload-transcode', 'PartVideoController@uploadTranscode')->name('part_video.upload_transcode');
-            Route::post('part-video/ajax-upload-video', 'PartVideoController@uploadVideo')->name('part_video.upload_video');
-            Route::post('part-video/ajax-upload-drive', 'PartVideoController@uploadDrive')->name('part_video.upload_drive');
-            Route::post('part-video/ajax-clear-s3', 'PartVideoController@clearS3')->name('part_video.clear_s3');
-            Route::post('part-video/ajax-get-drive-token', 'PartVideoController@getGoogleDriveToken')->name('part_video.get_drive_token');
+            Route::prefix('part-video')->name('part_video.')->group(function () {
+                Route::get('edit/{part_id}', 'PartVideoController@edit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('edit/{part_id}', 'PartVideoController@submitEdit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('delete/{part_id}', 'PartVideoController@submitDelete')->name('delete')->middleware('can:course.delete');
+                Route::post('ajax-upload-transcode', 'PartVideoController@uploadTranscode')->name('upload_transcode')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('ajax-upload-video', 'PartVideoController@uploadVideo')->name('upload_video')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('ajax-upload-drive', 'PartVideoController@uploadDrive')->name('upload_drive')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('ajax-clear-s3', 'PartVideoController@clearS3')->name('clear_s3')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('ajax-get-drive-token', 'PartVideoController@getGoogleDriveToken')->name('get_drive_token')->middleware(['can:course.add', 'can:course.edit']);
+            });
 
-            Route::get('part-youtube/edit/{part_id}', 'PartYoutubeController@edit')->name('part_youtube.edit');
-            Route::post('part-youtube/edit/{part_id}', 'PartYoutubeController@submitEdit')->name('part_youtube.edit');
-            Route::post('part-youtube/delete/{part_id}', 'PartYoutubeController@submitDelete')->name('part_youtube.delete');
+            Route::prefix('part-youtube')->name('part_youtube.')->group(function () {
+                Route::get('edit/{part_id}', 'PartYoutubeController@edit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('edit/{part_id}', 'PartYoutubeController@submitEdit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('delete/{part_id}', 'PartYoutubeController@submitDelete')->name('delete')->middleware('can:course.delete');
+            });
 
-            Route::get('part-content/edit/{part_id}', 'PartContentController@edit')->name('part_content.edit');
-            Route::post('part-content/edit/{part_id}', 'PartContentController@submitEdit')->name('part_content.edit');
-            Route::post('part-content/delete/{part_id}', 'PartContentController@submitDelete')->name('part_content.delete');
+            Route::prefix('part-content')->name('part_content.')->group(function () {
+                Route::get('edit/{part_id}', 'PartContentController@edit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('edit/{part_id}', 'PartContentController@submitEdit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('delete/{part_id}', 'PartContentController@submitDelete')->name('delete')->middleware('can:course.delete');
+            });
 
-            Route::get('part-test/edit/{part_id}', 'PartTestController@edit')->name('part_test.edit');
-            Route::post('part-test/edit/{part_id}', 'PartTestController@submitEdit')->name('part_test.edit');
-            Route::get('part-test/get-data/{part_id}', 'PartTestController@getData')->name('part_test.get_data');
-            Route::post('part-test/delete/{part_id}', 'PartTestController@submitDelete')->name('part_test.delete');
-            Route::post('part-test/upload-audio', 'PartTestController@uploadAudio')->name('part_test.upload_audio');
-            Route::post('part-test/delete-audio', 'PartTestController@deleteAudio')->name('part_test.delete_audio');
+            Route::prefix('part-test')->name('part_test.')->group(function () {
+                Route::get('edit/{part_id}', 'PartTestController@edit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('edit/{part_id}', 'PartTestController@submitEdit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::get('get-data/{part_id}', 'PartTestController@getData')->name('get_data')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('delete/{part_id}', 'PartTestController@submitDelete')->name('delete')->middleware('can:course.delete');
+                Route::post('upload-audio', 'PartTestController@uploadAudio')->name('upload_audio')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('delete-audio', 'PartTestController@deleteAudio')->name('delete_audio')->middleware(['can:course.add', 'can:course.edit']);
+            });
 
-            Route::get('part-survey/edit/{part_id}', 'PartSurveyController@edit')->name('part_survey.edit');
-            Route::post('part-survey/edit/{part_id}', 'PartSurveyController@submitEdit')->name('part_survey.edit');
-            Route::post('part-survey/delete/{part_id}', 'PartSurveyController@submitDelete')->name('part_survey.delete');
+            Route::prefix('part-survey')->name('part_survey.')->group(function () {
+                Route::get('edit/{part_id}', 'PartSurveyController@edit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('edit/{part_id}', 'PartSurveyController@submitEdit')->name('edit')->middleware(['can:course.add', 'can:course.edit']);
+                Route::post('delete/{part_id}', 'PartSurveyController@submitDelete')->name('delete')->middleware('can:course.delete');
+            });
 
-            Route::get('recharge', 'RechargeController@list')->name('recharge.list');
-            Route::get('recharge/get-data', 'RechargeController@getData')->name('recharge.get_data');
-            Route::post('recharge/recheck', 'RechargeController@recheck')->name('recharge.recheck');
+            Route::prefix('recharge')->name('recharge.')->middleware('can:recharge.list')->group(function () {
+                Route::get('list', 'RechargeController@list')->name('list');
+                Route::get('get-data', 'RechargeController@getData')->name('get_data');
+                Route::post('recheck', 'RechargeController@recheck')->name('recheck');
+            });
 
-            Route::get('setting/edit/{view}', 'SettingController@edit')->name('setting.edit');
-            Route::post('setting/submit', 'SettingController@submit')->name('setting.submit');
-            Route::post('setting/upload-image', 'SettingController@uploadImage')->name('setting.upload_image');
-            Route::get('setting/drive/redirect', 'SettingController@redirectAuthGoogleDriveApi')->name('setting.drive.redirect');
-            Route::get('setting/drive/callback', 'SettingController@callbackAuthGoogleDriveApi')->name('setting.drive.callback');
+            Route::prefix('setting')->name('setting.')->middleware('can:admin')->group(function () {
+                Route::get('edit/{view}', 'SettingController@edit')->name('edit');
+                Route::post('submit', 'SettingController@submit')->name('submit');
+                Route::post('upload-image', 'SettingController@uploadImage')->name('upload_image');
+                Route::get('drive/redirect', 'SettingController@redirectAuthGoogleDriveApi')->name('drive.redirect');
+                Route::get('drive/callback', 'SettingController@callbackAuthGoogleDriveApi')->name('drive.callback');
+            });
 
-            Route::get('book', 'BookController@list')->name('book.list');
-            Route::get('book/add', 'BookController@add')->name('book.add');
-            Route::post('book/add', 'BookController@submitAdd')->name('book.add');
-            Route::get('book/edit/{id}', 'BookController@edit')->name('book.edit');
-            Route::post('book/edit/{id}', 'BookController@submitEdit')->name('book.edit');
-            Route::post('book/enabled', 'BookController@submitEnabled')->name('book.enabled');
-            Route::post('book/delete/{id}', 'BookController@submitDelete')->name('book.delete');
-            Route::post('book/order-in-category', 'BookController@submitOrderInCategory')->name('book.order_in_category');
-            Route::post('book/order-in-position', 'BookController@submitOrderInPosition')->name('book.order_in_position');
-            Route::get('book/search-book', 'BookController@getSearchBook')->name('book.search_book');
-            Route::get('book/get-related-course', 'BookController@getRelatedCourse')->name('book.get_related_course');
-            Route::get('book/get-related-book', 'BookController@getRelatedBook')->name('book.get_related_book');
+            Route::prefix('book')->name('book.')->group(function () {
+                Route::get('list', 'BookController@list')->name('list')->middleware('can:book.list');
+                Route::get('add', 'BookController@add')->name('add')->middleware('can:book.add');
+                Route::post('add', 'BookController@submitAdd')->name('add')->middleware('can:book.add');
+                Route::get('edit/{id}', 'BookController@edit')->name('edit')->middleware('can:book.edit');
+                Route::post('edit/{id}', 'BookController@submitEdit')->name('edit')->middleware('can:book.edit');
+                Route::post('enabled', 'BookController@submitEnabled')->name('enabled')->middleware('can:book.edit');
+                Route::post('delete/{id}', 'BookController@submitDelete')->name('delete')->middleware('can:book.delete');
+                Route::post('order-in-category', 'BookController@submitOrderInCategory')->name('order_in_category')->middleware('can:book.edit');
+                Route::post('order-in-position', 'BookController@submitOrderInPosition')->name('order_in_position')->middleware('can:book.edit');
+                Route::get('search-book', 'BookController@getSearchBook')->name('search_book');
+                Route::get('get-related-course', 'BookController@getRelatedCourse')->name('get_related_course');
+                Route::get('get-related-book', 'BookController@getRelatedBook')->name('get_related_book');
+            });
 
-            Route::prefix('invoice')->name('invoice.')->group(function () {
+            Route::prefix('invoice')->name('invoice.')->middleware('can:invoice.list')->group(function () {
                 Route::get('list', 'InvoiceController@list')->name('list');
                 Route::get('detail/{id}', 'InvoiceController@detail')->name('detail');
                 Route::post('detail/{id}/change-status', 'InvoiceController@changeStatus')->name('change_status');
             });
 
             Route::prefix('teacher')->name('teacher.')->group(function () {
-                Route::get('list', 'TeacherController@list')->name('list');
-                Route::get('add', 'TeacherController@add')->name('add');
-                Route::post('add', 'TeacherController@submitAdd')->name('add');
-                Route::get('edit/{id}', 'TeacherController@edit')->name('edit');
-                Route::post('edit/{id}', 'TeacherController@submitEdit')->name('edit');
-                Route::post('delete/{id}', 'TeacherController@submitDelete')->name('delete');
+                Route::get('list', 'TeacherController@list')->name('list')->middleware('can:teacher.list');
+                Route::get('add', 'TeacherController@add')->name('add')->middleware('can:teacher.add');
+                Route::post('add', 'TeacherController@submitAdd')->name('add')->middleware('can:teacher.add');
+                Route::get('edit/{id}', 'TeacherController@edit')->name('edit')->middleware('can:teacher.edit');
+                Route::post('edit/{id}', 'TeacherController@submitEdit')->name('edit')->middleware('can:teacher.edit');
+                Route::post('delete/{id}', 'TeacherController@submitDelete')->name('delete')->middleware('can:teacher.delete');
             });
 
-            Route::prefix('promo')->name('promo.')->group(function () {
+            Route::prefix('promo')->name('promo.')->middleware('can:promo.list')->group(function () {
                 Route::get('list', 'PromoController@list')->name('list');
                 Route::get('get-item/{id}', 'PromoController@getItem')->name('get_item');
                 Route::get('add', 'PromoController@add')->name('add');
@@ -239,6 +265,15 @@ Route::prefix('admin')
                 Route::get('edit/{id}', 'PromoController@edit')->name('edit');
                 Route::post('edit/{id}', 'PromoController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'PromoController@submitDelete')->name('delete');
+            });
+
+            Route::prefix('permission')->name('permission.')->middleware('can:admin')->group(function () {
+                Route::get('list', 'PermissionController@list')->name('list');
+                Route::get('add', 'PermissionController@add')->name('add');
+                Route::post('add', 'PermissionController@submitAdd')->name('add');
+                Route::get('edit/{id}', 'PermissionController@edit')->name('edit');
+                Route::post('edit/{id}', 'PermissionController@submitEdit')->name('edit');
+                Route::post('delete/{id}', 'PermissionController@submitDelete')->name('delete');
             });
         });
 

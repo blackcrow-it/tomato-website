@@ -5,6 +5,7 @@ namespace App\Http\Requests\Backend;
 use App\Rules\Lowercase;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class UserRequest extends FormRequest
 {
@@ -52,6 +53,10 @@ class UserRequest extends FormRequest
             '__user_courses.*.course_id' => 'exists:courses,id',
             '__user_courses.*.expires_on' => 'nullable|date_format:Y-m-d H:i:s',
             '__user_courses.*.created_at' => 'nullable|date_format:Y-m-d H:i:s',
+            'role_id' => [
+                'nullable',
+                'exists:' . Role::class . ',id'
+            ]
         ];
     }
 }

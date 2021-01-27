@@ -1,18 +1,18 @@
 @extends('backend.master')
 
 @section('title')
-    @if (request()->routeIs('admin.user.add'))
-        Thêm thành viên mới
-    @else
-        Sửa thông tin thành viên : {{ $data->username }}
-    @endif
+@if(request()->routeIs('admin.user.add'))
+    Thêm thành viên mới
+@else
+    Sửa thông tin thành viên : {{ $data->username }}
+@endif
 @endsection
 
 @section('content-header')
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if (request()->routeIs('admin.user.add'))
+            @if(request()->routeIs('admin.user.add'))
                 Thêm thành viên mới
             @else
                 Sửa thông tin thành viên : {{ $data->username }}
@@ -28,21 +28,21 @@
 @endsection
 
 @section('content')
-@if ($errors->any())
+@if($errors->any())
     <div class="callout callout-danger">
         <ul class="mb-0">
-            @foreach ($errors->all() as $msg)
+            @foreach($errors->all() as $msg)
                 <li>{{ $msg }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 
-@if (session('success'))
+@if(session('success'))
     <div class="callout callout-success">
-        @if (is_array(session('success')))
+        @if(is_array(session('success')))
             <ul class="mb-0">
-                @foreach (session('success') as $msg)
+                @foreach(session('success') as $msg)
                     <li>{{ $msg }}</li>
                 @endforeach
             </ul>
@@ -83,6 +83,18 @@
                     </div>
                 </div>
                 @error('password')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Quyền hạn</label>
+                <select name="role_id" class="form-control">
+                    <option value="">Học viên</option>
+                    @foreach($roles as $item)
+                        <option value="{{ $item->id }}" {{ $data->hasRole($item) ? 'selected' : '' }}>{{ $item->name }}</option>
+                    @endforeach
+                </select>
+                @error('role_id')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
@@ -210,12 +222,12 @@
 
 @section('script')
 <script>
-    $('#js-generate-password').click(function() {
+    $('#js-generate-password').click(function () {
         var password = '';
         var passwordLength = 10;
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         var charactersLength = characters.length;
-        for ( var i = 0; i < passwordLength; i++ ) {
+        for (var i = 0; i < passwordLength; i++) {
             password += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         $('#js-password-input').val(password);
@@ -277,5 +289,6 @@
             }
         }
     });
+
 </script>
 @endsection

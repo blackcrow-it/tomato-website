@@ -13,6 +13,7 @@ use DB;
 use Hash;
 use Illuminate\Http\Request;
 use Mail;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -50,7 +51,9 @@ class UserController extends Controller
 
     public function add()
     {
-        return view('backend.user.edit');
+        return view('backend.user.edit', [
+            'roles' => Role::orderBy('name', 'asc')->get()
+        ]);
     }
 
     public function submitAdd(UserRequest $request)
@@ -62,6 +65,9 @@ class UserController extends Controller
         $user = new User;
         $user->fill($data);
         $user->save();
+
+        $role = Role::find($request->input('role_id'));
+        $user->syncRoles([$role]);
 
         if ($request->input('money') !== null) {
             $this->userRepo->setMoney($user->id, $request->input('money'));
@@ -103,7 +109,8 @@ class UserController extends Controller
         }
 
         return view('backend.user.edit', [
-            'data' => $user
+            'data' => $user,
+            'roles' => Role::orderBy('name', 'asc')->get()
         ]);
     }
 
@@ -131,6 +138,9 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        $role = Role::find($request->input('role_id'));
+        $user->syncRoles([$role]);
 
         if ($request->input('money') !== null) {
             $this->userRepo->setMoney($user->id, $request->input('money'));

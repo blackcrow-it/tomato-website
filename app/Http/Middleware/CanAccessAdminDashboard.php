@@ -21,7 +21,7 @@ class CanAccessAdminDashboard
             return redirect()->route('admin.login');
         }
 
-        if (Auth::user()->can(PermissionString::ACCESS_ADMIN_DASHBOARD) == false) {
+        if (!Auth::user()->is_super_admin && !Auth::user()->roles()->exists()) {
             return redirect()->route('home');
         }
 
