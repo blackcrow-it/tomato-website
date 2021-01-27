@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Constants\PermissionString;
 use Auth;
 use Closure;
 
