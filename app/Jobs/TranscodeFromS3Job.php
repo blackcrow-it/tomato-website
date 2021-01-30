@@ -40,10 +40,10 @@ class TranscodeFromS3Job implements ShouldQueue
         $localDriver->writeStream('transcode/input.tmp', $s3Driver->readStream($this->partVideo->s3_path . '/input.tmp'));
         gc_collect_cycles();
 
-        printf("Delete folder on s3.\n");
-        Storage::disk('s3')->deleteDirectory($this->partVideo->s3_path);
-
         TranscodeVideoJob::dispatchNow($this->partVideo);
+
+        printf("Delete file on s3.\n");
+        Storage::disk('s3')->delete($this->partVideo->s3_path . '/input.tmp');
     }
 
     public function failed(Exception $ex)
