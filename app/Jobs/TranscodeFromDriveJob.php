@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Storage;
+use Str;
 
 class TranscodeFromDriveJob implements ShouldQueue
 {
@@ -34,11 +35,14 @@ class TranscodeFromDriveJob implements ShouldQueue
 
         $this->partVideo->transcode_status = TranscodeStatus::PROCESSING;
         $this->partVideo->transcode_message = 'Downloading video';
-        $this->partVideo->save();
 
-        printf("Clear transcode folder.\n");
-        Storage::deleteDirectory('transcode');
-        Storage::makeDirectory('transcode');
+        do {
+            $this->partVideo->transcode_dir = 'transcode_' . now()->format('YmdHis') . '_' . Str::random(6);
+            sleep(1);
+        } while (Storage::exists($this->partVideo->transcode_dir));
+        Storage::makeDirectory($this->partVideo->transcode_dir);
+
+        $this->partVideo->save();
 
         printf("Download video file.\n");
 
@@ -58,7 +62,7 @@ class TranscodeFromDriveJob implements ShouldQueue
         $chunkStart = 0;
 
         // Create file pointer
-        $fp = fopen(Storage::path('transcode/input.tmp'), 'w');
+        $fp = fopen(Storage::path($this->partVideo->transcode_dir . '/input.tmp'), 'w');
 
         // Iterate over each chunk and write it to our file
         $http = $client->authorize();
@@ -83,12 +87,17 @@ class TranscodeFromDriveJob implements ShouldQueue
         gc_collect_cycles();
 
         TranscodeVideoJob::dispatchNow($this->partVideo);
+
+        Storage::deleteDirectory($this->partVideo->transcode_dir);
     }
 
     public function failed(Exception $ex)
     {
+        $this->partVideo->refresh();
         $this->partVideo->transcode_status = TranscodeStatus::FAIL;
         $this->partVideo->transcode_message = $ex->getMessage();
         $this->partVideo->save();
+
+        Storage::deleteDirectory($this->partVideo->transcode_dir);
     }
 }

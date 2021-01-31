@@ -79,8 +79,21 @@
                     <td>
                         @switch($item->type)
                             @case(\App\Constants\PartType::VIDEO)
-                                <i class="fas fa-video"></i>
-                                Video
+                                <div>
+                                    <i class="fas fa-video"></i>
+                                    <span>Video</span>
+                                    @switch($item->part_video->transcode_status)
+                                        @case(\App\Constants\TranscodeStatus::PENDING)
+                                            <small class="text-warning">(Đang chờ)</small>
+                                            @break
+                                        @case(\App\Constants\TranscodeStatus::PROCESSING)
+                                            <small class="text-warning">(Đang xử lý)</small>
+                                            @break
+                                        @case(\App\Constants\TranscodeStatus::FAIL)
+                                            <small class="text-danger">(Thất bại)</small>
+                                            @break
+                                    @endswitch
+                                </div>
                                 @break
                             @case(\App\Constants\PartType::YOUTUBE)
                                 <i class="fab fa-youtube"></i>
