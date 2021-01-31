@@ -31,8 +31,6 @@ class TranscodeFromDriveJob implements ShouldQueue
 
     public function handle()
     {
-        if ($this->partVideo->transcode_status != TranscodeStatus::PENDING) return;
-
         $this->partVideo->transcode_status = TranscodeStatus::PROCESSING;
         $this->partVideo->transcode_message = 'Downloading video';
 
