@@ -21,12 +21,10 @@ class TranscodeFromDriveJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $partVideo;
-    private $driveFileId;
 
-    public function __construct(PartVideo $partVideo, $driveFileId)
+    public function __construct(PartVideo $partVideo)
     {
         $this->partVideo = $partVideo;
-        $this->driveFileId = $driveFileId;
     }
 
     public function handle()
@@ -51,7 +49,7 @@ class TranscodeFromDriveJob implements ShouldQueue
 
         $drive = new Google_Service_Drive($client);
 
-        $file = $drive->files->get($this->driveFileId, [
+        $file = $drive->files->get($this->partVideo->drive_id, [
             'fields' => 'id, size'
         ]);
 

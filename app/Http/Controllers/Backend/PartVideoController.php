@@ -181,9 +181,10 @@ class PartVideoController extends Controller
     {
         $part = Part::findOrFail($request->input('part_id'));
         $data = $part->part_video;
+        $data->drive_id = $request->input('drive_id');
         $data->transcode_status = TranscodeStatus::PENDING;
         $data->save();
 
-        TranscodeFromDriveJob::dispatch($data, $request->input('drive_id'));
+        TranscodeFromDriveJob::dispatch($data);
     }
 }
