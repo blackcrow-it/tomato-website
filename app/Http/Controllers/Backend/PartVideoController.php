@@ -63,7 +63,7 @@ class PartVideoController extends Controller
 
             $data = $part->part_video ?? new PartVideo();
             $data->part_id = $part_id;
-            $data->s3_path = "part_video/c{$course->id}_l{$lesson->id}_p{$part->id}";
+            $data->s3_path = $data->s3_path ?? "part_video/c{$course->id}_l{$lesson->id}_p{$part->id}";
             $data->transcode_status = TranscodeStatus::COMPLETED;
             $data->transcode_message = null;
             $data->save();
