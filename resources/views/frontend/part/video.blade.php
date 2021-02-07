@@ -1,7 +1,7 @@
 @extends('frontend.part.master')
 
 @section('content')
-<link href="https://vjs.zencdn.net/7.7.6/video-js.css" rel="stylesheet" />
+<link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.css">
 <style>
     .video-js .vjs-big-play-button {
@@ -18,9 +18,8 @@
     </div>
 </div>
 
-<script src="https://vjs.zencdn.net/7.7.6/video.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
+<script src="https://unpkg.com/video.js/dist/video.js"></script>
+<script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js"></script>
 
 <script>
