@@ -10,6 +10,7 @@ use App\Part;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Storage;
+use Throwable;
 
 class PartController extends Controller
 {
@@ -47,6 +48,16 @@ class PartController extends Controller
         });
 
         $data = $part->{'part_' . $part->type};
+
+        if ($part->type == PartType::VIDEO) {
+            try {
+                Storage::disk('s3')->setVisibility($data->s3_path . '/hls/playlist.m3u8', 'public');
+                Storage::disk('s3')->setVisibility($data->s3_path . '/hls/playlist_720p.m3u8', 'public');
+                Storage::disk('s3')->setVisibility($data->s3_path . '/hls/playlist_1080p.m3u8', 'public');
+            } catch (Throwable $th) {
+                //throw $th;
+            }
+        }
 
         return view('frontend.part.' . $part->type, [
             'course' => $course,
