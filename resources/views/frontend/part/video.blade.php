@@ -2,23 +2,13 @@
 
 @section('content')
 <div class="learningLesson__video">
-    <div class="embed-responsive embed-responsive-16by9">
-        <video class="embed-responsive-item" id="video" controls preload="auto"></video>
+    <div class="embed-responsive embed-responsive-16by9" id="video-hls-wrapper" style="display: none">
+        <video class="embed-responsive-item" id="video-hls" controls preload="auto"></video>
+    </div>
+    <div class="product-detail__img" id="video-js-wrapper" style="display: none">
+        <video id="video-js" class="video-js" controls preload="auto" data-setup="{}"></video>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script>
-    var url = '{{ $stream_url }}';
-
-    if (Hls.isSupported()) {
-        var video = document.getElementById('video');
-        var hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(video);
-    }
-
-</script>
 @endsection
 
 @section('learning_footer')
@@ -70,6 +60,44 @@
 @section('footer')
 <script>
     $('.entry-detail img').css('height', 'auto');
+
+</script>
+
+<link href="https://vjs.zencdn.net/7.7.6/video-js.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.css">
+<style>
+    .video-js .vjs-big-play-button {
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+</style>
+<script src="https://vjs.zencdn.net/7.7.6/video.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2.0.9/dist/videojs-contrib-quality-levels.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+    var url = '{{ $stream_url }}';
+
+    if (Hls.isSupported()) {
+        $('#video-hls-wrapper').show();
+        var video = document.getElementById('video-hls');
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+    } else {
+        $('#video-js-wrapper').show();
+        var player = videojs('video-js');
+        player.src({
+            src: url,
+            type: 'application/x-mpegURL'
+        });
+        player.aspectRatio('16:9');
+        player.fluid(true);
+        player.hlsQualitySelector();
+    }
 
 </script>
 @endsection
