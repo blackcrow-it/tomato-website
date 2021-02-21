@@ -223,7 +223,10 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-light">
-                            <td colspan="4">Mã giảm giá</td>
+                            <td colspan="4">
+                                <b>Mã giảm giá</b><br>
+                                <small class="text-danger">* Mã giảm giá chỉ áp dụng với những khóa học online.</small>
+                            </td>
                             <td colspan="2">
                                 <div v-if="promoData === undefined">
                                     <input type="text" v-model="promoCode" class="form-control">
@@ -317,6 +320,7 @@
                     }
 
                     this.inputData = this.inputData.map(item => {
+                        if (item.type != '{{ \App\Constants\ObjectType::COURSE }}') return item;
                         if (item.price == 0) return item;
                         if (!applyPromo) return item;
 

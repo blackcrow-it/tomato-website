@@ -208,6 +208,8 @@ class CartController extends Controller
 
         if ($promo) {
             $cart->transform(function ($item) use ($promo) {
+                if ($item->type != ObjectType::COURSE) return $item;
+
                 switch ($promo->type) {
                     case PromoType::DISCOUNT:
                         $item->price = ceil($item->price - $item->price * $promo->value / 100);
@@ -217,6 +219,7 @@ class CartController extends Controller
                         $item->price = min($item->price, $promo->value);
                         break;
                 }
+
                 return $item;
             });
         }

@@ -133,10 +133,12 @@ Chi tiết đơn hàng
                         <td>
                             @switch($item->type)
                                 @case(\App\Constants\ObjectType::COURSE)
-                                    <a href="{{ $item->course->url }}" target="_blank">{{ $item->course->title }}</a>
+                                    <a href="{{ $item->course->url }}" target="_blank">{{ $item->course->title }}</a><br>
+                                    <em><small>Giá: {{ currency($item->course->price) }}</small></em>
                                     @break
                                 @case(\App\Constants\ObjectType::BOOK)
-                                    <a href="{{ $item->book->url }}" target="_blank">{{ $item->book->title }}</a>
+                                    <a href="{{ $item->book->url }}" target="_blank">{{ $item->book->title }}</a><br>
+                                    <em><small>Giá: {{ currency($item->book->price) }}</small></em>
                                     @break
                             @endswitch
                         </td>
