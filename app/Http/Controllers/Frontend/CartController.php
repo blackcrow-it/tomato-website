@@ -166,6 +166,7 @@ class CartController extends Controller
         if ($request->input('promo_code')) {
             $promo = Promo::query()
                 ->where('code', $request->input('promo_code'))
+                ->whereDate('start_on', '<', now())
                 ->whereDate('expires_on', '>', now())
                 ->first();
 
@@ -400,6 +401,7 @@ class CartController extends Controller
     {
         $promo = Promo::query()
             ->where('code', $request->input('code'))
+            ->whereDate('start_on', '<', now())
             ->whereDate('expires_on', '>', now())
             ->first();
 

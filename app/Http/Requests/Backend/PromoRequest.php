@@ -44,6 +44,7 @@ class PromoRequest extends FormRequest
             'combo_courses.*' => [
                 Rule::exists('courses', 'id')->where('enabled', true),
             ],
+            'promo.start_on' => 'required|date_format:Y-m-d H:i',
             'promo.expires_on' => 'required|date_format:Y-m-d H:i',
             'promo.used_many_times' => 'required:boolean'
         ];

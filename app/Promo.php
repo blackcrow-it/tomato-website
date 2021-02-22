@@ -11,21 +11,29 @@ class Promo extends BaseModel
         'type',
         'value',
         'expires_on',
+        'start_on',
         'used_many_times',
         'combo_courses'
     ];
 
     protected $dates = [
-        'expires_on'
+        'expires_on',
+        'start_on'
     ];
 
     protected $casts = [
         'expires_on' => 'datetime:Y-m-d H:i',
+        'start_on' => 'datetime:Y-m-d H:i',
         'combo_courses' => 'array'
     ];
 
     public function invoices()
     {
         return $this->hasMany(Invoice::class, 'promo_id', 'id');
+    }
+
+    public function getStartOnAttribute()
+    {
+        return $this->start_on ?? $this->created_at;
     }
 }

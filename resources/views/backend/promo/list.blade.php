@@ -50,7 +50,8 @@ Mã khuyến mãi
                 <th>Code</th>
                 <th>Loại</th>
                 <th>Giá trị</th>
-                <th>Thời gian kết thúc</th>
+                <th>Bắt đầu</th>
+                <th>Kết thúc</th>
                 <th>Hành động</th>
             </tr>
         </thead>
@@ -85,6 +86,7 @@ Mã khuyến mãi
                                 @break
                         @endswitch
                     </td>
+                    <td>{{ $item->start_on->format('Y-m-d H:i') }}</td>
                     <td>{{ $item->expires_on->format('Y-m-d H:i') }}</td>
                     <td class="text-nowrap">
                         <form action="{{ route('admin.promo.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa mã khuyến mãi này?')">

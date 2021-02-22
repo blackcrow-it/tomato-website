@@ -163,6 +163,15 @@
             @enderror
         </div>
         <div class="form-group">
+            <label>Thời gian bắt đầu</label>
+            <div>
+                <datetimepicker v-model="promo.start_on" format="YYYY-MM-DD hh:mm" formatted="YYYY-MM-DD hh:mm" :no-label="true" />
+            </div>
+            @error('promo.start_on')
+                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+            @enderror
+        </div>
+        <div class="form-group">
             <label>Thời gian kết thúc</label>
             <div>
                 <datetimepicker v-model="promo.expires_on" format="YYYY-MM-DD hh:mm" formatted="YYYY-MM-DD hh:mm" :no-label="true" />
@@ -201,6 +210,7 @@
                 type: '{{ \App\Constants\PromoType::DISCOUNT }}',
                 value: undefined,
                 combo_courses: [],
+                start_on: moment().format('YYYY-MM-DD hh:mm'),
                 expires_on: undefined,
                 used_many_times: true
             },
