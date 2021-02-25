@@ -180,7 +180,12 @@ class CartController extends Controller
                 ]);
             }
 
-            if ($promo->used_many_times == false && $promo->invoices()->exists()) {
+            if (
+                // Kiểm tra một người dùng
+                ($promo->only_one_user == true && $promo->invoices()->where('user_id', '!=', Auth::id())->exists()) ||
+                // Kiểm tra dùng một lần
+                ($promo->used_many_times == false && $promo->invoices()->exists())
+            ) {
                 $request->validate([
                     'cart' => [
                         function ($attribute, $value, $fail) {
@@ -415,7 +420,12 @@ class CartController extends Controller
             ]);
         }
 
-        if ($promo->used_many_times == false && $promo->invoices()->exists()) {
+        if (
+            // Kiểm tra một người dùng
+            ($promo->only_one_user == true && $promo->invoices()->where('user_id', '!=', Auth::id())->exists()) ||
+            // Kiểm tra dùng một lần
+            ($promo->used_many_times == false && $promo->invoices()->exists())
+        ) {
             $request->validate([
                 'code' => [
                     function ($attribute, $value, $fail) {
