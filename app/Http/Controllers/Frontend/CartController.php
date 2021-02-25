@@ -184,7 +184,7 @@ class CartController extends Controller
                 // Kiểm tra một người dùng
                 ($promo->only_one_user == true && $promo->invoices()->where('user_id', '!=', Auth::id())->exists()) ||
                 // Kiểm tra dùng một lần
-                ($promo->used_many_times == false && $promo->invoices()->exists())
+                ($promo->used_many_times == false && $promo->invoices()->where('user_id', Auth::id())->exists())
             ) {
                 $request->validate([
                     'cart' => [
@@ -424,7 +424,7 @@ class CartController extends Controller
             // Kiểm tra một người dùng
             ($promo->only_one_user == true && $promo->invoices()->where('user_id', '!=', Auth::id())->exists()) ||
             // Kiểm tra dùng một lần
-            ($promo->used_many_times == false && $promo->invoices()->exists())
+            ($promo->used_many_times == false && $promo->invoices()->where('user_id', Auth::id())->exists())
         ) {
             $request->validate([
                 'code' => [
