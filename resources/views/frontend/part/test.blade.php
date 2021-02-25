@@ -74,7 +74,7 @@
                         <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selectedIndex == x.correct).length / questions.length * 100) / 10 }}/10</b></li>
                         <li>
                             Kết quả:
-                            <b v-if="questions.filter(x => x.selectedIndex == x.correct).length < correct_requirement">Chưa đạt</b>
+                            <b v-if ="handleCheckCorrectRequirment">Chưa đạt</b>
                             <b v-else>Đạt</b>
                         </li>
                     </ul>
@@ -143,6 +143,12 @@
                 console.log(index);
             },
         },
+        computed:{
+            handleCheckCorrectRequirment(){
+               return this.questions.filter(x => x.selectedIndex == x.correct).length < this.correct_requirement 
+                || this.correct_requirement == 0;
+            }
+        }
     });
 
 </script>
