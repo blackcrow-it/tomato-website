@@ -43,7 +43,7 @@ class PartTestController extends Controller
 
     public function getData(Request $request, $part_id) {
         $part = Part::find($part_id);
-        $data = $part->part_test;
+        $data = $part->part_test->data;
         return $data;
     }
 

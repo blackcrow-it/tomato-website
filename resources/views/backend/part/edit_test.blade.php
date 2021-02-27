@@ -101,7 +101,7 @@ Sửa đầu mục
                         <td>
                             <h4>Câu hỏi số @{{ questionIndex + 1 }}</h4>
                             <div v-if="question.type == undefined" class="form-group">
-                                <label>Loại câu hỏi</label>
+                                <label>Loại câu hỏi</label> 
                                 <div class="form-check">
                                     <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="multiple-choice" :id="'question-type-1-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
                                     <label class="form-check-label" :for="'question-type-1-' + questionIndex">Lựa chọn đáp án</label>
@@ -238,7 +238,7 @@ Sửa đầu mục
                 },
                 {
                     type: 'correct-word-position',
-                    question: '',
+                    question: '', 
                     options: [
                         '', '', '', ''
                     ],
@@ -251,7 +251,10 @@ Sửa đầu mục
         },
         mounted() {
             axios.get("{{ route('admin.part_test.get_data', [ 'part_id' => $part->id ]) }}").then(res => {
-                this.questions = res.data;
+                if(res.length == 0){
+                    this.questions = array();
+                }
+                this.questions = res;
                 this.$nextTick(() => {
                     tooltipInit();
                     ckeditorInit();
@@ -265,7 +268,7 @@ Sửa đầu mục
         methods: {
             addQuestion() {
                 this.questions.push({
-                    type: undefined,
+                    type : undefined
                 });
             },
             loadDefaultQuestion(index) {
@@ -278,7 +281,6 @@ Sửa đầu mục
                 });
             },
             addOption(question) {
-                console.log(question);
                 question.options.push('');
             },
             openInputAudioFile(index) {
