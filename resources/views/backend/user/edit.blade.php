@@ -58,21 +58,21 @@
         <div class="card-body">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="username" placeholder="Username" value="{{ $data->username ?? old('username') }}" class="form-control @error('username') is-invalid @enderror">
+                <input type="text" name="username" placeholder="Username" value="{{ old('username') ?? $data->username ?? null }}" class="form-control @error('username') is-invalid @enderror">
                 @error('username')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" placeholder="Email" value="{{ $data->email ?? old('email') }}" class="form-control @error('email') is-invalid @enderror">
+                <input type="email" name="email" placeholder="Email" value="{{ old('email') ?? $data->email ?? null }}" class="form-control @error('email') is-invalid @enderror">
                 @error('email')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Your name" value="{{ $data->name ?? old('name') }}" class="form-control">
+                <input type="text" name="name" placeholder="Your name" value="{{ old('name') ?? $data->name ?? null }}" class="form-control">
             </div>
             <div class="form-group">
                 <label>Password</label>
@@ -91,7 +91,7 @@
                 <select name="role_id" class="form-control">
                     <option value="">Học viên</option>
                     @foreach($roles as $item)
-                        <option value="{{ $item->id }}" {{ $data->hasRole($item) ? 'selected' : '' }}>{{ $item->name }}</option>
+                        <option value="{{ $item->id }}" {{ isset($data) && $data->hasRole($item) ? 'selected' : '' }}>{{ $item->name }}</option>
                     @endforeach
                 </select>
                 @error('role_id')
@@ -100,7 +100,7 @@
             </div>
             <div class="form-group">
                 <label>Số tiền trong tài khoản</label>
-                <input type="text" name="money" placeholder="Số tiền trong tài khoản" value="{{ $data->money ?? old('money') }}" class="form-control currency @error('enabled') is-invalid @enderror">
+                <input type="text" name="money" placeholder="Số tiền trong tài khoản" value="{{ old('money') ?? $data->money ?? null }}" class="form-control currency @error('enabled') is-invalid @enderror">
                 @error('money')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -110,7 +110,7 @@
                     <div class="form-group">
                         <label>Ảnh đại diện</label>
                         <div class="input-group">
-                            <input type="text" name="avatar" placeholder="Ảnh đại diện" value="{{ $data->avatar ?? old('avatar') }}" class="form-control @error('avatar') is-invalid @enderror" id="ck-avatar">
+                            <input type="text" name="avatar" placeholder="Ảnh đại diện" value="{{ old('avatar') ?? $data->avatar ?? null }}" class="form-control @error('avatar') is-invalid @enderror" id="ck-avatar">
                             <div class="input-group-append">
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-avatar', 'ck-avatar-preview')">Chọn file</button>
                             </div>
@@ -118,7 +118,7 @@
                         @error('avatar')
                             <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                         @enderror
-                        <img class="image-preview" src="{{ $data->avatar ?? old('avatar') }}" id="ck-avatar-preview">
+                        <img class="image-preview" src="{{ old('avatar') ?? $data->avatar ?? null }}" id="ck-avatar-preview">
                     </div>
                 </div>
             </div>
