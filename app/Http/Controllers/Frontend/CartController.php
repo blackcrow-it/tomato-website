@@ -148,7 +148,7 @@ class CartController extends Controller
             $exists = UserCourse::query()
                 ->where('user_id', Auth::id())
                 ->where('course_id', $item->object_id)
-                ->whereDate('expires_on', '>', now())
+                ->where('expires_on', '>', now())
                 ->exists();
             if ($exists) {
                 $course = Course::find($item->object_id);
@@ -166,8 +166,8 @@ class CartController extends Controller
         if ($request->input('promo_code')) {
             $promo = Promo::query()
                 ->where('code', $request->input('promo_code'))
-                ->whereDate('start_on', '<', now())
-                ->whereDate('expires_on', '>', now())
+                ->where('start_on', '<', now())
+                ->where('expires_on', '>', now())
                 ->first();
 
             if ($promo == null) {
@@ -406,8 +406,8 @@ class CartController extends Controller
     {
         $promo = Promo::query()
             ->where('code', $request->input('code'))
-            ->whereDate('start_on', '<', now())
-            ->whereDate('expires_on', '>', now())
+            ->where('start_on', '<', now())
+            ->where('expires_on', '>', now())
             ->first();
 
         if ($promo == null) {
