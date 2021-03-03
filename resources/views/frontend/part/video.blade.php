@@ -3,10 +3,10 @@
 @section('content')
 <div class="learningLesson__video">
     <div class="embed-responsive embed-responsive-16by9" id="video-hls-wrapper" style="display: none">
-        <video class="embed-responsive-item" id="video-hls" controls preload="auto"></video>
+        <video class="embed-responsive-item" id="video-hls" poster="{{ $course->thumbnail }}" controls preload="auto"></video>
     </div>
     <div class="product-detail__img" id="video-js-wrapper" style="display: none">
-        <video id="video-js" class="video-js" controls preload="auto" data-setup="{}"></video>
+        <video id="video-js" class="video-js" poster="{{ $course->thumbnail }}" controls preload="auto" data-setup="{}"></video>
     </div>
 </div>
 @endsection

@@ -61,14 +61,11 @@ Mã khuyến mãi
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->code }}</td>
                     <td>
-                        @switch($item->type)
-                            @case(\App\Constants\PromoType::DISCOUNT)
-                                Giảm giá
-                                @break
-                            @case(\App\Constants\PromoType::SAME_PRICE)
-                                Đồng giá
-                                @break
-                        @endswitch
+                        @if($item->only_one_user)
+                            Một người dùng
+                        @else
+                            Nhiều người dùng
+                        @endif
                         <br>
                         @if($item->used_many_times)
                             Dùng nhiều lần
@@ -79,10 +76,10 @@ Mã khuyến mãi
                     <td>
                         @switch($item->type)
                             @case(\App\Constants\PromoType::DISCOUNT)
-                                {{ $item->value }}%
+                                Giảm giá {{ $item->value }}%
                                 @break
                             @case(\App\Constants\PromoType::SAME_PRICE)
-                                {{ currency($item->value) }}
+                                Đồng giá {{ currency($item->value) }}
                                 @break
                         @endswitch
                     </td>

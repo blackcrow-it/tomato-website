@@ -184,6 +184,19 @@
             <label>Loại</label>
             <div>
                 <div class="form-check-inline">
+                    <input type="radio" v-model="promo.only_one_user" class="form-check-input @error('promo.only_one_user') is-invalid @enderror" id="cr-type-only-one-user-2" :value="false">
+                    <label class="form-check-label" for="cr-type-only-one-user-2">Nhiều người dùng</label>
+                </div>
+                <div class="form-check-inline">
+                    <input type="radio" v-model="promo.only_one_user" class="form-check-input @error('promo.only_one_user') is-invalid @enderror" id="cr-type-only-one-user-1" :value="true">
+                    <label class="form-check-label" for="cr-type-only-one-user-1">Một người dùng</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Loại</label>
+            <div>
+                <div class="form-check-inline">
                     <input type="radio" v-model="promo.used_many_times" class="form-check-input @error('promo.used_many_times') is-invalid @enderror" id="cr-type-many-users-1" :value="true">
                     <label class="form-check-label" for="cr-type-many-users-1">Dùng nhiều lần</label>
                 </div>
@@ -212,7 +225,8 @@
                 combo_courses: [],
                 start_on: moment().format('YYYY-MM-DD hh:mm'),
                 expires_on: undefined,
-                used_many_times: true
+                used_many_times: true,
+                only_one_user: false,
             },
             comboCourses: [],
             searchTimer: undefined,
