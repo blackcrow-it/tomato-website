@@ -74,7 +74,7 @@
                         <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selectedIndex == x.correct).length / questions.length * 100) / 10 }}/10</b></li>
                         <li>
                             Kết quả:
-                            <b v-if="isNotPassTheTest">Chưa đạt</b>
+                            <b v-if="isNotPassTheTest()">Chưa đạt</b>
                             <b v-else>Đạt</b>
                         </li>
                     </ul>
