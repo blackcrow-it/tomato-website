@@ -189,7 +189,7 @@ Sửa đầu mục
                             </template>
                             <template v-if="question.type == 'translate-text'">
                                 <div class="form-group">
-                                    <label>Đáp án</label>
+                                    <label>Nhập các đáp án đúng:</label>
                                     <table class="table table-bordered">
                                         <tr v-for="(option, optionIndex) in question.options">
                                             <td class="align-middle" style= "display:none">
