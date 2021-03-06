@@ -198,7 +198,7 @@ Sửa đầu mục
                                                 </label>
                                             </td class="align-middle">
                                             <td class="align-middle">
-                                                <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Đáp án ' + String.fromCharCode(65 + optionIndex) + ', tick vào ô bên trái nếu là đáp án đúng'">
+                                                <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Nhập đáp án được cho là đúng'">
                                             </td>
                                             <td class="align-middle">
                                                 <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
