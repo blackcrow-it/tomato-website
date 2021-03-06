@@ -53,6 +53,20 @@
                                 </div>
                             </div>
                         </template>
+
+                        <template v-if="question.type == 'translate-text'">
+                            <div>
+                                Dịch đoạn lại văn trên: <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
+                                <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && compareTextOptionWithAnswer(option) }">    
+                                </label>
+                            </div>
+                            <div v-if="submited" style="margin-top:5px">
+                                <label>Các câu trả lời đúng:</label>
+                                <ul class="test-draggable" v-for="(option, optionIndex) in question.options" class="px-1" :class="{ 'test-draggable-true': compareTextOptionWithAnswer(option) }">
+                                    <li style="list-style-type: none">@{{optionIndex + 1 + '.' + option }} </li>
+                                </ul>
+                            </div>
+                        </template>
                     </li>
                 </ul>
 
@@ -70,8 +84,8 @@
                     <ul class="quiz-reslut__list">
                         <li>Họ và tên: <b>{{ auth()->user()->name ?? auth()->user()->username }}</b></li>
                         <li>Bài thi: <b>{{ $part->title }}</b></li>
-                        <li>Câu hỏi <b>@{{ questions.filter(x => x.selectedIndex == x.correct).length }}/@{{ questions.length }}</b></li>
-                        <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selectedIndex == x.correct).length / questions.length * 100) / 10 }}/10</b></li>
+                        <li>Câu hỏi <b>@{{ questions.filter(x => x.selectedIndex == x.correct || x.correct == true).length }}/@{{ questions.length }}</b></li>
+                        <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selectedIndex == x.correct || x.correct == true).length / questions.length * 100) / 10 }}/10</b></li>
                         <li>
                             Kết quả:
                             <b v-if="isNotPassTheTest()">Chưa đạt</b>
@@ -96,6 +110,7 @@
             questions: [],
             submited: false,
             correct_requirement: 0,
+            answer:'',
         },
         async mounted() {
             this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
@@ -126,11 +141,11 @@
             shuffle(arr) {
                 return arr.sort(() => Math.random() - 0.5);
             },
-            submit() {
-                this.submited = true;
+             submit() {
+                 this.submited = true;
 
-                $('.quiz-reslut').slideDown();
-                $('html,body').animate({
+                 $('.quiz-reslut').slideDown();
+                 $('html,body').animate({
                     scrollTop: $('.quiz-reslut').offset().top
                 }, 500);
             },
@@ -143,10 +158,20 @@
                 console.log(index);
             },
             isNotPassTheTest() {
-                const userCorrectCount = this.questions.filter(x => x.selectedIndex == x.correct).length;
+                const userCorrectCount = this.questions.filter(x => x.selectedIndex == x.correct || x.correct == true).length;
                 return userCorrectCount == 0 || userCorrectCount < this.correct_requirement;
+            },
+            compareTextOptionWithAnswer(option){
+                return option.toLowerCase().trim() == this.answer.toLowerCase().trim();
+            },
+            trimSpaceAnwer(questionIndex){
+                this.answer = this.answer.trim().replace(/\s\s+/g, ' ');
+                if(this.questions[questionIndex].options.indexOf(this.answer ) > -1){
+                    this.questions[questionIndex].correct = true;
+                }
             }
         },
+
     });
 
 </script>

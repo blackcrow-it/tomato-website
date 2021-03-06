@@ -110,6 +110,10 @@ Sửa đầu mục
                                     <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="correct-word-position" :id="'question-type-2-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
                                     <label class="form-check-label" :for="'question-type-2-' + questionIndex">Kéo từ còn thiếu vào vị trí đúng</label>
                                 </div>
+                                <div class="form-check">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="translate-text" :id="'question-type-3-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <label class="form-check-label" :for="'question-type-3-' + questionIndex">Dịch đoạn văn</label>
+                                </div>
                             </div>
                             <input v-else v-model="question.type" type="hidden" :name="'data[' + questionIndex + '][type]'">
                             <template v-if="question.type != undefined">
@@ -183,6 +187,30 @@ Sửa đầu mục
                                     <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
                                 </div>
                             </template>
+                            <template v-if="question.type == 'translate-text'">
+                                <div class="form-group">
+                                    <label>Đáp án</label>
+                                    <table class="table table-bordered">
+                                        <tr v-for="(option, optionIndex) in question.options">
+                                            <td class="align-middle" style= "display:none">
+                                                <label class="mb-0">
+                                                    <input v-model="question.correct" :name="'data[' + questionIndex + '][correct]'">
+                                                </label>
+                                            </td class="align-middle">
+                                            <td class="align-middle">
+                                                <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Đáp án ' + String.fromCharCode(65 + optionIndex) + ', tick vào ô bên trái nếu là đáp án đúng'">
+                                            </td>
+                                            <td class="align-middle">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm đáp án</button>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
+                                </div>
+                            </template>
                         </td>
                     </tr>
                 </table>
@@ -243,6 +271,17 @@ Sửa đầu mục
                         '', '', '', ''
                     ],
                     correct: 0,
+                    audio: undefined,
+                    uploadingAudio: false,
+                    uploadingAudioPercent: 0,
+                },
+                {
+                    type: 'translate-text',
+                    question: '', 
+                    options: [
+                        '', '', '', ''
+                    ],
+                    correct: false,
                     audio: undefined,
                     uploadingAudio: false,
                     uploadingAudioPercent: 0,
