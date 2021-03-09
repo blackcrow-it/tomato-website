@@ -59,7 +59,7 @@
 
 .quiz-wrap__header {
 	margin-bottom: 40px;
-	
+
 	.header-left {
 		margin-bottom: 30px;
 	}
@@ -98,7 +98,7 @@
 	@include media-breakpoint-up(lg) {
 		display: flex;
 		flex-wrap: wrap;
-		
+
 		.header-left {
 			width: 38%;
 			margin-bottom: 0;
@@ -128,6 +128,10 @@
 .quiz__list {
 	@include list-style;
 
+	p {
+		margin-bottom: 0;
+	}
+
 	.item {
 		color: $color-heading;
 
@@ -138,7 +142,7 @@
 
 	.item__title {
 		font-size: 15px;
-		margin-bottom: 20px;
+		margin-bottom: 10px;
 
 		b {
 			color: $color-heading;
@@ -178,7 +182,7 @@
 				position: relative;
 				padding-left: 20px;
 			}
-		
+
 			.choose-label__check {
 				position: absolute;
 				top: 5px;
@@ -238,7 +242,7 @@
 				margin-top: 20px;
 			}
 		}
-		
+
 		.item__choose {
 			display: flex;
 			flex-wrap: wrap;
@@ -346,7 +350,7 @@
 	}
 }
 
-@include media-breakpoint-down(sm) { 
+@include media-breakpoint-down(sm) {
 	.quiz-reslut__left {
 		border-bottom: 1px solid $color-border;
 	}

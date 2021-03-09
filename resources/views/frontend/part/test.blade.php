@@ -53,17 +53,15 @@
                                 </div>
                             </div>
                         </template>
-
                         <template v-if="question.type == 'translate-text'">
                             <div>
-                                Dịch lại đoạn văn trên: <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
-                                <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && compareTextOptionWithAnswer(option) }">    
-                                </label>
+                                <b>Đáp án</b>
+                                <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
                             </div>
-                            <div v-if="submited" style="margin-top:5px">
+                            <div v-if="submited">
                                 <label>Các câu trả lời đúng:</label>
-                                <ul class="test-draggable" v-for="(option, optionIndex) in question.options" class="px-1" :class="{ 'test-draggable-true': compareTextOptionWithAnswer(option) }">
-                                    <li style="list-style-type: none">@{{optionIndex + 1 + '.' + option }} </li>
+                                <ul>
+                                    <li v-for="(option, optionIndex) in question.options" :class="{ 'text-success': compareTextOptionWithAnswer(option) }">@{{ option }} </li>
                                 </ul>
                             </div>
                         </template>
