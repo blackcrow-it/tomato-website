@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailLogin;
 use Auth;
 use Illuminate\Http\Request;
 use Session;
 use Str;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -41,5 +43,12 @@ class LoginController extends Controller
             'login_token' =>  $loginToken
         ]);
         Session::put('login_token', $loginToken);
+        $data = [
+            'email' => Auth::user()->email,
+            'name' => Auth::user()->name,
+            'content' => 'Bạn đã đăng nhập từ một thiết bị khác',
+            'phone' => Auth::user()->phone
+        ];
+        Mail::to(Auth::user())->send(new SendMailLogin($data));
     }
 }

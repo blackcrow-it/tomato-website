@@ -1,15 +1,14 @@
 @component('mail::message')
 
 **Tên:** {{ $data['name'] }}\
+@if(!empty($data['phone']))
 **Số điện thoại:** {{ $data['phone'] }}\
+@endif
 **Email:** {{ $data['email'] }}\
-**Khóa học quan tâm:** {{ $data['course'] ?? null }}
 
-@component('mail::panel')
 @foreach (explode("\n", $data['content']) as $text)
-    {{ trim($text) }}<br>
+    {{ trim($text) }}
 @endforeach
-@endcomponent
 
 *Thời gian: {{ now()->format('d-m-Y H:i') }}*
 
