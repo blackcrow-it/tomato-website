@@ -53,16 +53,38 @@
                                 </div>
                             </div>
                         </template>
+
                         <template v-if="question.type == 'translate-text'">
                             <div>
-                                <b>Đáp án</b>
-                                <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
+                                Dịch lại đoạn văn trên: <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
+                                <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && compareTextOptionWithAnswer(option) }">
+                                </label>
                             </div>
-                            <div v-if="submited">
+                            <div v-if="submited" style="margin-top:5px">
                                 <label>Các câu trả lời đúng:</label>
-                                <ul>
-                                    <li v-for="(option, optionIndex) in question.options" :class="{ 'text-success': compareTextOptionWithAnswer(option) }">@{{ option }} </li>
+                                <ul class="test-draggable" v-for="(option, optionIndex) in question.options" class="px-1" :class="{ 'test-draggable-true': compareTextOptionWithAnswer(option) }">
+                                    <li style="list-style-type: none">@{{optionIndex + 1 + '.' + option }} </li>
                                 </ul>
+                            </div>
+                        </template>
+
+                        <template v-if="question.type == 'correct-word-position-translate'">
+                            <div class="test-draggable">
+                                <div style="display: flex">
+                                    <draggable class="px-2" :group="'q-sentence-' + questionIndex" @add="question.selectedIndex = 0" @update="question.selectedIndex = 0"></draggable>
+                                    <template v-for="(option, optionIndex) in question.options">
+                                        <div>
+                                            <span class="px-2" style="text-decoration: underline" :id="'word-position-' + optionIndex" @blur="editText(questionIndex,optionIndex)" contenteditable="true">@{{ option }}</span>
+                                            <div class="px-2 font-weight-bold" style="text-align: center" :class="{ 'test-draggable-true': submited && question.correct == optionIndex }">@{{ String.fromCharCode(65 + optionIndex) }}</div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div v-if="submited" class="">
+                                <label>Đáp án</label>
+                                <div class="test-draggable">
+                                    <span class="px-1 font-weight-bold">@{{ String.fromCharCode(65 + parseInt(question.correct)) }}. @{{ question.textCorrect }}</span>
+                                </div>
                             </div>
                         </template>
                     </li>
@@ -82,8 +104,8 @@
                     <ul class="quiz-reslut__list">
                         <li>Họ và tên: <b>{{ auth()->user()->name ?? auth()->user()->username }}</b></li>
                         <li>Bài thi: <b>{{ $part->title }}</b></li>
-                        <li>Câu hỏi <b>@{{ questions.filter(x => x.selectedIndex == x.correct || x.correct == true).length }}/@{{ questions.length }}</b></li>
-                        <li>Tổng điểm: <b>@{{ Math.round(questions.filter(x => x.selectedIndex == x.correct || x.correct == true).length / questions.length * 100) / 10 }}/10</b></li>
+                        <li>Câu hỏi <b>@{{ totalCorrectAnswer() }}</b></li>
+                        <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() }}</b></li>
                         <li>
                             Kết quả:
                             <b v-if="isNotPassTheTest()">Chưa đạt</b>
@@ -165,8 +187,38 @@
             trimSpaceAnwer(questionIndex){
                 this.answer = this.answer.trim().replace(/\s\s+/g, ' ');
                 if(this.questions[questionIndex].options.indexOf(this.answer ) > -1){
-                    this.questions[questionIndex].correct = true;
+                    this.questions[questionIndex].correct = "true";
                 }
+            },
+            editText(questionIndex) {
+                let countFalse = 0;
+                for (let i = 0; i < this.questions[questionIndex].options.length; i++) {
+                    if (i == this.questions[questionIndex].correct) {
+                        continue
+                    }
+
+                    if (($('#word-position-' + i).text()) !== this.questions[questionIndex].options[i]) {
+                        countFalse++
+                    }
+                }
+
+                if (countFalse) {
+                    return false
+                }
+
+                let correctIndex = parseInt(this.questions[questionIndex].correct)
+
+               return $('#word-position-' + correctIndex).text() == this.questions[questionIndex].textCorrect;
+            },
+            totalCorrectAnswer(){
+                let total = this.questions.filter((question, index) => question.selectedIndex == question.correct
+                    || question.correct == "true" || this.editText(index) == true).length;
+                return  total  + '/' + this.questions.length;
+            },
+            totalPointCorrectAnswer(){
+                let total = this.questions.filter((question, index) => question.selectedIndex == question.correct
+                    || question.correct == "true" || this.editText(index) == true).length;
+                return (Math.round(total / this.questions.length * 100) / 10 ) + '/' + 10;
             }
         },
 

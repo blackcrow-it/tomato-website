@@ -101,7 +101,7 @@ Sửa đầu mục
                         <td>
                             <h4>Câu hỏi số @{{ questionIndex + 1 }}</h4>
                             <div v-if="question.type == undefined" class="form-group">
-                                <label>Loại câu hỏi</label> 
+                                <label>Loại câu hỏi</label>
                                 <div class="form-check">
                                     <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="multiple-choice" :id="'question-type-1-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
                                     <label class="form-check-label" :for="'question-type-1-' + questionIndex">Lựa chọn đáp án</label>
@@ -111,8 +111,12 @@ Sửa đầu mục
                                     <label class="form-check-label" :for="'question-type-2-' + questionIndex">Kéo từ còn thiếu vào vị trí đúng</label>
                                 </div>
                                 <div class="form-check">
-                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="translate-text" :id="'question-type-3-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="translate-text" :id="'question-type-4-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
                                     <label class="form-check-label" :for="'question-type-3-' + questionIndex">Dịch đoạn văn</label>
+                                </div>
+                                <div class="form-check">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="correct-word-position-translate" :id="'question-type-4-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <label class="form-check-label" :for="'question-type-4-' + questionIndex">Chọn vị trí sai và sửa lại cho đúng</label>
                                 </div>
                             </div>
                             <input v-else v-model="question.type" type="hidden" :name="'data[' + questionIndex + '][type]'">
@@ -147,7 +151,7 @@ Sửa đầu mục
                                                     <input v-model="question.correct" type="radio" :name="'data[' + questionIndex + '][correct]'" :value="optionIndex">
                                                     @{{ String.fromCharCode(65 + optionIndex) }}
                                                 </label>
-                                            </td class="align-middle">
+                                            </td>
                                             <td class="align-middle">
                                                 <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Đáp án ' + String.fromCharCode(65 + optionIndex) + ', tick vào ô bên trái nếu là đáp án đúng'">
                                             </td>
@@ -172,7 +176,7 @@ Sửa đầu mục
                                                 <label class="mb-0">
                                                     <input v-model="question.correct" type="radio" :name="'data[' + questionIndex + '][correct]'" :value="optionIndex">
                                                 </label>
-                                            </td class="align-middle">
+                                            </td>
                                             <td class="align-middle">
                                                 <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" placeholder="Tick vào ô bên trái nếu là từ còn thiếu">
                                             </td>
@@ -196,7 +200,7 @@ Sửa đầu mục
                                                 <label class="mb-0">
                                                     <input v-model="question.correct" :name="'data[' + questionIndex + '][correct]'">
                                                 </label>
-                                            </td class="align-middle">
+                                            </td>
                                             <td class="align-middle">
                                                 <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" :placeholder="'Nhập đáp án được cho là đúng'">
                                             </td>
@@ -206,6 +210,35 @@ Sửa đầu mục
                                         </tr>
                                     </table>
                                     <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm đáp án</button>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
+                                </div>
+                            </template>
+                            <template v-if="question.type == 'correct-word-position-translate'">
+                                <div class="form-group">
+                                    <label>Chọn vị trí câu cần sửa</label>
+                                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tick vào ô bên trái nếu đó là từ còn thiếu.<br>- Ô trống sẽ được chèn vào giữa các thành phần trong câu."></i></small>
+                                    <table class="table table-bordered">
+                                        <tr v-for="(option, optionIndex) in question.options">
+                                            <td class="align-middle">
+                                                <label class="mb-0">
+                                                    <input v-model="question.correct" type="radio" :name="'data[' + questionIndex + '][correct]'" :value="optionIndex">
+                                                </label>
+                                            </td>
+                                            <td class="align-middle">
+                                                <input v-model="question.options[optionIndex]" type="text" :name="'data[' + questionIndex + '][options][' + optionIndex + ']'" class="form-control" placeholder="Tick vào ô bên trái nếu là từ còn thiếu">
+                                            </td>
+                                            <td class="align-middle">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm thành phần</button>
+                                    <div>
+                                        <label>Nhập đáp án đúng:</label>
+                                        <input type="text" v-model="question.textCorrect" :name="'data[' + questionIndex + '][textCorrect]'" value="text-correct" class="form-control" placeholder="Nhập vào đáp án đúng">
+                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
@@ -266,7 +299,7 @@ Sửa đầu mục
                 },
                 {
                     type: 'correct-word-position',
-                    question: '', 
+                    question: '',
                     options: [
                         '', '', '', ''
                     ],
@@ -277,15 +310,29 @@ Sửa đầu mục
                 },
                 {
                     type: 'translate-text',
-                    question: '', 
+                    question: '',
                     options: [
                         '', '', '', ''
                     ],
-                    correct: false,
+                    correct: "false",
                     audio: undefined,
                     uploadingAudio: false,
                     uploadingAudioPercent: 0,
                 },
+
+                {
+                    type: 'correct-word-position-translate',
+                    question: '',
+                    options: [
+                        '', '', '', ''
+                    ],
+                    correct: false,
+                    textCorrect:'',
+                    audio: undefined,
+                    uploadingAudio: false,
+                    uploadingAudioPercent: 0,
+                },
+
             ],
         },
         mounted() {
