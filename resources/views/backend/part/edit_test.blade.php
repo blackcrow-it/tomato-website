@@ -111,7 +111,7 @@ Sửa đầu mục
                                     <label class="form-check-label" :for="'question-type-2-' + questionIndex">Kéo từ còn thiếu vào vị trí đúng</label>
                                 </div>
                                 <div class="form-check">
-                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="translate-text" :id="'question-type-4-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="translate-text" :id="'question-type-3-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
                                     <label class="form-check-label" :for="'question-type-3-' + questionIndex">Dịch đoạn văn</label>
                                 </div>
                                 <div class="form-check">
@@ -217,8 +217,8 @@ Sửa đầu mục
                             </template>
                             <template v-if="question.type == 'correct-word-position-translate'">
                                 <div class="form-group">
-                                    <label>Chọn vị trí câu cần sửa</label>
-                                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tick vào ô bên trái nếu đó là từ còn thiếu.<br>- Ô trống sẽ được chèn vào giữa các thành phần trong câu."></i></small>
+                                    <label>Chọn từ sai trong câu</label>
+                                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tick vào ô bên trái nếu đó là từ sai và cần phải sửa lại."></i></small>
                                     <table class="table table-bordered">
                                         <tr v-for="(option, optionIndex) in question.options">
                                             <td class="align-middle">
@@ -234,9 +234,11 @@ Sửa đầu mục
                                             </td>
                                         </tr>
                                     </table>
-                                    <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm thành phần</button>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm thành phần</button>
+                                    </div>
                                     <div>
-                                        <label>Nhập đáp án đúng:</label>
+                                        <label>Nhập đáp án cho từ sai đã chọn ở trên:</label>
                                         <input type="text" v-model="question.textCorrect" :name="'data[' + questionIndex + '][textCorrect]'" value="text-correct" class="form-control" placeholder="Nhập vào đáp án đúng">
                                     </div>
                                 </div>
