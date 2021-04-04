@@ -88,6 +88,11 @@ Route::namespace('Frontend')
 
             Route::get('dang-ky', 'RegisterController@index')->name('register');
             Route::post('dang-ky', 'RegisterController@register')->name('register');
+
+            Route::get('quen-mat-khau', 'ForgotPasswordController@index')->name('forgot');
+            Route::post('quen-mat-khau', 'ForgotPasswordController@sendCodeResetPassword')->name('sendCodeResetPassword');
+            Route::get('/password/reset', 'ForgotPasswordController@resetPassword')->name('resetPassword');
+            Route::post('/reset', 'ForgotPasswordController@saveResetPassword')->name('saveResetPassword');
         });
 
         Route::post('dang-xuat', 'LogoutController@logout')->name('logout');

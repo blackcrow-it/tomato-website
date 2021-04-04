@@ -28,6 +28,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link active show" href="{{ route('register') }}">Đăng ký</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('forgot') }}">Quên mật khẩu</a>
+                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane fade active show">
