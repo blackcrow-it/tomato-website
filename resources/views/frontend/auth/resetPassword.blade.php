@@ -31,6 +31,9 @@
                                                             <form class="card mt-4">
                                                                 <div class="card-body">
                                                                     <h4>Form Thay đổi</h4>
+                                                                    <input type="hidden" name="email" value="{{ $email }}" class="form-control">
+                                                                    <input type="hidden" name="code" value="{{ $code }}" class="form-control">
+
                                                                     <div class="form-group">
                                                                         <label for="email-for-pass">Nhập mật khẩu : </label>
                                                                         <input type="password" name="password" placeholder="Nhập mật khẩu" class="form-control">

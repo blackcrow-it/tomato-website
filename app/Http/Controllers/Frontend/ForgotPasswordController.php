@@ -7,6 +7,7 @@ use App\Http\Requests\Frontend\RequestResetPassword;
 use App\Repositories\UserRepo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Log;
 use Mail;
 
 class ForgotPasswordController extends Controller
@@ -46,13 +47,15 @@ class ForgotPasswordController extends Controller
             ];
 
             Mail::send('mail.password_reset', $data, function ($message) use ($email) {
-                $message->to($email, 'reset password')->subject('Mail lấy lại mật khẩu người dùng từ Tomato');
+                $message->to($email, 'reset password')->subject('Lấy Lại mật khẩu người dùng(Tomato Website)');
             });
 
             return redirect()->back()->with('success', 'Link lấy lại mật khẩu đã được gửi đến email của bạn !');
-        }catch (\Exception $ex){
-            report($ex);
-            return abort(500);
+        } catch (\Exception $ex) {
+            Log::error($ex);
+            return redirect()
+                ->route('forgot')
+                ->with('danger', 'việc thay đổi password bị thất bại, vui lòng thử lại !');
         }
     }
 
@@ -61,48 +64,50 @@ class ForgotPasswordController extends Controller
         try {
             $email = $request->get('email');
             $code = $request->get('code');
-//            dd($code, $email);
+
             $user = $this->userRepo->getFirstByEmailAndCode($email, $code);
 
             $now = Carbon::now();
-            dd($user);
             $timeExpires = Carbon::parse($user->time_code)->addMinutes(15);
 
             if ($timeExpires < $now) {
-                return redirect('/')->with('danger', 'Xin lỗi! thời gian đã hết hạn, vui lòng thử lại');
+                return redirect()->route('login')->with('danger', 'Xin lỗi! thời gian đã hết hạn, vui lòng thử lại');
             }
 
             if (!$user) {
-                return redirect('/')->with('danger', 'Xin lỗi! đường dẫn không đúng, vui lòng thử lại');
+                return redirect()->route('login')->with('danger', 'Xin lỗi! đường dẫn không đúng, vui lòng thử lại');
             }
 
-            return view('frontend.auth.resetPassword');
-        }catch (\Exception $ex){
-            dd($ex);
-            report($ex);
-            return abort(500);
+            return view('frontend.auth.resetPassword')->with(['email' => $email, 'code' => $code]);
+        } catch (\Exception $ex) {
+            Log::error($ex);
+            return redirect()
+                ->route('login')
+                ->with('danger', 'Việc thay đổi password bị thất bại, vui lòng thử lại !');
         }
     }
 
-    public function saveResetPassword(RequestResetPassword $requestResetPassword)
+    public function saveResetPassword(RequestResetPassword $request)
     {
         try {
-            $email = $requestResetPassword->get('email');
-            $code = $requestResetPassword->get('code');
+            $email = $request->get('email');
+            $code = $request->get('code');
 
             $user = $this->userRepo->getFirstByEmailAndCode($email, $code);
 
             if (!$user) {
-                return redirect('/')->with('danger', 'Xin lỗi! đường dẫn không đúng, vui lòng thử lại');
+                return redirect()->route('login')->with('danger', 'Xin lỗi! đường dẫn không đúng, vui lòng thử lại');
             }
 
-            $user->password = \Hash::make($requestResetPassword->get('password'));
+            $user->password = \Hash::make($request->get('password'));
             $user->save();
 
-            return redirect('/dang-nhap')->with('success','Mật khẩu của bạn đã được thay đổi thành công !');
-        }catch (\Exception $ex){
-            report($ex);
-            return abort(500);
+            return redirect()->route('login')->with('success', 'Mật khẩu của bạn đã được thay đổi thành công, Vui lòng đăng nhập lại !');
+        } catch (\Exception $ex) {
+            Log::error($ex);
+            return redirect()
+                ->route('login')
+                ->with('danger', 'Việc thay đổi password bị thất bại, vui lòng thử lại !');
         }
     }
 }

@@ -14,8 +14,8 @@ class AddNewCodeAndTimeCodeToUser extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('code')->nullable()->index();
-            $table->timestamp('time_code')->nullable();
+            $table->string('code_forgot_password')->nullable()->index();
+            $table->timestamp('time_code_forgot_password_at')->nullable();
         });
     }
 
@@ -26,8 +26,8 @@ class AddNewCodeAndTimeCodeToUser extends Migration
      */
     public function down()
     {
-        Schema::table('user', function (Blueprint $table) {
-            $table->dropColumn(['code', 'time_code']);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['code_forgot_password', 'time_code_forgot_password_at']);
         });
     }
 }

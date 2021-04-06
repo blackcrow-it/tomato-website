@@ -64,11 +64,8 @@ class UserRepo
 
     public function getFirstByEmailAndCode($email, $code)
     {
-        dump($email, $code);die();
-
-        $query =  User::where('email', $email)
+        return User::where('email', $email)
             ->where('code',  $code)
             ->first();
-        dd($query);
     }
 }
