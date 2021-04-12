@@ -13,9 +13,6 @@
 @endsection
 
 @section('body')
-    <style>
-
-    </style>
     <section class="section page-title">
         <div class="container">
             <nav class="breadcrumb-nav">
@@ -43,17 +40,8 @@
                                     </div>
                                 @endif
                                 <div class="detailbox__content entry-detail">{!! $post->content !!}</div>
-                                <div class="socials-share">
-                                    <a class="bg-facebook" href="" target="_blank"><span class="fa fa-facebook"></span>
-                                        Share</a>
-                                    <a class="bg-twitter" href="" target="_blank"><span class="fa fa-twitter"></span>
-                                        Tweet</a>
-                                    <a class="bg-google-plus" href="" target="_blank"><span
-                                            class="fa fa-google-plus"></span> Plus</a>
-                                    <a class="bg-pinterest" href="" target="_blank"><span
-                                            class="fa fa-pinterest"></span> Pin</a>
-                                    <a class="bg-email" href="" target="_blank"><span class="fa fa-envelope"></span>
-                                        Gmail</a>
+                                <div class="mb-3">
+                                    <div class="sharethis-inline-share-buttons"></div>
                                 </div>
 
                                 <div class="post-detail__navigation">
@@ -163,49 +151,4 @@
             </div>
         </div>
     </section>
-@endsection
-
-@section('footer')
-    <script>
-        $('.entry-detail img').css('height', 'auto');
-        let href = location.href;
-
-        //bg-facebook
-        $('.bg-facebook').click(function (e) {
-            $('.bg-facebook').attr('href', function (i, originValue) {
-                console.log(i);
-                console.log(originValue);
-                return 'https://www.facebook.com/sharer/sharer.php?u=' + href;
-            });
-        })
-
-        //bg-twitter
-        $('.bg-twitter').click(function (e) {
-            $('.bg-twitter').attr('href', function (i, originValue) {
-                return 'https://twitter.com/share?text=&url=' + href;
-            });
-        })
-
-        //bg-google-plus
-        $('.bg-google-plus').click(function (e) {
-            $('.bg-google-plus').attr('href', function (i, originValue) {
-                return 'https://plus.google.com/share?url=' + href;
-            });
-        })
-
-        //bg-pinterest
-        $('.bg-pinterest').click(function (e) {
-            $('.bg-pinterest').attr('href', function (i, originValue) {
-                return 'https://www.pinterest.com/pin/create/button/?url=' + href + '&media=&description=';
-            });
-        })
-
-        //bg-email
-        $('.bg-email').click(function (e) {
-            $('.bg-email').attr('href', function (i, originValue) {
-                return 'https://mail.google.com/mail/u/0/?view=cm&fs=1&to&su=' + href + '&body=';
-            });
-        })
-
-    </script>
 @endsection

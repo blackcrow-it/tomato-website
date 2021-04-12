@@ -534,6 +534,8 @@
     <!-- Your Chat Plugin code -->
     <div class="fb-customerchat" attribution=setup_tool page_id="436195250152726" theme_color="#e71d36" logged_in_greeting="Kính chào quý khách! Chúng tôi có thể giúp gì được cho quý khách?" logged_out_greeting="Kính chào quý khách! Chúng tôi có thể giúp gì được cho quý khách?">
     </div>
+
+    <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=606f189a4d5573001844ff22&product=inline-share-buttons' async='async'></script>
 </body>
 
 </html>

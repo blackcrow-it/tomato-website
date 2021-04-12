@@ -128,6 +128,9 @@
                             <div class="entry-detail">
                                 {!! $book->content !!}
                             </div>
+                            <div class="mb-3">
+                                <div class="sharethis-inline-share-buttons"></div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="tab-khoahoc" role="tabpanel">
                             <div class="owl-carousel lessonbox-wrap-min lessonbox-related-slide">

@@ -111,6 +111,9 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="tabgioithieu" role="tabpanel">
                             <div class="entry-detail">{!! $course->content !!}</div>
+                            <div class="mb-3">
+                                <div class="sharethis-inline-share-buttons"></div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="tab-giangvien" role="tabpanel">
                             @if($course->teacher)
