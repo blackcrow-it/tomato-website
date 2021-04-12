@@ -56,7 +56,7 @@
 
                         <template v-if="question.type == 'translate-text'">
                             <div>
-                                Dịch lại đoạn văn trên: <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
+                                Nội dung trả lời: <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
                                 <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && compareTextOptionWithAnswer(option) }">
                                 </label>
                             </div>
