@@ -28,11 +28,11 @@ class CreateUsersTable extends Migration
         });
 
         User::insert([
-            'name' => 'Tuna',
-            'username' => 'mrcyclo',
-            'email' => 'vipboysanhdieu@gmail.com',
+            'name' => 'Admin',
+            'username' => 'admin',
+            'email' => 'admin@gmail.com',
             'email_verified_at' => Carbon::now(),
-            'password' => '$2y$10$UxIKFPSDSnPJgztOfuLeqeoK0JNccKYzO4nKB1BOnCexLErvk6bm6',
+            'password' => Hash::make('123456'),
         ]);
     }
 
