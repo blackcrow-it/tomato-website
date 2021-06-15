@@ -14,10 +14,10 @@
     <div class="container">
         <div class="login-page">
             <div class="row">
-                <div class="col-md-5 col-lg-6">
+                <div class="col-md-4 col-lg-5">
                     <div class="login-page__bg" style="background-image: url('{{ asset("tomato/assets/img/image/bg-login.jpg") }}');"></div>
                 </div>
-                <div class="col-md-7 col-lg-6">
+                <div class="col-md-8 col-lg-7">
                     <div class="login-page__wrap">
                         <div class="login-page__content">
                             <div class="tabJs">
@@ -27,6 +27,9 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link active show" href="{{ route('register') }}">Đăng ký</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ route('forgot') }}">Quên mật khẩu</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">

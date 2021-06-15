@@ -56,4 +56,16 @@ class UserRepo
             $user->save();
         }, 1);
     }
+
+    public function getFirstByEmail($email)
+    {
+        return User::where('email', $email)->first();
+    }
+
+    public function getFirstByEmailAndCode($email, $code)
+    {
+        return User::where('email', $email)
+            ->where('code',  $code)
+            ->first();
+    }
 }
