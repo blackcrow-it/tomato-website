@@ -25,6 +25,11 @@ class PartController extends Controller
         $course = $lesson->course;
         if ($course == null) return redirect()->route('home');
 
+        $user_course = $course->user_courses()
+            ->where('user_id', Auth::user()->id)
+            ->get();
+        if ($user_course == null) return redirect()->route('home');
+
         $relatedBooks = CourseRelatedBook::query()
             ->with('related_book')
             ->whereHas('related_book', function (Builder $query) {
