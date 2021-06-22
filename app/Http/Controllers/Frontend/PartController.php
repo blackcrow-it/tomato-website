@@ -11,9 +11,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Storage;
 use Throwable;
+use Auth;
 
 class PartController extends Controller
 {
+    // Lấy nội dung trong khoá học mà học viên đã thanh toán
     public function index($id)
     {
         $part = Part::find($id);
@@ -28,7 +30,7 @@ class PartController extends Controller
         $user_course = $course->user_courses()
             ->where('user_id', Auth::user()->id)
             ->get();
-        if ($user_course == null) return redirect()->route('home');
+        if (count($user_course) == 0) return redirect()->route('home');
 
         $relatedBooks = CourseRelatedBook::query()
             ->with('related_book')
