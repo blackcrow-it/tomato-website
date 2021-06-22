@@ -18,10 +18,10 @@ class PartController extends Controller
     // Lấy nội dung trong khoá học mà học viên đã thanh toán
     public function index($id)
     {
-        $part = Part::find($id);
+        $part = Part::where('enabled', true)->find($id);
         if ($part == null) return redirect()->route('home');
 
-        $lesson = $part->lesson;
+        $lesson = $part->lesson()->where('enabled', true)->first();
         if ($lesson == null) return redirect()->route('home');
 
         $course = $lesson->course;
@@ -50,6 +50,7 @@ class PartController extends Controller
 
         $lessons->map(function ($lesson) {
             $lesson->parts = $lesson->parts()
+                ->where('enabled', true)
                 ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
                 ->orderBy('created_at', 'asc')
                 ->get();
