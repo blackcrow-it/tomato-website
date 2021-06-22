@@ -24,7 +24,7 @@ class PartController extends Controller
         $lesson = $part->lesson()->where('enabled', true)->first();
         if ($lesson == null) return redirect()->route('home');
 
-        $course = $lesson->course;
+        $course = $lesson->course()->where('enabled', true)->first();
         if ($course == null) return redirect()->route('home');
 
         $user_course = $course->user_courses()
