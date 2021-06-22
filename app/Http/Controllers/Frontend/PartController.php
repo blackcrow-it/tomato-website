@@ -41,6 +41,7 @@ class PartController extends Controller
             ->pluck('related_book');
 
         $lessons = $course->lessons()
+            ->where('enabled', true)
             ->orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC')
             ->orderBy('title', 'asc')
             ->get();
