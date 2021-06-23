@@ -86,6 +86,7 @@ class CourseController extends Controller
         }
 
         $lessons = $course->lessons()
+            ->where('enabled', true)
             ->orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC')
             ->orderBy('title', 'asc')
             ->get();
@@ -152,7 +153,7 @@ class CourseController extends Controller
 
     public function start($id)
     {
-        $course = Course::find($id);
+        $course = Course::where('enabled', true)->find($id);
         if ($course == null) {
             return redirect()->route('home');
         }
@@ -170,12 +171,14 @@ class CourseController extends Controller
         }
 
         $lesson = $course->lessons()
+            ->where('enabled', true)
             ->orderByRaw('CASE WHEN order_in_course > 0 THEN 0 ELSE 1 END, order_in_course ASC')
             ->orderBy('title', 'asc')
             ->first();
         if ($lesson == null) return redirect()->route('home');
 
         $part = $lesson->parts()
+            ->where('enabled', true)
             ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
             ->orderBy('created_at', 'asc')
             ->first();
