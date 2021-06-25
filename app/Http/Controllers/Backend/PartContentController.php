@@ -63,7 +63,14 @@ class PartContentController extends Controller
             $part->title = $request->input('title');
             $part->save();
 
-            $data = $part->part_youtube ?? new PartContent();
+            // Kiểm tra part này của loại youtube hay là content
+            if ($part->part_youtube()->first()) {
+                $data = $part->part_youtube()->first();
+            } elseif ($part->part_content()->first()) {
+                $data = $part->part_content()->first();
+            } else {
+                $data = new PartContent();
+            }
             $data->part_id = $part_id;
             $data->content = $request->input('content');
             $data->save();
