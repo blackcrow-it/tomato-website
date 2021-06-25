@@ -49,6 +49,7 @@ Giảng viên
                 <th>ID</th>
                 <th>Ảnh đại diện</th>
                 <th>Tên</th>
+                <th>Email</th>
                 <th>Hành động</th>
             </tr>
         </thead>
@@ -60,6 +61,11 @@ Giảng viên
                         <img src="{{ $item->avatar }}" class="img-thumbnail">
                     </td>
                     <td>{{ $item->name }}</td>
+                    @if ($item->email)
+                    <td>{{ $item->email }}</td>
+                    @else
+                    <td><i>* Chưa có email</i></td>
+                    @endif
                     <td class="text-nowrap">
                         <form action="{{ route('admin.teacher.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa giảng viên này?')">
                             @csrf
