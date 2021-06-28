@@ -35,7 +35,7 @@
                     })
                     .then(function (response) {
                         console.log(response);
-                        $('#notify').html('<p style="color: #77af41;">Đã gửi bài viết cho giảng viên.</p>');
+                        $('#notify').html('<p style="color: #77af41;">Đã gửi bài viết cho giáo viên. Học viên vui lòng theo dõi email và group kín trên Facebook.</p>');
                     })
                     .catch(function (error) {
                         console.log(error)
