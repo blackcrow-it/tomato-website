@@ -56,12 +56,25 @@
     <form action="" method="POST">
         @csrf
         <div class="card-body">
-            <div class="form-group">
-                <label>Tên</label>
-                <input type="text" name="teacher[name]" placeholder="Tên" value="{{ old('teacher.name') ?? $teacher->name ?? null }}" class="form-control @error('teacher.name') is-invalid @enderror" required>
-                @error('teacher.name')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <input type="text" name="teacher[name]" placeholder="Tên" value="{{ old('teacher.name') ?? $teacher->name ?? null }}" class="form-control @error('teacher.name') is-invalid @enderror" required>
+                        @error('teacher.name')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="teacher[email]" placeholder="Email" value="{{ old('teacher.email') ?? $teacher->email ?? null }}" class="form-control @error('teacher.email') is-invalid @enderror">
+                        @error('teacher.email')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">

@@ -45,6 +45,7 @@ Route::namespace('Frontend')
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
             Route::get('bai-giang/{id}', 'PartController@index')->name('part');
+            Route::post('gui-bai-viet/{part_id}', 'PartContentController@send')->name('part_content.send_mail');
             Route::get('part-test/get-data/{id}', 'PartTestController@getData')->name('part_test.get_data');
 
             Route::get('gio-hang', 'CartController@index')->name('cart');
