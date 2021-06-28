@@ -37,11 +37,11 @@ class ForgotPasswordController extends Controller
 
             $code = \Hash::make(time() . $email);
 
-            $checkExistUser->code = $code;
-            $checkExistUser->time_code = Carbon::now();
+            $checkExistUser->code_forgot_password = $code;
+            $checkExistUser->time_code_forgot_password_at = Carbon::now();
             $checkExistUser->save();
 
-            $url = route('resetPassword', ['code' => $checkExistUser->code, 'email' => $email]);
+            $url = route('resetPassword', ['code' => $checkExistUser->code_forgot_password, 'email' => $email]);
             $data = [
                 'route' => $url
             ];
@@ -68,7 +68,7 @@ class ForgotPasswordController extends Controller
             $user = $this->userRepo->getFirstByEmailAndCode($email, $code);
 
             $now = Carbon::now();
-            $timeExpires = Carbon::parse($user->time_code)->addMinutes(15);
+            $timeExpires = Carbon::parse($user->time_code_forgot_password_at)->addMinutes(15);
 
             if ($timeExpires < $now) {
                 return redirect()->route('login')->with('danger', 'Xin lỗi! thời gian đã hết hạn, vui lòng thử lại');
