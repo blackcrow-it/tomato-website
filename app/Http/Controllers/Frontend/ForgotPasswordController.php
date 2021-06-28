@@ -61,7 +61,7 @@ class ForgotPasswordController extends Controller
 
     public function resetPassword(Request $request)
     {
-        // try {
+        try {
             $email = $request->get('email');
             $code = $request->get('code');
 
@@ -79,12 +79,12 @@ class ForgotPasswordController extends Controller
             }
 
             return view('frontend.auth.resetPassword')->with(['email' => $email, 'code' => $code]);
-        // } catch (\Exception $ex) {
-        //     Log::error($ex);
-        //     return redirect()
-        //         ->route('login')
-        //         ->with('danger', 'Việc thay đổi password bị thất bại, vui lòng thử lại !');
-        // }
+        } catch (\Exception $ex) {
+            Log::error($ex);
+            return redirect()
+                ->route('login')
+                ->with('danger', 'Việc thay đổi password bị thất bại, vui lòng thử lại !');
+        }
     }
 
     public function saveResetPassword(RequestResetPassword $request)
