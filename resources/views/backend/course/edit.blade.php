@@ -198,7 +198,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Vị trí hiển thị</label>
+                <label>Vị trí hiển thị</label>Meta Title
                 <div>
                     @foreach(get_template_position(\App\Constants\ObjectType::COURSE) as $item)
                         <div class="form-check">
@@ -342,6 +342,11 @@
                 @enderror
             </div>
             <hr>
+            <div class="form-group">
+                <label>Ngày tạo</label>
+                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Ngày tạo khóa học"></i></small>
+                <input type="text" name="meta_title" placeholder="ngày tạo" value="{{ old('created_at') ?? $data->created_at ?? null }}" class="form-control" readonly>
+            </div>
             <div class="form-group">
                 <label>Meta Title</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>

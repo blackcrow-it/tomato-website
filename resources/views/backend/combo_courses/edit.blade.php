@@ -1,10 +1,10 @@
 @extends('backend.master')
 
 @section('title')
-@if(request()->routeIs('admin.post.add'))
-    Thêm bài viết mới
+@if(request()->routeIs('admin.course.add'))
+    Thêm khóa học mới
 @else
-    Sửa bài viết
+    Sửa khóa học
 @endif
 @endsection
 
@@ -12,16 +12,16 @@
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if(request()->routeIs('admin.post.add'))
-                Thêm bài viết mới
+            @if(request()->routeIs('admin.course.add'))
+                Thêm khóa học mới
             @else
-                Sửa bài viết
+                Sửa khóa học
             @endif
         </h1>
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.post.list') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
+            <a href="{{ route('admin.course.list') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Quay lại</a>
         </div>
     </div><!-- /.col -->
 </div>
@@ -61,7 +61,7 @@
                 <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
                     <option value="">Không phân loại</option>
                     @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ ($data->category_id ?? old('category_id')) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+                        <option value="{{ $category->id }}" {{ (old('category_id') ?? $data->category_id ?? null) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
                     @endforeach
                 </select>
                 @error('category_id')
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group">
                 <label>Tiêu đề</label>
-                <input type="text" name="title" placeholder="Tiêu đề" value="{{ $data->title ?? old('title') }}" class="form-control @error('title') is-invalid @enderror">
+                <input type="text" name="title" placeholder="Tiêu đề" value="{{ old('title') ?? $data->title ?? null }}" class="form-control @error('title') is-invalid @enderror">
                 @error('title')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -78,7 +78,7 @@
             <div class="form-group">
                 <label>Đường dẫn</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hạn chế thay đổi vì ảnh hưởng tới SEO.<br>- Nếu bỏ trống, hệ thống tự tạo đường dẫn theo tiêu đề."></i></small>
-                <input type="text" name="slug" placeholder="Đường dẫn" value="{{ $data->slug ?? old('slug') }}" class="form-control @error('slug') is-invalid @enderror">
+                <input type="text" name="slug" placeholder="Đường dẫn" value="{{ old('slug') ?? $data->slug ?? null }}" class="form-control @error('slug') is-invalid @enderror">
                 @error('slug')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -88,7 +88,7 @@
                     <div class="form-group">
                         <label>Ảnh thu nhỏ (thumbnail)</label>
                         <div class="input-group">
-                            <input type="text" name="thumbnail" placeholder="Ảnh thu nhỏ" value="{{ $data->thumbnail ?? old('thumbnail') }}" class="form-control @error('thumbnail') is-invalid @enderror" id="ck-thumbnail">
+                            <input type="text" name="thumbnail" placeholder="Ảnh thu nhỏ" value="{{ old('thumbnail') ?? $data->thumbnail ?? null }}" class="form-control @error('thumbnail') is-invalid @enderror" id="ck-thumbnail">
                             @error('thumbnail')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -96,14 +96,14 @@
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-thumbnail', 'ck-thumbnail-preview')">Chọn file</button>
                             </div>
                         </div>
-                        <img class="image-preview" src="{{ $data->thumbnail ?? old('thumbnail') }}" id="ck-thumbnail-preview">
+                        <img class="image-preview" src="{{ old('thumbnail') ?? $data->thumbnail ?? null }}" id="ck-thumbnail-preview">
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Ảnh bìa (cover)</label>
                         <div class="input-group">
-                            <input type="text" name="cover" placeholder="Ảnh bìa" value="{{ $data->cover ?? old('cover') }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
+                            <input type="text" name="cover" placeholder="Ảnh bìa" value="{{ old('cover') ?? $data->cover ?? null }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
                             @error('cover')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -111,24 +111,78 @@
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-cover', 'ck-cover-preview')">Chọn file</button>
                             </div>
                         </div>
-                        <img class="image-preview" src="{{ $data->cover ?? old('cover') }}" id="ck-cover-preview">
+                        <img class="image-preview" src="{{ old('cover') ?? $data->cover ?? null }}" id="ck-cover-preview">
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <label>Mô tả nội dung</label>
-                <textarea name="description" rows="3" placeholder="Mô tả nội dung" class="form-control @error('description') is-invalid @enderror">{{ $data->description ?? old('description') }}</textarea>
-                @error('description')
+                <label>Intro Youtube ID</label>
+                <input type="text" name="intro_youtube_id" placeholder="Intro Youtube ID" value="{{ old('intro_youtube_id') ?? $data->intro_youtube_id ?? null }}" class="form-control @error('intro_youtube_id') is-invalid @enderror">
+                @error('intro_youtube_id')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <div class="form-group">
-                <label>Nội dung bài viết</label>
-                <textarea name="content" class="editor">{!! $data->content ?? old('content') !!}</textarea>
+                <label>Mô tả nội dung</label>
+                <textarea name="description" class="editor">{!! old('description') ?? $data->description ?? null !!}</textarea>
             </div>
             <div class="form-group">
-                <label>Hiển thị bài viết</label>
-                <?php $enabled = $data->enabled ?? old('enabled') ?? true; ?>
+                <label>Nội dung khóa học</label>
+                <textarea name="content" class="editor">{!! old('content') ?? $data->content ?? null !!}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Ghi chú cho người đã mua khóa học (Hiển thị dưới video)</label>
+                <textarea name="video_footer_text" class="editor">{!! old('video_footer_text') ?? $data->video_footer_text ?? null !!}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Giảng viên</label>
+                <select name="teacher_id" class="form-control">
+                    <option value="">Chọn giảng viên</option>
+                    @foreach ($teachers as $item)
+                        <option value="{{ $item->id }}" {{ (old('teacher_id') ?? $data->teacher_id ?? null) == $item->id ? 'selected' : null }}>{{ $item->name }}</option>
+                    @endforeach
+                </select>
+                @error('teacher_id')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Trình độ</label>
+                <select name="level" class="form-control @error('level') is-invalid @enderror">
+                    <option value="">Không phân loại</option>
+                    <option value="{{ \App\Constants\CourseLevel::ELEMENTARY }}" {{ (old('level') ?? $data->level ?? null) == App\Constants\CourseLevel::ELEMENTARY ? 'selected' : '' }}>Sơ cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::INTERMEDIATE }}" {{ (old('level') ?? $data->level ?? null) == App\Constants\CourseLevel::INTERMEDIATE ? 'selected' : '' }}>Trung cấp</option>
+                    <option value="{{ \App\Constants\CourseLevel::ADVANCED }}" {{ (old('level') ?? $data->level ?? null) == App\Constants\CourseLevel::ADVANCED ? 'selected' : '' }}>Cao cấp</option>
+                </select>
+                @error('level')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Giá tiền</label>
+                <input type="text" name="price" placeholder="Giá tiền" value="{{ old('price') ?? $data->price ?? null }}" class="form-control currency @error('price') is-invalid @enderror">
+                @error('price')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Giá gốc</label>
+                <input type="text" name="original_price" placeholder="Giá gốc" value="{{ old('original_price') ?? $data->original_price ?? null }}" class="form-control currency @error('original_price') is-invalid @enderror">
+                @error('original_price')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Số ngày sở hữu sau khi mua</label>
+                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="Bỏ trống để học viên có thể sở hữu mãi mãi."></i></small>
+                <input type="text" name="buyer_days_owned" placeholder="Số ngày sở hữu sau khi mua" value="{{ old('buyer_days_owned') ?? $data->buyer_days_owned ?? null }}" class="form-control currency @error('buyer_days_owned') is-invalid @enderror">
+                @error('buyer_days_owned')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label>Hiển thị khóa học</label>
+                <?php $enabled = old('enabled') ?? $data->enabled ?? null ?? true; ?>
                 <div>
                     <div class="form-check-inline">
                         <input class="form-check-input @error('enabled') is-invalid @enderror" type="radio" id="cr-enabled-1" name="enabled" value="1" {{ $enabled == true ? 'checked' : '' }}>
@@ -146,7 +200,7 @@
             <div class="form-group">
                 <label>Vị trí hiển thị</label>
                 <div>
-                    @foreach(get_template_position(\App\Constants\ObjectType::POST) as $item)
+                    @foreach(get_template_position(\App\Constants\ObjectType::COURSE) as $item)
                         <div class="form-check">
                             <input class="form-check-input @error('__template_position') is-invalid @enderror" type="checkbox" id="cr-template-position-{{ $loop->index }}" name="__template_position[]" value="{{ $item['code'] }}" {{ in_array($item['code'], $data->__template_position ?? []) ? 'checked' : '' }}>
                             <label class="form-check-label" for="cr-template-position-{{ $loop->index }}">{{ $item['name'] }}</label>
@@ -223,15 +277,15 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Bài viết liên quan</label>
-                <div id="js-related-post">
+                <label>Tài liệu liên quan</label>
+                <div id="js-related-book">
                     <div class="card">
                         <div class="card-body">
                             <table class="table table-striped table-borderless">
-                                <tr v-for="item in relatedPosts" :key="item.id">
+                                <tr v-for="item in relatedBooks" :key="item.id">
                                     <td>
                                         @{{ item.id }}
-                                        <input type="hidden" name="__related_posts[]" :value="item.id">
+                                        <input type="hidden" name="__related_books[]" :value="item.id">
                                     </td>
                                     <td>
                                         <img :src="item.thumbnail" class="img-thumbnail">
@@ -248,18 +302,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" tabindex="-1" id="js-related-post-modal">
+                    <div class="modal fade" tabindex="-1" id="js-related-book-modal">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Chọn bài viết liên quan</h5>
+                                    <h5 class="modal-title">Chọn tài liệu liên quan</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Tìm kiếm bài viết" v-model="keyword">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm sách" v-model="keyword">
                                     </div>
                                     <div class="text-center" v-if="isSearching">
                                         <div class="spinner-border">
@@ -283,20 +337,15 @@
                         </div>
                     </div>
                 </div>
-                @error('__related_posts')
+                @error('__related_books')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
             <hr>
             <div class="form-group">
-                <label>Ngày tạo</label>
-                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Ngày tạo bài viết"></i></small>
-                <input type="text" name="meta_title" placeholder="ngày tạo" value="{{ old('created_at') ?? $data->created_at ?? null }}" class="form-control" readonly>
-            </div>
-            <div class="form-group">
                 <label>Meta Title</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
-                <input type="text" name="meta_title" placeholder="Meta Title" value="{{ $data->meta_title ?? old('meta_title') }}" class="form-control @error('meta_title') is-invalid @enderror">
+                <input type="text" name="meta_title" placeholder="Meta Title" value="{{ old('meta_title') ?? $data->meta_title ?? null }}" class="form-control @error('meta_title') is-invalid @enderror">
                 @error('meta_title')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -304,7 +353,7 @@
             <div class="form-group">
                 <label>Meta description</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
-                <textarea name="meta_description" rows="3" placeholder="Meta description" class="form-control @error('meta_description') is-invalid @enderror">{{ $data->meta_description ?? old('meta_description') }}</textarea>
+                <textarea name="meta_description" rows="3" placeholder="Meta description" class="form-control @error('meta_description') is-invalid @enderror">{{ old('meta_description') ?? $data->meta_description ?? null }}</textarea>
                 @error('meta_description')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -312,7 +361,7 @@
             <div class="form-group">
                 <label>OG Title</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
-                <input type="text" name="og_title" placeholder="OG Title" value="{{ $data->og_title ?? old('og_title') }}" class="form-control @error('og_title') is-invalid @enderror">
+                <input type="text" name="og_title" placeholder="OG Title" value="{{ old('og_title') ?? $data->og_title ?? null }}" class="form-control @error('og_title') is-invalid @enderror">
                 @error('og_title')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -320,7 +369,7 @@
             <div class="form-group">
                 <label>OG description</label>
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
-                <textarea name="og_description" rows="3" placeholder="OG description" class="form-control @error('og_description') is-invalid @enderror">{{ $data->og_description ?? old('og_description') }}</textarea>
+                <textarea name="og_description" rows="3" placeholder="OG description" class="form-control @error('og_description') is-invalid @enderror">{{ old('og_description') ?? $data->og_description ?? null }}</textarea>
                 @error('og_description')
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
@@ -331,7 +380,7 @@
                         <label>OG Image</label>
                         <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hình ảnh hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo ảnh bìa."></i></small>
                         <div class="input-group">
-                            <input type="text" name="og_image" placeholder="OG Image" value="{{ $data->og_image ?? old('og_image') }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
+                            <input type="text" name="og_image" placeholder="OG Image" value="{{ old('og_image') ?? $data->og_image ?? null }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
                             @error('og_image')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -339,7 +388,7 @@
                                 <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-og-image', 'ck-og-image-preview')">Chọn file</button>
                             </div>
                         </div>
-                        <img class="image-preview" src="{{ $data->og_image ?? old('og_image') }}" id="ck-og-image-preview">
+                        <img class="image-preview" src="{{ old('og_image') ?? $data->og_image ?? null }}" id="ck-og-image-preview">
                     </div>
                 </div>
             </div>
@@ -353,56 +402,7 @@
 
 @section('script')
 <script>
-    const POST_ID = "{{ $data->id ?? 'undefined' }}";
-
-    new Vue({
-        el: '#js-related-post',
-        data: {
-            relatedPosts: [],
-            searchTimer: undefined,
-            searchResult: [],
-            keyword: undefined,
-            isSearching: false,
-        },
-        mounted() {
-            axios.get('{{ route("admin.post.get_related_post") }}', {
-                params: {
-                    id: POST_ID
-                }
-            }).then(res => {
-                this.relatedPosts = res;
-            });
-        },
-        methods: {
-            showAddItemModal() {
-                $('#js-related-post-modal').modal('show');
-            },
-            addItem(item) {
-                this.relatedPosts.push(item);
-            },
-            deleteItem(id) {
-                const index = this.relatedPosts.findIndex(x => x.id == id);
-                this.relatedPosts.splice(index, 1);
-            },
-        },
-        watch: {
-            keyword(newVal, oldVal) {
-                this.isSearching = true;
-                clearTimeout(this.searchTimer);
-                this.searchTimer = setTimeout(() => {
-                    axios.get('{{ route("admin.post.search_post") }}', {
-                        params: {
-                            keyword: this.keyword
-                        }
-                    }).then(res => {
-                        this.searchResult = res;
-                    }).then(() => {
-                        this.isSearching = false;
-                    });
-                }, 1000);
-            }
-        }
-    });
+    const COURSE_ID = "{{ $data->id ?? 'undefined' }}";
 
     new Vue({
         el: '#js-related-course',
@@ -414,9 +414,9 @@
             isSearching: false,
         },
         mounted() {
-            axios.get('{{ route("admin.post.get_related_course") }}', {
+            axios.get('{{ route("admin.course.get_related_course") }}', {
                 params: {
-                    id: POST_ID
+                    id: COURSE_ID
                 }
             }).then(res => {
                 this.relatedCourses = res;
@@ -440,6 +440,55 @@
                 clearTimeout(this.searchTimer);
                 this.searchTimer = setTimeout(() => {
                     axios.get('{{ route("admin.course.search_course") }}', {
+                        params: {
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res;
+                    }).then(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
+            }
+        }
+    });
+
+    new Vue({
+        el: '#js-related-book',
+        data: {
+            relatedBooks: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
+        },
+        mounted() {
+            axios.get('{{ route("admin.course.get_related_book") }}', {
+                params: {
+                    id: COURSE_ID
+                }
+            }).then(res => {
+                this.relatedBooks = res;
+            });
+        },
+        methods: {
+            showAddItemModal() {
+                $('#js-related-book-modal').modal('show');
+            },
+            addItem(item) {
+                this.relatedBooks.push(item);
+            },
+            deleteItem(id) {
+                const index = this.relatedBooks.findIndex(x => x.id == id);
+                this.relatedBooks.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.book.search_book") }}', {
                         params: {
                             keyword: this.keyword
                         }

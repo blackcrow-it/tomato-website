@@ -75,6 +75,10 @@
                 <input type="text" name="name" placeholder="Your name" value="{{ old('name') ?? $data->name ?? null }}" class="form-control">
             </div>
             <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" placeholder="Your phone" value="{{ old('phone') ?? $data->phone ?? null }}" class="form-control">
+            </div>
+            <div class="form-group">
                 <label>Password</label>
                 <div class="input-group @error('password') is-invalid @enderror">
                     <input type="text" class="form-control" name="password" placeholder="Password" id="js-password-input">

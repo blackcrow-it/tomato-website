@@ -124,6 +124,7 @@ class PartVideoController extends Controller
                 $pathInfo['basename'],
                 's3'
             );
+			Storage::disk('s3')->setVisibility($data->s3_path . '/' . $pathInfo['dirname'] . '/' . $pathInfo['basename'], 'public');
         }
 
         if ($pathInfo['extension'] != 'm3u8') return;

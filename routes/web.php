@@ -88,6 +88,11 @@ Route::namespace('Frontend')
 
             Route::get('dang-ky', 'RegisterController@index')->name('register');
             Route::post('dang-ky', 'RegisterController@register')->name('register');
+
+            Route::get('quen-mat-khau', 'ForgotPasswordController@index')->name('forgot');
+            Route::post('quen-mat-khau', 'ForgotPasswordController@sendCodeResetPassword')->name('sendCodeResetPassword');
+            Route::get('/password/reset', 'ForgotPasswordController@resetPassword')->name('resetPassword');
+            Route::post('/reset', 'ForgotPasswordController@saveResetPassword')->name('saveResetPassword');
         });
 
         Route::post('dang-xuat', 'LogoutController@logout')->name('logout');
@@ -153,6 +158,18 @@ Route::prefix('admin')
                 Route::get('search-course', 'CourseController@getSearchCourse')->name('search_course');
                 Route::get('get-related-course', 'CourseController@getRelatedCourse')->name('get_related_course');
                 Route::get('get-related-book', 'CourseController@getRelatedBook')->name('get_related_book');
+            });
+
+            Route::prefix('combo_courses')->name('combo_courses.')->group(function () {
+                Route::get('list', 'ComboCourseController@list')->name('list')->middleware('can:course.list');
+                Route::get('add', 'ComboCourseController@add')->name('add')->middleware('can:course.add');
+                Route::post('add', 'ComboCourseController@submitAdd')->name('add')->middleware('can:course.add');
+                Route::get('edit/{id}', 'ComboCourseController@edit')->name('edit')->middleware('can:course.edit');
+                Route::post('edit/{id}', 'ComboCourseController@submitEdit')->name('edit')->middleware('can:course.edit');
+                Route::post('enabled', 'ComboCourseController@submitEnabled')->name('enabled')->middleware('can:course.edit');
+                Route::post('delete/{id}', 'ComboCourseController@submitDelete')->name('delete')->middleware('can:course.delete');
+                Route::get('search-course', 'ComboCourseController@getSearchCourse')->name('search_course');
+                Route::get('get-related-course', 'ComboCourseController@getRelatedCourse')->name('get_related_course');
             });
 
             Route::prefix('lesson')->name('lesson.')->group(function () {
