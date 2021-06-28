@@ -65,7 +65,7 @@ class UserRepo
     public function getFirstByEmailAndCode($email, $code)
     {
         return User::where('email', $email)
-            ->where('code',  $code)
+            ->where('code_forgot_password',  $code)
             ->first();
     }
 }
