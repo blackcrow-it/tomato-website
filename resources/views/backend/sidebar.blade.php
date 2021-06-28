@@ -13,12 +13,12 @@
         </a>
     </li>
 @endcan
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-boxes"></i>
         <p>Combo khóa học</p>
     </a>
-</li>
+</li> --}}
 @can('post.list')
     <li class="nav-item">
         <a href="{{ route('admin.post.list') }}" class="nav-link {{ request()->routeIs('admin.post.*') ? 'active' : '' }}">
