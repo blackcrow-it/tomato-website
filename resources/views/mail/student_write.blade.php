@@ -6,13 +6,16 @@ Số điện thoại: **{{ $data['phone_student'] }}**
 * Bài học: {{ $data['lesson']->title }}
 * Đầu mục: {{ $data['part']->title }}
 
-Đường dẫn bài học: [tại đây]({{ url('/bai-giang/'.strval($data['part']->id)) }})
+# Nội dung bài viết
+***
+{{ $data['part_content'] }}
+***
 
 # Bài làm của học viên
-### Thời gian nộp bài: {{ now()->format('d-m-Y H:i') }}
 ***
 {{ $data['content'] }}
 ***
+### Thời gian nộp bài: {{ now()->format('d-m-Y H:i') }}
 
 *Vui lòng không trả lời email này. Giáo viên chữa bài rồi gửi qua email của học viên và đăng bài lên group kín Facebook*
 @endcomponent
