@@ -4,13 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\SlugOptions;
+use DB;
 
 class ComboCourses extends Model
 {
     protected $table = 'combo_courses';
 
     protected $fillable = [
-        'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'enabled',
+        'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'enabled', 'price',
         'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image'
     ];
 
@@ -30,5 +31,15 @@ class ComboCourses extends Model
     public function items()
     {
         return $this->hasMany(ComboCoursesItem::class, 'combo_courses_id', 'id');
+    }
+
+    // Hàm xoá combo courses và xoá luôn cả combo course items để không bị lỗi transaction
+    public function delete()
+    {
+        DB::transaction(function()
+        {
+            $this->items()->delete();
+            parent::delete();
+        });
     }
 }
