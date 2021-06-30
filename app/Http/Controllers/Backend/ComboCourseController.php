@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
+use DB;
+use Log;
+use Exception;
 use App\ComboCourses;
+use App\ComboCoursesItem;
+use App\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Backend\ComboCourseRequest;
 
 class ComboCourseController extends Controller
 {
@@ -19,146 +25,131 @@ class ComboCourseController extends Controller
 
     public function add()
     {
-        return view('backend.course.edit', [
-            'categories' => $this->getCategoriesTraverse(),
-            'teachers' => Teacher::orderBy('name', 'asc')->get()
+        return view('backend.combo_courses.edit', [
         ]);
     }
 
-    public function submitAdd(CourseRequest $request)
+    public function submitAdd(ComboCourseRequest $request)
     {
-        $course = new Course;
+        $comboCourse = new ComboCourses;
 
         try {
             DB::beginTransaction();
-            $this->processCourseFromRequest($request, $course);
+            $this->processComboCourseFromRequest($request, $comboCourse);
             DB::commit();
 
             return redirect()
-                ->route('admin.course.list')
-                ->with('success', 'Thêm khóa học mới thành công.');
+                ->route('admin.combo_courses.list')
+                ->with('success', 'Thêm combo khóa học mới thành công.');
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
 
             return redirect()
-                ->route('admin.course.list')
-                ->withErrors('Thêm khóa học mới thất bại.');
+                ->route('admin.combo_courses.list')
+                ->withErrors('Thêm combo khóa học mới thất bại.');
         }
     }
 
     public function edit($id)
     {
-        $course = Course::find($id);
-        if ($course == null) {
+        $comboCourses = ComboCourses::find($id);
+        if ($comboCourses == null) {
             return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
         }
-
-        $course->__template_position = $course->position->pluck('code')->toArray();
-
-        return view('backend.course.edit', [
-            'data' => $course,
-            'categories' => $this->getCategoriesTraverse(),
-            'teachers' => Teacher::orderBy('name', 'asc')->get()
+        $listCourses = array();
+        foreach ($comboCourses->items as $comboCoursesItem) {
+            $course = Course::find($comboCoursesItem->course_id);
+            array_push($listCourses, $course);
+        }
+        return view('backend.combo_courses.edit', [
+            'data' => $comboCourses,
+            'courses' => json_encode($listCourses)
         ]);
     }
 
-    public function submitEdit(CourseRequest $request, $id)
+    public function submitEdit(ComboCourseRequest $request, $id)
     {
-        $course = Course::find($id);
-        if ($course == null) {
-            return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
+        $comboCourse = ComboCourses::find($id);
+        if ($comboCourse == null) {
+            return redirect()->route('admin.combo_courses.list')->withErrors('Combo khoá học không tồn tại hoặc đã bị xóa.');
         }
 
         try {
             DB::beginTransaction();
-            $this->processCourseFromRequest($request, $course);
+            $this->processComboCourseFromRequest($request, $comboCourse);
             DB::commit();
 
             return redirect()
-                ->route('admin.course.list')
-                ->with('success', 'Thay đổi khóa học thành công.');
+                ->route('admin.combo_courses.list')
+                ->with('success', 'Thay đổi combo khóa học thành công.');
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
 
             return redirect()
-                ->route('admin.course.list')
-                ->withErrors('Thay đổi khóa học thất bại.');
+                ->route('admin.combo_courses.list')
+                ->withErrors('Thay đổi combo khóa học thất bại.');
         }
     }
 
-    private function processCourseFromRequest(Request $request, Course $course)
+    // Hàm xử lý lưu và tạo combo khoá học
+    private function processComboCourseFromRequest(Request $request, ComboCourses $comboCourse)
     {
         $data = $request->all();
-        $course->fill($data);
-        $course->intro_youtube_id = get_youtube_id_from_url($course->intro_youtube_id);
-        $course->save();
+        $comboCourse->fill($data);
+        $comboCourse->save();
 
-        $positionData = CoursePosition::where('course_id', $course->id)->get();
-        CoursePosition::where('course_id', $course->id)->delete();
-        $templatePositionCodeArray = $request->input('__template_position', []);
-        foreach ($templatePositionCodeArray as $code) {
-            $position = new CoursePosition();
-            $position->code = $code;
-            $position->course_id = $course->id;
-            $position->order_in_position = $positionData->firstWhere('code', $code)->order_in_position ?? 0;
-            $position->save();
-        }
-
-        CourseRelatedCourse::where('course_id', $course->id)->delete();
-        $relatedCourseIds = $request->input('__related_courses', []);
-        foreach ($relatedCourseIds as $relatedCourseId) {
-            $related = new CourseRelatedCourse();
-            $related->course_id = $course->id;
-            $related->related_course_id = $relatedCourseId;
-            $related->save();
-        }
-
-        CourseRelatedBook::where('course_id', $course->id)->delete();
-        $relatedBookIds = $request->input('__related_books', []);
-        foreach ($relatedBookIds as $relatedBookId) {
-            $related = new CourseRelatedBook();
-            $related->course_id = $course->id;
-            $related->related_book_id = $relatedBookId;
-            $related->save();
+        ComboCoursesItem::where('combo_courses_id', $comboCourse->id)->delete();
+        $courseIds = $request->input('__courses', []);
+        error_log(implode($courseIds));
+        foreach ($courseIds as $courseId) {
+            $comboCourseItem = new ComboCoursesItem();
+            $comboCourseItem->combo_courses_id = $comboCourse->id;
+            $comboCourseItem->course_id = $courseId;
+            $comboCourseItem->save();
         }
     }
 
     public function submitDelete($id)
     {
-        $course = Course::find($id);
-        if ($course == null) {
-            return redirect()->route('admin.course.list')->withErrors('Khóa học không tồn tại hoặc đã bị xóa.');
-        }
-
-        if ($course->lessons()->count() > 0) {
-            return redirect()->route('admin.course.list')->withErrors('Không thể xóa khóa học vì vẫn còn bài học bên trong.');
+        $comboCourse = ComboCourses::find($id);
+        if ($comboCourse == null) {
+            return redirect()->route('admin.combo_courses.list')->withErrors('Combo khóa học không tồn tại hoặc đã bị xóa.');
         }
 
         try {
             DB::beginTransaction();
-            $course->delete();
+            $comboCourse->delete();
             DB::commit();
 
             return redirect()
-                ->route('admin.course.list')
-                ->with('success', 'Xóa khóa học thành công.');
+                ->route('admin.combo_courses.list')
+                ->with('success', 'Xóa combo khóa học thành công.');
         } catch (Exception $ex) {
             DB::rollBack();
             Log::error($ex);
 
             return redirect()
-                ->route('admin.course.list')
-                ->withErrors('Xóa khóa học thất bại.');
+                ->route('admin.combo_courses.list')
+                ->withErrors('Xóa combo khóa học thất bại.');
         }
     }
 
     public function submitEnabled(Request $request)
     {
-        $course = Course::findOrFail($request->input('id'));
-        $course->enabled = $request->input('enabled');
-        $course->timestamps = false;
-        $course->save();
+        $comboCourse = ComboCourses::findOrFail($request->input('id'));
+        $comboCourse->enabled = $request->input('enabled');
+        $comboCourse->timestamps = false;
+        $comboCourse->save();
+    }
+
+    public function getCoursesInCombo(Request $request)
+    {
+        $id = $request->input('id');
+        return ComboCoursesItem::with('course')
+            ->where('combo_courses_id', $id)
+            ->get()
+            ->pluck('course');
     }
 }

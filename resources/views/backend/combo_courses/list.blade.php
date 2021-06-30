@@ -1,21 +1,21 @@
 @extends('backend.master')
 
 @section('title')
-Khóa học
+Combo khóa học
 @endsection
 
 @section('content-header')
 <div class="row mb-2">
     <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Khóa học</h1>
+        <h1 class="m-0 text-dark">Combo khóa học</h1>
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.course.add') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
+            <a href="{{ route('admin.combo_courses.add') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Thêm mới</a>
         </div>
     </div><!-- /.col -->
 </div>
-<form action="" method="GET">
+{{-- <form action="" method="GET">
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
@@ -41,7 +41,7 @@ Khóa học
     <div class="form-group">
         <button class="btn btn-primary" type="submit">Tìm kiếm</button>
     </div>
-</form>
+</form> --}}
 @endsection
 
 @section('content')
@@ -122,20 +122,10 @@ Khóa học
                             <label class="custom-control-label" for="cs-enabled-{{ $item->id }}"></label>
                         </div>
                     </td>
-                    @if(request()->input('filter.position'))
-                        <td>
-                            <input type="text" value="{{ $item->__order_in_position }}" data-id="{{ $item->id }}" class="custom-order js-order-in-position">
-                        </td>
-                    @elseif(request()->input('filter.category_id'))
-                        <td>
-                            <input type="text" value="{{ $item->order_in_category }}" data-id="{{ $item->id }}" class="custom-order js-order-in-category">
-                        </td>
-                    @endif
                     <td class="text-nowrap">
-                        <form action="{{ route('admin.course.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này?')">
+                        <form action="{{ route('admin.combo_courses.delete', [ 'id' => $item->id ]) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa combo khóa học này?')">
                             @csrf
-                            <a href="{{ route('admin.lesson.list', [ 'course_id' => $item->id ]) }}" class="btn btn-sm btn-info"><i class="fas fa-bookmark"></i> Bài học</a>
-                            <a href="{{ route('admin.course.edit', [ 'id' => $item->id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
+                            <a href="{{ route('admin.combo_courses.edit', [ 'id' => $item->id ]) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Sửa</a>
                             <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Xóa</button>
                         </form>
                     </td>
@@ -153,40 +143,11 @@ Khóa học
         var that = this;
         $(that).prop('disabled', true);
 
-        $.post('{{ route("admin.course.enabled") }}', {
+        $.post('{{ route("admin.combo_courses.enabled") }}', {
             id: $(that).data('id'),
             enabled: $(that).prop('checked')
         }).fail(function () {
             alert('Không thể đổi trạng thái kích hoạt. Vui lòng thử lại.')
-        }).always(function () {
-            $(that).prop('disabled', false);
-        });
-    });
-
-    $('.js-order-in-category').change(function () {
-        var that = this;
-        $(that).prop('disabled', true);
-
-        $.post('{{ route("admin.course.order_in_category") }}', {
-            id: $(that).data('id'),
-            order_in_category: $(that).val()
-        }).fail(function () {
-            alert('Có lỗi xảy ra, vui lòng thử lại.');
-        }).always(function () {
-            $(that).prop('disabled', false);
-        });
-    });
-
-    $('.js-order-in-position').change(function () {
-        var that = this;
-        $(that).prop('disabled', true);
-
-        $.post('{{ route("admin.course.order_in_position") }}', {
-            id: $(that).data('id'),
-            code: '{{ request()->input("filter.position") }}',
-            order_in_position: $(that).val()
-        }).fail(function () {
-            alert('Có lỗi xảy ra, vui lòng thử lại.');
         }).always(function () {
             $(that).prop('disabled', false);
         });

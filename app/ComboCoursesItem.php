@@ -19,6 +19,6 @@ class ComboCoursesItem extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class, 'courses_id', 'id');
+        return $this->belongsTo(Course::class, 'course_id', 'id');
     }
 }
