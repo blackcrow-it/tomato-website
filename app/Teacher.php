@@ -7,7 +7,7 @@ class Teacher extends BaseModel
     protected $table = 'teachers';
 
     protected $fillable = [
-        'name', 'avatar', 'description'
+        'name', 'avatar', 'description', 'email'
     ];
 
     public function courses()
