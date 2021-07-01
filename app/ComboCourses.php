@@ -3,11 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use DB;
 
 class ComboCourses extends Model
 {
+    use HasSlug;
+
     protected $table = 'combo_courses';
 
     protected $fillable = [
