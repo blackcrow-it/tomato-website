@@ -36,6 +36,8 @@ Route::namespace('Frontend')
 
         Route::get('{slug}-c{id}.html', 'CourseController@index')->name('course')->where(['slug' => '.*', 'id' => '\d+']);
 
+        Route::get('{slug}-cb{id}.html', 'ComboCoursesController@index')->name('combo_courses')->where(['slug' => '.*', 'id' => '\d+']);
+
         Route::get('{slug}-b{id}.html', 'BookController@index')->name('book')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::get('khoa-hoc/tat-ca', 'CourseController@all')->name('course.all');
