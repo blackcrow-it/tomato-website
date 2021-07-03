@@ -229,3 +229,18 @@ if (!function_exists('get_teachers')) {
         return Teacher::orderBy('name')->get();
     }
 }
+
+
+// Hàm rút gọn ký tự
+if (!function_exists('truncate')) {
+    function truncate($text, $chars = 25) {
+        if (strlen($text) <= $chars) {
+            return $text;
+        }
+        $text = $text." ";
+        $text = substr($text,0,$chars);
+        $text = substr($text,0,strrpos($text,' '));
+        $text = $text."...";
+        return $text;
+    }
+}
