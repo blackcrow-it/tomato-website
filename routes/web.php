@@ -109,6 +109,7 @@ Route::prefix('admin')
 
         Route::middleware('can_access_admin_dashboard')->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
+            Route::get('get-invoice', 'HomeController@getInvoice')->name('get_invoice');
 
             Route::prefix('user')->name('user.')->middleware('can:admin')->group(function () {
                 Route::get('list', 'UserController@list')->name('list');
