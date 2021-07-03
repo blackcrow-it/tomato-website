@@ -94,9 +94,9 @@
                     <div class="d-flex">
                         <p class="d-flex flex-column">
                             <span class="text-bold text-lg">
-                                {{ currency($total_invoices_one_week_ago) }}
+                                {{ currency($total_invoices_one_week_ago, '0 ₫') }}
                             </span>
-                            <span><small>(Tuần trước {{ currency($total_invoices_two_week_ago) }})</small></span>
+                            <span><small>(Tuần trước {{ currency($total_invoices_two_week_ago, '0 ₫') }})</small></span>
                         </p>
                         <p class="ml-auto d-flex flex-column text-right">
                             @if ($total_invoices_one_week_ago > $total_invoices_two_week_ago)
