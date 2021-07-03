@@ -25,18 +25,20 @@
         <!-- /.col -->
 
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+            <a href="{{ route('admin.invoice.list') }}">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Đơn hàng</span>
-                    <span class="info-box-number">
-                        {{ $count_invoices }}
-                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Đơn hàng</span>
+                        <span class="info-box-number">
+                            {{ $count_invoices }}
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+                <!-- /.info-box -->
+            </a>
         </div>
         <!-- /.col -->
 
@@ -44,96 +46,224 @@
         <div class="clearfix hidden-md-up"></div>
 
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-graduation-cap"></i></span>
+            <a href="{{ route('admin.course.list') }}">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-graduation-cap"></i></span>
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Khoá học</span>
-                    <span class="info-box-number">
-                        {{ $count_courses }}
-                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Khoá học</span>
+                        <span class="info-box-number">
+                            {{ $count_courses }}
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+                <!-- /.info-box -->
+            </a>
         </div>
         <!-- /.col -->
 
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+            <a href="{{ route('admin.user.list') }}">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
-                <div class="info-box-content">
-                    <span class="info-box-text">Người dùng</span>
-                    <span class="info-box-number">
-                        {{ $count_users }}
-                        <small>người</small>
-                    </span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Người dùng</span>
+                        <span class="info-box-number">
+                            {{ $count_users }}
+                            <small>người</small>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+                <!-- /.info-box -->
+            </a>
         </div>
         <!-- /.col -->
     </div>
 
     <div class="row">
         <section class="col-lg-7">
-            <div class="card">
-                <div class="card-header border-0">
-                    <div class="card-header">
-                        <h3 class="card-title">Doanh thu tuần</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pills-today-tab" data-toggle="pill" href="#pills-today" role="tab"
+                        aria-controls="pills-today" aria-selected="false">Hôm nay</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-week-tab" data-toggle="pill" href="#pills-week" role="tab"
+                        aria-controls="pills-week" aria-selected="true">Theo tuần</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="pills-option-tab" data-toggle="pill" href="#pills-option" role="tab"
+                        aria-controls="pills-option" aria-selected="false">Tuỳ chọn</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-today" role="tabpanel" aria-labelledby="pills-today-tab">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="card-header">
+                                <h3 class="card-title">Doanh thu hôm nay</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex">
-                        <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">
-                                {{ currency($total_invoices_one_week_ago, '0 ₫') }}
-                            </span>
-                            <span><small>(Tuần trước {{ currency($total_invoices_two_week_ago, '0 ₫') }})</small></span>
-                        </p>
-                        @if ($total_invoices_one_week_ago != 0 && $total_invoices_two_week_ago != 0)
-                        <p class="ml-auto d-flex flex-column text-right">
-                            @if ($total_invoices_one_week_ago > $total_invoices_two_week_ago)
-                                <span class="text-success">
-                                    <i class="fas fa-arrow-up"></i>
-                                    {{ round((($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100) }}
-                                    %
-                                </span>
-                            @else
-                                <span class="text-danger">
-                                    <i class="fas fa-arrow-down"></i>
-                                    {{ round(abs((($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100)) }}
-                                    %
-                                </span>
-                            @endif
-                            <span class="text-muted">so với tuần trước</span>
-                        </p>
-                        @endif
-                    </div>
-                    <!-- /.d-flex -->
+                        {{-- {{ dd($list_categories) }} --}}
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">
+                                        {{ currency($total_invoices_today, '0 ₫') }}
+                                    </span>
+                                    <span><small>(Hôm qua
+                                            {{ currency($total_invoices_yesterday, '0 ₫') }})</small></span>
+                                </p>
+                                @if ($total_invoices_yesterday != 0)
+                                    <p class="ml-auto d-flex flex-column text-right">
+                                        @if ($total_invoices_today > $total_invoices_yesterday)
+                                            <span class="text-success">
+                                                <i class="fas fa-arrow-up"></i>
+                                                {{ round((($total_invoices_today - $total_invoices_yesterday) / $total_invoices_yesterday) * 100) }}
+                                                %
+                                            </span>
+                                        @else
+                                            <span class="text-danger">
+                                                <i class="fas fa-arrow-down"></i>
+                                                {{ round(abs((($total_invoices_today - $total_invoices_yesterday) / $total_invoices_yesterday) * 100)) }}
+                                                %
+                                            </span>
+                                        @endif
+                                        <span class="text-muted">so với hôm qua</span>
+                                    </p>
+                                @endif
+                            </div>
+                            <!-- /.d-flex -->
 
-                    <div class="position-relative mb-4">
-                        <div class="chartjs-size-monitor">
-                            <div class="chartjs-size-monitor-expand">
-                                <div class=""></div>
-                            </div>
-                            <div class="chartjs-size-monitor-shrink">
-                                <div class=""></div>
+                            @if ($total_invoices_today > 0)
+                                <div class="position-relative mb-4">
+                                    <div class="chartjs-size-monitor"
+                                        style="height: 300px; width: 300px; margin: auto; text-align: center;">
+                                        <canvas id="sale-today-chart"></canvas>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="tab-pane fade" id="pills-week" role="tabpanel" aria-labelledby="pills-week-tab">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="card-header">
+                                <h3 class="card-title">Doanh thu tuần</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <canvas id="sale-chart" height="400" width="1064" class="chartjs-render-monitor"
-                            style="display: block; height: 200px; width: 532px;"></canvas>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">
+                                        {{ currency($total_invoices_one_week_ago, '0 ₫') }}
+                                    </span>
+                                    <span><small>(Tuần trước
+                                            {{ currency($total_invoices_two_week_ago, '0 ₫') }})</small></span>
+                                </p>
+                                @if ($total_invoices_one_week_ago != 0 && $total_invoices_two_week_ago != 0)
+                                    <p class="ml-auto d-flex flex-column text-right">
+                                        @if ($total_invoices_one_week_ago > $total_invoices_two_week_ago)
+                                            <span class="text-success">
+                                                <i class="fas fa-arrow-up"></i>
+                                                {{ round((($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100) }}
+                                                %
+                                            </span>
+                                        @else
+                                            <span class="text-danger">
+                                                <i class="fas fa-arrow-down"></i>
+                                                {{ round(abs((($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100)) }}
+                                                %
+                                            </span>
+                                        @endif
+                                        <span class="text-muted">so với tuần trước</span>
+                                    </p>
+                                @endif
+                            </div>
+                            <!-- /.d-flex -->
+
+                            <div class="position-relative mb-4">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <canvas id="sale-chart" height="400" width="1064" class="chartjs-render-monitor"
+                                    style="display: block; height: 200px; width: 532px;"></canvas>
+                            </div>
+                        </div>
                     </div>
+                    <!-- /.card -->
+                </div>
+                <div class="tab-pane fade" id="pills-option" role="tabpanel" aria-labelledby="pills-option-tab">
+                    <div class="form-group">
+                        <label>Chọn ngày bắt đầu và kết thúc:</label>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </div>
+                            {{-- <input type="text" class="form-control float-right" id="reservation"> --}}
+                            <input type="text" class="form-control" name="daterange" v-model="daterange" />
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="card-header">
+                                <h3 class="card-title">Doanh thu</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex">
+                                <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg" id="total-option">0 ₫</span>
+                                </p>
+                            </div>
+                            <!-- /.d-flex -->
+
+                            <div class="position-relative mb-4">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <canvas id="sale-option-chart" height="400" width="1064" class="chartjs-render-monitor"
+                                    style="display: block; height: 200px; width: 532px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
                 </div>
             </div>
-            <!-- /.card -->
         </section>
         <section class="col-lg-5">
             <div class="card">
@@ -159,28 +289,30 @@
                         </thead>
                         <tbody>
                             @foreach ($top_seller_month as $item)
-                            <tr>
-                                <td>{{ $loop->index + 1 }}</td>
-                                <td>
-                                    @if($item->type == 'course')
-                                    <a href="{{ route('course', [ 'slug' => $item->slug, 'id' => $item->id ]) }}" data-toggle="tooltip" title="{{ $item->title }}">
-                                        {{ truncate($item->title) }}
-                                    </a>
-                                    @elseif($item->type == 'book')
-                                    <a href="{{ route('book', [ 'slug' => $item->slug, 'id' => $item->id ]) }}" data-toggle="tooltip" title="{{ $item->title }}">
-                                        {{ truncate($item->title) }}
-                                    </a>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($item->type == 'course')
-                                    Khoá học
-                                    @elseif($item->type == 'book')
-                                    Sách
-                                    @endif
-                                </td>
-                                <td>{{ $item->amount }}</td>
-                            </tr>
+                                <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>
+                                        @if ($item->type == 'course')
+                                            <a href="{{ route('course', ['slug' => $item->slug, 'id' => $item->id]) }}"
+                                                data-toggle="tooltip" title="{{ $item->title }}">
+                                                {{ truncate($item->title) }}
+                                            </a>
+                                        @elseif($item->type == 'book')
+                                            <a href="{{ route('book', ['slug' => $item->slug, 'id' => $item->id]) }}"
+                                                data-toggle="tooltip" title="{{ $item->title }}">
+                                                {{ truncate($item->title) }}
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->type == 'course')
+                                            Khoá học
+                                        @elseif($item->type == 'book')
+                                            Sách
+                                        @endif
+                                    </td>
+                                    <td>{{ $item->amount }}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -191,6 +323,9 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script>
         $(function() {
             'use strict'
@@ -203,6 +338,7 @@
             var mode = 'index'
             var intersect = true
 
+            // Biểu đồ doanh thu theo tuần
             var $saleChart = $('#sale-chart')
             // eslint-disable-next-line no-unused-vars
             var saleChart = new Chart($saleChart, {
@@ -272,6 +408,55 @@
                     }
                 }
             })
+
+            // Biểu đồ doanh thu ngày
+            var $saleTodayChart = $('#sale-today-chart')
+            var saleTodayChart = new Chart($saleTodayChart, {
+                type: 'pie',
+                data: {
+                    labels: [@foreach ($list_categories as $category => $price)"{{ $category }}",@endforeach],
+                    datasets: [{
+                        label: '',
+                        data: [@foreach ($list_categories as $category => $price){{ $price }},@endforeach],
+                        backgroundColor: [@foreach ($list_categories as $category => $price)getRandomColor(),@endforeach],
+                        hoverOffset: 4
+                    }]
+                }
+            })
         })
+
+        function getRandomColor() {
+            const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+            return "#" + randomColor;
+        }
+        var saleOptionChart = undefined;
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'left'
+        }, function(start, end, label) {
+            axios.get('{{ route('admin.get_invoice') }}', {
+                params: {
+                    start: start.format('YYYY-MM-DD'),
+                    end: end.format('YYYY-MM-DD'),
+                }
+            }).then(res => {
+                var $saleOptionChart = $('#sale-option-chart')
+                if (saleOptionChart) {
+                    saleOptionChart.destroy()
+                }
+                saleOptionChart = new Chart($saleOptionChart, {
+                    data: {
+                        labels: res.date,
+                        datasets: [{
+                            type: 'line',
+                            label: 'Doanh thu',
+                            data: res.price,
+                            backgroundColor: '#007bff',
+                            fill: false,
+                        }]
+                    }
+                });
+                $("#total-option").text(res.total + " ₫");
+            });
+        });
     </script>
 @endsection
