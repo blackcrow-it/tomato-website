@@ -15,7 +15,7 @@
                 <div class="info-box-content">
                     <span class="info-box-text">Doanh thu</span>
                     <span class="info-box-number">
-                        {{ currency($total_invoice) }}
+                        {{ currency($total_invoice, '0 ₫') }}
                     </span>
                 </div>
                 <!-- /.info-box-content -->
