@@ -187,6 +187,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
     <!-- CKFinder -->
     @include('ckfinder::setup')
+    <!-- ChartJs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         var __imask = [];
