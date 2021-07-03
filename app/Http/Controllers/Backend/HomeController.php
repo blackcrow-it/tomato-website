@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Book;
+use App\Category;
 use App\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,6 +11,8 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\User;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use DB;
 
 class HomeController extends Controller
 {
@@ -31,11 +34,50 @@ class HomeController extends Controller
         $listUsers = User::get();
         $countUsers = count($listUsers);
 
-        $arrayDateWeekAgo = array();
-        $dataInvoiceOneWeekAgo = array();
-        $dataInvoiceTwoWeekAgo = array();
+        // Doanh thu ngày hôm nay
+        $totalInvoicesToday = 0;
+        $listCategories = (object) array();
+        $invoiceItemsToday = InvoiceItem::groupBy('type', 'object_id')
+            ->selectRaw('sum(price) as sum_price, type, object_id')
+            ->where('created_at', '>=', [Carbon::today()->format('Y-m-d')])
+            ->get();
+        foreach ($invoiceItemsToday as $item) {
+            $totalInvoicesToday += $item->sum_price;
+            if($item->type == 'course') {
+                $course = Course::where('id', $item->object_id)->first();
+                $categoryTitle = "Khác";
+                if ($course->category) {
+                    $categoryTitle = $course->category->title;
+                }
+                if (property_exists($listCategories, $categoryTitle)) {
+                    $listCategories->$categoryTitle += $item->sum_price;
+                } else {
+                    $listCategories->$categoryTitle = $item->sum_price;
+                }
+            } elseif ($item->type == 'book') {
+                $categoryTitle = "Sách";
+                if (property_exists($listCategories, $categoryTitle)) {
+                    $listCategories->$categoryTitle += $item->sum_price;
+                } else {
+                    $listCategories->$categoryTitle = $item->sum_price;
+                }
+            }
+        }
+
+        // Doanh thu ngày hôm qua
+        $totalInvoicesYesterday = 0;
+        $invoiceYesterday = Invoice::where('status', 'complete')
+            ->whereBetween('created_at', [Carbon::today()->subDays(1)->format('Y-m-d'), Carbon::today()->format('Y-m-d')])
+            ->get();
+        foreach ($invoiceYesterday as $invoice) {
+            foreach ($invoice->items as $item) {
+                $totalInvoicesYesterday += $item->price;
+            }
+        }
 
         // Lấy hoá đơn trong vòng 7 ngày trước
+        $arrayDateWeekAgo = array();
+        $dataInvoiceOneWeekAgo = array();
         $totalInvoicesOneWeekAgo = 0;
         for ($i=7; $i>=1; $i--) {
             $list = Invoice::where('status', 'complete')
@@ -57,6 +99,7 @@ class HomeController extends Controller
         }
 
         // Lấy hoá đơn trong vòng 14 ngày trước
+        $dataInvoiceTwoWeekAgo = array();
         $totalInvoicesTwoWeekAgo = 0;
         for ($i=14; $i>=8; $i--) {
             $list = Invoice::where('status', 'complete')
@@ -118,7 +161,36 @@ class HomeController extends Controller
             'total_invoices_one_week_ago' => $totalInvoicesOneWeekAgo,
             'data_invoices_two_week_ago' => json_encode($dataInvoiceTwoWeekAgo),
             'total_invoices_two_week_ago' => $totalInvoicesTwoWeekAgo,
-            'top_seller_month' => $dataTopSellerMonth
+            'top_seller_month' => $dataTopSellerMonth,
+            'total_invoices_today' => $totalInvoicesToday,
+            'total_invoices_yesterday' => $totalInvoicesYesterday,
+            'list_categories' => $listCategories
         ]);
+    }
+
+    public function getInvoice(Request $request)
+    {
+        $start = Carbon::createFromFormat('Y-m-d', $request->input('start'));
+        $end = Carbon::createFromFormat('Y-m-d', $request->input('end'));
+
+        $data = (object) array(
+            "date" => array(),
+            "price" => array(),
+            "total" => 0
+        );
+        $period = CarbonPeriod::create($start, $end);
+        foreach ($period as $date) {
+            $total = 0;
+            $invoiceItems = InvoiceItem::whereBetween('created_at', [$date->format('Y-m-d'), Carbon::createFromFormat('Y-m-d', $date->format('Y-m-d'))->addDay()->format('Y-m-d')])
+            ->get();
+            foreach ($invoiceItems as $item) {
+                $total += $item->price;
+            }
+            array_push($data->date, $date->format('d/m'));
+            array_push($data->price, $total);
+            $data->total += $total;
+        }
+
+        return json_encode($data);
     }
 }
