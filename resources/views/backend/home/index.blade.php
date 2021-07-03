@@ -103,13 +103,13 @@
                             @if ($total_invoices_one_week_ago > $total_invoices_two_week_ago)
                                 <span class="text-success">
                                     <i class="fas fa-arrow-up"></i>
-                                    {{ (($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100 }}
+                                    {{ round((($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100) }}
                                     %
                                 </span>
                             @else
                                 <span class="text-danger">
                                     <i class="fas fa-arrow-down"></i>
-                                    {{ (($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100 }}
+                                    {{ round(abs((($total_invoices_one_week_ago - $total_invoices_two_week_ago) / $total_invoices_two_week_ago) * 100)) }}
                                     %
                                 </span>
                             @endif
