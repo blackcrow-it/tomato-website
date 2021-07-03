@@ -15,7 +15,7 @@
                 <div class="info-box-content">
                     <span class="info-box-text">Doanh thu</span>
                     <span class="info-box-number">
-                        {{ currency($total_invoice) }}
+                        {{ currency($total_invoice, '0 ₫') }}
                     </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -98,6 +98,7 @@
                             </span>
                             <span><small>(Tuần trước {{ currency($total_invoices_two_week_ago, '0 ₫') }})</small></span>
                         </p>
+                        @if ($total_invoices_one_week_ago != 0 && $total_invoices_two_week_ago != 0)
                         <p class="ml-auto d-flex flex-column text-right">
                             @if ($total_invoices_one_week_ago > $total_invoices_two_week_ago)
                                 <span class="text-success">
@@ -114,6 +115,7 @@
                             @endif
                             <span class="text-muted">so với tuần trước</span>
                         </p>
+                        @endif
                     </div>
                     <!-- /.d-flex -->
 
