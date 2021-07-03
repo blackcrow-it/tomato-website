@@ -44,11 +44,15 @@ if (!function_exists('categories_traverse')) {
 if (!function_exists('currency')) {
     function currency($money, $default = 'Miễn phí')
     {
-        $money = intval($money);
+        try {
+            $money = intval($money);
 
-        if ($money == 0) return $default;
+            if ($money == 0) return $default;
 
-        return number_format($money, 0, ',', '.') . ' ₫';
+            return number_format($money, 0, ',', '.') . ' ₫';
+        } catch (\Throwable $th) {
+            return $default;
+        }
     }
 }
 
@@ -227,5 +231,20 @@ if (!function_exists('get_teachers')) {
     function get_teachers()
     {
         return Teacher::orderBy('name')->get();
+    }
+}
+
+
+// Hàm rút gọn ký tự
+if (!function_exists('truncate')) {
+    function truncate($text, $chars = 25) {
+        if (strlen($text) <= $chars) {
+            return $text;
+        }
+        $text = $text." ";
+        $text = substr($text,0,$chars);
+        $text = substr($text,0,strrpos($text,' '));
+        $text = $text."...";
+        return $text;
     }
 }
