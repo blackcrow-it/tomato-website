@@ -536,6 +536,15 @@
     </div>
 
     <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=606f189a4d5573001844ff22&product=inline-share-buttons' async='async'></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_ANALYSIS_ID') }}"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', "{{ env('GOOGLE_ANALYSIS_ID') }}");
+    </script>
 </body>
 
 </html>
