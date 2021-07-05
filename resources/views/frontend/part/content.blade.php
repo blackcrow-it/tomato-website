@@ -14,7 +14,7 @@
 </div>
 @endsection
 
-@section('footer')
+@section('part_script')
     <script>
         $('.entry-detail img').css('height', 'auto');
     </script>
