@@ -190,6 +190,7 @@ Route::prefix('admin')
                 Route::get('add', 'PartController@add')->name('add')->middleware('can:course.add');
                 Route::post('add', 'PartController@submitAdd')->name('add')->middleware('can:course.add');
                 Route::post('enabled', 'PartController@submitEnabled')->name('enabled')->middleware('can:course.edit');
+                Route::post('enabled-trial', 'PartController@submitEnabledTrial')->name('enabled_trial')->middleware('can:course.edit');
                 Route::post('order-in-lesson', 'PartController@submitOrderInLesson')->name('order_in_lesson')->middleware('can:course.edit');
             });
 

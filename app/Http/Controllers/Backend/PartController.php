@@ -88,6 +88,14 @@ class PartController extends Controller
         $part->save();
     }
 
+    public function submitEnabledTrial(Request $request)
+    {
+        $part = Part::findOrFail($request->input('id'));
+        $part->enabled_trial = $request->input('enabled_trial');
+        $part->timestamps = false;
+        $part->save();
+    }
+
     public function submitOrderInLesson(Request $request)
     {
         $part = Part::findOrFail($request->input('id'));
