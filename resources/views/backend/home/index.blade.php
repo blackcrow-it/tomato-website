@@ -82,7 +82,7 @@
         </div>
         <!-- /.col -->
     </div>
-
+    {{-- {{ dd($visitors) }} --}}
     <div class="row">
         <section class="col-lg-7">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
