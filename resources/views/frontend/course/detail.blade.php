@@ -29,6 +29,11 @@
 <section class="section">
     <div class="container">
         @include('frontend.session_alert')
+        @if($status && $is_owned)
+        <div class="alert alert-success">
+            Bạn đã mua khóa học thành công.
+        </div>
+        @endif
         <div class="product-detail">
             <div class="row">
                 <div class="col-md-6 col-xl-7">
@@ -49,6 +54,14 @@
                             <span class="sale">-{{ ceil(100 - $course->price / $course->original_price * 100) }}%</span>
                         @endif
                     </div>
+
+                    @if(auth()->check())
+                        @if(!$is_owned && $is_trial)
+                        <div class="btn-wrap">
+                            <a href="{{ route('course.start', [ 'id' => $course->id ]) }}" class="btn btn--sm"><i class="fa fa-book" aria-hidden="true"></i> Học thử</a>
+                        </div><br/>
+                        @endif
+                    @endif
 
                     <div class="mb-3">
                         {!! $course->description !!}

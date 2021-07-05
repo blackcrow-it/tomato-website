@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\UserCourse;
 use App\Category;
 use App\Constants\PartType;
 use App\CourseRelatedBook;
@@ -27,10 +28,19 @@ class PartController extends Controller
         $course = $lesson->course()->where('enabled', true)->first();
         if ($course == null) return redirect()->route('home');
 
-        $user_course = $course->user_courses()
-            ->where('user_id', Auth::user()->id)
-            ->get();
-        if (count($user_course) == 0) return redirect()->route('home');
+        // Kiểm tra học viên có sở hữu khoá học này không
+        $isUserOwnedThisCourse = auth()->check()
+            ? UserCourse::query()
+            ->where('user_id', auth()->id())
+            ->where('course_id', $course->id)
+            ->where(function ($query) {
+                $query->orWhere('expires_on', '>', now());
+                $query->orWhereNull('expires_on');
+            })
+            ->exists()
+            : false;
+
+        if (!$isUserOwnedThisCourse && !$part->enabled_trial) return redirect()->route('home');
 
         $relatedBooks = CourseRelatedBook::query()
             ->with('related_book')
@@ -74,6 +84,7 @@ class PartController extends Controller
             'lessons' => $lessons,
             'part' => $part,
             'data' => $data,
+            'is_owned' => $isUserOwnedThisCourse,
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
             'related_books' => $relatedBooks
         ]);

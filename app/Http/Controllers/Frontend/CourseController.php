@@ -9,6 +9,7 @@ use App\Course;
 use App\CourseRelatedBook;
 use App\CourseRelatedCourse;
 use App\Http\Controllers\Controller;
+use App\Part;
 use App\UserCourse;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -75,6 +76,8 @@ class CourseController extends Controller
 
     public function index(Request $request, $slug, $id)
     {
+        $status = $request->input('status');
+        $isTrial = false;
         $course = Course::with('teacher')
             ->firstWhere([
                 'slug' => $slug,
@@ -97,6 +100,14 @@ class CourseController extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
         });
+        foreach ($lessons as $lesson) {
+            foreach ($lesson->parts as $p) {
+                if($p->enabled_trial) {
+                    $isTrial = true;
+                    break;
+                }
+            }
+        }
 
         $relatedCourses = CourseRelatedCourse::query()
             ->with([
@@ -147,7 +158,9 @@ class CourseController extends Controller
             'added_to_cart' => $addedToCart,
             'is_owned' => $isUserOwnedThisCourse,
             'related_courses' => $relatedCourses,
-            'related_books' => $relatedBooks
+            'related_books' => $relatedBooks,
+            'status' => $status,
+            'is_trial' => $isTrial
         ]);
     }
 
@@ -166,9 +179,9 @@ class CourseController extends Controller
             })
             ->exists();
 
-        if (!$isOwned) {
-            return redirect()->to($course->url)->withErrors('Bạn chưa sở hữu khóa học này.');
-        }
+        // if (!$isOwned) {
+        //     return redirect()->to($course->url)->withErrors('Bạn chưa sở hữu khóa học này.');
+        // }
 
         $lesson = $course->lessons()
             ->where('enabled', true)
@@ -177,11 +190,21 @@ class CourseController extends Controller
             ->first();
         if ($lesson == null) return redirect()->route('home');
 
-        $part = $lesson->parts()
-            ->where('enabled', true)
-            ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
-            ->orderBy('created_at', 'asc')
-            ->first();
+        // Kiểm tra nếu không sở hữu thì chọn từ bài học được cho xem thử
+        if (!$isOwned) {
+            $part = $lesson->parts()
+                ->where('enabled', true)
+                ->where('enabled_trial', true)
+                ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
+                ->orderBy('created_at', 'asc')
+                ->first();
+        } else {
+            $part = $lesson->parts()
+                ->where('enabled', true)
+                ->orderByRaw('CASE WHEN order_in_lesson > 0 THEN 0 ELSE 1 END, order_in_lesson ASC')
+                ->orderBy('created_at', 'asc')
+                ->first();
+        }
         if ($part == null) return redirect()->route('home');
 
         return redirect()->route('part', ['id' => $part->id]);

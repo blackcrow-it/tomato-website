@@ -67,6 +67,7 @@
                 <th>Tiêu đề</th>
                 <th>Loại</th>
                 <th>Hiển thị</th>
+                <th>Cho phép học thử</th>
                 <th data-toggle="tooltip" title="Thứ tự trong khóa học">Thứ tự</th>
                 <th>Hành động</th>
             </tr>
@@ -120,6 +121,12 @@
                         </div>
                     </td>
                     <td>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input js-switch-enabled-trial" {{ $item->enabled_trial ? 'checked' : '' }} id="cs-enabled-trial-{{ $item->id }}" data-id="{{ $item->id }}">
+                            <label class="custom-control-label" for="cs-enabled-trial-{{ $item->id }}"></label>
+                        </div>
+                    </td>
+                    <td>
                         <input type="text" value="{{ $item->order_in_lesson }}" data-id="{{ $item->id }}" class="custom-order js-order-in-lesson">
                     </td>
                     <td class="text-nowrap">
@@ -141,13 +148,31 @@
 <script>
     $('.js-switch-enabled').change(function () {
         var that = this;
+        var isCheck = $(that).is(":checked");
         $(that).prop('disabled', true);
 
         $.post('{{ route("admin.part.enabled") }}', {
             id: $(that).data('id'),
             enabled: $(that).prop('checked')
         }).fail(function () {
+            $(that).prop('checked', !isCheck);
             alert('Không thể đổi trạng thái kích hoạt. Vui lòng thử lại.')
+        }).always(function () {
+            $(that).prop('disabled', false);
+        });
+    });
+
+    $('.js-switch-enabled-trial').change(function () {
+        var that = this;
+        var isCheck = $(that).is(":checked");
+        $(that).prop('disabled', true);
+
+        $.post('{{ route("admin.part.enabled_trial") }}', {
+            id: $(that).data('id'),
+            enabled_trial: $(that).prop('checked')
+        }).fail(function () {
+            $(that).prop('checked', !isCheck);
+            alert('Không thể bật trạng thái xem thử. Vui lòng thử lại.');
         }).always(function () {
             $(that).prop('disabled', false);
         });
