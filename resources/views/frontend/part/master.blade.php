@@ -3,6 +3,15 @@
 @section('header')
 <title>{{ $part->title }}</title>
 <meta content="description" value="{{ $course->meta_description ?? $course->description }}">
+<style>
+    .learning-process__list .collapse__submenu li a i {
+        position: absolute;
+        top: 17px;
+        left: 12px;
+        width: 10px;
+        height: 10px;
+    }
+</style>
 @endsection
 
 @section('body')
@@ -38,6 +47,9 @@
                 <div class="col-xl-3 sticky">
                     <div class="layout-sidebar">
                         <div class="learning-process">
+                            @if(!$is_owned)
+                            <div>Bạn chưa sở hữu khóa học này. Mua khoá học <a href="#" onclick="boxBuyCourse()">tại đây</a>.</div><br/>
+                            @endif
                             <div class="learning-process__header">
                                 <div class="f-title">Tiến trình học tập</div>
                             </div>
@@ -53,7 +65,15 @@
                                                 <div class="panel__entry">
                                                     <ul class="collapse__submenu">
                                                         @foreach($lesson->parts as $p)
+                                                            @if($is_owned)
                                                             <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
+                                                            @else
+                                                                @if($p->enabled_trial)
+                                                                <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ $p->title }}</a></li>
+                                                                @else
+                                                                <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="#" onclick="boxBuyCourse()"><i class="fa fa-lock" aria-hidden="true"></i> {{ $p->title }}</a></li>
+                                                                @endif
+                                                            @endif
                                                         @endforeach
                                                     </ul>
                                                 </div>
@@ -76,7 +96,36 @@
     $('.learning-process__list').animate({
         scrollTop: $('.learning-process__list .panel .collapse__submenu li.current').offset().top - $('.learning-process__list').offset().top
     }, 500);
-
+    function boxBuyCourse() {
+        bootbox.confirm({
+            message: '<h1>Thông báo</h1><br/>Hiện tại bạn chưa sở hữu khoá học này.<br/>Ấn <b>"Thanh toán"</b> để mua khoá học.',
+            buttons: {
+                confirm: {
+                    label: 'Thanh toán',
+                    className: 'btn--sm btn--success'
+                },
+                cancel: {
+                    label: 'Tiếp tục học thử',
+                    className: 'btn--sm bg-dark'
+                }
+            },
+            callback: r => {
+                if (!r) return;
+                this.submited = true;
+                axios.post("{{ route('cart.instant_buy') }}", {
+                    course_id: {{ $course->id }}
+                })
+                .then(function (response) {
+                    // location.reload();
+                    window.location.href = "{{ route('course', ['slug' => $course->slug, 'id' => $course->id, 'status' => 'success'])}}";
+                })
+                .catch(function (error) {
+                    bootbox.alert(error.errors.course_id[0]);
+                });
+            }
+        });
+    }
+    boxBuyCourse();
 </script>
 @yield('part_script')
 @endsection

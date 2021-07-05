@@ -114,6 +114,23 @@ Thêm đầu mục mới
                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                 @enderror
             </div>
+            <div class="form-group">
+                <label>Cho phép học thử</label>
+                <?php $enabled_trial = $data->enabled_trial ?? old('enabled_trial') ?? false; ?>
+                <div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input @error('enabled_trial') is-invalid @enderror" type="radio" id="cr-enabled-trial-1" name="enabled_trial" value="1" {{ $enabled_trial == true ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-enabled-trial-1">Bật</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input @error('enabled_trial') is-invalid @enderror" type="radio" id="cr-enabled-trial-0" name="enabled_trial" value="0" {{ $enabled_trial == false ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-enabled-trial-0">Tắt</label>
+                    </div>
+                </div>
+                @error('enabled_trial')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
