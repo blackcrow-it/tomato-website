@@ -13,6 +13,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- CSS LIBRARY -->
+    <script src="https://kit.fontawesome.com/8141b12cca.js" crossorigin="anonymous"></script>
     <link href="{{ asset('tomato/assets/font/fontawesome/font-awesome.css') }}" rel="stylesheet">
     <link href="{{ asset('tomato/assets/font/Pe-icon/pe-icon.css') }}" rel="stylesheet">
     <!-- <link rel="stylesheet" type="text/css" href="assets/lib/wow/animate.css"> -->
@@ -22,14 +23,41 @@
     <!-- PAGE STYLE -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300;1,600;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap">
     <link rel="stylesheet" type="text/css" href="{{ mix('tomato/assets/css/main.css') }}">
-
     <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
     <![endif]-->
 
     <meta property="fb:app_id" content="141729702951631">
+    <style>
+    .footer__social a {
+        width: 50px;
+        text-align: center;
+        border-radius: 50%;
+        background-color: #fff;
+        margin-right: 10px;
+        font-size: 30px;
 
+        height: 50px;
+        line-height: 55px;
+        border: 0 solid white;
+    }
+    .footer__social a .fa-facebook-square {
+        color: #3B5998;
+    }
+    .footer__social a .fa-youtube {
+        color: #FF0000;
+    }
+    .footer__social a .fa-tiktok {
+        color: linear-gradient(to bottom right, #33ccff 0%, #ff99cc 100%);
+        background: -webkit-linear-gradient(#69C9D0, #010101, #EE1D52);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .footer__social a:hover {
+        transform: scale(1.2);
+    }
+    </style>
     @yield('header')
 </head>
 
@@ -395,10 +423,13 @@
                                         <div class="footer__widget-title">Mạng xã hội</div>
                                         <div class="footer__social">
                                             @if(config('settings.facebook'))
-                                                <a href="{{ config('settings.facebook') }}" target="_blank"><i class="fa fa-facebook"></i></a>
+                                                <a href="{{ config('settings.facebook') }}" target="_blank"><i class="fab fa-facebook-square"></i></a>
                                             @endif
                                             @if(config('settings.youtube'))
-                                                <a href="{{ config('settings.youtube') }}" target="_blank"><i class="fa fa-youtube"></i></a>
+                                                <a href="{{ config('settings.youtube') }}" target="_blank"><i class="fab fa-youtube"></i></a>
+                                            @endif
+                                            @if(config('settings.tiktok'))
+                                                <a href="{{ config('settings.tiktok') }}" target="_blank"><i class="fab fa-tiktok"></i></a>
                                             @endif
                                         </div>
                                     </div>
