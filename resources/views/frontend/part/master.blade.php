@@ -40,7 +40,9 @@
                             @yield('content')
                         </div>
                         <div class="learningLesson__footer">
-                            @yield('learning_footer')
+                            @if($is_owned)
+                                @yield('learning_footer')
+                            @endif
                         </div>
                     </div>
                 </div>
