@@ -125,7 +125,9 @@
             }
         });
     }
+    @if(!$is_owned)
     boxBuyCourse();
+    @endif
 </script>
 @yield('part_script')
 @endsection
