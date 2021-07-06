@@ -62,6 +62,10 @@ Cài đặt thông tin chung
     <input type="text" name="youtube" value="{{ config('settings.youtube') }}" class="form-control" placeholder="Youtube">
 </div>
 <div class="form-group">
+    <label>Tiktok</label>
+    <input type="text" name="tiktok" value="{{ config('settings.tiktok') }}" class="form-control" placeholder="Tiktok">
+</div>
+<div class="form-group">
     <label>Chứng nhận Bộ công thương</label>
     <textarea name="certification" class="editor">{!! config('settings.certification') !!}</textarea>
 </div>
