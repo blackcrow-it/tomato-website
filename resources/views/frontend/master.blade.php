@@ -216,6 +216,53 @@
                 <nav class="menu-mobile__nav">
                     <ul class="menu-list">
                         <li><a href="{{ route('home') }}">Trang chủ</a></li>
+                        <li class="menu-has-children">
+                            <a href="{{ route('course.all') }}">Khóa học</a>
+                            <ul class="submenu">
+                                @foreach(get_categories(null, 'course-categories') as $c1)
+                                    <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                        <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                        @if($c1->__subcategory_count > 0)
+                                            <ul class="submenu">
+                                                @foreach(get_categories($c1->id, 'course-categories') as $c2)
+                                                    <li class="{{ $c2->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                                        <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                        @if($c2->__subcategory_count > 0)
+                                                            <ul class="submenu">
+                                                                @foreach(get_categories($c2->id, 'course-categories') as $c3)
+                                                                    <li class="">
+                                                                        <a href="{{ $c3->url }}">{{ $c3->title }}</a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        <li class="menu-has-children">
+                            <a href="{{ route('book.all') }}">Thư viện sách</a>
+                            <ul class="submenu">
+                                @foreach(get_categories(null, 'book-categories') as $c1)
+                                    <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                        <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                        @if($c1->__subcategory_count > 0)
+                                            <ul class="submenu">
+                                                @foreach(get_categories($c1->id, 'book-categories') as $c2)
+                                                    <li class="">
+                                                        <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
                         @foreach(get_categories(null, 'navigator') as $c1)
                             <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
                                 <a href="{{ $c1->url }}">{{ $c1->title }}</a>
