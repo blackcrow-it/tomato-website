@@ -11,9 +11,18 @@ use Storage;
 
 class PartVideoController extends Controller
 {
-    public function getKey($id)
+    public function getKey(Request $request, $id)
     {
         \Debugbar::disable();
+		
+		if (
+			// Cho phép request tới từ iPhone
+			preg_match("/iPhone|Android|iPad|iPod|webOS/", $request->header('User-Agent')) !== 1 &&
+			// Chặn tất cả các request có header Sec-Fetch-Site khác same-origin
+			$request->header('Sec-Fetch-Site') != 'same-origin'
+		) {
+			return response('Hi.', 500);
+		}
 
         $part = Part::findOrFail($id);
 
