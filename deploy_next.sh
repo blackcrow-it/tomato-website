@@ -6,6 +6,7 @@ git reset --hard
 git pull
 composer install
 php artisan config:cache
+php artisan config:clear
 php artisan migrate
 chown -R apache storage
 chown -R apache bootstrap/cache
