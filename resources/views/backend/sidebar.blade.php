@@ -5,6 +5,12 @@
         <p>Trang chủ</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('admin.analytics') }}" class="nav-link {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-chart-area"></i>
+        <p>Google Analytics</p>
+    </a>
+</li>
 @can('course.list')
     <li class="nav-item">
         <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">

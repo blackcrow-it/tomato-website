@@ -3,6 +3,12 @@
 - DB: PostgreSQL
 - Chạy migrate
 - Đăng nhập vào quản trị bằng tài khoản `admin`, mật khẩu `123456`
+- Những file cần thiết: 
+```
+ + web-ssh-key-private.pem (để deploy code vào cloud).
+ + storage/app/analytics/service-account-credentials.json (key để có quyểng truy cập vào Google Analytics)
+```
+ 
 
 # Script
 ## Deploy nhanh lên môi trường staging

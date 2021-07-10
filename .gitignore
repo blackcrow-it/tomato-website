@@ -13,3 +13,4 @@ yarn-error.log
 web-ssh-key-private.pem
 *.tlp
 .DS_Store
+app/analytics/service-account-credentials.json
