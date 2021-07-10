@@ -152,8 +152,6 @@ class HomeController extends Controller
                 array_push($dataTopSellerMonth, $objBook);
             }
         }
-        $visitors = Analytics::fetchVisitorsAndPageViews(Period::days(7));
-
 
         return view('backend.home.index', [
             'count_invoices' => $countInvoices,
@@ -168,8 +166,7 @@ class HomeController extends Controller
             'top_seller_month' => $dataTopSellerMonth,
             'total_invoices_today' => $totalInvoicesToday,
             'total_invoices_yesterday' => $totalInvoicesYesterday,
-            'list_categories' => $listCategories,
-            'visitors' => $visitors
+            'list_categories' => $listCategories
         ]);
     }
 

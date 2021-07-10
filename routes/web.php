@@ -106,9 +106,9 @@ Route::prefix('admin')
     ->namespace('Backend')
     ->name('admin.')
     ->group(function () {
-
         Route::middleware('can_access_admin_dashboard')->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
+            Route::get('/analytics', 'AnalyticsController@index')->name('analytics');
             Route::get('get-invoice', 'HomeController@getInvoice')->name('get_invoice');
 
             Route::prefix('user')->name('user.')->middleware('can:admin')->group(function () {
@@ -301,4 +301,19 @@ Route::prefix('admin')
         });
 
         Route::post('logout', 'LogoutController@logout')->name('logout');
+
+        Route::prefix('api')
+            ->namespace('Api')
+            ->name('api.')
+            ->group(function () {
+                Route::prefix('analytics')
+                    ->name('analytics.')
+                    ->group(function () {
+                        Route::get('get-users-visitors-ago', 'AnalyticsController@getUsersAndVisitorsAgo')->name('get_users_visitors_ago');
+                        Route::get('get-most-visited-pages', 'AnalyticsController@getMostVisitedPages')->name('get_most_visited_pages');
+                        Route::get('get-sessions-ago', 'AnalyticsController@getSessionsAgo')->name('get_sessions_ago');
+                        Route::get('get-summary', 'AnalyticsController@getSummary')->name('get_summary');
+                        Route::get('get-devices', 'AnalyticsController@getDevices')->name('get_devices');
+                    });
+            });
     });
