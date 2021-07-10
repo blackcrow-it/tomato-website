@@ -13,6 +13,8 @@ use App\User;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DB;
+use Analytics;
+use Spatie\Analytics\Period;
 
 class HomeController extends Controller
 {

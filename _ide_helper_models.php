@@ -277,6 +277,7 @@ namespace App{
  * @property string|null $og_title
  * @property string|null $og_description
  * @property string|null $og_image
+ * @property int|null $price
  * @property-read mixed $url
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\ComboCoursesItem[] $items
  * @property-read int|null $items_count
@@ -294,6 +295,7 @@ namespace App{
  * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses whereOgDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses whereOgImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses whereOgTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses whereThumbnail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ComboCourses whereTitle($value)

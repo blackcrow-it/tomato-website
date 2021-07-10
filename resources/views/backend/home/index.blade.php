@@ -7,6 +7,7 @@
 @section('content-header')
     <h1 class="text-center">Have a nice day!</h1>
     <br />
+
     <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box">
@@ -82,7 +83,7 @@
         </div>
         <!-- /.col -->
     </div>
-
+    {{-- {{ dd($visitors) }} --}}
     <div class="row">
         <section class="col-lg-7">
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
