@@ -269,14 +269,7 @@ class AnalyticsController extends Controller
         // ]
     }
 
-    public function getStartAndEndDateByWeek($week, $year)
-    {
-        $dto = new DateTime();
-        $ret['week_start'] = $dto->setISODate($year, $week)->format('Y-m-d');
-        $ret['week_end'] = $dto->modify('+6 days')->format('Y-m-d');
-        return $ret;
-    }
-
+    // Hàm lấy thông tin của các thiết bị
     public function getDevices(Request $request)
     {
         $start = $request->input('start');
