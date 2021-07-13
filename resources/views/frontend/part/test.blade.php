@@ -168,6 +168,17 @@
                  $('html,body').animate({
                     scrollTop: $('.quiz-reslut').offset().top
                 }, 500);
+                const passed = !this.isNotPassTheTest();
+                console.log(passed)
+                if (passed) {
+                    axios.post("{{ route('part_test.set_complete') }}", { part_id: {{$part->id}} })
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                }
             },
             scrollToQuiz() {
                 $('html,body').animate({
