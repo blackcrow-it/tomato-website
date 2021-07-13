@@ -99,4 +99,20 @@ class Course extends BaseModel
             parent::delete();
         });
     }
+
+    public function getPercentComplete() {
+        $total = 0;
+        $complete = 0;
+        $lessons = $this->lessons()->get();
+        foreach ($lessons as $lesson) {
+            $parts = $lesson->parts()->get();
+            foreach ($parts as $part) {
+                if ($part->isProcessedWithThisUser()) $complete += 1;
+                $total += 1;
+            }
+        }
+        if ($complete == 0) return 0;
+        $percent = round((100 / $total) * $complete);
+        return $percent;
+    }
 }
