@@ -8,6 +8,7 @@ use App\Constants\PartType;
 use App\CourseRelatedBook;
 use App\Http\Controllers\Controller;
 use App\Part;
+use App\ProcessPart;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Storage;
@@ -76,6 +77,20 @@ class PartController extends Controller
             } catch (Throwable $th) {
                 //throw $th;
             }
+        }
+
+        // Nếu không phải "Trắc nghiệm" thì đánh dấu đầu mục khi đã được vào xem
+        if ($part->type != 'test') {
+            $processPart = ProcessPart::where('part_id', $part->id)
+                ->where('user_id', auth()->id())
+                ->first();
+            if (!$processPart) {
+                $processPart = new ProcessPart;
+            }
+            $processPart->part_id = $part->id;
+            $processPart->user_id = auth()->id();
+            $processPart->is_check = true;
+            $processPart->save();
         }
 
         return view('frontend.part.' . $part->type, [
