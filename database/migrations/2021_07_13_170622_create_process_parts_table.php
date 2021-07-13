@@ -15,7 +15,7 @@ class CreateProcessPartsTable extends Migration
     {
         Schema::create('process_parts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('part_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('part_id')->constrained('parts')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->boolean('is_check')->default(false);
             $table->timestamps();
