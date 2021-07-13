@@ -54,6 +54,9 @@
                             @endif
                             <div class="learning-process__header">
                                 <div class="f-title">Tiến trình học tập</div>
+                                @if($is_owned)
+                                <span class="f-process">{{ $course->getPercentComplete() }}%</span>
+                                @endif
                             </div>
 
                             <div class="learning-process__list">
@@ -62,13 +65,22 @@
                                         <div class="panel">
                                             <div class="panel__title" data-toggle="collapse" data-target="#collapse-id-{{ $loop->index }}" aria-expanded="true" aria-controls="collapse-id-{{ $loop->index }}">
                                                 {{ $lesson->title }}
+                                                @if($is_owned)
+                                                <div class="percent" data-percent="{{ $lesson->getPercentComplete() }}">
+                                                    <svg class="percent__svg" width="40" height="40" viewBox="0 0 40 40">
+                                                        <circle cx="20" cy="20" r="17" fill="none" stroke="#fd6b7d" stroke-width="3"></circle>
+                                                        <circle cx="20" cy="20" r="17" fill="none" stroke="#ffffff" stroke-width="3" class="circle" style="stroke-dasharray: 106.81415022205297px; stroke-dashoffset: 64px;"></circle>
+                                                    </svg>
+                                                    <span class="percent__number">{{ $lesson->getPercentComplete() }}%</span>
+                                                </div>
+                                                @endif
                                             </div>
                                             <div id="collapse-id-{{ $loop->index }}" class="collapse show" data-parent="#accordion">
                                                 <div class="panel__entry">
                                                     <ul class="collapse__submenu">
                                                         @foreach($lesson->parts as $p)
                                                             @if($is_owned)
-                                                            <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
+                                                            <li class="{{ $p->isProcessedWithThisUser() ? 'done' : '' }} {{ $p->id == $part->id ? 'current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
                                                             @else
                                                                 @if($p->enabled_trial)
                                                                 <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ $p->title }}</a></li>
