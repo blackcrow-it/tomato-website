@@ -49,7 +49,7 @@ Route::namespace('Frontend')
             Route::get('bai-giang/{id}', 'PartController@index')->name('part');
             Route::post('gui-bai-viet/{part_id}', 'PartContentController@send')->name('part_content.send_mail');
             Route::get('part-test/get-data/{id}', 'PartTestController@getData')->name('part_test.get_data');
-            Route::post('set-complete', 'PartTestController@setCompletePart')->name('part_test.set_complete');
+            Route::post('set-complete', 'PartController@setCompletePart')->name('part.set_complete');
 
             Route::get('gio-hang', 'CartController@index')->name('cart');
             Route::get('gio-hang/get-data', 'CartController@getData')->name('cart.get_data');
