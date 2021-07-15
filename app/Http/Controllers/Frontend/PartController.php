@@ -11,6 +11,7 @@ use App\Part;
 use App\ProcessPart;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Storage;
 use Throwable;
 use Auth;
@@ -79,20 +80,6 @@ class PartController extends Controller
             }
         }
 
-        // Nếu không phải "Trắc nghiệm" thì đánh dấu đầu mục khi đã được vào xem
-        if ($part->type != 'test') {
-            $processPart = ProcessPart::where('part_id', $part->id)
-                ->where('user_id', auth()->id())
-                ->first();
-            if (!$processPart) {
-                $processPart = new ProcessPart;
-            }
-            $processPart->part_id = $part->id;
-            $processPart->user_id = auth()->id();
-            $processPart->is_check = true;
-            $processPart->save();
-        }
-
         return view('frontend.part.' . $part->type, [
             'course' => $course,
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
@@ -103,5 +90,22 @@ class PartController extends Controller
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
             'related_books' => $relatedBooks
         ]);
+    }
+
+    public function setCompletePart(Request $request)
+    {
+        $id = $request->input('part_id');
+        $part = Part::findOrFail($id);
+        $processPart = ProcessPart::where('part_id', $part->id)
+            ->where('user_id', auth()->id())
+            ->first();
+        if (!$processPart) {
+            $processPart = new ProcessPart;
+        }
+        $processPart->part_id = $part->id;
+        $processPart->user_id = auth()->id();
+        $processPart->is_check = true;
+        $processPart->save();
+        return response()->json('success', Response::HTTP_OK);
     }
 }
