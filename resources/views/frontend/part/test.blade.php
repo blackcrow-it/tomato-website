@@ -171,7 +171,7 @@
                 const passed = !this.isNotPassTheTest();
                 console.log(passed)
                 if (passed) {
-                    axios.post("{{ route('part_test.set_complete') }}", { part_id: {{$part->id}} })
+                    axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
                     .then(function (response) {
                         console.log(response);
                     })
