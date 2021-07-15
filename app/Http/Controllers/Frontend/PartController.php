@@ -80,20 +80,6 @@ class PartController extends Controller
             }
         }
 
-        // Nếu không phải "Trắc nghiệm" thì đánh dấu đầu mục khi đã được vào xem
-        if ($part->type == 'content') {
-            $processPart = ProcessPart::where('part_id', $part->id)
-                ->where('user_id', auth()->id())
-                ->first();
-            if (!$processPart) {
-                $processPart = new ProcessPart;
-            }
-            $processPart->part_id = $part->id;
-            $processPart->user_id = auth()->id();
-            $processPart->is_check = true;
-            $processPart->save();
-        }
-
         return view('frontend.part.' . $part->type, [
             'course' => $course,
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
