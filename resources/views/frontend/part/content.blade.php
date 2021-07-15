@@ -50,6 +50,13 @@
                                 .then(function (response) {
                                     bootbox.alert('<h1>Nộp bài thành công!</h1><br/>Bạn vui lòng theo dõi Email và Group kín trên Facebook để nhận kết quả của cô.');
                                     $('#notify').html('<p style="color: #77af41">Nộp bài thành công! Bạn vui lòng theo dõi Email và Group kín trên Facebook để nhận kết quả của cô.</p>');
+                                    axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+                                    .then(function (response) {
+                                        console.log(response);
+                                    })
+                                    .catch(function (error) {
+                                        console.log(error);
+                                    })
                                 })
                                 .catch(function (error) {
                                     $('#notify').html('<p style="color: #e71d36">Gửi bài viết cho giảng viên không thành công. Vui lòng thử lại sau.</p>');

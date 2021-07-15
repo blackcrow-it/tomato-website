@@ -44,4 +44,20 @@ class Part extends BaseModel
     {
         return route('part', ['id' => $this->id]);
     }
+
+    public function isProcessedWithThisUser()
+    {
+        if (auth()) {
+            $item = $this->hasMany(ProcessPart::class, 'part_id', 'id')
+                ->where('user_id', auth()->id())
+                ->first();
+            if ($item) {
+                return $item->is_check;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }
