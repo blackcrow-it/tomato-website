@@ -79,11 +79,13 @@
 <script src="https://cdn.jsdelivr.net/npm/videojs-hls-quality-selector@1.1.1/dist/videojs-hls-quality-selector.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
+    var sendComplete = false;
     var url = '{{ $stream_url }}';
+    var video = undefined;
 
     if (Hls.isSupported()) {
         $('#video-hls-wrapper').show();
-        var video = document.getElementById('video-hls');
+        video = document.getElementById('video-hls');
         var hls = new Hls();
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -97,7 +99,31 @@
         player.aspectRatio('16:9');
         player.fluid(true);
         player.hlsQualitySelector();
+        video = document.getElementById('video-js');
     }
 
+    // Assign an ontimeupdate event to the video element, and execute a function if the current playback position has changed
+    video.ontimeupdate = function() {checkComplete(video)};
+    function checkComplete(vid) {
+        if (getTotalPlayed(vid.played) >= vid.duration / 100 * 85 && !sendComplete) {
+            sendComplete = true;
+            axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        }
+    }
+
+    function getTotalPlayed(r) {
+        var total = 0;
+        for (var i = 0; i < r.length; i++) {
+            let timeNode = r.end(i) - r.start(i);
+            total += timeNode;
+        }
+        return total;
+    }
 </script>
 @endsection
