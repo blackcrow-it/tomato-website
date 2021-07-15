@@ -15,6 +15,11 @@ class CreateChildCourseCommentsTable extends Migration
     {
         Schema::create('child_course_comments', function (Blueprint $table) {
             $table->id();
+            $table->string('content');
+            $table->unsignedBigInteger('coursecmt_id');
+            $table->foreign('coursecmt_id')->references('id')->on('course_comments');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

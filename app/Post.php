@@ -61,4 +61,9 @@ class Post extends BaseModel
     {
         return $this->belongsTo('App\Category', 'category_id', 'id');
     }
+
+    public function postComments()
+    {
+        return $this->hasMany('App\PostComment', 'post_id', 'id');
+    }
 }

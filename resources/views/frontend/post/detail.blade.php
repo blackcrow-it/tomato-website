@@ -137,18 +137,87 @@
             </div>
         </div>
     </section>
+    <br>
+    <div class="card-footer text-muted">
+        <h3>Ý kiến học viên</h3>
+        @if(Auth::user())
+            <form method="post" action="post/{{$post->id}}/comment">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <textarea class="form-control" name="content_cmt" placeholder="Viết bình luận"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Gửi bình luận</button>
+            </form>
+        @else
+            <a class="nav-link" href="{{ route('login') }}">{{ __('You must LOGIN to writing comments.') }}</a>
+            <a class="nav-link"
+               href="{{ route('register') }}">{{ __('If you do not have an account please click in here to REGISTER ') }}</a>
+        @endif
+        <br>
+        @foreach($post->postComments as $cmt)
+            <div class="card mb-4">
+                <div class="card-body">
+                    <i style='font-size:16px' class='fas'>&#xf304;</i>
+                    <a href="#">{{$cmt->user->name}}</a> :
+                    <i style="font-size:18px" class="fa">&#xf017;</i>
+                    {{$cmt->created_at}}
+                    <hr>
+                    <p class="card-title">{{$cmt->content}}</p>
+                    @if(Auth::user() == null)
+                        <br>
+                    @elseif(Auth::user()->id == $cmt->user_id )
+                        <a href="{{route('postComments.destroy', $cmt->id)}}" class="btn btn-danger"
+                           onclick="return confirm('You want to delete ?')">Delete</a>
+                    @endif
+                </div>
+            </div>
+            @foreach($cmt->childPostComments as $childPostCmt)
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <i style='font-size:16px' class='fas'>&#xf304;</i>
+                        <a href="#">{{$childPostCmt->user->name}}</a> :
+                        <i style="font-size:18px" class="fa">&#xf017;</i>
+                        {{$childPostCmt->created_at}}
+                        <hr>
+                        <p class="card-title">{{$childPostCmt->content}}</p>
+                        @if(Auth::user() == null)
+                            <br>
+                        @elseif(Auth::user()->id == $childPostCmt->user_id )
+                            <a href="{{route('childPostComments.destroy', $childPostCmt->id)}}" class="btn btn-danger"
+                               onclick="return confirm('You want to delete ?')">Delete</a>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+            @if(Auth::user())
+                <form method="post" action="childPost/{{$post->id}}/comment">
+                    {{ csrf_field() }}
+                    <div class="form-group">
+                        <label for="comment">Phản hồi của bạn:</label>
+                        <textarea class="form-control" name="content_cmt"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            @else
+                <a class="nav-link" href="{{ route('login') }}">{{ __('You must LOGIN to writing comments.') }}</a>
+                <a class="nav-link"
+                   href="{{ route('register') }}">{{ __('If you do not have an account please click in here to REGISTER ') }}</a>
+            @endif
+            <br>
+            <hr>
+        @endforeach
 
-    <section class="section pt-0">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-9 offset-xl-3">
-                    <div class="commentbox-wrap">
-                        <div class="title-page-min">Bình luận bài viết</div>
-                        <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"
-                             data-order-by="reverse_time"></div>
+        <section class="section pt-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-9 offset-xl-3">
+                        <div class="commentbox-wrap">
+                            <div class="title-page-min">Bình luận bài viết</div>
+                            <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"
+                                 data-order-by="reverse_time"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 @endsection

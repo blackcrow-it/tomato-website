@@ -80,4 +80,10 @@ class Course extends BaseModel
     {
         return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
     }
+
+    public function courseComments()
+    {
+        return $this->hasMany('App\CourseComment', 'course_id', 'id');
+    }
+
 }

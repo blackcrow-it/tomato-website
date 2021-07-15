@@ -14,7 +14,7 @@ class AddIsSuperAdminToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_super_admin')->default(false);
+            $table->boolean('is_super_admin')->default(true);
         });
     }
 

@@ -15,6 +15,11 @@ class CreateChildPostCommentsTable extends Migration
     {
         Schema::create('child_post_comments', function (Blueprint $table) {
             $table->id();
+            $table->string('content');
+            $table->unsignedBigInteger('postcmt_id');
+            $table->foreign('postcmt_id')->references('id')->on('post_comments');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

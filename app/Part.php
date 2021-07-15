@@ -44,4 +44,9 @@ class Part extends BaseModel
     {
         return route('part', ['id' => $this->id]);
     }
+
+    public function partComments()
+    {
+        return $this->hasMany('App\PartComment', 'part_id', 'id');
+    }
 }

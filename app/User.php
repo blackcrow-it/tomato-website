@@ -36,4 +36,34 @@ class User extends Authenticatable
     {
         $this->attributes['email'] = mb_strtolower($value);
     }
+
+    public function postComments()
+    {
+        return $this->hasMany('App\PostComment', 'user_id', 'id');
+    }
+
+    public function courseComments()
+    {
+        return $this->hasMany('App\CourseComment', 'user_id', 'id');
+    }
+
+    public function partComments()
+    {
+        return $this->hasMany('App\PartComment', 'user_id', 'id');
+    }
+
+    public function childPostComments()
+    {
+        return $this->hasMany('App\ChildPostComment', 'user_id', 'id');
+    }
+
+    public function childCourseComments()
+    {
+        return $this->hasMany('App\ChildCourseComment', 'user_id', 'id');
+    }
+
+    public function childPartComments()
+    {
+        return $this->hasMany('App\ChildPartComment', 'user_id', 'id');
+    }
 }

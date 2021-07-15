@@ -15,6 +15,11 @@ class CreatePartCommentsTable extends Migration
     {
         Schema::create('part_comments', function (Blueprint $table) {
             $table->id();
+            $table->string('content');
+            $table->unsignedBigInteger('part_id');
+            $table->foreign('part_id')->references('id')->on('parts');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

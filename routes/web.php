@@ -41,6 +41,24 @@ Route::namespace('Frontend')
         Route::get('khoa-hoc/tat-ca', 'CourseController@all')->name('course.all');
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
+        Route::post('post/{id}/comment', 'PostCommentController@createPostComment');
+        Route::get('post/{id}/comment', 'PostCommentController@deletePostComment')->name('postComments.destroy');
+
+        Route::post('course/{id}/comment', 'CourseCommentController@createCourseComment');
+        Route::get('course/{id}/comment', 'CourseCommentController@deleteCourseComment')->name('courseComments.destroy');
+
+        Route::post('part/{id}/comment', 'PartCommentController@createPartComment');
+        Route::get('part/{id}/comment', 'PartCommentController@deletePartComment')->name('partComments.destroy');
+
+        Route::post('childPost/{id}/comment', 'ChildPostCommentController@createChildPostComment');
+        Route::get('childPost/{id}/comment', 'ChildPostCommentController@deleteChildPostComment')->name('childPostComments.destroy');
+
+        Route::post('childCourse/{id}/comment', 'ChildCourseCommentController@createChildCourseComment');
+        Route::get('childCourse/{id}/comment', 'ChildCourseCommentController@deleteChildCourseComment')->name('childCourseComments.destroy');
+
+        Route::post('childPart/{id}/comment', 'ChildPartCommentController@createChildPartComment');
+        Route::get('childPart/{id}/comment', 'ChildPartCommentController@deletaChildPartComment')->name('childPartComments.destroy');
+
         Route::middleware('auth')->group(function () {
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
