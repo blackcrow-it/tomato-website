@@ -4,7 +4,8 @@
 <div class="learningLesson__video">
     <div class="product-detail__img">
         <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $data->youtube_id ?? null }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {{-- <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $data->youtube_id ?? null }}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --}}
+            <div class="embed-responsive-item" id="player"></div>
         </div>
     </div>
 </div>
@@ -60,4 +61,53 @@
     <script>
         $('.entry-detail img').css('height', 'auto');
     </script>
+    <script>
+        var done = false;
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        var player;
+        function onYouTubeIframeAPIReady() {
+          player = new YT.Player('player', {
+            height: '390',
+            width: '640',
+            videoId: '{{ $data->youtube_id ?? null }}',
+            playerVars: {
+              'playsinline': 1
+            },
+            events: {
+              'onReady': onPlayerReady,
+              'onStateChange': onPlayerStateChange,
+            }
+          });
+        }
+
+        function onPlayerReady(event) {
+            event.target.getDuration();
+        }
+        function onPlayerStateChange(event) {
+            if (!done) {
+                checkComplete()
+            }
+        }
+        $(window).click(function(e) {
+            if (!done) {
+                checkComplete()
+            }
+        });
+        function checkComplete() {
+            if (player.getCurrentTime() >= player.getDuration()/100*80) {
+                done = true;
+                axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+            }
+        }
+      </script>
 @endsection
