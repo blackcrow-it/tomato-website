@@ -54,15 +54,44 @@
                             </div>
                         </template>
 
+                        <template v-if="question.type == 'multiple-correct-word-position'">
+                            <div>
+                                <label for="">Chọn đáp án đúng điền vào chỗ trống</label>
+                                <div style="padding-bottom: 10px">
+                                    <draggable class="p-1 group-test-draggable" :group="'q-sentence-multiple-' + questionIndex" @add="question.selectedIndex = undefined">
+                                        <span v-for="(option, optionIndex) in question.options">@{{ option.correct }}</span>
+                                    </draggable>
+                                </div>
+                                <div v-for="(option, optionIndex) in question.options" class="test-draggable group-result-draggable">
+                                    @{{ optionIndex + 1 }}. <span>@{{ option.start }}</span>
+                                    <draggable
+                                        style="border-bottom: 1px solid black"
+                                        class="px-2 item-multiple-word"
+                                        :class="{ 'right': submited && option.correct == $('#result-multiple-word-q' + questionIndex + '-' + optionIndex).text(), 'wrong': submited && option.correct != $('#result-multiple-word-q' + questionIndex + '-' + optionIndex).text() }"
+                                        :id="'result-multiple-word-q' + questionIndex + '-' + optionIndex"
+                                        :group="'q-sentence-multiple-' + questionIndex"
+                                    ></draggable>
+                                    <span>@{{ option.end }}</span>
+                                </div>
+                                <div v-if="submited" class="">
+                                    <p>Đáp án:</p>
+                                    <p v-for="(option, optionIndex) in question.options">
+                                        @{{ optionIndex + 1 }}. <span>@{{ question.options[optionIndex]['start'] }}</span> <span style="text-decoration: underline">@{{ question.options[optionIndex]['correct'] }}</span> <span>@{{ question.options[optionIndex]['end'] }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </template>
+
                         <template v-if="question.type == 'translate-text'">
                             <div>
-                                Nội dung trả lời: <input type="input" v-model="answer" @blur="trimSpaceAnwer(questionIndex)" class="form-control">
-                                <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && compareTextOptionWithAnswer(option) }">
+                                Nội dung trả lời:
+                                <textarea type="input" v-model="answer[questionIndex]" @blur="trimSpaceAnwer(questionIndex)" class="form-control"></textarea>
+                                <label v-for="(option, optionIndex) in question.options" class="choose-label" :class="{ 'true': submited && compareTextOptionWithAnswer(option, questionIndex) }">
                                 </label>
                             </div>
                             <div v-if="submited" style="margin-top:5px">
                                 <label>Các câu trả lời đúng:</label>
-                                <ul class="test-draggable" v-for="(option, optionIndex) in question.options" class="px-1" :class="{ 'test-draggable-true': compareTextOptionWithAnswer(option) }">
+                                <ul class="test-draggable" v-for="(option, optionIndex) in question.options" class="px-1" :class="{ 'test-draggable-true': compareTextOptionWithAnswer(option, questionIndex) }">
                                     <li style="list-style-type: none">@{{optionIndex + 1 + '.' + option }} </li>
                                 </ul>
                             </div>
@@ -123,6 +152,27 @@
 @endsection
 
 @section('part_script')
+<style>
+    .group-test-draggable span {
+        background: #5e8bab;
+        padding: 3px 7px;
+        margin: 0 5px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: move;
+    }
+    .group-result-draggable .px-2 span {
+        cursor: move;
+        padding-right: 2.5px;
+        padding-left: 2.5px;
+    }
+    .group-result-draggable .item-multiple-word.right {
+        color: #77af41;
+    }
+    .group-result-draggable .item-multiple-word.wrong {
+        color: #e71d36;
+    }
+</style>
 <script>
     new Vue({
         el: '#test',
@@ -130,7 +180,7 @@
             questions: [],
             submited: false,
             correct_requirement: 0,
-            answer:'',
+            answer: {},
         },
         async mounted() {
             this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
@@ -151,6 +201,17 @@
                     question.correct = question.options.findIndex(opt => opt.is_correct);
                 }
                 return question;
+            });
+            this.questions.forEach((question, questionIndex) => {
+                question.options.forEach((option, optionIndex) => {
+                    if (question.type == 'translate-text') {
+                            this.answer[questionIndex] = '';
+                    } else if (question.type == 'multiple-correct-word-position') {
+                        question.options.forEach((option, optionIndex) => {
+                            option['selected'] = []
+                        });
+                    }
+                });
             });
             if (parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) {
                 this.questions = this.shuffle(this.questions);
@@ -190,15 +251,34 @@
                 console.log(index);
             },
             isNotPassTheTest() {
-                const userCorrectCount = this.questions.filter(x => x.selectedIndex == x.correct || x.correct == true).length;
+                const userCorrectCount = this.questions.filter((question, index) => {
+                    if (question.type == 'correct-word-position' || question.type == 'multiple-choice') {
+                        return question.selectedIndex == question.correct
+                    } else if (question.type == 'correct-word-position-translate') {
+                        return this.editText(index) == true
+                    } else if (question.type == 'translate-text') {
+                        return question.correct == "true"
+                    } else if (question.type == 'multiple-correct-word-position') {
+                        let result = false;
+                        question.options.forEach((option, optionIndex) => {
+                            if (option.correct != $('#result-multiple-word-q' + index + '-' + optionIndex).text()) {
+                                result = false;
+                            } else {
+                                result = true;
+                            }
+                        });
+                        return result;
+                    }
+                    return false
+                }).length;
                 return userCorrectCount == 0 || userCorrectCount < this.correct_requirement;
             },
-            compareTextOptionWithAnswer(option){
-                return option.toLowerCase().trim() == this.answer.toLowerCase().trim();
+            compareTextOptionWithAnswer(option, questionIndex){
+                return option.toLowerCase().trim() == this.answer[questionIndex].toLowerCase().trim();
             },
             trimSpaceAnwer(questionIndex){
-                this.answer = this.answer.trim().replace(/\s\s+/g, ' ');
-                if(this.questions[questionIndex].options.indexOf(this.answer ) > -1){
+                this.answer[questionIndex] = this.answer[questionIndex].trim().replace(/\s\s+/g, ' ');
+                if(this.questions[questionIndex].options.indexOf(this.answer[questionIndex] ) > -1){
                     this.questions[questionIndex].correct = "true";
                 }
             },
@@ -223,14 +303,50 @@
                return $('#word-position-' + correctIndex).text() == this.questions[questionIndex].textCorrect;
             },
             totalCorrectAnswer(){
-                let total = this.questions.filter((question, index) => question.selectedIndex == question.correct
-                    || question.correct == "true" || this.editText(index) == true).length;
-                return  total  + '/' + this.questions.length;
+                let total = this.questions.filter((question, index) => {
+                    if (question.type == 'correct-word-position' || question.type == 'multiple-choice') {
+                        return question.selectedIndex == question.correct
+                    } else if (question.type == 'correct-word-position-translate') {
+                        return this.editText(index) == true
+                    } else if (question.type == 'translate-text') {
+                        return question.correct == "true"
+                    } else if (question.type == 'multiple-correct-word-position') {
+                        let result = false;
+                        question.options.forEach((option, optionIndex) => {
+                            if (option.correct != $('#result-multiple-word-q' + index + '-' + optionIndex).text()) {
+                                result = false;
+                            } else {
+                                result = true;
+                            }
+                        });
+                        return result;
+                    }
+                    return false
+                });
+                return  total.length  + '/' + this.questions.length;
             },
             totalPointCorrectAnswer(){
-                let total = this.questions.filter((question, index) => question.selectedIndex == question.correct
-                    || question.correct == "true" || this.editText(index) == true).length;
-                return (Math.round(total / this.questions.length * 100) / 10 ) + '/' + 10;
+                let total = this.questions.filter((question, index) => {
+                    if (question.type == 'correct-word-position' || question.type == 'multiple-choice') {
+                        return question.selectedIndex == question.correct
+                    } else if (question.type == 'correct-word-position-translate') {
+                        return this.editText(index) == true
+                    } else if (question.type == 'translate-text') {
+                        return question.correct == "true"
+                    } else if (question.type == 'multiple-correct-word-position') {
+                        let result = false;
+                        question.options.forEach((option, optionIndex) => {
+                            if (option.correct != $('#result-multiple-word-q' + index + '-' + optionIndex).text()) {
+                                result = false;
+                            } else {
+                                result = true;
+                            }
+                        });
+                        return result;
+                    }
+                    return false
+                });
+                return (Math.round(total.length / this.questions.length * 100) / 10 ) + '/' + 10;
             }
         },
 

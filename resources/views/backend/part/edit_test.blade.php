@@ -118,6 +118,10 @@ Sửa đầu mục
                                     <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="correct-word-position-translate" :id="'question-type-4-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
                                     <label class="form-check-label" :for="'question-type-4-' + questionIndex">Chọn vị trí sai và sửa lại cho đúng</label>
                                 </div>
+                                <div class="form-check">
+                                    <input v-model="question.type" type="radio" :name="'data[' + questionIndex + '][type]'" value="multiple-correct-word-position" :id="'question-type-5-' + questionIndex" @change="loadDefaultQuestion(questionIndex)">
+                                    <label class="form-check-label" :for="'question-type-5-' + questionIndex">Chọn từ còn thiếu trong câu</label>
+                                </div>
                             </div>
                             <input v-else v-model="question.type" type="hidden" :name="'data[' + questionIndex + '][type]'">
                             <template v-if="question.type != undefined">
@@ -246,6 +250,37 @@ Sửa đầu mục
                                     <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
                                 </div>
                             </template>
+                            <template v-if="question.type == 'multiple-correct-word-position'">
+                                <div class="form-group">
+                                    <label>Các câu có từ còn thiếu</label>
+                                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tick vào ô bên trái nếu đó là từ còn thiếu.<br>- Ô trống sẽ được chèn vào giữa các thành phần trong câu."></i></small>
+                                    <table class="table table-bordered">
+                                        <tr v-for="(option, optionIndex) in question.options">
+                                            <td class="align-middle">
+                                                <input type="text" v-model="question.options[optionIndex]['start']" :name="'data[' + questionIndex + '][options][' + optionIndex + '][start]'" class="form-control" placeholder="Đoạn đầu">
+                                            </td>
+                                            <td class="align-middle">
+                                                <input type="text" v-model="question.options[optionIndex]['correct']" :name="'data[' + questionIndex + '][options][' + optionIndex + '][correct]'" class="form-control" placeholder="Từ cần điền">
+                                            </td>
+                                            <td class="align-middle">
+                                                <input type="text" v-model="question.options[optionIndex]['end']" :name="'data[' + questionIndex + '][options][' + optionIndex + '][end]'" class="form-control" placeholder="Đoạn sau">
+                                            </td>
+                                            <td class="align-middle">
+                                                <button type="button" class="btn btn-sm btn-danger" @click="question.options.splice(optionIndex, 1)"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <button type="button" class="btn btn-info btn-sm" @click="addOption(question)">Thêm câu còn thiếu</button>
+                                </div>
+                                <div>
+                                    <p v-for="(option, optionIndex) in question.options">
+                                        @{{ optionIndex + 1 }}. <span>@{{ question.options[optionIndex]['start'] }}</span> <span style="text-decoration: underline">@{{ question.options[optionIndex]['correct'] }}</span> <span>@{{ question.options[optionIndex]['end'] }}</span>
+                                    </p>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-sm btn-link" @click="questions.splice(questionIndex, 1)">Xóa câu hỏi</button>
+                                </div>
+                            </template>
                         </td>
                     </tr>
                 </table>
@@ -321,7 +356,6 @@ Sửa đầu mục
                     uploadingAudio: false,
                     uploadingAudioPercent: 0,
                 },
-
                 {
                     type: 'correct-word-position-translate',
                     question: '',
@@ -334,7 +368,16 @@ Sửa đầu mục
                     uploadingAudio: false,
                     uploadingAudioPercent: 0,
                 },
-
+                {
+                    type: 'multiple-correct-word-position',
+                    question: '',
+                    options: [
+                        {"start": "Đây", "correct": "là", "end": "câu hỏi"},
+                    ],
+                    audio: undefined,
+                    uploadingAudio: false,
+                    uploadingAudioPercent: 0,
+                },
             ],
         },
         mounted() {
@@ -378,10 +421,18 @@ Sửa đầu mục
                 });
             },
             addOption(question) {
-                if (question.options.length == 0) {
-                    question.correct = "0";
+                if (question.type == "multiple-correct-word-position") {
+                    question.options.push({
+                        "start": "",
+                        "correct": "",
+                        "end": "",
+                    });
+                } else {
+                    if (question.options.length == 0) {
+                        question.correct = "0";
+                    }
+                    question.options.push('');
                 }
-                question.options.push('');
             },
             openInputAudioFile(index) {
                 $('#question-audio-index-' + index).trigger('click');
