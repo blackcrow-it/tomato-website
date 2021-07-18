@@ -136,19 +136,20 @@
             this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
             this.questions = this.questions.map(question => {
                 if (question.type != 'multiple-choice') return question;
+                if (question.options != undefined && question.options.length >= 1) {
+                    question.options = question.options.map(opt => {
+                        return {
+                            value: opt,
+                            is_correct: false
+                        };
+                    });
+                    question.options[question.correct].is_correct = true;
 
-                question.options = question.options.map(opt => {
-                    return {
-                        value: opt,
-                        is_correct: false
-                    };
-                });
-                question.options[question.correct].is_correct = true;
+                    if (!parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) return question;
 
-                if (!parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) return question;
-
-                question.options = this.shuffle(question.options);
-                question.correct = question.options.findIndex(opt => opt.is_correct);
+                    question.options = this.shuffle(question.options);
+                    question.correct = question.options.findIndex(opt => opt.is_correct);
+                }
                 return question;
             });
             if (parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) {
