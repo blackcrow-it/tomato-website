@@ -134,10 +134,8 @@
         },
         async mounted() {
             this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
-            console.log(this.questions);
             this.questions = this.questions.map(question => {
                 if (question.type != 'multiple-choice') return question;
-                console.log(question.options)
                 if (question.options != undefined && question.options.length >= 1) {
                     question.options = question.options.map(opt => {
                         return {

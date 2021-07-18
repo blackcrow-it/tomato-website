@@ -342,7 +342,16 @@ Sửa đầu mục
                 if(res.length == 0){
                     this.questions = array();
                 }
-                this.questions = res;
+                // this.questions = res;
+                res.forEach(item => {
+                    if (item.type == "multiple-choice") {
+                        if (!item.options) {
+                            item['options'] = new Array();
+                            item['correct'] = undefined;
+                        }
+                    }
+                    this.questions.push(item)
+                });
                 this.$nextTick(() => {
                     tooltipInit();
                     ckeditorInit();
@@ -369,6 +378,9 @@ Sửa đầu mục
                 });
             },
             addOption(question) {
+                if (question.options.length == 0) {
+                    question.correct = "0";
+                }
                 question.options.push('');
             },
             openInputAudioFile(index) {
