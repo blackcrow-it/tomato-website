@@ -155,10 +155,11 @@
     .group-test-draggable span {
         background: #5e8bab;
         padding: 3px 7px;
-        margin: 0 5px;
+        margin: 2px 5px;
         border-radius: 5px;
         color: #fff;
         cursor: move;
+        display: inline-block;
     }
     .group-result-draggable .px-2 span {
         cursor: move;
