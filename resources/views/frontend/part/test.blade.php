@@ -56,7 +56,6 @@
 
                         <template v-if="question.type == 'multiple-correct-word-position'">
                             <div>
-                                <label for="">Chọn đáp án đúng điền vào chỗ trống</label>
                                 <div style="padding-bottom: 10px">
                                     <draggable class="p-1 group-test-draggable" :group="'q-sentence-multiple-' + questionIndex" @add="question.selectedIndex = undefined">
                                         <span v-for="(option, optionIndex) in question.options">@{{ option.correct }}</span>
