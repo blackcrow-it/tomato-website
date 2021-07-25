@@ -10,13 +10,23 @@
 @endsection
 
 @section('body')
+<style>
+    .login-page {
+        background-image: url('{{ asset("images/background-login.png") }}');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .login-page__content .nav-tabs .nav-link {
+        color: #000000;
+    }
+</style>
     <section class="section p-0">
         <div class="container">
             <div class="login-page">
                 <div class="row">
                     <div class="col-md-4 col-lg-5">
-                        <div class="login-page__bg"
-                             style="background-image: url('{{ asset("tomato/assets/img/image/bg-login.jpg") }}');"></div>
+                        {{-- <div class="login-page__bg"
+                             style="background-image: url('{{ asset("tomato/assets/img/image/bg-login.jpg") }}');"></div> --}}
                     </div>
                     <div class="col-md-8 col-lg-7">
                         <div class="login-page__wrap">
