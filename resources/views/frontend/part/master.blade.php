@@ -80,7 +80,11 @@
                                                     <ul class="collapse__submenu">
                                                         @foreach($lesson->parts as $p)
                                                             @if($is_owned)
-                                                            <li class="{{ $p->isProcessedWithThisUser() ? 'done' : '' }} {{ $p->id == $part->id ? 'current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
+                                                                @if($p->is_open)
+                                                                <li class="{{ $p->isProcessedWithThisUser() ? 'done' : '' }} {{ $p->id == $part->id ? 'current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
+                                                                @else
+                                                                <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="#" onclick="boxBuyCourse()"><i class="fa fa-lock" aria-hidden="true"></i> {{ $p->title }}</a></li>
+                                                                @endif
                                                             @else
                                                                 @if($p->enabled_trial)
                                                                 <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ $p->title }}</a></li>

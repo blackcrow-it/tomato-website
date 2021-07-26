@@ -21,6 +21,7 @@ class PartController extends Controller
     // Lấy nội dung trong khoá học mà học viên đã thanh toán
     public function index($id)
     {
+        $is_open = true;
         $part = Part::where('enabled', true)->find($id);
         if ($part == null) return redirect()->route('home');
 
@@ -67,6 +68,16 @@ class PartController extends Controller
                 ->orderBy('created_at', 'asc')
                 ->get();
         });
+
+        // Thêm trạng thái bài học đã được mở khi làm qua bài trắc nghiệm
+        foreach ($lessons as $lesson) {
+            foreach ($lesson->parts as $key_part) {
+                $key_part->is_open = $is_open;
+                if ($key_part->type == 'test') {
+                    $is_open = $key_part->isProcessedWithThisUser();
+                }
+            }
+        }
 
         $data = $part->{'part_' . $part->type};
 
