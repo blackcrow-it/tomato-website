@@ -133,7 +133,7 @@
                         <li>Họ và tên: <b>{{ auth()->user()->name ?? auth()->user()->username }}</b></li>
                         <li>Bài thi: <b>{{ $part->title }}</b></li>
                         <li>Câu hỏi <b>@{{ totalCorrectAnswer() }}</b></li>
-                        <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() }}</b></li>
+                        <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() + '/' + 10 }}</b></li>
                         <li>
                             Kết quả:
                             <b v-if="isNotPassTheTest()">Chưa đạt</b>
@@ -223,15 +223,26 @@
             shuffle(arr) {
                 return arr.sort(() => Math.random() - 0.5);
             },
-             submit() {
+            submit() {
                  this.submited = true;
 
-                 $('.quiz-reslut').slideDown();
-                 $('html,body').animate({
+                $('.quiz-reslut').slideDown();
+                $('html,body').animate({
                     scrollTop: $('.quiz-reslut').offset().top
                 }, 500);
                 const passed = !this.isNotPassTheTest();
-                console.log(passed)
+
+                // console.log(passed)
+                axios.post(
+                    "{{ route('api.test_result.add') }}",
+                    { test_id: {{$part->part_test->id}}, score: this.totalPointCorrectAnswer(), is_pass: passed }
+                )
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
                 if (passed) {
                     axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
                     .then(function (response) {
@@ -346,7 +357,7 @@
                     }
                     return false
                 });
-                return (Math.round(total.length / this.questions.length * 100) / 10 ) + '/' + 10;
+                return (Math.round(total.length / this.questions.length * 100) / 10 );
             }
         },
 
