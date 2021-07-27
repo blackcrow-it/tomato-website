@@ -24,6 +24,7 @@ class PartController extends Controller
     {
         $is_open = true;
         $is_next = false;
+        $this_open = false;
         $part = Part::where('enabled', true)->find($id);
         if ($part == null) return redirect()->route('home');
         $nextPart = $part;
@@ -83,9 +84,13 @@ class PartController extends Controller
                     $nextPart = $key_part;
                     $is_next = false;
                 }
-                $key_part->id == $part->id ? $is_next = true : $is_next = false;
+                if ($key_part->id == $part->id) {
+                    $is_next = true;
+                    $this_open = $is_open;
+                }
             }
         }
+        if ($isUserOwnedThisCourse && !$this_open) return redirect()->route('home');
 
         $testResults = TestResult::where('test_id', $part->part_test->id)->where('user_id', auth()->id())->get();
 
