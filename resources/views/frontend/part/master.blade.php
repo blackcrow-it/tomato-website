@@ -137,7 +137,9 @@
                     window.location.href = "{{ route('course', ['slug' => $course->slug, 'id' => $course->id, 'status' => 'success'])}}";
                 })
                 .catch(function (error) {
-                    bootbox.alert(error.errors.course_id[0]);
+                    bootbox.alert(error.errors.course_id[0], function(){
+                        window.location.href = "{{ route('user.recharge') }}"
+                    });
                 });
             }
         });
