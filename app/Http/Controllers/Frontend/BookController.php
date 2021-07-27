@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Auth;
 use App\Book;
 use App\BookRelatedBook;
 use App\BookRelatedCourse;
@@ -53,6 +54,15 @@ class BookController extends Controller
             ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_book');
+
+        if (Auth::check()) {
+            if (!Auth::user()->is_super_admin && !Auth::user()->roles()->exists()) {
+                $book->view++;
+            }
+        } else {
+            $book->view++;
+        }
+        $book->save();
 
         return view('frontend.book.detail', [
             'book' => $book,
