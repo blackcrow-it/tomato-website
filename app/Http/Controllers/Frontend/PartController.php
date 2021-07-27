@@ -24,7 +24,7 @@ class PartController extends Controller
     {
         $is_open = true;
         $is_next = false;
-        $this_open = false;
+        $this_open = true;
         $part = Part::where('enabled', true)->find($id);
         if ($part == null) return redirect()->route('home');
         $nextPart = $part;
@@ -77,16 +77,19 @@ class PartController extends Controller
         foreach ($lessons as $lesson) {
             foreach ($lesson->parts as $key_part) {
                 $key_part->is_open = $is_open;
-                if ($key_part->type == 'test') {
-                    $is_open = $key_part->isProcessedWithThisUser();
-                }
+                // Lấy bài học tiếp theo
                 if ($is_next) {
                     $nextPart = $key_part;
                     $is_next = false;
                 }
+                // Kiểm tra xem bài học hiện này có bị chặn không
                 if ($key_part->id == $part->id) {
                     $is_next = true;
                     $this_open = $is_open;
+                }
+                // Lấy trạng thái của bài test cho những bài sau
+                if ($key_part->type == 'test') {
+                    $is_open = $key_part->isProcessedWithThisUser();
                 }
             }
         }
