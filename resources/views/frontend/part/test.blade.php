@@ -148,7 +148,7 @@
             </div>
         </div>
     </div>
-    @if($test_result)
+    @if(count($test_result) > 0)
     <div class="quiz-history">
         <h3>Kết quả bài làm trước đó</h3>
         <div class="table-historyExam table-responsive">
@@ -163,7 +163,7 @@
                     @foreach ($test_result as $key => $value)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $value->created_at }}</td>
+                            <td>{{ date("d/m/Y (H:i:s)", strtotime($value->created_at)) }}</td>
                             <td>{{ $value->score }}</td>
                             <td>
                                 @if($value->is_pass)
