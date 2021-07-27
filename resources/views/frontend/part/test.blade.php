@@ -141,13 +141,15 @@
                         </li>
                     </ul>
                     <div class="quiz-reslut__btn text-left">
-                        <button type="button" class="btn" @click="scrollToQuiz">Xem đáp án</button>
-                        <button type="button" class="btn" @click="skipTest">Bài học tiếp theo</button>
+                        <button type="button" class="btn" @click="scrollToQuiz"><i class="fa fa-eye" aria-hidden="true"></i> Xem đáp án</button>
+                        <button type="button" class="btn" onClick="window.location.reload();"><i class="fa fa-repeat" aria-hidden="true"></i> Làm lại</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <br/>
+    <button v-if="show_next" type="button" class="btn" @click="skipTest" style="float: right"><i class="fa fa-forward" aria-hidden="true"></i> Bài học tiếp theo</button>
     @if(count($test_result) > 0)
     <div class="quiz-history">
         <h3>Kết quả bài làm trước đó</h3>
@@ -222,6 +224,7 @@
             submited: false,
             correct_requirement: 0,
             answer: {},
+            show_next: false
         },
         async mounted() {
             this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
@@ -264,8 +267,9 @@
             shuffle(arr) {
                 return arr.sort(() => Math.random() - 0.5);
             },
-            submit() {
-                 this.submited = true;
+            async submit() {
+                this.submited = true;
+                let lenHistory = 0;
 
                 $('.quiz-reslut').slideDown();
                 $('html,body').animate({
@@ -274,23 +278,27 @@
                 const passed = !this.isNotPassTheTest();
 
                 // console.log(passed)
-                axios.post(
+                await axios.post(
                     "{{ route('api.test_result.add') }}",
                     { test_id: {{$part->part_test->id}}, score: this.totalPointCorrectAnswer(), is_pass: passed }
                 )
                 .then(function (response) {
-                    console.log(response);
+                    lenHistory = response['history'].length;
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không nộp được bài.");
                 })
+                if(lenHistory >= 3) {
+                    this.show_next = await true;
+                }
                 if (passed) {
+                    this.show_next = true;
                     axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
                     .then(function (response) {
-                        console.log(response);
+                        bootbox.alert('<h1>Chúc mừng!</h1>Bạn đã hoàn thành bài trắc nghiệm, ấn nút <b>Bài học tiếp theo</b> để học tiếp khoá học.');
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không hoàn thành được bài trắc nghiệm.");
                     })
                 }
             },

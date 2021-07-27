@@ -134,7 +134,6 @@
                     course_id: {{ $course->id }}
                 })
                 .then(function (response) {
-                    // location.reload();
                     window.location.href = "{{ route('course', ['slug' => $course->slug, 'id' => $course->id, 'status' => 'success'])}}";
                 })
                 .catch(function (error) {
