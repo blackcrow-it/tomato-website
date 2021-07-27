@@ -80,7 +80,11 @@
                                                     <ul class="collapse__submenu">
                                                         @foreach($lesson->parts as $p)
                                                             @if($is_owned)
-                                                            <li class="{{ $p->isProcessedWithThisUser() ? 'done' : '' }} {{ $p->id == $part->id ? 'current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
+                                                                @if($p->is_open)
+                                                                <li class="{{ $p->isProcessedWithThisUser() ? 'done' : '' }} {{ $p->id == $part->id ? 'current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
+                                                                @else
+                                                                <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="#" onclick="boxLockCourse()"><i class="fa fa-lock" aria-hidden="true"></i> {{ $p->title }}</a></li>
+                                                                @endif
                                                             @else
                                                                 @if($p->enabled_trial)
                                                                 <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="{{ $p->url }}"><i class="fa fa-unlock-alt" aria-hidden="true"></i> {{ $p->title }}</a></li>
@@ -130,11 +134,12 @@
                     course_id: {{ $course->id }}
                 })
                 .then(function (response) {
-                    // location.reload();
                     window.location.href = "{{ route('course', ['slug' => $course->slug, 'id' => $course->id, 'status' => 'success'])}}";
                 })
                 .catch(function (error) {
-                    bootbox.alert(error.errors.course_id[0]);
+                    bootbox.alert(error.errors.course_id[0], function(){
+                        window.location.href = "{{ route('user.recharge') }}"
+                    });
                 });
             }
         });
@@ -142,6 +147,9 @@
     @if(!$is_owned)
     boxBuyCourse();
     @endif
+    function boxLockCourse() {
+        bootbox.alert('<h1>Thông báo!</h1><br/>Bạn chưa hoàn thành bài trắc nghiệm trước đó. Vui lòng hoàn thành để tiếp tục khoá học.');
+    }
 </script>
 @yield('part_script')
 @endsection

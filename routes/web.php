@@ -80,6 +80,21 @@ Route::namespace('Frontend')
             Route::get('recharge/epay-callback', 'RechargeEpayController@processCallback')->name('recharge.epay.callback');
         });
 
+        Route::middleware('auth')
+        ->namespace('Api')
+        ->prefix('api')
+        ->name('api.')
+        ->group(function () {
+            Route::prefix('test-result')
+            ->name('test_result.')
+            ->group(function() {
+                Route::get('', 'TestResultApiController@index')->name('getAll');
+                Route::post('add', 'TestResultApiController@store')->name('add');
+            });
+            // Route::post('recharge/momo', 'RechargeMomoController@makeRequest')->name('recharge.momo.request');
+
+        });
+
         Route::post('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
         Route::post('recharge/epay-notify', 'RechargeEpayController@processNotify')->name('recharge.epay.notify');
 

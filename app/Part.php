@@ -7,7 +7,7 @@ class Part extends BaseModel
     protected $table = 'parts';
 
     protected $fillable = [
-        'title', 'enabled', 'order_in_lesson', 'lesson_id', 'type', 'enabled_trial'
+        'title', 'enabled', 'order_in_lesson', 'lesson_id', 'type', 'enabled_trial', 'is_open'
     ];
 
     public function lesson()

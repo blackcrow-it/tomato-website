@@ -9,6 +9,7 @@ use App\CourseRelatedBook;
 use App\Http\Controllers\Controller;
 use App\Part;
 use App\ProcessPart;
+use App\TestResult;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,8 +22,12 @@ class PartController extends Controller
     // Lấy nội dung trong khoá học mà học viên đã thanh toán
     public function index($id)
     {
+        $is_open = true;
+        $is_next = false;
+        $this_open = true;
         $part = Part::where('enabled', true)->find($id);
         if ($part == null) return redirect()->route('home');
+        $nextPart = $part;
 
         $lesson = $part->lesson()->where('enabled', true)->first();
         if ($lesson == null) return redirect()->route('home');
@@ -68,6 +73,30 @@ class PartController extends Controller
                 ->get();
         });
 
+        // Thêm trạng thái bài học đã được mở khi làm qua bài trắc nghiệm
+        foreach ($lessons as $lesson) {
+            foreach ($lesson->parts as $key_part) {
+                $key_part->is_open = $is_open;
+                // Lấy bài học tiếp theo
+                if ($is_next) {
+                    $nextPart = $key_part;
+                    $is_next = false;
+                }
+                // Kiểm tra xem bài học hiện này có bị chặn không
+                if ($key_part->id == $part->id) {
+                    $is_next = true;
+                    $this_open = $is_open;
+                }
+                // Lấy trạng thái của bài test cho những bài sau
+                if ($key_part->type == 'test') {
+                    $is_open = $key_part->isProcessedWithThisUser();
+                }
+            }
+        }
+        if ($isUserOwnedThisCourse && !$this_open) return redirect()->route('home');
+
+        $testResults = TestResult::where('test_id', $part->part_test->id)->where('user_id', auth()->id())->get();
+
         $data = $part->{'part_' . $part->type};
 
         if ($part->type == PartType::VIDEO) {
@@ -85,10 +114,12 @@ class PartController extends Controller
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
             'lessons' => $lessons,
             'part' => $part,
+            'next_part' => $nextPart,
             'data' => $data,
             'is_owned' => $isUserOwnedThisCourse,
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
-            'related_books' => $relatedBooks
+            'related_books' => $relatedBooks,
+            'test_result' => $testResults
         ]);
     }
 
