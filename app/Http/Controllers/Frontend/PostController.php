@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Auth;
 use App\Book;
 use App\Category;
 use App\Http\Controllers\Controller;
@@ -54,6 +55,15 @@ class PostController extends Controller
             ->where('created_at', '<', $post->created_at)
             ->orderBy('created_at', 'desc')
             ->first();
+
+        if (Auth::check()) {
+            if (!Auth::user()->is_super_admin && !Auth::user()->roles()->exists()) {
+                $post->view++;
+            }
+        } else {
+            $post->view++;
+        }
+        $post->save();
 
         return view('frontend.post.detail', [
             'post' => $post,

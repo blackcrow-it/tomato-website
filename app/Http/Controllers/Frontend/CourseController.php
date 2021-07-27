@@ -13,6 +13,7 @@ use App\Part;
 use App\UserCourse;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Auth;
 
 class CourseController extends Controller
 {
@@ -150,6 +151,15 @@ class CourseController extends Controller
             ->where('object_id', $course->id)
             ->exists()
             : false;
+
+        if (Auth::check()) {
+            if (!Auth::user()->is_super_admin && !Auth::user()->roles()->exists()) {
+                $course->view++;
+            }
+        } else {
+            $course->view++;
+        }
+        $course->save();
 
         return view('frontend.course.detail', [
             'course' => $course,
