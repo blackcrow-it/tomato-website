@@ -133,7 +133,7 @@
                         <li>Họ và tên: <b>{{ auth()->user()->name ?? auth()->user()->username }}</b></li>
                         <li>Bài thi: <b>{{ $part->title }}</b></li>
                         <li>Câu hỏi <b>@{{ totalCorrectAnswer() }}</b></li>
-                        <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() }}</b></li>
+                        <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() + '/' + 10 }}</b></li>
                         <li>
                             Kết quả:
                             <b v-if="isNotPassTheTest()">Chưa đạt</b>
@@ -141,12 +141,46 @@
                         </li>
                     </ul>
                     <div class="quiz-reslut__btn text-left">
-                        <button type="button" class="btn" @click="scrollToQuiz">Xem đáp án</button>
+                        <button type="button" class="btn" @click="scrollToQuiz"><i class="fa fa-eye" aria-hidden="true"></i> Xem đáp án</button>
+                        <button type="button" class="btn" onClick="window.location.reload();"><i class="fa fa-repeat" aria-hidden="true"></i> Làm lại</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <br/>
+    <button v-if="show_next" type="button" class="btn" @click="skipTest" style="float: right"><i class="fa fa-forward" aria-hidden="true"></i> Bài học tiếp theo</button>
+    @if(count($test_result) > 0)
+    <div class="quiz-history">
+        <h3>Kết quả bài làm trước đó</h3>
+        <div class="table-historyExam table-responsive">
+            <table>
+                <thead>
+                    <tr><th>STT</th>
+                    <th>Thời gian</th>
+                    <th>Điểm</th>
+                    <th>Đạt</th>
+                </tr></thead>
+                <tbody>
+                    @foreach ($test_result as $key => $value)
+                        <tr>
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ date("d/m/Y (H:i:s)", strtotime($value->created_at)) }}</td>
+                            <td>{{ $value->score }}</td>
+                            <td>
+                                @if($value->is_pass)
+                                <span class="f-icon"><i class="fa fa-check"></i></span></td>
+                                @else
+                                <span class="f-icon"><i class="fa fa-close"></i></span>
+                                @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
 </div>
 @endsection
 
@@ -172,6 +206,15 @@
     .group-result-draggable .item-multiple-word.wrong {
         color: #e71d36;
     }
+    .quiz-history {
+        padding-top: 50px;
+    }
+    @media only screen and (min-width: 1024px) {
+        .quiz-history {
+            width: 50%;
+            margin: auto;
+        }
+    }
 </style>
 <script>
     new Vue({
@@ -181,6 +224,7 @@
             submited: false,
             correct_requirement: 0,
             answer: {},
+            show_next: false
         },
         async mounted() {
             this.questions = await axios.get("{{ route('part_test.get_data', [ 'id' => $part->id ]) }}");
@@ -223,22 +267,38 @@
             shuffle(arr) {
                 return arr.sort(() => Math.random() - 0.5);
             },
-             submit() {
-                 this.submited = true;
+            async submit() {
+                this.submited = true;
+                let lenHistory = 0;
 
-                 $('.quiz-reslut').slideDown();
-                 $('html,body').animate({
+                $('.quiz-reslut').slideDown();
+                $('html,body').animate({
                     scrollTop: $('.quiz-reslut').offset().top
                 }, 500);
                 const passed = !this.isNotPassTheTest();
-                console.log(passed)
+
+                // console.log(passed)
+                await axios.post(
+                    "{{ route('api.test_result.add') }}",
+                    { test_id: {{$part->part_test->id}}, score: this.totalPointCorrectAnswer(), is_pass: passed }
+                )
+                .then(function (response) {
+                    lenHistory = response['history'].length;
+                })
+                .catch(function (error) {
+                    bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không nộp được bài.");
+                })
+                if(lenHistory >= 3) {
+                    this.show_next = await true;
+                }
                 if (passed) {
+                    this.show_next = true;
                     axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
                     .then(function (response) {
-                        console.log(response);
+                        bootbox.alert('<h1>Chúc mừng!</h1>Bạn đã hoàn thành bài trắc nghiệm, ấn nút <b>Bài học tiếp theo</b> để học tiếp khoá học.');
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không hoàn thành được bài trắc nghiệm.");
                     })
                 }
             },
@@ -246,6 +306,15 @@
                 $('html,body').animate({
                     scrollTop: $('.quiz-wrap').offset().top
                 }, 500);
+            },
+            skipTest() {
+                axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+                .then(function(response) {
+                    window.location.href = "{{route('part', ['id' => $next_part->id]) }}";
+                })
+                .catch(function(error) {
+                    bootbox.alert("<h1>Thông báo</h1>Không thể chuyển đến bài học tiếp theo");
+                });
             },
             correctWordPositionSelectedIndex(index) {
                 console.log(index);
@@ -346,7 +415,7 @@
                     }
                     return false
                 });
-                return (Math.round(total.length / this.questions.length * 100) / 10 ) + '/' + 10;
+                return (Math.round(total.length / this.questions.length * 100) / 10 );
             }
         },
 
