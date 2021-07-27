@@ -83,7 +83,7 @@
                                                                 @if($p->is_open)
                                                                 <li class="{{ $p->isProcessedWithThisUser() ? 'done' : '' }} {{ $p->id == $part->id ? 'current' : '' }}"><a href="{{ $p->url }}"><span></span> {{ $p->title }}</a></li>
                                                                 @else
-                                                                <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="#" onclick="boxBuyCourse()"><i class="fa fa-lock" aria-hidden="true"></i> {{ $p->title }}</a></li>
+                                                                <li class="{{ $p->id == $part->id ? 'done current' : '' }}"><a href="#" onclick="boxLockCourse()"><i class="fa fa-lock" aria-hidden="true"></i> {{ $p->title }}</a></li>
                                                                 @endif
                                                             @else
                                                                 @if($p->enabled_trial)
@@ -146,6 +146,9 @@
     @if(!$is_owned)
     boxBuyCourse();
     @endif
+    function boxLockCourse() {
+        bootbox.alert('<h1>Thông báo!</h1><br/>Bạn chưa hoàn thành bài trắc nghiệm trước đó. Vui lòng hoàn thành để tiếp tục khoá học.');
+    }
 </script>
 @yield('part_script')
 @endsection

@@ -22,8 +22,10 @@ class PartController extends Controller
     public function index($id)
     {
         $is_open = true;
+        $is_next = false;
         $part = Part::where('enabled', true)->find($id);
         if ($part == null) return redirect()->route('home');
+        $nextPart = $part;
 
         $lesson = $part->lesson()->where('enabled', true)->first();
         if ($lesson == null) return redirect()->route('home');
@@ -76,6 +78,11 @@ class PartController extends Controller
                 if ($key_part->type == 'test') {
                     $is_open = $key_part->isProcessedWithThisUser();
                 }
+                if ($is_next) {
+                    $nextPart = $key_part;
+                    $is_next = false;
+                }
+                $key_part->id == $part->id ? $is_next = true : $is_next = false;
             }
         }
 
@@ -96,6 +103,7 @@ class PartController extends Controller
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
             'lessons' => $lessons,
             'part' => $part,
+            'next_part' => $nextPart,
             'data' => $data,
             'is_owned' => $isUserOwnedThisCourse,
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,

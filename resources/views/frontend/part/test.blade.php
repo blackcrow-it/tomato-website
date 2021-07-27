@@ -142,6 +142,7 @@
                     </ul>
                     <div class="quiz-reslut__btn text-left">
                         <button type="button" class="btn" @click="scrollToQuiz">Xem đáp án</button>
+                        <button type="button" class="btn" @click="skipTest">Bài học tiếp theo</button>
                     </div>
                 </div>
             </div>
@@ -257,6 +258,15 @@
                 $('html,body').animate({
                     scrollTop: $('.quiz-wrap').offset().top
                 }, 500);
+            },
+            skipTest() {
+                axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+                .then(function(response) {
+                    window.location.href = "{{route('part', ['id' => $next_part->id]) }}";
+                })
+                .catch(function(error) {
+                    bootbox.alert("<h1>Thông báo</h1>Không thể chuyển đến bài học tiếp theo");
+                });
             },
             correctWordPositionSelectedIndex(index) {
                 console.log(index);
