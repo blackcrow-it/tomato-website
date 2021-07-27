@@ -148,6 +148,37 @@
             </div>
         </div>
     </div>
+    @if($test_result)
+    <div class="quiz-history">
+        <h3>Kết quả bài làm trước đó</h3>
+        <div class="table-historyExam table-responsive">
+            <table>
+                <thead>
+                    <tr><th>STT</th>
+                    <th>Thời gian</th>
+                    <th>Điểm</th>
+                    <th>Đạt</th>
+                </tr></thead>
+                <tbody>
+                    @foreach ($test_result as $key => $value)
+                        <tr>
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $value->created_at }}</td>
+                            <td>{{ $value->score }}</td>
+                            <td>
+                                @if($value->is_pass)
+                                <span class="f-icon"><i class="fa fa-check"></i></span></td>
+                                @else
+                                <span class="f-icon"><i class="fa fa-close"></i></span>
+                                @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
 </div>
 @endsection
 
@@ -172,6 +203,15 @@
     }
     .group-result-draggable .item-multiple-word.wrong {
         color: #e71d36;
+    }
+    .quiz-history {
+        padding-top: 50px;
+    }
+    @media only screen and (min-width: 1024px) {
+        .quiz-history {
+            width: 50%;
+            margin: auto;
+        }
     }
 </style>
 <script>

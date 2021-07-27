@@ -9,6 +9,7 @@ use App\CourseRelatedBook;
 use App\Http\Controllers\Controller;
 use App\Part;
 use App\ProcessPart;
+use App\TestResult;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -86,6 +87,8 @@ class PartController extends Controller
             }
         }
 
+        $testResults = TestResult::where('test_id', $part->part_test->id)->where('user_id', auth()->id())->get();
+
         $data = $part->{'part_' . $part->type};
 
         if ($part->type == PartType::VIDEO) {
@@ -107,7 +110,8 @@ class PartController extends Controller
             'data' => $data,
             'is_owned' => $isUserOwnedThisCourse,
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
-            'related_books' => $relatedBooks
+            'related_books' => $relatedBooks,
+            'test_result' => $testResults
         ]);
     }
 
