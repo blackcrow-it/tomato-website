@@ -5,8 +5,9 @@
 @endsection
 
 @section('content-header')
-    <h1 class="text-center">Have a nice day!</h1>
-    <br />
+    @if ($surveys)
+    <p><a href="{{ route('admin.survey.list') }}"><i class="fa fa-bell" aria-hidden="true"></i> Chưa tiếp nhận thông tin Phiếu khảo sát ({{ count($surveys) }})</a></p>
+    @endif
 
     <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
