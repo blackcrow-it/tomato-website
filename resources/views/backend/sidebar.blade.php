@@ -49,6 +49,12 @@
         </a>
     </li>
 @endcan
+<li class="nav-item">
+    <a href="{{ route('admin.survey.list') }}" class="nav-link {{ request()->routeIs('admin.survey.list') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-chart-area"></i>
+        <p>Phiếu khảo sát</p>
+    </a>
+</li>
 @can('teacher.list')
     <li class="nav-item">
         <a href="{{ route('admin.teacher.list') }}" class="nav-link {{ request()->routeIs('admin.teacher.*') ? 'active' : '' }}">

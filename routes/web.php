@@ -91,8 +91,12 @@ Route::namespace('Frontend')
                 Route::get('', 'TestResultApiController@index')->name('getAll');
                 Route::post('add', 'TestResultApiController@store')->name('add');
             });
-            // Route::post('recharge/momo', 'RechargeMomoController@makeRequest')->name('recharge.momo.request');
-
+            Route::prefix('survey')
+            ->name('survey.')
+            ->group(function() {
+                Route::get('', 'SurveyApiController@index')->name('getAll');
+                Route::post('add', 'SurveyApiController@store')->name('add');
+            });
         });
 
         Route::post('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
@@ -178,6 +182,11 @@ Route::prefix('admin')
                 Route::get('search-course', 'CourseController@getSearchCourse')->name('search_course');
                 Route::get('get-related-course', 'CourseController@getRelatedCourse')->name('get_related_course');
                 Route::get('get-related-book', 'CourseController@getRelatedBook')->name('get_related_book');
+            });
+            Route::prefix('survey')->name('survey.')->group(function () {
+                Route::get('list', 'SurveyController@list')->name('list');
+                Route::get('detail/{id}', 'SurveyController@detail')->name('detail');
+                Route::post('received/{id}', 'SurveyController@received')->name('received');
             });
 
             // Route::prefix('combo_courses')->name('combo_courses.')->group(function () {

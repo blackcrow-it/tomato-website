@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Survey extends Model
 {
-    protected $table = 'part_survey';
+    protected $table = 'surveys';
 
     protected $fillable = [
         'part_id',
