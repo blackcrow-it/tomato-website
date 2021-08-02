@@ -14,12 +14,14 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DB;
 use Analytics;
+use App\Survey;
 use Spatie\Analytics\Period;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        $surveys = Survey::where('is_received', false)->get();
         // Lấy thông tin tất cả các hoá đơn
         $countInvoices = 0;
         $totalInvoiceAll = 0;
@@ -166,7 +168,8 @@ class HomeController extends Controller
             'top_seller_month' => $dataTopSellerMonth,
             'total_invoices_today' => $totalInvoicesToday,
             'total_invoices_yesterday' => $totalInvoicesYesterday,
-            'list_categories' => $listCategories
+            'list_categories' => $listCategories,
+            'surveys' => $surveys
         ]);
     }
 
