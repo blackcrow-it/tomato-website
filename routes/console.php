@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+// Artisan::command('command:copy_user {user}', function ($user) {
+//     $this->info("Sending email to: {$user}!");
+// });
