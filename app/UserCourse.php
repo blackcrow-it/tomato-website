@@ -22,4 +22,9 @@ class UserCourse extends BaseModel
     {
         return $this->belongsTo('App\Course', 'course_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
