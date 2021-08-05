@@ -407,7 +407,7 @@
                 <div class="video-demo wow fadeInRight" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/lessonbox-2.jpg') }});">
                     <div class="bg-overlay"></div>
                     <div class="video-demo__btn">
-                        <a href="https://www.youtube.com/watch?v=8blp3Tl770Q" data-init="magnificPopupVideo"><i class="pe-icon-play"></i> Xem thử bài
+                        <a href="https://www.youtube.com/watch?v=r1r7O5HsBMY" data-init="magnificPopupVideo"><i class="pe-icon-play"></i> Xem thử bài
                             giảng</a>
                     </div>
                 </div>

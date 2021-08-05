@@ -12,7 +12,7 @@
 @section('body')
 <style>
     .login-page {
-        background-image: url('{{ asset("images/background-login.png") }}');
+        background-image: url('{{ asset("tomato/assets/img/image/forgot-password-1110x637.png") }}');
         background-repeat: no-repeat;
         background-size: cover;
     }
