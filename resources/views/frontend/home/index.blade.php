@@ -236,67 +236,52 @@
 
                     <div class="testimonial-slide">
                         <div class="owl-carousel">
-                            <img src="{{ asset('images/testimonial/testimonial-hoang-cam-tu.png') }}" alt="">
+                            {{-- <img src="{{ asset('images/testimonial/testimonial-hoang-cam-tu.png') }}" alt="">
                             <img src="{{ asset('images/testimonial/testimonial-khanh.png') }}" alt="">
                             <img src="{{ asset('images/testimonial/testimonial-nguyen-thanh-mai.png') }}" alt="">
                             <img src="{{ asset('images/testimonial/testimonial-nguyen-thi-ngoc-yen.png') }}" alt="">
-                            <img src="{{ asset('images/testimonial/testimonial-tuan-dinh.png') }}" alt="">
-                            {{-- <div class="testimonial">
+                            <img src="{{ asset('images/testimonial/testimonial-tuan-dinh.png') }}" alt=""> --}}
+                            <div class="testimonial">
                                 <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
-                                <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
-                                    thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
-                                    mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
-                                    đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
+                                <p class="testimonial__quote">Chị dạy dễ hiểu quá, cố gắng thực hiện giấc mơ đi du học của mình.</p>
 
                                 <div class="testimonial__info">
-                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
-                                    <p class="testimonial__position">Học viên đang theo học</p>
+                                    <div class="testimonial__name">Hoàng Cẩm Tú</div>
+                                    <p class="testimonial__position">Học viên Youtube</p>
                                 </div>
-                            </div> --}}
-                            {{-- <div class="testimonial">
+                            </div>
+                            <div class="testimonial">
                                 <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
-                                <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
-                                    thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
-                                    mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
-                                    đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
+                                <p class="testimonial__quote">Em rất yêu thích bộ môn tiếng Trung và đã tìm được khoá học tại Tomato, rất cảm ơn trung tâm và cô Bùi Thu Hà đã cho em khoá học bổ ích.</p>
                                 <div class="testimonial__info">
-                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
+                                    <div class="testimonial__name">Khanh Mmui</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
                             <div class="testimonial">
                                 <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
-                                <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
-                                    thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
-                                    mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
-                                    đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
+                                <p class="testimonial__quote">Tomato, trung tâm uy tín, giáo viên thân thiện, nhiệt tình rất đáng đặt niềm tin.</p>
                                 <div class="testimonial__info">
-                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
+                                    <div class="testimonial__name">Nguyễn Thanh Mai</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
                             <div class="testimonial">
                                 <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
-                                <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
-                                    thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
-                                    mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
-                                    đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
+                                <p class="testimonial__quote">Chỉ nói 1 câu: Mua khoá học ở Tomato không phí tiền. Đặt niềm tin đúng chỗ.</p>
                                 <div class="testimonial__info">
-                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
+                                    <div class="testimonial__name">Nguyễn Thị Ngọc Yến</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
                             </div>
                             <div class="testimonial">
                                 <span class="testimonial__icon"><img src="{{ asset('tomato/assets/img/icon/icon-quote.svg') }}" alt=""></span>
-                                <p class="testimonial__quote">Học tiếng Nhất tại Tomato Online mình rất
-                                    thích và muốn được giới thiếu cho nhiều người được biết đến trung tâm
-                                    mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa người được biết
-                                    đến trung tâm mình nhiều hơn, muốn mọi người biết đến nhiều hơn nữa</p>
+                                <p class="testimonial__quote">Mình đã học nhiều nơi, nhưng đây là môi trường từ nhân viên đến giáo viên đều rất nhiệt tình và tận tâm.</p>
                                 <div class="testimonial__info">
-                                    <div class="testimonial__name">Nguyễn Quốc Khánh</div>
+                                    <div class="testimonial__name">Tuấn Đinh</div>
                                     <p class="testimonial__position">Học viên đang theo học</p>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                         <ul class="owl-dot-custom">
                             <li class="owl-dot"><span style="background-image: url({{ asset('images/testimonial/avatar-hoang-cam-tu.jpg') }})"></span></li>
@@ -404,11 +389,10 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="video-demo wow fadeInRight" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/lessonbox-2.jpg') }});">
+                <div class="video-demo wow fadeInRight" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/huong-dan-cach-nap-tien-online.jpeg') }});">
                     <div class="bg-overlay"></div>
                     <div class="video-demo__btn">
-                        <a href="https://www.youtube.com/watch?v=r1r7O5HsBMY" data-init="magnificPopupVideo"><i class="pe-icon-play"></i> Xem thử bài
-                            giảng</a>
+                        <a href="https://www.youtube.com/watch?v=r1r7O5HsBMY" data-init="magnificPopupVideo"><i class="pe-icon-play"></i> Hướng dẫn đăng ký</a>
                     </div>
                 </div>
             </div>
