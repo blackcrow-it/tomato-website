@@ -347,56 +347,62 @@
                 <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Ngày tạo khóa học"></i></small>
                 <input type="text" name="meta_title" placeholder="ngày tạo" value="{{ old('created_at') ?? $data->created_at ?? null }}" class="form-control" readonly>
             </div>
-            <div class="form-group">
-                <label>Meta Title</label>
-                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
-                <input type="text" name="meta_title" placeholder="Meta Title" value="{{ old('meta_title') ?? $data->meta_title ?? null }}" class="form-control @error('meta_title') is-invalid @enderror">
-                @error('meta_title')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label>Meta description</label>
-                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
-                <textarea name="meta_description" rows="3" placeholder="Meta description" class="form-control @error('meta_description') is-invalid @enderror">{{ old('meta_description') ?? $data->meta_description ?? null }}</textarea>
-                @error('meta_description')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label>OG Title</label>
-                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
-                <input type="text" name="og_title" placeholder="OG Title" value="{{ old('og_title') ?? $data->og_title ?? null }}" class="form-control @error('og_title') is-invalid @enderror">
-                @error('og_title')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label>OG description</label>
-                <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
-                <textarea name="og_description" rows="3" placeholder="OG description" class="form-control @error('og_description') is-invalid @enderror">{{ old('og_description') ?? $data->og_description ?? null }}</textarea>
-                @error('og_description')
-                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                @enderror
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>OG Image</label>
-                        <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hình ảnh hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo ảnh bìa."></i></small>
-                        <div class="input-group">
-                            <input type="text" name="og_image" placeholder="OG Image" value="{{ old('og_image') ?? $data->og_image ?? null }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
-                            @error('og_image')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                            <div class="input-group-append">
-                                <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-og-image', 'ck-og-image-preview')">Chọn file</button>
-                            </div>
-                        </div>
-                        <img class="image-preview" src="{{ old('og_image') ?? $data->og_image ?? null }}" id="ck-og-image-preview">
-                    </div>
+            <div id="js-meta-data">
+                <div class="form-group">
+                    <label>Meta Title</label>
+                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
+                    <span> @{{ metaTitle.length }}/60</span>
+                    <input type="text" name="meta_title" maxlength="60" placeholder="Meta Title" v-model="metaTitle" class="form-control @error('meta_title') is-invalid @enderror">
+                    @error('meta_title')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Meta description</label>
+                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
+                    <span> @{{ metaDesc.length }}/155</span>
+                    <textarea name="meta_description" rows="3" maxlength="155" v-model="metaDesc" placeholder="Meta description" class="form-control @error('meta_description') is-invalid @enderror"></textarea>
+                    @error('meta_description')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>OG Title</label>
+                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
+                    <span> @{{ ogTitle.length }}/95</span>
+                    <input type="text" name="og_title" placeholder="OG Title" maxlength="95" v-model="ogTitle" class="form-control @error('og_title') is-invalid @enderror">
+                    @error('og_title')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>OG description</label>
+                    <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Mô tả hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo mô tả."></i></small>
+                    <span> @{{ ogDesc.length }}/200</span>
+                    <textarea name="og_description" rows="3" placeholder="OG description" maxlength="200" v-model="ogDesc" class="form-control @error('og_description') is-invalid @enderror"></textarea>
+                    @error('og_description')
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                    @enderror
                 </div>
             </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>OG Image</label>
+                            <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Hình ảnh hiển thị trên các trang mạng xã hội.<br>- Nếu bỏ trống, hệ thống tự lấy theo ảnh bìa."></i></small>
+                            <div class="input-group">
+                                <input type="text" name="og_image" placeholder="OG Image" value="{{ old('og_image') ?? $data->og_image ?? null }}" class="form-control @error('og_image') is-invalid @enderror" id="ck-og-image">
+                                @error('og_image')
+                                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                                @enderror
+                                <div class="input-group-append">
+                                    <button type="button" class="input-group-text" onclick="selectFileWithCKFinder('ck-og-image', 'ck-og-image-preview')">Chọn file</button>
+                                </div>
+                            </div>
+                            <img class="image-preview" src="{{ old('og_image') ?? $data->og_image ?? null }}" id="ck-og-image-preview">
+                        </div>
+                    </div>
+                </div>
         </div>
         <div class="card-footer">
             <button class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
@@ -417,6 +423,7 @@
             searchResult: [],
             keyword: undefined,
             isSearching: false,
+            metaTitle: '{{ old('meta_title') ?? $data->meta_title ?? null }}'
         },
         mounted() {
             axios.get('{{ route("admin.course.get_related_course") }}', {
@@ -505,6 +512,16 @@
                 }, 1000);
             }
         }
+    });
+
+    new Vue({
+        el: '#js-meta-data',
+        data: {
+            metaTitle: "{{ $data->meta_title ?? old('meta_title') }}",
+            metaDesc: "{{ $data->meta_description ?? old('meta_description') }}",
+            ogTitle: "{{ $data->og_title ?? old('og_title') }}",
+            ogDesc: "{{ $data->og_description ?? old('og_description') }}",
+        },
     });
 
 </script>
