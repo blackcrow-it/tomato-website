@@ -4,6 +4,7 @@ namespace App;
 
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use DB;
 
 class Course extends BaseModel
 {
@@ -79,6 +80,24 @@ class Course extends BaseModel
     public function teacher()
     {
         return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
+    }
+
+    public function combo_course_items()
+    {
+        return $this->hasMany(ComboCoursesItem::class, 'course_id', 'id');
+    }
+
+    // Hàm xoá courses và xoá luôn cả các liên kết để không bị lỗi transaction
+    public function delete()
+    {
+        DB::transaction(function()
+        {
+            $this->position()->delete();
+            $this->lessons()->delete();
+            $this->user_courses()->delete();
+            $this->combo_course_items()->delete();
+            parent::delete();
+        });
     }
 
     public function getPercentComplete() {

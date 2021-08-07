@@ -19,12 +19,20 @@
         </a>
     </li>
 @endcan
-{{-- <li class="nav-item">
-    <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
+{{-- @can('combo_courses.list')
+<li class="nav-item">
+    <a href="{{ route('admin.combo_courses.list') }}" class="nav-link {{ request()->routeIs('admin.combo_courses.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-boxes"></i>
         <p>Combo khóa học</p>
     </a>
-</li> --}}
+</li>
+@endcan --}}
+<li class="nav-item">
+    <a href="{{ route('admin.combo_courses.list') }}" class="nav-link {{ request()->routeIs('admin.combo_courses.*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-boxes"></i>
+        <p>Combo khóa học</p>
+    </a>
+</li>
 @can('post.list')
     <li class="nav-item">
         <a href="{{ route('admin.post.list') }}" class="nav-link {{ request()->routeIs('admin.post.*') ? 'active' : '' }}">
