@@ -506,10 +506,10 @@
     new Vue({
         el: '#js-meta-data',
         data: {
-            metaTitle: "{{ $data->meta_title ?? old('meta_title') }}",
-            metaDesc: "{{ $data->meta_description ?? old('meta_description') }}",
-            ogTitle: "{{ $data->og_title ?? old('og_title') }}",
-            ogDesc: "{{ $data->og_description ?? old('og_description') }}",
+            metaTitle: "{!! $data->meta_title ?? old('meta_title') !!}",
+            metaDesc: "{!! $data->meta_description ?? old('meta_description') !!}",
+            ogTitle: "{!! $data->og_title ?? old('og_title') !!}",
+            ogDesc: "{!! $data->og_description ?? old('og_description') !!}",
         },
     });
 
