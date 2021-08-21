@@ -210,7 +210,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="consultationForm__bg" style="background-image: url(assets/img/image/consultationForm-bg.jpg);"></div>
+                    <div class="consultationForm__bg" style="background-image: url(assets/img/image/dang_ky_nhan_tin.jpg);"></div>
                 </div>
             </div>
         </div>

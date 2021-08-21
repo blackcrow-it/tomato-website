@@ -23,6 +23,7 @@
     <!-- PAGE STYLE -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,300;1,600;1,700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap">
     <link rel="stylesheet" type="text/css" href="{{ mix('tomato/assets/css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('tomato/assets/css/cust.css') }}">
     <!--[if lt IE 9]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
