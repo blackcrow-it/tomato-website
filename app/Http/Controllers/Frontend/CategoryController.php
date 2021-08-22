@@ -8,6 +8,7 @@ use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Setting;
 
 class CategoryController extends Controller
 {
@@ -39,11 +40,13 @@ class CategoryController extends Controller
 
     private function indexForPost(Category $category)
     {
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
         return view('frontend.category.post', [
             'category' => $category,
             'list' => get_posts($category->id, null, true),
             'breadcrumb' => Category::ancestorsOf($category->id),
-            'featured_books' => Book::orderBy('created_at', 'desc')->take(5)->get()
+            'featured_books' => Book::orderBy('created_at', 'desc')->take(5)->get(),
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 
@@ -100,19 +103,24 @@ class CategoryController extends Controller
 
         $list = $query->paginate(config('template.paginate.list.course'));
 
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
+        error_log($consultationFormBg->value);
         return view('frontend.category.course', [
             'category' => $category,
             'list' => $list,
             'breadcrumb' => Category::ancestorsOf($category->id),
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 
     private function indexForBook(Category $category)
     {
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
         return view('frontend.category.book', [
             'category' => $category,
             'list' => get_books($category->id, null, true),
-            'breadcrumb' => Category::ancestorsOf($category->id)
+            'breadcrumb' => Category::ancestorsOf($category->id),
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 }

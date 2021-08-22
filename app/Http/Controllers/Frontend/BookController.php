@@ -10,6 +10,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Setting;
 
 class BookController extends Controller
 {
@@ -63,12 +64,14 @@ class BookController extends Controller
             $book->view++;
         }
         $book->save();
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
 
         return view('frontend.book.detail', [
             'book' => $book,
             'breadcrumb' => Category::ancestorsAndSelf($book->category_id),
             'related_courses' => $relatedCourses,
             'related_books' => $relatedBooks,
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 }
