@@ -79,7 +79,11 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="consultationForm__bg" style="background-image: url(assets/img/image/dang_ky_nhan_tin.jpg);"></div>
+                    @if ($consultation_background)
+                        <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url({{ $consultation_background }});"></div>
+                    @else
+                        <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/dang_ky_nhan_tin.jpg') }});"></div>
+                    @endif
                 </div>
             </div>
         </div>
