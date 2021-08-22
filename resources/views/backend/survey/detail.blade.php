@@ -38,9 +38,9 @@ Chi tiết phiếu khảo sát
         @foreach ($survey->data as $index => $item)
             <p><b>{{$index + 1}}. {{ $item['question'] }}</b></p>
             @if ($item['type'] == 'textarea')
-            <p>{{ $item['answer'] }}</p>
+            <p>{{ $item['answer'] ?? '' }}</p>
             @elseif ($item['type'] == 'radio')
-            <p>{{ $item['options'][$item['answer']] }}</p>
+            <p>{{ $item['options'][$item['answer']] ?? '' }}</p>
             @endif
         @endforeach
     </div>
