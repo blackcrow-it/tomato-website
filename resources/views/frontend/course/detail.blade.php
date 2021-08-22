@@ -249,7 +249,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/consultationForm-bg.jpg') }});"></div>
+                    <div class="consultationForm__bg wow fadeInUp" data-wow-delay=".2s" style="background-image: url({{ asset('tomato/assets/img/image/dang_ky_nhan_tin.jpg') }});"></div>
                 </div>
             </div>
         </div>
