@@ -40,7 +40,13 @@ Chi tiết phiếu khảo sát
             @if ($item['type'] == 'textarea')
             <p>{{ $item['answer'] ?? '' }}</p>
             @elseif ($item['type'] == 'radio')
-            <p>{{ $item['options'][$item['answer']] ?? '' }}</p>
+            <p>
+                <?php try{ ?>
+                    {{ $item['options'][$item['answer']] ?? '' }}
+                <?php }catch(\Exception $e){ ?>
+
+                <?php } ?>
+            </p>
             @endif
         @endforeach
     </div>
