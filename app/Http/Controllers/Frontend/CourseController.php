@@ -9,7 +9,7 @@ use App\Course;
 use App\CourseRelatedBook;
 use App\CourseRelatedCourse;
 use App\Http\Controllers\Controller;
-use App\Part;
+use App\Setting;
 use App\UserCourse;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -68,10 +68,13 @@ class CourseController extends Controller
         $category->title = 'Tất cả khóa học';
         $category->link = route('course.all');
 
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
+
         return view('frontend.category.course', [
             'category' => $category,
             'list' => $list,
             'breadcrumb' => [],
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 
@@ -161,6 +164,7 @@ class CourseController extends Controller
         }
         $course->save();
 
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
         return view('frontend.course.detail', [
             'course' => $course,
             'lessons' => $lessons,
@@ -170,7 +174,8 @@ class CourseController extends Controller
             'related_courses' => $relatedCourses,
             'related_books' => $relatedBooks,
             'status' => $status,
-            'is_trial' => $isTrial
+            'is_trial' => $isTrial,
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 
