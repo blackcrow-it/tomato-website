@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Log;
 use Mail;
+use App\Setting;
 
 class ForgotPasswordController extends Controller
 {
@@ -22,7 +23,10 @@ class ForgotPasswordController extends Controller
 
     public function index()
     {
-        return view('frontend.auth.forgot');
+        $background = Setting::where('key', 'forgot_password_background')->first();
+        return view('frontend.auth.forgot', [
+            'background' => $background->value
+        ]);
     }
 
     public function sendCodeResetPassword(Request $request)
@@ -77,8 +81,8 @@ class ForgotPasswordController extends Controller
             if (!$user) {
                 return redirect()->route('login')->with('danger', 'Xin lỗi! đường dẫn không đúng, vui lòng thử lại');
             }
-
-            return view('frontend.auth.resetPassword')->with(['email' => $email, 'code' => $code]);
+            $background = Setting::where('key', 'forgot_password_background')->first();
+            return view('frontend.auth.resetPassword')->with(['email' => $email, 'code' => $code, 'background' => $background->value]);
         } catch (\Exception $ex) {
             Log::error($ex);
             return redirect()

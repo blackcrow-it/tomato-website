@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\RegisterRequest;
+use App\Setting;
 use App\User;
 use Auth;
 use Hash;
@@ -17,8 +18,10 @@ class RegisterController extends Controller
         if (!Str::startsWith($redirectUrl, route('login'))) {
             redirect()->setIntendedUrl($redirectUrl);
         }
-
-        return view('frontend.auth.register');
+        $background = Setting::where('key', 'register_background')->first();
+        return view('frontend.auth.register', [
+            'background' => $background->value
+        ]);
     }
 
     public function register(RegisterRequest $request) {

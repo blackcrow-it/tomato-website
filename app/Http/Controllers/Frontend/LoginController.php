@@ -9,13 +9,16 @@ use Illuminate\Http\Request;
 use Session;
 use Str;
 use Illuminate\Support\Facades\Mail;
+use App\Setting;
 
 class LoginController extends Controller
 {
     public function index() {
         redirect()->setIntendedUrl(url()->previous());
-
-        return view('frontend.auth.login');
+        $background = Setting::where('key', 'login_background')->first();
+        return view('frontend.auth.login', [
+            'background' => $background->value
+        ]);
     }
 
     public function login(Request $request) {
