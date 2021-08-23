@@ -3,10 +3,17 @@
     .h3 {
         font-size: 16px;
     }
+
     .detailbox__content img {
         width: auto!important;
         height: auto!important;
     }
+
+    .detailbox__content iframe {
+        width: 100%!important;
+        height: auto!important;
+    }
+
     .widget--book .item__img img {
         height: 300px;
         width: auto;
@@ -19,6 +26,12 @@
         width: auto!important;
         height: auto!important;
     }
+
+    .detailbox__content iframe {
+        width: 100%!important;
+        height: auto!important;
+    }
+
     .widget--book .item__img img {
         height: 150px;
         width: auto;
