@@ -12,7 +12,11 @@
 @section('body')
 <style>
     .login-page {
+        @if($background)
+        background-image: url('{{ $background }}');
+        @else()
         background-image: url('{{ asset("tomato/assets/img/image/mat_khau.jpg") }}');
+        @endif
         background-repeat: no-repeat;
         background-size: cover;
     }
