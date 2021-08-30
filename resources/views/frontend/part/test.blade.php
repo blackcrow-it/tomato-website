@@ -136,8 +136,8 @@
                         <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() + '/' + 10 }}</b></li>
                         <li>
                             Kết quả:
-                            <b v-if="isNotPassTheTest()">Chưa đạt</b>
-                            <b v-else>Đạt</b>
+                            <b v-if="isPassTheTest()">Đạt</b>
+                            <b v-else>Chưa đạt</b>
                         </li>
                     </ul>
                     <div class="quiz-reslut__btn text-left">
@@ -246,17 +246,22 @@
                 }
                 return question;
             });
-            this.questions.forEach((question, questionIndex) => {
-                question.options.forEach((option, optionIndex) => {
-                    if (question.type == 'translate-text') {
-                            this.answer[questionIndex] = '';
-                    } else if (question.type == 'multiple-correct-word-position') {
-                        question.options.forEach((option, optionIndex) => {
-                            option['selected'] = []
-                        });
-                    }
+            try {
+                this.questions.forEach((question, questionIndex) => {
+                    question.options.forEach((option, optionIndex) => {
+                        if (question.type == 'translate-text') {
+                                this.answer[questionIndex] = '';
+                        } else if (question.type == 'multiple-correct-word-position') {
+                            question.options.forEach((option, optionIndex) => {
+                                option['selected'] = []
+                            });
+                        }
+                    });
                 });
-            });
+            } catch (error) {
+                console.log(error);
+            }
+
             if (parseInt('{{ ($data->random_enabled ?? false) ? 1 : 0 }}')) {
                 this.questions = this.shuffle(this.questions);
             }
@@ -275,7 +280,7 @@
                 $('html,body').animate({
                     scrollTop: $('.quiz-reslut').offset().top
                 }, 500);
-                const passed = !this.isNotPassTheTest();
+                const passed = this.isPassTheTest();
 
                 // console.log(passed)
                 await axios.post(
@@ -319,7 +324,7 @@
             correctWordPositionSelectedIndex(index) {
                 console.log(index);
             },
-            isNotPassTheTest() {
+            isPassTheTest() {
                 const userCorrectCount = this.questions.filter((question, index) => {
                     if (question.type == 'correct-word-position' || question.type == 'multiple-choice') {
                         return question.selectedIndex == question.correct
@@ -340,10 +345,14 @@
                     }
                     return false
                 }).length;
-                return userCorrectCount == 0 || userCorrectCount < this.correct_requirement;
+                return userCorrectCount > this.correct_requirement;
             },
             compareTextOptionWithAnswer(option, questionIndex){
-                return option.toLowerCase().trim() == this.answer[questionIndex].toLowerCase().trim();
+                try {
+                    return option.toLowerCase().trim() == this.answer[questionIndex].toLowerCase().trim();
+                } catch (error) {
+                    return false;
+                }
             },
             trimSpaceAnwer(questionIndex){
                 this.answer[questionIndex] = this.answer[questionIndex].trim().replace(/\s\s+/g, ' ');
