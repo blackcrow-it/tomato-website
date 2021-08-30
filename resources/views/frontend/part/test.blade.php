@@ -131,7 +131,7 @@
                 <div class="quiz-reslut__right">
                     <ul class="quiz-reslut__list">
                         <li>Họ và tên: <b>{{ auth()->user()->name ?? auth()->user()->username }}</b></li>
-                        <li>Bài thi: <b>{{ $part->title }}</b></li>
+                        <li>Bài thi: <b>{{ $part->lesson->title }}</b></li>
                         <li>Câu hỏi <b>@{{ totalCorrectAnswer() }}</b></li>
                         <li>Tổng điểm: <b>@{{ totalPointCorrectAnswer() + '/' + 10 }}</b></li>
                         <li>
