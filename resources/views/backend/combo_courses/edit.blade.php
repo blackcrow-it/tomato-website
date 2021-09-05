@@ -216,7 +216,7 @@
                 @enderror
             </div> --}}
             <hr>
-            <div id="js-meta-data">
+            <div>
                 <div class="form-group">
                     <label>Meta Title</label>
                     <small><i class="fas fa-question-circle text-warning" data-toggle="popover" data-html="true" data-content="- Tiêu đề hiển thị trên các công cụ tìm kiếm.<br>- Nếu bỏ trống, hệ thống tự lấy theo tiêu đề."></i></small>
@@ -285,66 +285,6 @@
     const COURSE_ID = "{{ $data->id ?? 'undefined' }}";
 
     new Vue({
-        el: '#js-combo-course',
-        data: {
-            courses: [],
-            coursesId: [],
-            searchTimer: undefined,
-            searchResult: [],
-            keyword: undefined,
-            isSearching: false,
-            originPrice: 0
-        },
-        mounted() {
-            axios.get('{{ route("admin.combo_courses.get_courses_in_combo") }}', {
-                params: {
-                    id: COURSE_ID
-                }
-            }).then(res => {
-                res.forEach(item => {
-                    this.courses.push(item);
-                    this.coursesId.push(item.id);
-                    this.originPrice = this.originPrice + item.price;
-                });
-                console.log(this.originPrice)
-            });
-        },
-        methods: {
-            showAddItemModal() {
-                $('#js-course-modal').modal('show');
-            },
-            addItem(item) {
-                this.courses.push(item);
-                this.coursesId.push(item.id);
-                this.originPrice = this.originPrice + item.price;
-            },
-            deleteItem(id) {
-                const index = this.courses.findIndex(x => x.id == id);
-                this.originPrice = this.originPrice - this.courses[index].price;
-                this.courses.splice(index, 1);
-                this.coursesId.splice(index, 1);
-            },
-        },
-        watch: {
-            keyword(newVal, oldVal) {
-                this.isSearching = true;
-                clearTimeout(this.searchTimer);
-                this.searchTimer = setTimeout(() => {
-                    axios.get('{{ route("admin.course.search_course") }}', {
-                        params: {
-                            keyword: this.keyword
-                        }
-                    }).then(res => {
-                        this.searchResult = res;
-                    }).then(() => {
-                        this.isSearching = false;
-                    });
-                }, 1000);
-            }
-        }
-    });
-
-    new Vue({
         el: '#js-related-book',
         data: {
             relatedBooks: [],
@@ -394,13 +334,69 @@
     });
 
     new Vue({
-        el: '#js-meta-data',
+        el: '#js-combo-course',
         data: {
+            courses: [],
+            coursesId: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
+            originPrice: 0,
             metaTitle: "{!! $data->meta_title ?? old('meta_title') !!}",
             metaDesc: "{!! $data->meta_description ?? old('meta_description') !!}",
             ogTitle: "{!! $data->og_title ?? old('og_title') !!}",
             ogDesc: "{!! $data->og_description ?? old('og_description') !!}",
         },
+        mounted() {
+            console.log('call api');
+            axios.get('{{ route("admin.combo_courses.get_courses_in_combo") }}', {
+                params: {
+                    id: COURSE_ID
+                }
+            }).then(res => {
+                res.forEach(item => {
+                    this.courses.push(item);
+                    this.coursesId.push(item.id);
+                    this.originPrice = this.originPrice + item.price;
+                });
+                console.log(this.originPrice)
+            });
+            console.log('call api end');
+        },
+        methods: {
+            showAddItemModal() {
+                $('#js-course-modal').modal('show');
+            },
+            addItem(item) {
+                this.courses.push(item);
+                this.coursesId.push(item.id);
+                this.originPrice = this.originPrice + item.price;
+            },
+            deleteItem(id) {
+                const index = this.courses.findIndex(x => x.id == id);
+                this.originPrice = this.originPrice - this.courses[index].price;
+                this.courses.splice(index, 1);
+                this.coursesId.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.course.search_course") }}', {
+                        params: {
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res;
+                    }).then(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
+            }
+        }
     });
 </script>
 @endsection
