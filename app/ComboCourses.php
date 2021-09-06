@@ -15,7 +15,7 @@ class ComboCourses extends Model
 
     protected $fillable = [
         'title', 'slug', 'thumbnail', 'cover', 'description', 'content', 'enabled', 'price',
-        'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image'
+        'meta_title', 'meta_description', 'og_title', 'og_description', 'og_image', 'category_id', 'order_in_category',
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -44,5 +44,10 @@ class ComboCourses extends Model
             $this->items()->delete();
             parent::delete();
         });
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Category', 'category_id', 'id');
     }
 }

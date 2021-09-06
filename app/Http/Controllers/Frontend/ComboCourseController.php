@@ -98,7 +98,7 @@ class ComboCourseController extends Controller
         return view('frontend.combo_course.detail', [
             'combo_course' => $combo_course,
             // 'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
-            'breadcrumb' => [],
+            'breadcrumb' => Category::ancestorsAndSelf($combo_course->category_id),
             // 'added_to_cart' => $addedToCart,
             // 'is_owned' => $isUserOwnedThisCourse,
             // 'related_courses' => $relatedCourses,

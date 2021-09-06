@@ -77,6 +77,10 @@
                         <label class="form-check-label" for="cr-type-1">Khóa học</label>
                     </div>
                     <div class="form-check-inline">
+                        <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-4" name="type" value="{{ \App\Constants\ObjectType::COMBO_COURSE }}" {{ ($data->type ?? old('type')) == \App\Constants\ObjectType::COMBO_COURSE ? 'checked' : '' }}>
+                        <label class="form-check-label" for="cr-type-4">Combo khoá học</label>
+                    </div>
+                    <div class="form-check-inline">
                         <input class="form-check-input @error('type') is-invalid @enderror" type="radio" id="cr-type-2" name="type" value="{{ \App\Constants\ObjectType::POST }}" {{ ($data->type ?? old('type')) == \App\Constants\ObjectType::POST ? 'checked' : '' }}>
                         <label class="form-check-label" for="cr-type-2">Bài viết</label>
                     </div>
