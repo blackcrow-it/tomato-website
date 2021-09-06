@@ -25,8 +25,17 @@ window.bsCustomFileInput = bsCustomFileInput;
 import Paginate from 'vuejs-paginate';
 Vue.component('paginate', Paginate);
 
-import moment from 'moment';
-window.moment = moment;
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+window.moment = extendMoment(Moment);
+
+import Draggable from 'vuedraggable';
+Vue.component('draggable', Draggable);
+
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.min.css';
+Vue.component('multiselect', Multiselect)
 
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';

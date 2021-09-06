@@ -237,14 +237,72 @@ if (!function_exists('get_teachers')) {
 
 // Hàm rút gọn ký tự
 if (!function_exists('truncate')) {
-    function truncate($text, $chars = 25) {
+    function truncate($text, $chars = 25)
+    {
         if (strlen($text) <= $chars) {
             return $text;
         }
-        $text = $text." ";
-        $text = substr($text,0,$chars);
-        $text = substr($text,0,strrpos($text,' '));
-        $text = $text."...";
+        $text = $text . " ";
+        $text = substr($text, 0, $chars);
+        $text = substr($text, 0, strrpos($text, ' '));
+        $text = $text . "...";
         return $text;
+    }
+}
+
+if (!function_exists('get_next_day')) {
+    function get_next_day($start = null, $end = null, $days_txt = null)
+    {
+        if($days_txt == null) {
+            return null;
+        }
+
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $weekdays = [1,2,3,4,5,6,0];
+        $days = explode(",", $days_txt);
+        usort($days, function($a, $b) use($weekdays){
+            return array_search($a, $weekdays) - array_search($b, $weekdays);
+         });
+        $now = (int)date('w');
+        if ($now == 0) {
+            if (time() < strtotime($end)) {
+                if (in_array($now, $days)) {
+                    return strtotime('now');
+                }
+            } else {
+                $nums = array_values(array_filter($days, function ($value) use ($now) {
+                    return $value != $now;
+                }));
+                
+                if (isset($nums[0])){
+                   return strtotime('next sunday +'. $nums[0]. 'days');
+                }
+            }
+        } else {
+            $nums = array_values(array_filter($days, function ($value) use ($now) {
+                return $value >= $now || $value == 0;
+            }));
+
+            if (isset($nums[0])) {
+                $curr = $nums[0];
+
+                if($curr == 0 && count($nums) == 1){
+                    return strtotime('next sunday');
+                }
+
+                if ($curr == $now){
+                    if(time()<strtotime($end)){
+                        return strtotime('now');
+                    } else{
+                        if(isset($nums[1])){
+                            return strtotime('last sunday +'. $nums[1]. 'days');
+                        }
+                    }   
+                } else {
+                    return strtotime('last sunday +'. $curr. 'days');
+                }
+            }       
+        }
+        return  null;
     }
 }

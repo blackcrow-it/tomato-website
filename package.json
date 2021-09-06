@@ -29,11 +29,13 @@
         "imask": "^6.0.5",
         "jquery": "^3.5.1",
         "moment": "^2.27.0",
+        "moment-range": "^4.0.2",
         "popper.js": "^1.16.1",
         "vue": "^2.6.11",
         "vue-ctk-date-time-picker": "^2.5.0",
         "vue-currency-input": "^1.22.4",
-        "vuedraggable": "^2.24.2",
+        "vue-multiselect": "^2.1.6",
+        "vuedraggable": "^2.24.3",
         "vuejs-paginate": "^2.1.0"
     }
 }

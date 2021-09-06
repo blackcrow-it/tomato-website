@@ -19,6 +19,16 @@
         </a>
     </li>
 @endcan
+
+@can('course.list')
+    <li class="nav-item">
+        <a href="{{ route('admin.practice_test.list') }}" class="nav-link {{ request()->routeIs('admin.practice_test.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-graduation-cap"></i>
+            <p>Thi thử</p>
+        </a>
+    </li>
+@endcan
+
 {{-- <li class="nav-item">
     <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-boxes"></i>
