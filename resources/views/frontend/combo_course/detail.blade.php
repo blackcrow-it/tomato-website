@@ -32,13 +32,33 @@
             <div class="row">
                 <div class="col-xl-3">
                     <div class="layout-sidebar">
-                        <div class="widget widget--lessonCat">
+                        <div class="widget widget--lessonCat sticky-top">
                             <h2 class="widget__title">Combo Khoá học</h2>
                             <div class="f-scroll">
                                 <ul>
-                                    <li class="current"><a href="#">Tiếng trung</a></li>
-                                    <li><a href="#">Tiếng Hàn</a></li>
-                                    <li><a href="#">Nhật</a></li>
+                                    @foreach(get_categories(null, 'combo-course-categories') as $c1)
+                                        <li class="{{ $c1->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                            <a href="{{ $c1->url }}">{{ $c1->title }}</a>
+                                            @if($c1->__subcategory_count > 0)
+                                                <ul class="submenu">
+                                                    @foreach(get_categories($c1->id, 'combo-course-categories') as $c2)
+                                                        <li class="{{ $c2->__subcategory_count > 0 ? 'menu-has-children' : null }}">
+                                                            <a href="{{ $c2->url }}">{{ $c2->title }}</a>
+                                                            @if($c2->__subcategory_count > 0)
+                                                                <ul class="submenu">
+                                                                    @foreach(get_categories($c2->id, 'combo-course-categories') as $c3)
+                                                                        <li class="">
+                                                                            <a href="{{ $c3->url }}">{{ $c3->title }}</a>
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
@@ -53,64 +73,67 @@
                 <div class="col-xl-9">
                     <div class="layout-content">
                         <div class="row spacing-custom lessonbox-wrap-style">
-                            {{-- {{dd($combo_course->items()->first()->course)}} --}}
-                            @foreach ($combo_course->items as $item)
-                            <div class="col-6 col-lg-4">
-                                <div class="lessonbox">
-                                    <div class="lessonbox__inner">
-                                        <a href="{{ $item->course->url }}" class="lessonbox__img">
-                                            <img src="{{ $item->course->thumbnail }}">
-                                        </a>
-                                        <div class="lessonbox__body">
-                                            @if($item->course->category)
-                                                <div class="lessonbox__cat">
-                                                    <a href="{{ $item->course->category->url }}">{{ $item->course->category->title }}</a>
-                                                </div>
-                                            @endif
-                                            <h3 class="lessonbox__title"><a href="{{ $item->course->url }}">{{ $item->course->title }}</a></h3>
-                                            <ul class="lessonbox__info">
-                                                <li>Bài học: {{ $item->course->lessons()->count() }} bài</li>
-                                                <li>Giảng viên: <a href="#">{{$item->course->teacher->name}}</a></li>
-                                                @switch($item->course->level)
-                                                    @case(\App\Constants\CourseLevel::ELEMENTARY)
-                                                        <li>Trình độ: Sơ cấp</li>
-                                                        @break
-                                                    @case(\App\Constants\CourseLevel::INTERMEDIATE)
-                                                        <li>Trình độ: Trung cấp</li>
-                                                        @break
-                                                    @case(\App\Constants\CourseLevel::ADVANCED)
-                                                        <li>Trình độ: Cao cấp</li>
-                                                        @break
-                                                    @default
-                                                        <li>Trình độ: Không phân loại</li>
-                                                        @break
-                                                @endswitch
-                                                {{-- <li>Đánh giá:
-                                                    <span class="lessonbox__rating">
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </span>
-                                                    (4.5)
-                                                </li> --}}
-                                            </ul>
+                            @if ($combo_course->items->count() > 0)
+                                @foreach ($combo_course->items as $item)
+                                <div class="col-6 col-lg-4">
+                                    <div class="lessonbox">
+                                        <div class="lessonbox__inner">
+                                            <a href="{{ $item->course->url }}" class="lessonbox__img">
+                                                <img src="{{ $item->course->thumbnail }}">
+                                            </a>
+                                            <div class="lessonbox__body">
+                                                @if($item->course->category)
+                                                    <div class="lessonbox__cat">
+                                                        <a href="{{ $item->course->category->url }}">{{ $item->course->category->title }}</a>
+                                                    </div>
+                                                @endif
+                                                <h3 class="lessonbox__title"><a href="{{ $item->course->url }}">{{ $item->course->title }}</a></h3>
+                                                <ul class="lessonbox__info">
+                                                    <li>Bài học: {{ $item->course->lessons()->count() }} bài</li>
+                                                    <li>Giảng viên: <a href="#">{{$item->course->teacher->name}}</a></li>
+                                                    @switch($item->course->level)
+                                                        @case(\App\Constants\CourseLevel::ELEMENTARY)
+                                                            <li>Trình độ: Sơ cấp</li>
+                                                            @break
+                                                        @case(\App\Constants\CourseLevel::INTERMEDIATE)
+                                                            <li>Trình độ: Trung cấp</li>
+                                                            @break
+                                                        @case(\App\Constants\CourseLevel::ADVANCED)
+                                                            <li>Trình độ: Cao cấp</li>
+                                                            @break
+                                                        @default
+                                                            <li>Trình độ: Không phân loại</li>
+                                                            @break
+                                                    @endswitch
+                                                    {{-- <li>Đánh giá:
+                                                        <span class="lessonbox__rating">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </span>
+                                                        (4.5)
+                                                    </li> --}}
+                                                </ul>
 
-                                            <div class="lessonbox__footer">
-                                                <div class="lessonbox__price">
-                                                    <ins>{{ currency($item->course->price) }}</ins>
-                                                    @if($item->course->original_price)
-                                                        <del>{{ currency($item->course->original_price) }}</del>
-                                                    @endif
+                                                <div class="lessonbox__footer">
+                                                    <div class="lessonbox__price">
+                                                        <ins>{{ currency($item->course->price) }}</ins>
+                                                        @if($item->course->original_price)
+                                                            <del>{{ currency($item->course->original_price) }}</del>
+                                                        @endif
+                                                    </div>
+                                                    <a href="{{ $item->course->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
                                                 </div>
-                                                <a href="{{ $item->course->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            @endforeach
+                                @endforeach
+                            @else
+                                <div style="font-size: 20px">Không có khoá học nào trong combo này</div>
+                            @endif
                         </div>
 
                         <div class="product-detail__detail">

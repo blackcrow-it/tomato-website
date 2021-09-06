@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Category;
 use DB;
 use Log;
 use Exception;
 use App\ComboCourses;
 use App\ComboCoursesItem;
+use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -26,6 +28,7 @@ class ComboCourseController extends Controller
     public function add()
     {
         return view('backend.combo_courses.edit', [
+            'categories' => $this->getCategoriesTraverse(),
         ]);
     }
 
@@ -64,6 +67,7 @@ class ComboCourseController extends Controller
         }
         return view('backend.combo_courses.edit', [
             'data' => $comboCourses,
+            'categories' => $this->getCategoriesTraverse(),
             'courses' => json_encode($listCourses)
         ]);
     }
@@ -151,5 +155,15 @@ class ComboCourseController extends Controller
             ->where('combo_courses_id', $id)
             ->get()
             ->pluck('course');
+    }
+
+    public function getCategoriesTraverse()
+    {
+        return categories_traverse(
+            Category::where('type', ObjectType::COMBO_COURSE)
+                ->orderBy('title', 'ASC')
+                ->get()
+                ->toTree()
+        );
     }
 }

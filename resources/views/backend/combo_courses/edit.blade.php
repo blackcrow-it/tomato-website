@@ -1,7 +1,7 @@
 @extends('backend.master')
 
 @section('title')
-@if(request()->routeIs('admin.course.add'))
+@if(request()->routeIs('admin.combo_courses.add'))
     Thêm combo khóa học mới
 @else
     Sửa combo khóa học
@@ -12,7 +12,7 @@
 <div class="row mb-2">
     <div class="col-sm-6">
         <h1 class="m-0 text-dark">
-            @if(request()->routeIs('admin.course.add'))
+            @if(request()->routeIs('admin.combo_courses.add'))
                 Thêm combo khóa học mới
             @else
                 Sửa combo khóa học
@@ -56,6 +56,18 @@
     <form action="" method="POST">
         @csrf
         <div class="card-body" id="js-combo-course">
+            <div class="form-group">
+                <label>Chọn danh mục</label>
+                <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                    <option value="">Không phân loại</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ (old('category_id') ?? $data->category_id ?? null) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
             <div class="form-group">
                 <label>Tiêu đề</label>
                 <input type="text" name="title" placeholder="Tiêu đề" value="{{ old('title') ?? $data->title ?? null }}" class="form-control @error('title') is-invalid @enderror">
