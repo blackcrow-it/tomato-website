@@ -28,7 +28,7 @@ class ComboCourses extends Model
 
     public function getUrlAttribute()
     {
-        return route('course', ['slug' => $this->slug, 'id' => $this->id]);
+        return route('combo_course', ['slug' => $this->slug, 'id' => $this->id]);
     }
 
     public function items()

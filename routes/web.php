@@ -36,11 +36,12 @@ Route::namespace('Frontend')
 
         Route::get('{slug}-c{id}.html', 'CourseController@index')->name('course')->where(['slug' => '.*', 'id' => '\d+']);
 
-        Route::get('{slug}-cb{id}.html', 'ComboCoursesController@index')->name('combo_courses')->where(['slug' => '.*', 'id' => '\d+']);
+        Route::get('{slug}-cb{id}.html', 'ComboCourseController@index')->name('combo_course')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::get('{slug}-b{id}.html', 'BookController@index')->name('book')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::get('khoa-hoc/tat-ca', 'CourseController@all')->name('course.all');
+        Route::get('combo-khoa-hoc/tat-ca', 'ComboCourseController@all')->name('combo_course.all');
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
         Route::middleware('auth')->group(function () {
