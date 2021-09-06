@@ -336,7 +336,7 @@ Route::prefix('admin')
                 Route::get('list', 'PracticeTestController@list')->name('list');
                 Route::get('add', 'PracticeTestController@add')->name('add');
                 Route::get('get_categories', 'PracticeTestController@get_categories')->name('get_categories');
-                Route::post('create', 'PracticeTestController@create')->name('create');
+                Route::post('submit-add', 'PracticeTestController@submitAdd')->name('submitAdd');
             });
         });
 

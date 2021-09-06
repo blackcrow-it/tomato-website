@@ -18,15 +18,13 @@ class CreateTablePracticeTestsTable extends Migration
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->integer('duration')->default(0);
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
             $table->timestamp('date')->nullable();
             $table->boolean('enabled');
             $table->boolean('loop');
             $table->integer('max_score_override')->nullable();
             $table->integer('pass_score_override')->nullable();
             $table->string('loop_days')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('category_id')->constrained('practice_test_categories')->onDelete('cascade');
         });

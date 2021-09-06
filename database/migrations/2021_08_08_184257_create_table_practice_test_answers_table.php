@@ -19,7 +19,7 @@ class CreateTablePracticeTestAnswersTable extends Migration
             $table->integer('index')->default(0);
             $table->boolean('enabled')->default(false);
             $table->boolean('correct')->default(false);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('question_id')->constrained('practice_test_questions')->onDelete('cascade');
         });

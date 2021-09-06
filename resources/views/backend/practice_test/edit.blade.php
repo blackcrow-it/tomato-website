@@ -88,28 +88,12 @@
                     <input v-model="model.title" type="text" name="title" placeholder="Tiêu đề" class="form-control">
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group col">
-                        <label>Thời gian bắt đầu</label>
-                        <div>
-                            <datetimepicker v-model="start_time" id="start_time" name="start_time" only-time format="HH:mm"
-                                formatted="HH:mm" label="Chọn thời gian" :no-label="true" />
-                        </div>
-                    </div>
-                    <div class="form-group col">
-                        <label>Thời gian kết thúc</label>
-                        <div>
-                            <datetimepicker v-model="end_time" name="end_time" id="end_time" only-time format="HH:mm"
-                                label="Chọn thời gian" formatted="HH:mm" :no-label="true" />
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-sm-1">
                         <div class="form-group">
                             <label>Lặp lại</label>
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input js-switch-enabled" id="cs-enabled-loop">
+                                <input type="checkbox" v-model="model.loop" class="custom-control-input js-switch-enabled" id="cs-enabled-loop">
                                 <label class="custom-control-label" for="cs-enabled-loop"></label>
                             </div>
                         </div>
@@ -130,9 +114,6 @@
                         <datetimepicker format="DD-MM-YYYY" formatted="DD-MM-YYYY" only-date v-model="model.targetDate"
                             label="Chọn ngày" :no-label="true" />
                     </div>
-                    @error('promo.start_on')
-                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Chọn ca thi</label><br>
@@ -234,8 +215,7 @@
                                             class="btn bg-gradient-primary mt-2"><i class="fa fa-plus "></i></button>
                                     </li>
                                 </draggable>
-                                <button type="button" @click="addQuestion(ss)" class="btn bg-gradient-primary mt-2">Thêm câu
-                                    hỏi</button>
+                                <button type="button" @click="addQuestion(ss)" class="btn bg-gradient-primary mt-2">Thêm câu hỏi</button>
                             </div>
                         </draggable>
                     </div>
@@ -262,7 +242,8 @@
                     selected_weekdays: [],
                     level: null,
                     title: null,
-                    duration: 0
+                    duration: 0,
+                    loop: false
                 },
                 levels: [],
                 language_id: initId,
@@ -409,7 +390,7 @@
                     if (!this.checkValid()) return
                     const formData = new FormData();
                     formData.append('data', JSON.stringify(this.model))
-                    axios.post('{{route('admin.practice_test.create')}}',
+                    axios.post('{{ route('admin.practice_test.submitAdd') }}',
                         formData
                     ).then(response => {
                         console.log('Submit Success')
