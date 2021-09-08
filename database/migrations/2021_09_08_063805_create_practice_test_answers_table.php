@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablePracticeTestQuestionsTable extends Migration
+class CreatePracticeTestAnswersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ class CreateTablePracticeTestQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('practice_test_questions', function (Blueprint $table) {
+        Schema::create('practice_test_answers', function (Blueprint $table) {
             $table->id();
             $table->text('content')->nullable();
-            $table->integer('level')->default(0);
-            $table->string('type', 30);
+            $table->integer('index')->default(0);
             $table->boolean('enabled')->default(false);
-            $table->integer('score')->default(0);
+            $table->boolean('correct')->default(false);
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
-            $table->foreignId('practice_test_id')->constrained('practice_tests')->onDelete('cascade');
-        }); 
+            $table->foreignId('question_id')->constrained('practice_test_questions')->onDelete('cascade');
+        });
     }
 
     /**
@@ -33,6 +32,6 @@ class CreateTablePracticeTestQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practice_test_questions');
+        Schema::dropIfExists('practice_test_answers');
     }
 }

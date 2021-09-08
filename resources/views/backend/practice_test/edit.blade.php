@@ -235,6 +235,7 @@
             el: '#edit_practice',
             data: {
                 model: {
+                    id: null,
                     sessions: [],
                     shifts: [],
                     language_id: initId,
@@ -243,7 +244,10 @@
                     level: null,
                     title: null,
                     duration: 0,
-                    loop: false
+                    loop: false,
+                    max_score_override:null,
+                    pass_score_override:null,
+                    enabled: false,
                 },
                 levels: [],
                 language_id: initId,
@@ -324,23 +328,22 @@
                 addAnswer: function(question) {
                     question.answers.push({
                         value: '',
-                        order: question.answers.length > 0 ? question.answers.length - 1 : 0,
+                        order: (question.answers.length - 1) +1,
                         correct: false
                     });
                 },
                 addQuestion: function(ss) {
                     ss.questions.push({
-                        order: ss.questions.length > 0 ? ss.questions.length - 1 : 0,
+                        order: ss.questions.length -1 + 1,
                         value: '',
                         answers: [],
                         type: 1,
                         media: null,
                     })
                 },
-                addSession: function(id) {
+                addSession: function() {
                     this.model.sessions.push({
                         questions: [],
-                        id: id,
                         type: 1
                     });
                 },
@@ -397,7 +400,6 @@
                     }).catch(e => {
                         console.log('Submit Fail')
                     });
-
                 }
             },
         })

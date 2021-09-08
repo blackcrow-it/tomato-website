@@ -8,6 +8,9 @@ use App\Repositories\PracticeTestRepo;
 use App\PracticeTestCategory;
 use DB;
 use App\PracticeTest;
+use Carbon\Carbon;
+use Exception;
+use Log;
 
 class PracticeTestController extends Controller
 {
@@ -49,14 +52,42 @@ class PracticeTestController extends Controller
 
     public function submitAdd(Request $request)
     {
+        try {
+            DB::beginTransaction();
+            $this->processFromRequest($request);
+            DB::commit();
+        } catch (Exception $ex) {
+            DB::rollBack();
+            Log::error($ex);
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    private function processFromRequest($request)
+    {
         $data = json_decode($request->all()['data']);
-        $pt_props = array(
-            'title' => $data->title,
-            'duration' => $data->duration,
-            'loop_days' => implode(", ", $data->selected_weekdays),
-            'loop' => $data->loop,
-        'date'=>$data->targetDate);
+        $id = $data->id;
+        dd($data->sessions);
         $pt = new PracticeTest();
-        dd($pt_props);
+        if (is_null($id)) {
+            $pt_props = array(
+                'title' => $data->title?:null,
+                'duration' => $data->duration?:null,
+                'loop_days' => implode(", ", $data->selected_weekdays)?:null,
+                'loop' => $data->loop?:false,
+                'max_score_override' => $data->max_score_override?:0,
+                'pass_score_override' => $data->pass_score_override?:0,
+                'date' => $data->targetDate,
+                'enabled' => $data->enabled?:false,
+                'created_at' => Carbon::now(),
+                'category_id' => $data->language_id,
+                'date' => $data->targetDate?:false
+            );
+            $pt->fill($pt_props);
+            $pt->save();
+        }
+        foreach ($data->sessions as $session) {
+            
+        }
     }
 }
