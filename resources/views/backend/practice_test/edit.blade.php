@@ -334,6 +334,7 @@
                 },
                 addQuestion: function(ss) {
                     ss.questions.push({
+                        id: null,
                         order: ss.questions.length -1 + 1,
                         value: '',
                         answers: [],
@@ -392,8 +393,16 @@
                 create() {
                     if (!this.checkValid()) return
                     const formData = new FormData();
+                    let questions = [];
+                    this.model.sessions.forEach((e)=>{
+                        e.questions.forEach((i)=>{
+                            i.session_id = e.type;
+                        })
+                        questions = [...questions, ...e.questions]
+                    })
+                    this.model.questions = questions;
                     formData.append('data', JSON.stringify(this.model))
-                    axios.post('{{ route('admin.practice_test.submitAdd') }}',
+                    axios.post('{{ route('admin.practice_test.submitAdd')}}',
                         formData
                     ).then(response => {
                         console.log('Submit Success')

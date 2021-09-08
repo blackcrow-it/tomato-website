@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\PracticeTestRepo;
 use App\PracticeTestCategory;
+use App\PracticeTestQuestion;
 use DB;
 use App\PracticeTest;
 use Carbon\Carbon;
@@ -67,27 +68,37 @@ class PracticeTestController extends Controller
     {
         $data = json_decode($request->all()['data']);
         $id = $data->id;
-        dd($data->sessions);
+        $questions = [];
         $pt = new PracticeTest();
         if (is_null($id)) {
             $pt_props = array(
-                'title' => $data->title?:null,
-                'duration' => $data->duration?:null,
-                'loop_days' => implode(", ", $data->selected_weekdays)?:null,
-                'loop' => $data->loop?:false,
-                'max_score_override' => $data->max_score_override?:0,
-                'pass_score_override' => $data->pass_score_override?:0,
+                'title' => $data->title ?: null,
+                'duration' => $data->duration ?: null,
+                'loop_days' => implode(", ", $data->selected_weekdays) ?: null,
+                'loop' => $data->loop ?: false,
+                'max_score_override' => $data->max_score_override ?: 0,
+                'pass_score_override' => $data->pass_score_override ?: 0,
                 'date' => $data->targetDate,
-                'enabled' => $data->enabled?:false,
+                'enabled' => $data->enabled ?: false,
                 'created_at' => Carbon::now(),
                 'category_id' => $data->language_id,
-                'date' => $data->targetDate?:false
+                'date' => $data->targetDate ?: false
             );
-            $pt->fill($pt_props);
-            $pt->save();
+            //$pt->fill($pt_props);
+            //$pt->save();
         }
-        foreach ($data->sessions as $session) {
-            
+
+        $input_questions = $data->questions;
+        $db_questions = PracticeTestQuestion::where('practice_test_id', $id);
+        $db_questions->whereNotIn('id', array_map(function ($value) {
+            return $value->id;
+        }, $input_questions))->delete();
+
+        foreach ($input_questions as $question) {
+            $exist = $db_questions->where('id', $question->id)->first();
+            if(is_null($exist)){
+                $exist = new PracticeTestQuestion(array('content'=> $question->content));
+            }
         }
     }
 }
