@@ -63,6 +63,12 @@
                                         <a href="{{ $item->course->url }}" target="_blank">{{ $item->course->title }}</a>
                                     </div>
                                     @break
+                                @case(\App\Constants\ObjectType::COMBO_COURSE)
+                                    <div>
+                                        Combo khóa học:
+                                        <a href="{{ $item->comboCourse->url }}" target="_blank">{{ $item->comboCourse->title }}</a>
+                                    </div>
+                                    @break
                                 @case(\App\Constants\ObjectType::BOOK)
                                     <div>
                                         Sách:

@@ -184,10 +184,22 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Tổng tiền</td>
-                                                        <td class="tongtien"><b>{{ currency($combo_course->price) }}</b><br><br><a href="#" class="btn">Mua combo</a></td>
+                                                        <td class="tongtien">
+                                                            <b>{{ currency($combo_course->price) }}</b><br><br>
+                                                            {{-- <button type="button" class="btn" data-form="#add-to-cart">Mua combo</button> --}}
+                                                            <button type="button" data-form="#add-to-cart" class="btn btn-add-to-cart">
+                                                                <span class="add-to-cart-text">Thêm vào giỏ</span>
+                                                                <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
+                                                                <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
+                                                            </button>
+                                                        </td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
+                                            <form action="{{ route('cart.add') }}" id="add-to-cart" class="invisible">
+                                                <input type="hidden" name="object_id" value="{{ $combo_course->id }}">
+                                                <input type="hidden" name="type" value="{{ \App\Constants\ObjectType::COMBO_COURSE }}">
+                                            </form>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="tab-tailieu" role="tabpanel">
