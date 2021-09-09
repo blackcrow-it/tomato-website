@@ -24,4 +24,9 @@ class InvoiceItem extends BaseModel
     {
         return $this->belongsTo(Course::class, 'object_id', 'id');
     }
+
+    public function comboCourse()
+    {
+        return $this->belongsTo(ComboCourses::class, 'object_id', 'id');
+    }
 }
