@@ -43,6 +43,7 @@ class CategoryRequest extends FormRequest
                     ObjectType::COURSE,
                     ObjectType::POST,
                     ObjectType::BOOK,
+                    ObjectType::COMBO_COURSE,
                 ]),
             ],
             'url' => 'nullable|url',

@@ -125,6 +125,9 @@ Chi tiết đơn hàng
                                 @case(\App\Constants\ObjectType::COURSE)
                                     Khóa học
                                     @break
+                                @case(\App\Constants\ObjectType::COMBO_COURSE)
+                                    Combo khóa học
+                                    @break
                                 @case(\App\Constants\ObjectType::BOOK)
                                     Sách
                                     @break
@@ -135,6 +138,10 @@ Chi tiết đơn hàng
                                 @case(\App\Constants\ObjectType::COURSE)
                                     <a href="{{ $item->course->url }}" target="_blank">{{ $item->course->title }}</a><br>
                                     <em><small>Giá: {{ currency($item->course->price) }}</small></em>
+                                    @break
+                                @case(\App\Constants\ObjectType::COMBO_COURSE)
+                                    <a href="{{ $item->comboCourse->url }}" target="_blank">{{ $item->comboCourse->title }}</a><br>
+                                    <em><small>Giá: {{ currency($item->comboCourse->price) }}</small></em>
                                     @break
                                 @case(\App\Constants\ObjectType::BOOK)
                                     <a href="{{ $item->book->url }}" target="_blank">{{ $item->book->title }}</a><br>
