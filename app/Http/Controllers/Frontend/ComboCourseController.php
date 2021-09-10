@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Cart;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Setting;
 use App\Category;
 use App\ComboCourses;
+use App\ComboRelatedCombo;
+use App\Constants\ObjectType;
+use App\UserComboCourse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class ComboCourseController extends Controller
@@ -53,37 +58,32 @@ class ComboCourseController extends Controller
             return redirect()->route('home');
         }
 
-        // $relatedCourses = CourseRelatedCourse::query()
-        //     ->with([
-        //         'related_course',
-        //         'related_course.teacher'
-        //     ])
-        //     ->whereHas('related_course', function (Builder $query) {
-        //         $query->where('enabled', true);
-        //     })
-        //     ->where('course_id', $course->id)
-        //     ->orderBy('id', 'asc')
-        //     ->get()
-        //     ->pluck('related_course');
+        $relatedCombosCourse = ComboRelatedCombo::query()
+            ->with([
+                'related_combo_course',
+            ])
+            ->whereHas('related_combo_course', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('combo_course_id', $combo_course->id)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->pluck('related_combo_course');
 
-        // $isUserOwnedThisCourse = auth()->check()
-        //     ? UserCourse::query()
-        //     ->where('user_id', auth()->id())
-        //     ->where('course_id', $course->id)
-        //     ->where(function ($query) {
-        //         $query->orWhere('expires_on', '>', now());
-        //         $query->orWhereNull('expires_on');
-        //     })
-        //     ->exists()
-        //     : false;
+        $isUserOwnedThisCourse = auth()->check()
+            ? UserComboCourse::query()
+            ->where('user_id', auth()->id())
+            ->where('combo_course_id', $combo_course->id)
+            ->exists()
+            : false;
 
-        // $addedToCart = !$isUserOwnedThisCourse && auth()->check()
-        //     ? Cart::query()
-        //     ->where('user_id', auth()->id())
-        //     ->where('type', ObjectType::COURSE)
-        //     ->where('object_id', $course->id)
-        //     ->exists()
-        //     : false;
+        $addedToCart = !$isUserOwnedThisCourse && auth()->check()
+            ? Cart::query()
+            ->where('user_id', auth()->id())
+            ->where('type', ObjectType::COMBO_COURSE)
+            ->where('object_id', $combo_course->id)
+            ->exists()
+            : false;
 
         if (Auth::check()) {
             if (!Auth::user()->is_super_admin && !Auth::user()->roles()->exists()) {
@@ -99,9 +99,9 @@ class ComboCourseController extends Controller
             'combo_course' => $combo_course,
             // 'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
             'breadcrumb' => Category::ancestorsAndSelf($combo_course->category_id),
-            // 'added_to_cart' => $addedToCart,
-            // 'is_owned' => $isUserOwnedThisCourse,
-            // 'related_courses' => $relatedCourses,
+            'added_to_cart' => $addedToCart,
+            'is_owned' => $isUserOwnedThisCourse,
+            'related_combos_course' => $relatedCombosCourse,
             // 'related_books' => $relatedBooks,
             'status' => $status,
             'is_trial' => $isTrial,

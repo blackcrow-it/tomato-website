@@ -210,6 +210,8 @@ Route::prefix('admin')
                 Route::post('enabled', 'ComboCourseController@submitEnabled')->name('enabled');
                 Route::post('delete/{id}', 'ComboCourseController@submitDelete')->name('delete');
                 Route::get('get-courses', 'ComboCourseController@getCoursesInCombo')->name('get_courses_in_combo');
+                Route::get('search', 'ComboCourseController@getSearch')->name('search');
+                Route::get('get-related-combo-course', 'ComboCourseController@getRelatedComboCourse')->name('get_related_combo_course');
             });
 
             Route::prefix('lesson')->name('lesson.')->group(function () {

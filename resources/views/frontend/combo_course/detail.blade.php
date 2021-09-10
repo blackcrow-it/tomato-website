@@ -187,7 +187,7 @@
                                                         <td class="tongtien">
                                                             <b>{{ currency($combo_course->price) }}</b><br><br>
                                                             {{-- <button type="button" class="btn" data-form="#add-to-cart">Mua combo</button> --}}
-                                                            <button type="button" data-form="#add-to-cart" class="btn btn-add-to-cart">
+                                                            <button type="button" data-form="#add-to-cart" class="btn btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
                                                                 <span class="add-to-cart-text">Thêm vào giỏ</span>
                                                                 <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
                                                                 <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
@@ -204,62 +204,30 @@
                                     </div>
                                     <div class="tab-pane fade" id="tab-tailieu" role="tabpanel">
                                         <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
+                                            @foreach($related_combos_course as $item)
                                             <div class="lessonbox">
                                                 <div class="lessonbox__inner">
                                                     <div class="lessonbox__body">
-                                                        <h3 class="lessonbox__title"><a href="combo-khoahoc.html">Combo khoá học tiếng Trung GT1 + GT2</a></h3>
+                                                        <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
                                                         <div class="lessonbox__footer">
                                                             <div class="lessonbox__price">
-                                                                <ins>499.000đ</ins>
-                                                                <del>1.000.000đ</del>
+                                                                <?php
+                                                                    $price_origin = 0;
+                                                                    foreach ($item->items as $c_course) {
+                                                                        $price_origin += $c_course->course->price;
+                                                                    }
+                                                                ?>
+                                                                <ins>{{ currency($item->price) }}</ins>
+                                                                @if ($item->price < $price_origin)
+                                                                    <del>{{ currency($price_origin) }}</del>
+                                                                @endif
                                                             </div>
-                                                            <a href="combo-khoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
+                                                            <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="lessonbox">
-                                                <div class="lessonbox__inner">
-                                                    <div class="lessonbox__body">
-                                                        <h3 class="lessonbox__title"><a href="combo-khoahoc.html">Combo khoá học tiếng Hàn GT1 + GT2</a></h3>
-                                                        <div class="lessonbox__footer">
-                                                            <div class="lessonbox__price">
-                                                                <ins>499.000đ</ins>
-                                                                <del>1.000.000đ</del>
-                                                            </div>
-                                                            <a href="combo-khoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="lessonbox">
-                                                <div class="lessonbox__inner">
-                                                    <div class="lessonbox__body">
-                                                        <h3 class="lessonbox__title"><a href="combo-khoahoc.html">Combo khoá học tiếng Nhật GT1 + GT2</a></h3>
-                                                        <div class="lessonbox__footer">
-                                                            <div class="lessonbox__price">
-                                                                <ins>499.000đ</ins>
-                                                                <del>1.000.000đ</del>
-                                                            </div>
-                                                            <a href="combo-khoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="lessonbox">
-                                                <div class="lessonbox__inner">
-                                                    <div class="lessonbox__body">
-                                                        <h3 class="lessonbox__title"><a href="combo-khoahoc.html">Combo khoá học tiếng Nhật GT1 + GT2</a></h3>
-                                                        <div class="lessonbox__footer">
-                                                            <div class="lessonbox__price">
-                                                                <ins>499.000đ</ins>
-                                                                <del>1.000.000đ</del>
-                                                            </div>
-                                                            <a href="combo-khoahoc.html" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="tab-danhgia" role="tabpanel">

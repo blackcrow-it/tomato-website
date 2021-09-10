@@ -190,6 +190,71 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label>Combo khóa học liên quan</label>
+                <div>
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <tr v-for="item in relatedComboCourses" :key="item.id">
+                                    <td>
+                                        @{{ item.id }}
+                                        <input type="hidden" name="__related_combo_courses[]" :value="item.id">
+                                    </td>
+                                    <td>
+                                        <img :src="item.thumbnail" class="img-thumbnail">
+                                    </td>
+                                    <td>@{{ item.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteItemRelated(item.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddItemModalRelated"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-related-combo-course-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn combo khóa học liên quan</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm combo khóa học" v-model="keywordComboCourses">
+                                    </div>
+                                    <div class="text-center" v-if="isSearchingComboCourses">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="item in searchResultComboCourses" :key="item.id">
+                                            <td>@{{ item.id }}</td>
+                                            <td>
+                                                <img :src="item.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ item.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addItemRelated(item)" :disabled="comboRelatedId.includes(item.id)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('__related_combo_courses')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Giá tiền (gốc @{{ currency(originPrice) }})</label>
                 <input type="text" name="price" placeholder="Giá tiền" value="{{ old('price') ?? $data->price ?? null }}" class="form-control currency @error('price') is-invalid @enderror">
                 @error('price')
@@ -294,56 +359,7 @@
 
 @section('script')
 <script>
-    const COURSE_ID = "{{ $data->id ?? 'undefined' }}";
-
-    new Vue({
-        el: '#js-related-book',
-        data: {
-            relatedBooks: [],
-            searchTimer: undefined,
-            searchResult: [],
-            keyword: undefined,
-            isSearching: false,
-        },
-        mounted() {
-            axios.get('{{ route("admin.course.get_related_book") }}', {
-                params: {
-                    id: COURSE_ID
-                }
-            }).then(res => {
-                this.relatedBooks = res;
-            });
-        },
-        methods: {
-            showAddItemModal() {
-                $('#js-related-book-modal').modal('show');
-            },
-            addItem(item) {
-                this.relatedBooks.push(item);
-            },
-            deleteItem(id) {
-                const index = this.relatedBooks.findIndex(x => x.id == id);
-                this.relatedBooks.splice(index, 1);
-            },
-        },
-        watch: {
-            keyword(newVal, oldVal) {
-                this.isSearching = true;
-                clearTimeout(this.searchTimer);
-                this.searchTimer = setTimeout(() => {
-                    axios.get('{{ route("admin.book.search_book") }}', {
-                        params: {
-                            keyword: this.keyword
-                        }
-                    }).then(res => {
-                        this.searchResult = res;
-                    }).then(() => {
-                        this.isSearching = false;
-                    });
-                }, 1000);
-            }
-        }
-    });
+    const COMBO_COURSE_ID = "{{ $data->id ?? 'undefined' }}";
 
     new Vue({
         el: '#js-combo-course',
@@ -359,12 +375,18 @@
             metaDesc: "{!! $data->meta_description ?? old('meta_description') !!}",
             ogTitle: "{!! $data->og_title ?? old('og_title') !!}",
             ogDesc: "{!! $data->og_description ?? old('og_description') !!}",
+
+            comboRelatedId: [],
+            relatedComboCourses: [],
+            searchTimerComboCourses: undefined,
+            searchResultComboCourses: [],
+            keywordComboCourses: undefined,
+            isSearchingComboCourses: false,
         },
         mounted() {
-            console.log('call api');
             axios.get('{{ route("admin.combo_courses.get_courses_in_combo") }}', {
                 params: {
-                    id: COURSE_ID
+                    id: COMBO_COURSE_ID
                 }
             }).then(res => {
                 res.forEach(item => {
@@ -372,9 +394,18 @@
                     this.coursesId.push(item.id);
                     this.originPrice = this.originPrice + item.price;
                 });
-                console.log(this.originPrice)
             });
-            console.log('call api end');
+
+            axios.get('{{ route("admin.combo_courses.get_related_combo_course") }}', {
+                params: {
+                    id: COMBO_COURSE_ID
+                }
+            }).then(res => {
+                res.forEach(item => {
+                    this.relatedComboCourses.push(item);
+                    this.comboRelatedId.push(item.id);
+                });
+            });
         },
         methods: {
             showAddItemModal() {
@@ -391,6 +422,19 @@
                 this.courses.splice(index, 1);
                 this.coursesId.splice(index, 1);
             },
+
+            showAddItemModalRelated() {
+                $('#js-related-combo-course-modal').modal('show');
+            },
+            addItemRelated(item) {
+                this.relatedComboCourses.push(item);
+                this.comboRelatedId.push(item.id);
+            },
+            deleteItemRelated(id) {
+                const index = this.relatedComboCourses.findIndex(x => x.id == id);
+                this.relatedComboCourses.splice(index, 1);
+                this.comboRelatedId.splice(index, 1);
+            },
         },
         watch: {
             keyword(newVal, oldVal) {
@@ -405,6 +449,25 @@
                         this.searchResult = res;
                     }).then(() => {
                         this.isSearching = false;
+                    });
+                }, 1000);
+            },
+            keywordComboCourses(newVal, oldVal) {
+                this.isSearchingComboCourses = true;
+                clearTimeout(this.searchTimerComboCourses);
+                this.searchTimerComboCourses = setTimeout(() => {
+                    axios.get('{{ route("admin.combo_courses.search") }}', {
+                        params: {
+                            keyword: this.keywordComboCourses
+                        }
+                    }).then(res => {
+                        res.forEach(item => {
+                            if (item.id != COMBO_COURSE_ID) {
+                                this.searchResultComboCourses.push(item);
+                            }
+                        });
+                    }).then(() => {
+                        this.isSearchingComboCourses = false;
                     });
                 }, 1000);
             }
