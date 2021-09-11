@@ -242,39 +242,6 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="tab-tailieu" role="tabpanel">
-                                        <h2>Combo khoá học</h2>
-                                        @if (count($related_combos_course) > 0)
-                                        <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
-                                            @foreach($related_combos_course as $item)
-                                            <div class="lessonbox">
-                                                <div class="lessonbox__inner">
-                                                    <div class="lessonbox__body">
-                                                        <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
-                                                        <div class="lessonbox__footer">
-                                                            <div class="lessonbox__price">
-                                                                <?php
-                                                                    $price_origin = 0;
-                                                                    foreach ($item->items as $c_course) {
-                                                                        $price_origin += $c_course->course->price;
-                                                                    }
-                                                                ?>
-                                                                <ins>{{ currency($item->price) }}</ins>
-                                                                @if ($item->price < $price_origin)
-                                                                    <del>{{ currency($price_origin) }}</del>
-                                                                @endif
-                                                            </div>
-                                                            <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                        @else
-                                        <div>Đang cập nhật ...</div>
-                                        @endif
-                                        <br/><br/>
-                                        <h2>Sách</h2>
                                         @if (count($related_books) > 0)
                                         <div class="bookBook-retale">
                                             <div class="owl-carousel" data-slide-four-item>
@@ -478,6 +445,44 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="product-detail__relate">
+                            <div class="title">
+                                <div class="title__title">Combo khoá học liên quan</div>
+                            </div>
+
+
+                            @if (count($related_combos_course) > 0)
+                            <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
+                                @foreach($related_combos_course as $item)
+                                <div class="lessonbox">
+                                    <div class="lessonbox__inner">
+                                        <div class="lessonbox__body">
+                                            <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
+                                            <div class="lessonbox__footer">
+                                                <div class="lessonbox__price">
+                                                    <?php
+                                                        $price_origin = 0;
+                                                        foreach ($item->items as $c_course) {
+                                                            $price_origin += $c_course->course->price;
+                                                        }
+                                                    ?>
+                                                    <ins>{{ currency($item->price) }}</ins>
+                                                    @if ($item->price < $price_origin)
+                                                        <del>{{ currency($price_origin) }}</del>
+                                                    @endif
+                                                </div>
+                                                <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                            @else
+                            <div>Đang cập nhật ...</div>
+                            @endif
                         </div>
                     </div>
                 </div>
