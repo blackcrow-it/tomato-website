@@ -126,19 +126,27 @@ class PostController extends Controller
         PostRelatedPost::where('post_id', $post->id)->delete();
         $relatedPostIds = $request->input('__related_posts', []);
         foreach ($relatedPostIds as $relatedPostId) {
-            $related = new PostRelatedPost();
-            $related->post_id = $post->id;
-            $related->related_post_id = $relatedPostId;
-            $related->save();
+            try {
+                $related = new PostRelatedPost();
+                $related->post_id = $post->id;
+                $related->related_post_id = $relatedPostId;
+                $related->save();
+            } catch (Exception $ex) {
+                Log::error($ex);
+            }
         }
 
         PostRelatedCourse::where('post_id', $post->id)->delete();
         $relatedCourseIds = $request->input('__related_courses', []);
         foreach ($relatedCourseIds as $relatedCourseId) {
-            $related = new PostRelatedCourse();
-            $related->post_id = $post->id;
-            $related->related_course_id = $relatedCourseId;
-            $related->save();
+            try {
+                $related = new PostRelatedCourse();
+                $related->post_id = $post->id;
+                $related->related_course_id = $relatedCourseId;
+                $related->save();
+            } catch (Exception $ex) {
+                Log::error($ex);
+            }
         }
     }
 

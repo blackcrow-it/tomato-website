@@ -11,11 +11,11 @@ class PostRelatedPost extends BaseModel
 
     public function post()
     {
-        return $this->belongsTo('App\Post', 'post_id', 'id');
+        return $this->belongsTo(Post::class, 'post_id', 'id');
     }
 
     public function related_post()
     {
-        return $this->belongsTo('App\Post', 'related_post_id', 'id');
+        return $this->belongsTo(Post::class, 'related_post_id', 'id');
     }
 }
