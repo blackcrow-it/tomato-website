@@ -219,12 +219,18 @@
                                                         <td>Tổng tiền</td>
                                                         <td class="tongtien">
                                                             <b>{{ currency($combo_course->price) }}</b><br><br>
-                                                            {{-- <button type="button" class="btn" data-form="#add-to-cart">Mua combo</button> --}}
+                                                            @if(auth()->check())
                                                             <button type="button" data-form="#add-to-cart" class="btn btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
                                                                 <span class="add-to-cart-text">Thêm vào giỏ</span>
                                                                 <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
                                                                 <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
                                                             </button>
+                                                            @else
+                                                            <a href="{{ route('login') }}" class="btn">Đăng nhập</a>
+                                                            <div class="product-detal__btn">
+                                                                <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
+                                                            </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 </tfoot>
