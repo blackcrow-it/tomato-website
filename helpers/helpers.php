@@ -1,6 +1,7 @@
 <?php
 
 use App\Category;
+use App\ComboCourses;
 use App\Constants\ObjectType;
 use App\Course;
 use App\CoursePosition;
@@ -150,6 +151,51 @@ if (!function_exists('get_courses')) {
 
         if ($paginate === true) {
             $list = $query->paginate(config('template.paginate.list.course'));
+        } else if ($paginate > 0) {
+            $list = $query->paginate($paginate);
+        } else {
+            $list = $query->get();
+        }
+
+        return $list;
+    }
+}
+
+if (!function_exists('get_combos_course')) {
+    function get_combos_course($category_id = null, $position = null, $paginate = false)
+    {
+        $query = ComboCourses::query()
+            ->with([
+                'category' => function ($q) {
+                    $q->where('enabled', true);
+                },
+            ])
+            ->where('enabled', true);
+
+        if ($category_id) {
+            $categoryIds = Category::descendantsAndSelf($category_id)->pluck('id');
+            $query
+                ->whereIn('category_id', $categoryIds)
+                ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC');
+        }
+
+        // if ($position) {
+        //     $coursePosition = CoursePosition::query()
+        //         ->select([
+        //             'course_id',
+        //             'order_in_position'
+        //         ])
+        //         ->where('code', $position);
+
+        //     $query
+        //         ->joinSub($coursePosition, 'course_position', 'course_position.course_id', '=', 'courses.id')
+        //         ->orderByRaw('CASE WHEN course_position.order_in_position > 0 THEN 0 ELSE 1 END, course_position.order_in_position asc');
+        // }
+
+        $query->orderBy('combo_courses.created_at', 'desc');
+
+        if ($paginate === true) {
+            $list = $query->paginate(config('template.paginate.list.combo_course'));
         } else if ($paginate > 0) {
             $list = $query->paginate($paginate);
         } else {

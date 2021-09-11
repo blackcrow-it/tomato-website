@@ -108,6 +108,10 @@
                         @foreach(get_courses($category->id, 'home-courses') as $course)
                             @include('frontend.category.course_item', [ 'course' => $course ])
                         @endforeach
+
+                        @foreach(get_combos_course($category->id, 'home-courses') as $combo_course)
+                            @include('frontend.category.combo_course_item', [ 'combo_course' => $combo_course ])
+                        @endforeach
                     </div>
                 </div>
             @endforeach
