@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Book;
+use App\ComboCourses;
 use App\Constants\ObjectType;
 use App\Constants\RechargeStatus;
 use App\Course;
@@ -57,6 +58,9 @@ class UserController extends Controller
             switch ($item->type) {
                 case ObjectType::COURSE:
                     $item->object = Course::with('category')->find($item->object_id);
+                    break;
+                case ObjectType::COMBO_COURSE:
+                    $item->object = ComboCourses::with('category')->find($item->object_id);
                     break;
                 case ObjectType::BOOK:
                     $item->object = Book::with('category')->find($item->object_id);
