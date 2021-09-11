@@ -159,10 +159,10 @@
                             <div class="tabJs">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#tabgioithieu" role="tab" aria-controls="tabgioithieu" aria-selected="true">Giới thiệu</a>
+                                        <a class="nav-link active" data-toggle="tab" href="#tabbuy" role="tab" aria-controls="tabbuy" aria-selected="true">Mua combo</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabbuy" role="tab" aria-controls="tabbuy" aria-selected="true">Mua combo</a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabgioithieu" role="tab" aria-controls="tabgioithieu" aria-selected="true">Giới thiệu</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tab-tailieu" role="tab" aria-controls="tab-tailieu" aria-selected="false">Tài liệu liên quan</a>
@@ -175,7 +175,7 @@
                                     </li> --}}
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="tabgioithieu" role="tabpanel">
+                                    <div class="tab-pane fade" id="tabgioithieu" role="tabpanel">
                                         <div class="entry-detail">
                                             {!! $combo_course->content !!}
                                         </div>
@@ -183,7 +183,7 @@
                                             <div class="sharethis-inline-share-buttons"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="tabbuy" role="tabpanel">
+                                    <div class="tab-pane fade show active" id="tabbuy" role="tabpanel">
                                         <div class="giacombo">
                                             <table>
                                                 <thead>
@@ -219,12 +219,18 @@
                                                         <td>Tổng tiền</td>
                                                         <td class="tongtien">
                                                             <b>{{ currency($combo_course->price) }}</b><br><br>
-                                                            {{-- <button type="button" class="btn" data-form="#add-to-cart">Mua combo</button> --}}
+                                                            @if(auth()->check())
                                                             <button type="button" data-form="#add-to-cart" class="btn btn-add-to-cart {{ $added_to_cart ? 'added' : '' }}">
                                                                 <span class="add-to-cart-text">Thêm vào giỏ</span>
                                                                 <span class="loading-text"><i class="fa fa-opencart"></i> Đang thêm...</span>
                                                                 <span class="complete-text"><i class="fa fa-check"></i> Đã thêm</span>
                                                             </button>
+                                                            @else
+                                                            <a href="{{ route('login') }}" class="btn">Đăng nhập</a>
+                                                            <div class="product-detal__btn">
+                                                                <div class="btn-min">hoặc <a href="#consultationForm" class="btn-scroll-form">Đăng ký nhận tư vấn</a></div>
+                                                            </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 </tfoot>
