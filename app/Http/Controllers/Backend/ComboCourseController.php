@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Category;
+use App\ComboCourseRelatedBook;
 use DB;
 use Log;
 use Exception;
@@ -124,6 +125,15 @@ class ComboCourseController extends Controller
             $related->related_combo_course_id = $relatedComboCourseId;
             $related->save();
         }
+
+        ComboCourseRelatedBook::where('combo_course_id', $comboCourse->id)->delete();
+        $relatedBookIds = $request->input('__related_books', []);
+        foreach ($relatedBookIds as $relatedBookId) {
+            $related = new ComboCourseRelatedBook();
+            $related->combo_course_id = $comboCourse->id;
+            $related->related_book_id = $relatedBookId;
+            $related->save();
+        }
     }
 
     public function submitDelete($id)
@@ -204,5 +214,14 @@ class ComboCourseController extends Controller
             ->where('combo_course_id', $id)
             ->get()
             ->pluck('related_combo_course');
+    }
+
+    public function getRelatedBook(Request $request)
+    {
+        $id = $request->input('id');
+        return ComboCourseRelatedBook::with('related_book')
+            ->where('combo_course_id', $id)
+            ->get()
+            ->pluck('related_book');
     }
 }

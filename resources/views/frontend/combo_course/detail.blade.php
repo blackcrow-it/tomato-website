@@ -140,10 +140,16 @@
                             <div class="tabJs">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#tabgioithieu" role="tab" aria-controls="tabgioithieu" aria-selected="true">Mua combo</a>
+                                        <a class="nav-link active" data-toggle="tab" href="#tabgioithieu" role="tab" aria-controls="tabgioithieu" aria-selected="true">Giới thiệu</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tab-tailieu" role="tab" aria-controls="tab-tailieu" aria-selected="false">Gói combo liên quan</a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabbuy" role="tab" aria-controls="tabbuy" aria-selected="true">Mua combo</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-tailieu" role="tab" aria-controls="tab-tailieu" aria-selected="false">Tài liệu liên quan</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-binhluan" aria-selected="false">Bình luận</a>
                                     </li>
                                     {{-- <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá</a>
@@ -151,6 +157,14 @@
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="tabgioithieu" role="tabpanel">
+                                        <div class="entry-detail">
+                                            {!! $combo_course->content !!}
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="sharethis-inline-share-buttons"></div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tabbuy" role="tabpanel">
                                         <div class="giacombo">
                                             <table>
                                                 <thead>
@@ -203,6 +217,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="tab-tailieu" role="tabpanel">
+                                        <h2>Combo khoá học</h2>
                                         <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
                                             @foreach($related_combos_course as $item)
                                             <div class="lessonbox">
@@ -228,6 +243,20 @@
                                                 </div>
                                             </div>
                                             @endforeach
+                                        </div>
+                                        <br/><br/>
+                                        <h2>Sách</h2>
+                                        <div class="bookBook-retale">
+                                            <div class="owl-carousel" data-slide-four-item>
+                                                @foreach($related_books as $item)
+                                                    @include('frontend.category.book_item', [ 'book' => $item ])
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
+                                        <div class="commentbox-wrap">
+                                            <div class="fb-comments" data-href="{{ $combo_course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="tab-danhgia" role="tabpanel">

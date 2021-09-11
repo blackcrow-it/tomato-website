@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Setting;
 use App\Category;
+use App\ComboCourseRelatedBook;
 use App\ComboCourses;
 use App\ComboRelatedCombo;
 use App\Constants\ObjectType;
@@ -85,6 +86,16 @@ class ComboCourseController extends Controller
             ->exists()
             : false;
 
+        $relatedBooks = ComboCourseRelatedBook::query()
+            ->with('related_book')
+            ->whereHas('related_book', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('combo_course_id', $combo_course->id)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->pluck('related_book');
+
         if (Auth::check()) {
             if (!Auth::user()->is_super_admin && !Auth::user()->roles()->exists()) {
                 $combo_course->view++;
@@ -102,7 +113,7 @@ class ComboCourseController extends Controller
             'added_to_cart' => $addedToCart,
             'is_owned' => $isUserOwnedThisCourse,
             'related_combos_course' => $relatedCombosCourse,
-            // 'related_books' => $relatedBooks,
+            'related_books' => $relatedBooks,
             'status' => $status,
             'is_trial' => $isTrial,
             'consultation_background' => $consultationFormBg->value,

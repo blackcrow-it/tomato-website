@@ -255,6 +255,71 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label>Tài liệu liên quan</label>
+                <div>
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <tr v-for="item in relatedBooks" :key="item.id">
+                                    <td>
+                                        @{{ item.id }}
+                                        <input type="hidden" name="__related_books[]" :value="item.id">
+                                    </td>
+                                    <td>
+                                        <img :src="item.thumbnail" class="img-thumbnail">
+                                    </td>
+                                    <td>@{{ item.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteBook(item.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddBookModal"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-related-book-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn tài liệu liên quan</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm sách" v-model="keywordBooks">
+                                    </div>
+                                    <div class="text-center" v-if="isSearchingBooks">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="item in searchResultBooks" :key="item.id">
+                                            <td>@{{ item.id }}</td>
+                                            <td>
+                                                <img :src="item.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ item.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addBook(item)" :disabled="bookRelatedId.includes(item.id)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('__related_books')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Giá tiền (gốc @{{ currency(originPrice) }})</label>
                 <input type="text" name="price" placeholder="Giá tiền" value="{{ old('price') ?? $data->price ?? null }}" class="form-control currency @error('price') is-invalid @enderror">
                 @error('price')
@@ -382,6 +447,13 @@
             searchResultComboCourses: [],
             keywordComboCourses: undefined,
             isSearchingComboCourses: false,
+
+            bookRelatedId: [],
+            relatedBooks: [],
+            searchTimerBooks: undefined,
+            searchResultBooks: [],
+            keywordBooks: undefined,
+            isSearchingBooks: false,
         },
         mounted() {
             axios.get('{{ route("admin.combo_courses.get_courses_in_combo") }}', {
@@ -404,6 +476,17 @@
                 res.forEach(item => {
                     this.relatedComboCourses.push(item);
                     this.comboRelatedId.push(item.id);
+                });
+            });
+
+            axios.get('{{ route("admin.combo_courses.get_related_book") }}', {
+                params: {
+                    id: COMBO_COURSE_ID
+                }
+            }).then(res => {
+                res.forEach(item => {
+                    this.relatedBooks.push(item);
+                    this.bookRelatedId.push(item.id);
                 });
             });
         },
@@ -434,6 +517,19 @@
                 const index = this.relatedComboCourses.findIndex(x => x.id == id);
                 this.relatedComboCourses.splice(index, 1);
                 this.comboRelatedId.splice(index, 1);
+            },
+
+            showAddBookModal() {
+                $('#js-related-book-modal').modal('show');
+            },
+            addBook(item) {
+                this.relatedBooks.push(item);
+                this.bookRelatedId.push(item.id);
+            },
+            deleteBook(id) {
+                const index = this.relatedBooks.findIndex(x => x.id == id);
+                this.relatedBooks.splice(index, 1);
+                this.bookRelatedId.splice(index, 1);
             },
         },
         watch: {
@@ -468,6 +564,23 @@
                         });
                     }).then(() => {
                         this.isSearchingComboCourses = false;
+                    });
+                }, 1000);
+            },
+            keywordBooks(newVal, oldVal) {
+                this.isSearchingBooks = true;
+                clearTimeout(this.searchTimerBooks);
+                this.searchTimerBooks = setTimeout(() => {
+                    axios.get('{{ route("admin.book.search_book") }}', {
+                        params: {
+                            keyword: this.keywordBooks
+                        }
+                    }).then(res => {
+                        res.forEach(item => {
+                            this.searchResultBooks.push(item);
+                        });
+                    }).then(() => {
+                        this.isSearchingBooks = false;
                     });
                 }, 1000);
             }

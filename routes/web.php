@@ -212,6 +212,7 @@ Route::prefix('admin')
                 Route::get('get-courses', 'ComboCourseController@getCoursesInCombo')->name('get_courses_in_combo');
                 Route::get('search', 'ComboCourseController@getSearch')->name('search');
                 Route::get('get-related-combo-course', 'ComboCourseController@getRelatedComboCourse')->name('get_related_combo_course');
+                Route::get('get-related-book', 'ComboCourseController@getRelatedBook')->name('get_related_book');
             });
 
             Route::prefix('lesson')->name('lesson.')->group(function () {
