@@ -373,12 +373,16 @@ class CartController extends Controller
                     $userComboCourse->user_id = $user->id;
                     $userComboCourse->combo_course_id = $comboCourse->id;
                     $userComboCourse->save();
+                    $addDayBuy = 0;
                     foreach ($comboCourse->items as $itemComboCourse) {
                         $itemCourse = $itemComboCourse->course;
                         $userCourseInCombo = UserCourse::where('course_id', $itemCourse->id)->where('user_id', $user->id)->firstOrNew();
                         $userCourseInCombo->user_id = $user->id;
                         $userCourseInCombo->course_id = $itemCourse->id;
-                        $userCourseInCombo->expires_on = $itemCourse->buyer_days_owned ? now()->addDays($itemCourse->buyer_days_owned) : null;
+                        if (count($comboCourse->items) >= 3 && $itemCourse->buyer_days_owned) {
+                            $addDayBuy += 30;
+                        }
+                        $userCourseInCombo->expires_on = $itemCourse->buyer_days_owned ? now()->addDays($itemCourse->buyer_days_owned)->addDays($addDayBuy) : null;
                         $userCourseInCombo->save();
                     }
                 }
