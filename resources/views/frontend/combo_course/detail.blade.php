@@ -68,6 +68,25 @@
                                 <a href="thithudauvao.html" class="btn btn--secondary">Vào thi</a>
                             </div>
                         </div> --}}
+                        <div class="widget widget--book">
+                            <h2 class="widget__title">Sách liên quan</h2>
+                            <div class="owl-carousel">
+                                @foreach($related_books as $item)
+                                    <a href="{{ $item->url }}" class="item">
+                                        <div class="item__img">
+                                            <img src="{{ $item->thumbnail }}" alt="{{ $item->title }}">
+                                        </div>
+                                        <div class="item__title">{{ $item->title }}</div>
+                                        <div class="item__price">
+                                            <ins>{{ currency($item->price) }}</ins>
+                                            @if($item->original_price)
+                                                <del>{{ currency($item->original_price) }}</del>
+                                            @endif
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xl-9">
@@ -218,6 +237,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="tab-tailieu" role="tabpanel">
                                         <h2>Combo khoá học</h2>
+                                        @if (count($related_combos_course) > 0)
                                         <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
                                             @foreach($related_combos_course as $item)
                                             <div class="lessonbox">
@@ -244,8 +264,12 @@
                                             </div>
                                             @endforeach
                                         </div>
+                                        @else
+                                        <div>Đang cập nhật ...</div>
+                                        @endif
                                         <br/><br/>
                                         <h2>Sách</h2>
+                                        @if (count($related_books) > 0)
                                         <div class="bookBook-retale">
                                             <div class="owl-carousel" data-slide-four-item>
                                                 @foreach($related_books as $item)
@@ -253,6 +277,9 @@
                                                 @endforeach
                                             </div>
                                         </div>
+                                        @else
+                                        <div>Đang cập nhật ...</div>
+                                        @endif
                                     </div>
                                     <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                                         <div class="commentbox-wrap">
