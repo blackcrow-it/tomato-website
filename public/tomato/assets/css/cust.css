@@ -46,3 +46,67 @@
 @media screen and (min-width: 1024px) and (max-width: 1024px){
 
 }
+.giacombo table {
+    font-size: 13px;
+    width: 100%;
+    table-layout: fixed;
+    line-height: 1.4;
+    border: 1px solid #e2e2e2;
+  }
+  .giacombo table thead th {
+    font-weight: 500;
+  }
+  .giacombo table thead th:nth-child(1) {
+    width: 50%;
+  }
+  .giacombo table thead th:nth-child(2) {
+    width: 50%;
+  }
+  @media (min-width: 768px) {
+    .giacombo table thead th:nth-child(1) {
+      width: 60%;
+    }
+    .giacombo table thead th:nth-child(2) {
+      width: 40%;
+    }
+  }
+  .giacombo table td,
+  .giacombo table th {
+    border-top: 1px solid #e2e2e2;
+    padding: 10px 10px;
+  }
+  @media (min-width: 768px) {
+    .giacombo table td,
+  .giacombo table th {
+      padding: 15px;
+    }
+  }
+  .giacombo table td:last-child,
+  .giacombo table th:last-child {
+    border-left: 1px solid #e2e2e2;
+  }
+  .giacombo table .sale {
+    color: #77AF41;
+  }
+  .giacombo table a:not(.btn) {
+    color: #000;
+  }
+  .giacombo table a:not(.btn):hover {
+    color: #E71D36;
+  }
+  .giacombo table tfoot {
+    background-color: #f7f7f7;
+  }
+  .giacombo table .tongtien {
+    font-size: 20px;
+    color: #E71D36;
+  }
+  .giacombo table .btn {
+    text-align: center;
+    padding: 0 10px;
+    max-width: 180px;
+    width: 100%;
+  }
+  .combo-ralete-slide .owl-nav {
+    display: none;
+  }

@@ -9,6 +9,19 @@
 <meta property="og:image" content="{{ $course->og_image ?? $course->cover }}">
 <meta property="og:type" content="website">
 <link rel="canonical" href="{{ $course->url }}">
+<style>
+    .page-combo-course a {
+        color: #FFFFFF;
+        font-size: 12px;
+        text-transform: capitalize;
+        background: #77af41;
+        padding: 7px 11px 6px;
+        margin: 0 2px 2px 0;
+    }
+    .page-combo-course a:hover {
+        background: #e71d36;
+    }
+</style>
 @endsection
 
 @section('body')
@@ -22,7 +35,15 @@
                 @endforeach
             </ol>
         </nav>
-        <h1 class="page-title__title">{{ $course->title }}</h1>
+        <h1 class="page-title__title">{{ $course->title }}</h1><br/>
+        @if (count($related_combos_course) > 0)
+        <div class="page-combo-course">
+            <span>Combo khoá học: </span>
+            @foreach($related_combos_course as $item)
+            <a type="button" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
+            @endforeach
+        </div>
+        @endif
     </div>
 </section>
 
@@ -176,6 +197,38 @@
                                         @include('frontend.category.book_item', [ 'book' => $item ])
                                     @endforeach
                                 </div>
+                            </div>
+                            <div style="margin-top: 50px;">
+                                @if (count($related_combos_course) > 0)
+                                <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
+                                    @foreach($related_combos_course as $item)
+                                    <div class="lessonbox">
+                                        <div class="lessonbox__inner">
+                                            <div class="lessonbox__body">
+                                                <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
+                                                <div class="lessonbox__footer">
+                                                    <div class="lessonbox__price">
+                                                        <?php
+                                                            $price_origin = 0;
+                                                            foreach ($item->items as $c_course) {
+                                                                $price_origin += $c_course->course->price;
+                                                            }
+                                                        ?>
+                                                        <ins>{{ currency($item->price) }}</ins>
+                                                        @if ($item->price < $price_origin)
+                                                            <del>{{ currency($price_origin) }}</del>
+                                                        @endif
+                                                    </div>
+                                                    <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @else
+                                <div>Đang cập nhật ...</div>
+                                @endif
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">

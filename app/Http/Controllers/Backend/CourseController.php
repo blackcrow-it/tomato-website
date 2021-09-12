@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Category;
+use App\ComboCoursesItem;
 use App\Constants\ObjectType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\CourseRequest;
@@ -143,6 +144,15 @@ class CourseController extends Controller
             $related->related_book_id = $relatedBookId;
             $related->save();
         }
+
+        ComboCoursesItem::where('course_id', $course->id)->delete();
+        $relatedComboIds = $request->input('__related_combos_course', []);
+        foreach ($relatedComboIds as $relatedComboId) {
+            $related = new ComboCoursesItem();
+            $related->course_id = $course->id;
+            $related->combo_courses_id = $relatedComboId;
+            $related->save();
+        }
     }
 
     public function submitDelete($id)
@@ -236,6 +246,16 @@ class CourseController extends Controller
             ->where('course_id', $id)
             ->get()
             ->pluck('related_course');
+    }
+
+    public function getRelatedCombosCourse(Request $request)
+    {
+        $id = $request->input('id');
+        error_log($id);
+        return ComboCoursesItem::with('combo_courses')
+            ->where('course_id', $id)
+            ->get()
+            ->pluck('combo_courses');
     }
 
     public function getRelatedBook(Request $request)

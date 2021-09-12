@@ -1125,6 +1125,30 @@
         wow.init();
     }
 
+    function comboRelated() {
+        $('.combo-ralete-slide').each(function() {
+            let self = $(this);
+            let timeRandom = getRandomIntInclusive(5, 10)*1000;
+
+            self.owlCarousel({
+                items: 2,
+                margin: 18,
+                smartSpeed: 1000,
+                autoplayHoverPause: true,
+                dots: true,
+                nav: true,
+                navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
+
+                responsive : {
+                    768: {
+                        items: 3,
+                        margin: 30
+                    }
+                }
+            });
+        })
+    }
+
 
 
     owlSlideJs();
@@ -1144,6 +1168,7 @@
     mobileQuiz();
     $('[data-toggle="tooltip"]').tooltip();
     popupNotifiWebsite();
+    comboRelated();
 
     $(window).on('load', function () {
         headerJs();

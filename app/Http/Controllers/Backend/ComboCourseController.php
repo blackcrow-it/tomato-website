@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Category;
+use App\ComboCourseRelatedBook;
 use DB;
 use Log;
 use Exception;
 use App\ComboCourses;
 use App\ComboCoursesItem;
+use App\ComboRelatedCombo;
+use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Backend\ComboCourseRequest;
+use Route;
 
 class ComboCourseController extends Controller
 {
@@ -26,6 +31,7 @@ class ComboCourseController extends Controller
     public function add()
     {
         return view('backend.combo_courses.edit', [
+            'categories' => $this->getCategoriesTraverse(),
         ]);
     }
 
@@ -64,6 +70,7 @@ class ComboCourseController extends Controller
         }
         return view('backend.combo_courses.edit', [
             'data' => $comboCourses,
+            'categories' => $this->getCategoriesTraverse(),
             'courses' => json_encode($listCourses)
         ]);
     }
@@ -109,6 +116,24 @@ class ComboCourseController extends Controller
             $comboCourseItem->course_id = $courseId;
             $comboCourseItem->save();
         }
+
+        ComboRelatedCombo::where('combo_course_id', $comboCourse->id)->delete();
+        $relatedComboCourseIds = $request->input('__related_combo_courses', []);
+        foreach ($relatedComboCourseIds as $relatedComboCourseId) {
+            $related = new ComboRelatedCombo();
+            $related->combo_course_id = $comboCourse->id;
+            $related->related_combo_course_id = $relatedComboCourseId;
+            $related->save();
+        }
+
+        ComboCourseRelatedBook::where('combo_course_id', $comboCourse->id)->delete();
+        $relatedBookIds = $request->input('__related_books', []);
+        foreach ($relatedBookIds as $relatedBookId) {
+            $related = new ComboCourseRelatedBook();
+            $related->combo_course_id = $comboCourse->id;
+            $related->related_book_id = $relatedBookId;
+            $related->save();
+        }
     }
 
     public function submitDelete($id)
@@ -151,5 +176,51 @@ class ComboCourseController extends Controller
             ->where('combo_courses_id', $id)
             ->get()
             ->pluck('course');
+    }
+
+    public function getCategoriesTraverse()
+    {
+        return categories_traverse(
+            Category::where('type', ObjectType::COMBO_COURSE)
+                ->orderBy('title', 'ASC')
+                ->get()
+                ->toTree()
+        );
+    }
+
+    public function getSearch(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        if (empty($keyword)) return [];
+
+        $query = ComboCourses::where('enabled', true)
+            ->orderBy('title', 'asc');
+
+        if (strpos($keyword, config('app.url')) === 0) {
+            $route = Route::getRoutes()->match(Request::create($keyword));
+            $query->where('slug', $route->slug);
+        } else {
+            $query->where('title', 'ilike', "%$keyword%");
+        }
+
+        return $query->get();
+    }
+
+    public function getRelatedComboCourse(Request $request)
+    {
+        $id = $request->input('id');
+        return ComboRelatedCombo::with('related_combo_course')
+            ->where('combo_course_id', $id)
+            ->get()
+            ->pluck('related_combo_course');
+    }
+
+    public function getRelatedBook(Request $request)
+    {
+        $id = $request->input('id');
+        return ComboCourseRelatedBook::with('related_book')
+            ->where('combo_course_id', $id)
+            ->get()
+            ->pluck('related_book');
     }
 }

@@ -88,7 +88,7 @@
                                         <li>
                                             <a href="{{ $item->url }}">
                                                 <img src="{{ $item->thumbnail }}">
-                                                <div class="h3">{{ $item->title }}</div>
+                                                <div class="h6">{{ $item->title }}</div>
                                                 <span><i class="fa fa-clock-o"></i>{{ $item->updated_at->format('d/m/Y') }}</span>
                                             </a>
                                         </li>

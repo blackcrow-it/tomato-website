@@ -121,9 +121,17 @@ Danh mục
                                 <i class="fas fa-graduation-cap"></i>
                                 Khóa học
                                 @break
+                            @case(\App\Constants\ObjectType::COMBO_COURSE)
+                                <i class="fas fa-boxes"></i>
+                                Combo khóa học
+                                @break
                             @case(\App\Constants\ObjectType::POST)
                                 <i class="fas fa-newspaper"></i>
                                 Bài viết
+                                @break
+                            @case(\App\Constants\ObjectType::BOOK)
+                                <i class="fas fa-book"></i>
+                                Sách
                                 @break
                         @endswitch
                     </td>

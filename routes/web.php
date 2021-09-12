@@ -36,11 +36,12 @@ Route::namespace('Frontend')
 
         Route::get('{slug}-c{id}.html', 'CourseController@index')->name('course')->where(['slug' => '.*', 'id' => '\d+']);
 
-        Route::get('{slug}-cb{id}.html', 'ComboCoursesController@index')->name('combo_courses')->where(['slug' => '.*', 'id' => '\d+']);
+        Route::get('{slug}-cb{id}.html', 'ComboCourseController@index')->name('combo_course')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::get('{slug}-b{id}.html', 'BookController@index')->name('book')->where(['slug' => '.*', 'id' => '\d+']);
 
         Route::get('khoa-hoc/tat-ca', 'CourseController@all')->name('course.all');
+        Route::get('combo-khoa-hoc/tat-ca', 'ComboCourseController@all')->name('combo_course.all');
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
         Route::middleware('auth')->group(function () {
@@ -182,23 +183,13 @@ Route::prefix('admin')
                 Route::get('search-course', 'CourseController@getSearchCourse')->name('search_course');
                 Route::get('get-related-course', 'CourseController@getRelatedCourse')->name('get_related_course');
                 Route::get('get-related-book', 'CourseController@getRelatedBook')->name('get_related_book');
+                Route::get('get-related-combos-course', 'CourseController@getRelatedCombosCourse')->name('get_related_combos_course');
             });
             Route::prefix('survey')->name('survey.')->group(function () {
                 Route::get('list', 'SurveyController@list')->name('list');
                 Route::get('detail/{id}', 'SurveyController@detail')->name('detail');
                 Route::post('received/{id}', 'SurveyController@received')->name('received');
             });
-
-            // Route::prefix('combo_courses')->name('combo_courses.')->group(function () {
-            //     Route::get('list', 'ComboCourseController@list')->name('list')->middleware('can:combo_courses.list');
-            //     Route::get('add', 'ComboCourseController@add')->name('add')->middleware('can:combo_courses.add');
-            //     Route::post('add', 'ComboCourseController@submitAdd')->name('add')->middleware('can:combo_courses.add');
-            //     Route::get('edit/{id}', 'ComboCourseController@edit')->name('edit')->middleware('can:combo_courses.edit');
-            //     Route::post('edit/{id}', 'ComboCourseController@submitEdit')->name('edit')->middleware('can:combo_courses.edit');
-            //     Route::post('enabled', 'ComboCourseController@submitEnabled')->name('enabled')->middleware('can:combo_courses.edit');
-            //     Route::post('delete/{id}', 'ComboCourseController@submitDelete')->name('delete')->middleware('can:combo_courses.delete');
-            //     Route::get('get-courses', 'ComboCourseController@getCoursesInCombo')->name('get_courses_in_combo');
-            // });
 
             Route::prefix('combo_courses')->name('combo_courses.')->group(function () {
                 Route::get('list', 'ComboCourseController@list')->name('list');
@@ -209,6 +200,9 @@ Route::prefix('admin')
                 Route::post('enabled', 'ComboCourseController@submitEnabled')->name('enabled');
                 Route::post('delete/{id}', 'ComboCourseController@submitDelete')->name('delete');
                 Route::get('get-courses', 'ComboCourseController@getCoursesInCombo')->name('get_courses_in_combo');
+                Route::get('search', 'ComboCourseController@getSearch')->name('search');
+                Route::get('get-related-combo-course', 'ComboCourseController@getRelatedComboCourse')->name('get_related_combo_course');
+                Route::get('get-related-book', 'ComboCourseController@getRelatedBook')->name('get_related_book');
             });
 
             Route::prefix('lesson')->name('lesson.')->group(function () {

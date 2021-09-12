@@ -147,6 +147,44 @@
                         </tr>
                         <tr v-if="inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}').length > 0" class="bg-light">
                             <td colspan="99" class="text-left">
+                                <b>Combo khóa học online</b><br>
+                                <small class="text-danger">* Khoá học online trực tiếp trên website tomatoonline.edu.vn, không có hình thức vận chuyển.</small>
+                            </td>
+                        </tr>
+                        <tr v-for="(item, index) in inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COMBO_COURSE }}')" :key="item.id">
+                            <td>@{{ index + 1 }}</td>
+                            <td>
+                                <div class="f-info">
+                                    <img class="f-info__img" :src="item.object.thumbnail">
+                                    <div class="f-info__body">
+                                        <div class="f-info__title">@{{ item.object.title }}</div>
+                                        <div v-if="item.object.category" class="f-info__type">Thể loại: <b>@{{ item.object.category.title }}</b></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="f-quantity text-center">
+                                    <span><b>@{{ currency(item.price) }}</b></span>
+                                    <template v-if="item.del_price">
+                                        <br>
+                                        <small><del>@{{ currency(item.del_price) }}</del></small>
+                                    </template>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="f-quantity text-center">
+                                    <span><b>1</b></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="f-price">@{{ currency(item.amount * item.price) }}</span>
+                            </td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn--sm" @click="removeCartItem(item.id)"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr v-if="inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::COURSE }}').length > 0" class="bg-light">
+                            <td colspan="99" class="text-left">
                                 <b>Khóa học online</b><br>
                                 <small class="text-danger">* Khoá học online trực tiếp trên website tomatoonline.edu.vn, không có hình thức vận chuyển.</small>
                             </td>
@@ -225,7 +263,7 @@
                         <tr class="bg-light">
                             <td colspan="4">
                                 <b>Mã giảm giá</b><br>
-                                <small class="text-danger">* Mã giảm giá chỉ áp dụng với những khóa học online.</small>
+                                <small class="text-danger">* Mã giảm giá chỉ áp dụng dành cho mua khoá học lẻ.</small>
                             </td>
                             <td colspan="2">
                                 <div v-if="promoData === undefined">

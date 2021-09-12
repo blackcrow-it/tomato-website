@@ -76,6 +76,7 @@
                     <ul>
                         <li><a href="{{ route('home') }}" target="_blank">Hệ thống đào tạo Ngoại ngữ - Tin học Online Tomato</a></li>
                         <li><a href="https://ngoaingutomato.edu.vn/lich-khai-giang-cc1416.html" target="_blank">Lớp Offline</a></li>
+                        <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                     </ul>
                     <div class="fix"></div>
                     <div class="text-white">
@@ -172,7 +173,6 @@
                                     @endif
                                 </li>
                             @endforeach
-                            <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                         </ul>
                     </nav>
 

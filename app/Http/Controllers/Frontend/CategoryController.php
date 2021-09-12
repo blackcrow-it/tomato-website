@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Book;
 use App\Category;
+use App\ComboCourses;
 use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
@@ -26,6 +27,10 @@ class CategoryController extends Controller
         switch ($category->type) {
             case ObjectType::COURSE:
                 return $this->indexForCourse($request, $category);
+                break;
+
+            case ObjectType::COMBO_COURSE:
+                return $this->indexForComboCourse($request, $category);
                 break;
 
             case ObjectType::BOOK:
@@ -106,6 +111,35 @@ class CategoryController extends Controller
         $consultationFormBg = Setting::where('key', 'consultation_background')->first();
         error_log($consultationFormBg->value);
         return view('frontend.category.course', [
+            'category' => $category,
+            'list' => $list,
+            'breadcrumb' => Category::ancestorsOf($category->id),
+            'consultation_background' => $consultationFormBg->value,
+        ]);
+    }
+
+    private function indexForComboCourse(Request $request, Category $category)
+    {
+        $categoryIds = Category::descendantsAndSelf($category->id)->pluck('id');
+
+        $query = ComboCourses::query()
+            ->with([
+                'category' => function ($q) {
+                    $q->where('enabled', true);
+                },
+            ])
+            ->where('enabled', true)
+            ->whereIn('category_id', $categoryIds);
+
+        $query
+            ->orderByRaw('CASE WHEN order_in_category > 0 THEN 0 ELSE 1 END, order_in_category ASC')
+            ->orderBy('created_at', 'desc');
+
+        $list = $query->paginate(config('template.paginate.list.combo_course'));
+
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
+        error_log($consultationFormBg->value);
+        return view('frontend.category.combo_course', [
             'category' => $category,
             'list' => $list,
             'breadcrumb' => Category::ancestorsOf($category->id),

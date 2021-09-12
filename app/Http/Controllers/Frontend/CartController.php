@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Book;
 use App\Cart;
+use App\ComboCourses;
 use App\Constants\InvoiceStatus;
 use App\Constants\ObjectType;
 use App\Constants\PromoType;
@@ -17,6 +18,7 @@ use App\InvoiceItem;
 use App\Mail\InvoiceMail;
 use App\Promo;
 use App\Repositories\UserRepo;
+use App\UserComboCourse;
 use App\UserCourse;
 use Auth;
 use DB;
@@ -56,6 +58,10 @@ class CartController extends Controller
             case ObjectType::BOOK:
                 $object = Book::find($object_id);
                 break;
+
+            case ObjectType::COMBO_COURSE:
+                $object = ComboCourses::find($object_id);
+                break;
         }
 
         if ($object == null) return abort(500);
@@ -76,6 +82,10 @@ class CartController extends Controller
 
         switch ($type) {
             case ObjectType::COURSE:
+                $objectInCart->amount = 1;
+                break;
+
+            case ObjectType::COMBO_COURSE:
                 $objectInCart->amount = 1;
                 break;
 
@@ -112,6 +122,9 @@ class CartController extends Controller
                     case ObjectType::BOOK:
                         $item->object = Book::with('category')->find($item->object_id);
                         break;
+                    case ObjectType::COMBO_COURSE:
+                        $item->object = ComboCourses::with('category')->find($item->object_id);
+                        break;
                 }
                 return $item;
             })
@@ -143,6 +156,23 @@ class CartController extends Controller
         });
 
         $cart = Cart::where('user_id', $user->id)->get();
+
+        foreach ($cart->where('type', ObjectType::COMBO_COURSE) as $item) {
+            $exists = UserComboCourse::query()
+                ->where('user_id', Auth::id())
+                ->where('combo_course_id', $item->object_id)
+                ->exists();
+            if ($exists) {
+                $comboCourse = ComboCourses::find($item->object_id);
+                $request->validate([
+                    'cart' => [
+                        function ($attribute, $value, $fail) use ($comboCourse) {
+                            $fail('Bạn đã sở hữu combo khóa học <b>' . $comboCourse->title . '</b>. Vui lòng gỡ khỏi giỏ hàng trước khi thanh toán.');
+                        }
+                    ]
+                ]);
+            }
+        }
 
         foreach ($cart->where('type', ObjectType::COURSE) as $item) {
             $exists = UserCourse::query()
@@ -312,6 +342,50 @@ class CartController extends Controller
                 }
 
                 $notificationInvoices[] = $invoice;
+            }
+
+            // Process combos course
+            $combosCourseInCart = $cart->where('type', ObjectType::COMBO_COURSE);
+            if ($combosCourseInCart->count() > 0) {
+                $invoice = new Invoice();
+                $invoice->user_id = $user->id;
+                $invoice->name = $shipInfo['name'] ?? $user->name;
+                $invoice->phone = $shipInfo['phone'] ?? $user->phone;
+                $invoice->shipping = false;
+                $invoice->status = InvoiceStatus::COMPLETE;
+                $invoice->promo_id = $promo->id ?? null;
+                $invoice->save();
+
+                foreach ($combosCourseInCart as $item) {
+                    $invoiceItem = new InvoiceItem();
+                    $invoiceItem->invoice_id = $invoice->id;
+                    $invoiceItem->type = $item->type;
+                    $invoiceItem->object_id = $item->object_id;
+                    $invoiceItem->amount = $item->amount;
+                    $invoiceItem->price = $item->price;
+                    $invoiceItem->save();
+                }
+
+                $comboCourseIds = $combosCourseInCart->pluck('object_id');
+                $combosCourse = ComboCourses::whereIn('id', $comboCourseIds)->get();
+                foreach ($combosCourse as $comboCourse) {
+                    $userComboCourse = new UserComboCourse();
+                    $userComboCourse->user_id = $user->id;
+                    $userComboCourse->combo_course_id = $comboCourse->id;
+                    $userComboCourse->save();
+                    $addDayBuy = 0;
+                    foreach ($comboCourse->items as $itemComboCourse) {
+                        $itemCourse = $itemComboCourse->course;
+                        $userCourseInCombo = UserCourse::where('course_id', $itemCourse->id)->where('user_id', $user->id)->firstOrNew();
+                        $userCourseInCombo->user_id = $user->id;
+                        $userCourseInCombo->course_id = $itemCourse->id;
+                        if (count($comboCourse->items) >= 3 && $itemCourse->buyer_days_owned) {
+                            $addDayBuy += 30;
+                        }
+                        $userCourseInCombo->expires_on = $itemCourse->buyer_days_owned ? now()->addDays($itemCourse->buyer_days_owned)->addDays($addDayBuy) : null;
+                        $userCourseInCombo->save();
+                    }
+                }
             }
 
             Cart::where('user_id', $user->id)->delete();

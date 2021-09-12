@@ -16,6 +16,11 @@ return [
             'name' => 'Danh mục khoá học'
         ],
         [
+            'code' => 'combo-course-categories',
+            'type' => ObjectType::CATEGORY,
+            'name' => 'Danh mục combo khoá học'
+        ],
+        [
             'code' => 'post-categories',
             'type' => ObjectType::CATEGORY,
             'name' => 'Danh mục tin tức'

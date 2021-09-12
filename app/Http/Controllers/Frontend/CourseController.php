@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Cart;
 use App\Category;
+use App\ComboCoursesItem;
 use App\Constants\ObjectType;
 use App\Course;
 use App\CourseRelatedBook;
@@ -136,6 +137,16 @@ class CourseController extends Controller
             ->get()
             ->pluck('related_book');
 
+        $related_combos_course = ComboCoursesItem::query()
+            ->with('combo_courses')
+            ->whereHas('combo_courses', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('course_id', $course->id)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->pluck('combo_courses');
+
         $isUserOwnedThisCourse = auth()->check()
             ? UserCourse::query()
             ->where('user_id', auth()->id())
@@ -176,6 +187,7 @@ class CourseController extends Controller
             'status' => $status,
             'is_trial' => $isTrial,
             'consultation_background' => $consultationFormBg->value,
+            'related_combos_course' => $related_combos_course
         ]);
     }
 
