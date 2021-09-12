@@ -14,12 +14,12 @@
         color: #FFFFFF;
         font-size: 12px;
         text-transform: capitalize;
-        background: #e71d36;
+        background: #77af41;
         padding: 7px 11px 6px;
         margin: 0 2px 2px 0;
     }
     .page-combo-course a:hover {
-        background: #77af41;
+        background: #e71d36;
     }
 </style>
 @endsection
