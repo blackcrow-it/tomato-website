@@ -277,6 +277,71 @@
                 @enderror
             </div>
             <div class="form-group">
+                <label>Combo chứa khoá học này</label>
+                <div id="js-related-combos-course">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-borderless">
+                                <tr v-for="item in relatedCombosCourse" :key="item.id">
+                                    <td>
+                                        @{{ item.id }}
+                                        <input type="hidden" name="__related_combos_course[]" :value="item.id">
+                                    </td>
+                                    <td>
+                                        <img :src="item.thumbnail" class="img-thumbnail">
+                                    </td>
+                                    <td>@{{ item.title }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="deleteItem(item.id)"><i class="far fa-trash-alt"></i> Xóa</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-info" @click="showAddItemModal"><i class="fas fa-plus"></i> Thêm</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" tabindex="-1" id="js-related-combos-course-modal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chọn combo khoá học</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm combo khóa học" v-model="keyword">
+                                    </div>
+                                    <div class="text-center" v-if="isSearching">
+                                        <div class="spinner-border">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-borderless" v-else>
+                                        <tr v-for="item in searchResult" :key="item.id">
+                                            <td>@{{ item.id }}</td>
+                                            <td>
+                                                <img :src="item.thumbnail" class="img-thumbnail">
+                                            </td>
+                                            <td>@{{ item.title }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" @click="addItem(item)" :disabled="comboCourseIds.includes(item.id)"><i class="fas fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @error('__related_combos_course')
+                    <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                @enderror
+            </div>
+            <div class="form-group">
                 <label>Tài liệu liên quan</label>
                 <div id="js-related-book">
                     <div class="card">
@@ -501,6 +566,61 @@
                 clearTimeout(this.searchTimer);
                 this.searchTimer = setTimeout(() => {
                     axios.get('{{ route("admin.book.search_book") }}', {
+                        params: {
+                            keyword: this.keyword
+                        }
+                    }).then(res => {
+                        this.searchResult = res;
+                    }).then(() => {
+                        this.isSearching = false;
+                    });
+                }, 1000);
+            }
+        }
+    });
+
+    new Vue({
+        el: '#js-related-combos-course',
+        data: {
+            comboCourseIds: [],
+            relatedCombosCourse: [],
+            searchTimer: undefined,
+            searchResult: [],
+            keyword: undefined,
+            isSearching: false,
+        },
+        mounted() {
+            axios.get('{{ route("admin.course.get_related_combos_course") }}', {
+                params: {
+                    id: COURSE_ID
+                }
+            }).then(res => {
+                res.forEach(item => {
+                    this.relatedCombosCourse.push(item);
+                    this.comboCourseIds.push(item.id);
+                });
+            });
+        },
+        methods: {
+            showAddItemModal() {
+                $('#js-related-combos-course-modal').modal('show');
+            },
+            addItem(item) {
+                this.relatedCombosCourse.push(item);
+                this.comboCourseIds.push(item.id);
+            },
+            deleteItem(id) {
+                const index = this.relatedCombosCourse.findIndex(x => x.id == id);
+                this.relatedCombosCourse.splice(index, 1);
+                this.comboCourseIds.splice(index, 1);
+            },
+        },
+        watch: {
+            keyword(newVal, oldVal) {
+                this.isSearching = true;
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    axios.get('{{ route("admin.combo_courses.search") }}', {
                         params: {
                             keyword: this.keyword
                         }

@@ -263,7 +263,7 @@
                         <tr class="bg-light">
                             <td colspan="4">
                                 <b>Mã giảm giá</b><br>
-                                <small class="text-danger">* Mã giảm giá chỉ áp dụng với những khóa học online.</small>
+                                <small class="text-danger">* Mã giảm giá chỉ áp dụng dành cho mua khoá học lẻ.</small>
                             </td>
                             <td colspan="2">
                                 <div v-if="promoData === undefined">

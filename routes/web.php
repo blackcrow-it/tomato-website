@@ -183,23 +183,13 @@ Route::prefix('admin')
                 Route::get('search-course', 'CourseController@getSearchCourse')->name('search_course');
                 Route::get('get-related-course', 'CourseController@getRelatedCourse')->name('get_related_course');
                 Route::get('get-related-book', 'CourseController@getRelatedBook')->name('get_related_book');
+                Route::get('get-related-combos-course', 'CourseController@getRelatedCombosCourse')->name('get_related_combos_course');
             });
             Route::prefix('survey')->name('survey.')->group(function () {
                 Route::get('list', 'SurveyController@list')->name('list');
                 Route::get('detail/{id}', 'SurveyController@detail')->name('detail');
                 Route::post('received/{id}', 'SurveyController@received')->name('received');
             });
-
-            // Route::prefix('combo_courses')->name('combo_courses.')->group(function () {
-            //     Route::get('list', 'ComboCourseController@list')->name('list')->middleware('can:combo_courses.list');
-            //     Route::get('add', 'ComboCourseController@add')->name('add')->middleware('can:combo_courses.add');
-            //     Route::post('add', 'ComboCourseController@submitAdd')->name('add')->middleware('can:combo_courses.add');
-            //     Route::get('edit/{id}', 'ComboCourseController@edit')->name('edit')->middleware('can:combo_courses.edit');
-            //     Route::post('edit/{id}', 'ComboCourseController@submitEdit')->name('edit')->middleware('can:combo_courses.edit');
-            //     Route::post('enabled', 'ComboCourseController@submitEnabled')->name('enabled')->middleware('can:combo_courses.edit');
-            //     Route::post('delete/{id}', 'ComboCourseController@submitDelete')->name('delete')->middleware('can:combo_courses.delete');
-            //     Route::get('get-courses', 'ComboCourseController@getCoursesInCombo')->name('get_courses_in_combo');
-            // });
 
             Route::prefix('combo_courses')->name('combo_courses.')->group(function () {
                 Route::get('list', 'ComboCourseController@list')->name('list');
