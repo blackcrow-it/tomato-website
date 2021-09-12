@@ -191,7 +191,6 @@ class ComboCourseController extends Controller
     public function getSearch(Request $request)
     {
         $keyword = $request->input('keyword');
-        error_log($keyword);
         if (empty($keyword)) return [];
 
         $query = ComboCourses::where('enabled', true)

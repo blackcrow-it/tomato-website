@@ -9,6 +9,16 @@
 <meta property="og:image" content="{{ $combo_course->og_image ?? $combo_course->cover }}">
 <meta property="og:type" content="website">
 <link rel="canonical" href="{{ $combo_course->url }}">
+<style>
+    @media (max-width: 1259.98px) {
+        #related-book {
+            display: none;
+        }
+    }
+    /* #related-book {
+        display: none;
+    } */
+</style>
 @endsection
 
 @section('body')
@@ -34,6 +44,7 @@
                     <div class="layout-sidebar">
                         <div class="widget widget--lessonCat sticky-top">
                             <h2 class="widget__title">Combo Khoá học</h2>
+                            @if (count(get_categories(null, 'combo-course-categories')) > 0)
                             <div class="f-scroll">
                                 <ul>
                                     @foreach(get_categories(null, 'combo-course-categories') as $c1)
@@ -61,6 +72,9 @@
                                     @endforeach
                                 </ul>
                             </div>
+                            @else
+                                <p style="margin: 20px">Chưa có danh mục cho combo</p>
+                            @endif
                         </div>
                         {{-- <div class="widget widget--mockTest d-none d-xl-block">
                             <h2 class="widget__title">Kiểm tra kiến thức</h2>
@@ -68,8 +82,9 @@
                                 <a href="thithudauvao.html" class="btn btn--secondary">Vào thi</a>
                             </div>
                         </div> --}}
-                        <div class="widget widget--book">
-                            <h2 class="widget__title">Sách liên quan</h2>
+                        <div class="widget widget--book" id="related-book">
+                            <h2 class="widget__title">Tài liệu liên quan</h2>
+                            @if (count($related_books) > 0)
                             <div class="owl-carousel">
                                 @foreach($related_books as $item)
                                     <a href="{{ $item->url }}" class="item">
@@ -86,6 +101,9 @@
                                     </a>
                                 @endforeach
                             </div>
+                            @else
+                                <p style="margin: 20px">Chưa có tài liệu liên quan.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
