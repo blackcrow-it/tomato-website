@@ -9,6 +9,19 @@
 <meta property="og:image" content="{{ $course->og_image ?? $course->cover }}">
 <meta property="og:type" content="website">
 <link rel="canonical" href="{{ $course->url }}">
+<style>
+    .page-combo-course a {
+        color: #FFFFFF;
+        font-size: 12px;
+        text-transform: capitalize;
+        background: #e71d36;
+        padding: 7px 11px 6px;
+        margin: 0 2px 2px 0;
+    }
+    .page-combo-course a:hover {
+        background: #77af41;
+    }
+</style>
 @endsection
 
 @section('body')
@@ -22,7 +35,15 @@
                 @endforeach
             </ol>
         </nav>
-        <h1 class="page-title__title">{{ $course->title }}</h1>
+        <h1 class="page-title__title">{{ $course->title }}</h1><br/>
+        @if (count($related_combos_course) > 0)
+        <div class="page-combo-course">
+            <span>Combo khoá học: </span>
+            @foreach($related_combos_course as $item)
+            <a type="button" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
+            @endforeach
+        </div>
+        @endif
     </div>
 </section>
 
