@@ -250,9 +250,28 @@ if (!function_exists('truncate')) {
     }
 }
 
-if (!function_exists('get_next_day')) {
-    function get_next_day($start = null, $end = null, $days_txt = null)
+if (!function_exists('get_current_shift')) {
+    function get_current_shift($shifts)
     {
+       
+        $now = strtotime('now');
+        $result = array_filter($shifts, function($var) use ($now) {
+            $start = strtotime($var->start_time);
+            $end = strtotime($var->end_time);
+            return $end >= $now;
+         });
+        dd($shifts);
+        return $result;
+    }
+}
+
+
+if (!function_exists('get_next_day')) {
+    function get_next_day($shifts, $days_txt = null)
+    {
+        $end = 'null';
+        $shift = get_current_shift($shifts);
+        
         if($days_txt == null) {
             return null;
         }

@@ -18,4 +18,8 @@ class PracticeTest extends BaseModel
     public function questions(){
         return $this->hasMany('App\PracticeTestQuestion');
     }
+    
+    public function shifts(){
+        return $this->hasMany('App\PracticeTestShift');
+    }
 }

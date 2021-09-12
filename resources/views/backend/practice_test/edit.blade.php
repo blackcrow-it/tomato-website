@@ -328,18 +328,18 @@
                 addAnswer: function(question) {
                     question.answers.push({
                         value: '',
-                        order: (question.answers.length - 1) +1,
-                        correct: false
+                        correct: false,
+                        enabled: true
                     });
                 },
                 addQuestion: function(ss) {
                     ss.questions.push({
                         id: null,
-                        order: ss.questions.length -1 + 1,
                         value: '',
                         answers: [],
                         type: 1,
                         media: null,
+                        enabled: true
                     })
                 },
                 addSession: function() {
@@ -383,6 +383,7 @@
                 },
                 addShift() {
                     this.model.shifts.push({
+                        id: null,
                         start_time: null,
                         end_time: null
                     })
@@ -394,11 +395,16 @@
                     if (!this.checkValid()) return
                     const formData = new FormData();
                     let questions = [];
-                    this.model.sessions.forEach((e)=>{
-                        e.questions.forEach((i)=>{
+                    this.model.sessions.forEach((e, index)=>{
+                        e.questions.forEach((i, j)=>{
                             i.session_id = e.type;
+                            i.order = j;
+                            i.answers.forEach((a,ai)=>{
+                                a.order = ai;
+                            })
                         })
                         questions = [...questions, ...e.questions]
+                        e.order = index;
                     })
                     this.model.questions = questions;
                     formData.append('data', JSON.stringify(this.model))

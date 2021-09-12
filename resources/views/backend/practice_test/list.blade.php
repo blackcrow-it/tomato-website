@@ -37,7 +37,7 @@
                 <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->title }}</td>
-                    <td>{{ $item->loop? date('d-m-Y', get_next_day($item->start_time, $item->end_time, $item->loop_days)): date('d-m-Y', strtotime($item->date))}}</td>
+                    <td>{{ $item->loop? date('d-m-Y', get_next_day($item->shifts->all(), $item->loop_days)): date('d-m-Y', strtotime($item->date))}}</td>
                     <td>{{ date('h:i', strtotime($item->start_time)) }} - {{date('h:i', strtotime($item->end_time))}}</td>
                     <td>{{$item->duration}} phút</td>
                     <td>{{count($item->questions)}} câu</td>
