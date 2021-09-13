@@ -98,6 +98,12 @@ Route::namespace('Frontend')
                 Route::get('', 'SurveyApiController@index')->name('getAll');
                 Route::post('add', 'SurveyApiController@store')->name('add');
             });
+            Route::prefix('rating')
+            ->name('rating.')
+            ->group(function() {
+                Route::get('', 'RatingApiController@index')->name('getAll');
+                Route::post('add', 'RatingApiController@store')->name('add');
+            });
         });
 
         Route::post('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
