@@ -15,9 +15,14 @@ class RatingApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $object_id = $request->input('object_id');
+        $type = $request->input('type');
+        $ratings = Rating::query()->with(array('user' => function($query) {
+            $query->select('id', 'name', 'avatar');
+        }))->where('type', $type)->where('object_id', $object_id)->get();
+        return response(['data' => $ratings]);
     }
 
     /**
@@ -51,11 +56,10 @@ class RatingApiController extends Controller
                 return response(['msg' => 'Missing data', 'status' => 'error'], 401);
         }
         if ($item) {
-            $rating = Rating::firstOrNew(
-                ['user_id' => $user_id],
-                ['type' => $type],
-                ['object_id' => $object_id],
-            );
+            $rating = Rating::where('user_id', $user_id)->where('type', $type)->where('object_id', $object_id)->first();
+            if (!$rating) {
+                $rating = new Rating();
+            }
             $rating->user_id = $user_id;
             $rating->type = $type;
             $rating->object_id = $object_id;
