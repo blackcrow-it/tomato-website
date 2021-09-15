@@ -32,6 +32,7 @@ class RatingApiController extends Controller
             $query->select('id', 'name', 'avatar');
         }))->where('type', $type)
         ->where('object_id', $object_id)
+        ->where('visible', true)
         ->orderBy('star', 'DESC')
         ->orderBy('updated_at', 'DESC')
         ->paginate(5);
