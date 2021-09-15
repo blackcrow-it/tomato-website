@@ -101,10 +101,20 @@ Route::namespace('Frontend')
             Route::prefix('rating')
             ->name('rating.')
             ->group(function() {
-                Route::get('', 'RatingApiController@index')->name('getAll');
                 Route::post('add', 'RatingApiController@store')->name('add');
             });
         });
+        Route::namespace('Api')
+        ->prefix('api')
+        ->name('api.')
+        ->group(function () {
+            Route::prefix('rating')
+            ->name('rating.')
+            ->group(function() {
+                Route::get('', 'RatingApiController@index')->name('getAll');
+            });
+        });
+
 
         Route::post('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
         Route::post('recharge/epay-notify', 'RechargeEpayController@processNotify')->name('recharge.epay.notify');
