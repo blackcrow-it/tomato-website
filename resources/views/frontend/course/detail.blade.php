@@ -553,13 +553,16 @@
                 axios.post(
                     "{{ route('api.rating.add') }}",
                     { object_id: {{ $course->id }}, type: '{{ \App\Constants\ObjectType::COURSE }}', star: this.star, comment: this.comment }
-                ).then(function (response) {
+                ).then(() => {
                     $("#sendRating").text("Đánh giá đã được gửi");
+                    this.currentPage = 1;
+                    this.listRating = [];
+                }).then(() => {
+                    this.getData();
                 }).catch(() => {
                     $("#sendRating").attr("disabled", false);
                     $("#sendRating").text("Đánh giá chưa được gửi");
                 });
-                // this.getData();
             },
             getData() {
                 this.loadingMore = true;
@@ -581,6 +584,7 @@
                     });
                     if (response.data.last_page > this.currentPage) {
                         this.currentPage += 1;
+                        this.loadMore = true;
                     } else {
                         this.loadMore = false;
                     }
