@@ -396,6 +396,7 @@
                                             <label for="radio5"></label>
                                         </div>
                                     </div>
+                                    @if(auth()->check())
                                     <form class="form-wrap">
                                         <div class="input-item">
                                             <label>Nội dung</label>
@@ -407,6 +408,10 @@
                                             <button type="button" class="btn" @click="sendRating" id="sendRating">Gửi đánh giá</button>
                                         </div>
                                     </form>
+                                    @else
+                                    <br/>
+                                        <a href="{{ route('login') }}" class="btn">Đăng nhập để đánh giá</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -518,7 +523,7 @@
     const vueCourse = new Vue({
         el: '#course__js',
         data:{
-            star: 0,
+            star: 5,
             comment: '',
             listRating: [],
             avgStar: 0,
