@@ -17,12 +17,54 @@ class RatingApiController extends Controller
      */
     public function index(Request $request)
     {
+        $avgStar = 0;
+        $totalStar = 0;
+        $rank = [
+            'starOne' => 0,
+            'starTwo' => 0,
+            'starThree' => 0,
+            'starFour' => 0,
+            'starFive' => 0
+        ];
         $object_id = $request->input('object_id');
         $type = $request->input('type');
         $ratings = Rating::query()->with(array('user' => function($query) {
             $query->select('id', 'name', 'avatar');
-        }))->where('type', $type)->where('object_id', $object_id)->get();
-        return response(['data' => $ratings]);
+        }))->where('type', $type)
+        ->where('object_id', $object_id)
+        ->orderBy('star', 'DESC')
+        ->orderBy('updated_at', 'DESC')
+        ->paginate(5);
+        $ratingsOverview = Rating::query()->where('type', $type)->where('object_id', $object_id)->get();
+        foreach ($ratingsOverview as $rate) {
+            $totalStar += $rate->star;
+            switch ($rate->star) {
+                case 1:
+                    $rank['starOne'] += 1;
+                    break;
+                case 2:
+                    $rank['starTwo'] += 1;
+                    break;
+                case 3:
+                    $rank['starThree'] += 1;
+                    break;
+                case 4:
+                    $rank['starFour'] += 1;
+                    break;
+                case 5:
+                    $rank['starFive'] += 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        $avgStar = $totalStar / count($ratingsOverview);
+        error_log($avgStar);
+        return response([
+            'data' => $ratings,
+            'avgStar' => $avgStar,
+            'rank' => $rank,
+        ]);
     }
 
     /**

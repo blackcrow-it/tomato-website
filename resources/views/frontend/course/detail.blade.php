@@ -269,7 +269,7 @@
                                         <ul class="r-progress__ul">
                                             <li class="r-progress__li">
                                                 <div class="r-progress__step">
-                                                    <span v-bind:style="{ width: 100 / 1 * countStarFive + '%' }"></span>
+                                                    <span v-bind:style="{ width: 100 * (countStarFive / totalRating) + '%' }"></span>
                                                 </div>
                                                 <p class="r-progress__star">
                                                     <span>
@@ -284,7 +284,7 @@
                                             </li>
                                             <li class="r-progress__li">
                                                 <div class="r-progress__step">
-                                                    <span v-bind:style="{ width: 100 / 1 * countStarFour + '%' }"></span>
+                                                    <span v-bind:style="{ width: 100 * (countStarFour / totalRating) + '%' }"></span>
                                                 </div>
                                                 <p class="r-progress__star">
                                                     <span>
@@ -299,7 +299,7 @@
                                             </li>
                                             <li class="r-progress__li">
                                                 <div class="r-progress__step">
-                                                    <span v-bind:style="{ width: 100 / 1 * countStarThree + '%' }"></span>
+                                                    <span v-bind:style="{ width: 100 * (countStarThree / totalRating) + '%' }"></span>
                                                 </div>
                                                 <p class="r-progress__star">
                                                     <span>
@@ -314,7 +314,7 @@
                                             </li>
                                             <li class="r-progress__li">
                                                 <div class="r-progress__step">
-                                                    <span v-bind:style="{ width: 100 / 1 * countStarTwo + '%' }"></span>
+                                                    <span v-bind:style="{ width: 100 * (countStarTwo / totalRating) + '%' }"></span>
                                                 </div>
                                                 <p class="r-progress__star">
                                                     <span>
@@ -329,7 +329,7 @@
                                             </li>
                                             <li class="r-progress__li">
                                                 <div class="r-progress__step">
-                                                    <span v-bind:style="{ width: 100 / 1 * countStarOne + '%' }"></span>
+                                                    <span v-bind:style="{ width: 100 * (countStarOne / totalRating) + '%' }"></span>
                                                 </div>
                                                 <p class="r-progress__star">
                                                     <span>
@@ -377,6 +377,13 @@
                                             </li>
                                         </ul>
                                     </div>
+                                </div>
+
+                                <div style="text-align: center" v-if="loadMore">
+                                    <button class="btn btn--sm btn--outline" @click="getData">
+                                        <img src="/tomato/assets/img/icon/icon-loading.gif" v-if="loadingMore">
+                                        <span v-else>Tải thêm đánh giá</span>
+                                    </button>
                                 </div>
 
                                 <div class="addReviewBox">
@@ -527,12 +534,15 @@
             comment: '',
             listRating: [],
             avgStar: 0,
-            sumStar: 0,
             countStarOne: 0,
             countStarTwo: 0,
             countStarThree: 0,
             countStarFour: 0,
             countStarFive: 0,
+            currentPage: 1,
+            loadMore: true,
+            loadingMore: false,
+            totalRating: 0,
         },
         mounted() {
             this.getData();
@@ -549,48 +559,33 @@
                     $("#sendRating").attr("disabled", false);
                     $("#sendRating").text("Đánh giá chưa được gửi");
                 });
-                this.getData();
+                // this.getData();
             },
             getData() {
+                this.loadingMore = true;
                 axios.get(
                     "{{ route('api.rating.getAll') }}",
                     {
-                        params: { object_id: {{ $course->id }}, type: '{{ \App\Constants\ObjectType::COURSE }}' }
+                        params: { object_id: {{ $course->id }}, type: '{{ \App\Constants\ObjectType::COURSE }}', page: this.currentPage }
                     }
                 ).then(response => {
-                    this.listRating = response.data;
-                    this.sumStar = 0;
-                    this.countStarOne = 0,
-                    this.countStarTwo = 0,
-                    this.countStarThree = 0,
-                    this.countStarFour = 0,
-                    this.countStarFive = 0,
-                    response.data.forEach(element => {
-                        this.sumStar += element.star;
-                        switch (element.star) {
-                            case 1:
-                                this.countStarOne += 1;
-                                break;
-                            case 2:
-                                this.countStarTwo += 1;
-                                break;
-                            case 3:
-                                this.countStarThree += 1;
-                                break;
-                            case 4:
-                                this.countStarFour += 1;
-                                break;
-                            case 5:
-                                this.countStarFive += 1;
-                                break;
-                            default:
-                                break;
-                        }
+                    this.countStarOne = response.rank.starOne;
+                    this.countStarTwo = response.rank.starTwo;
+                    this.countStarThree = response.rank.starThree;
+                    this.countStarFour = response.rank.starFour;
+                    this.countStarFive = response.rank.starFive;
+                    this.avgStar = response.avgStar;
+                    this.totalRating = response.data.total;
+                    response.data.data.forEach(element => {
+                        this.listRating.push(element);
                     });
-                }).finally(() => {
-                    if (this.listRating.length > 0) {
-                        this.avgStar = this.sumStar / this.listRating.length;
+                    if (response.data.last_page > this.currentPage) {
+                        this.currentPage += 1;
+                    } else {
+                        this.loadMore = false;
                     }
+                }).finally(() => {
+                    this.loadingMore = false;
                 });
             },
             datetimeFormat(str) {
