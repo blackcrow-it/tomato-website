@@ -59,8 +59,11 @@ class RatingApiController extends Controller
                     break;
             }
         }
-        $avgStar = $totalStar / count($ratingsOverview);
-        error_log($avgStar);
+        if (count($ratingsOverview) > 0) {
+            $avgStar = $totalStar / count($ratingsOverview);
+        } else {
+            $avgStar = 0;
+        }
         return response([
             'data' => $ratings,
             'avgStar' => $avgStar,
