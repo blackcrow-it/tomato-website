@@ -102,7 +102,14 @@ Route::namespace('Frontend')
             ->name('rating.')
             ->group(function() {
                 Route::post('add', 'RatingApiController@store')->name('add');
+                Route::patch('toggle/{id}', 'RatingApiController@toggleVisible')->middleware('can_access_admin_dashboard')->middleware('can:course.edit')->name('toggle');
             });
+            // Route::prefix('rating')
+            // ->name('rating.')
+            // ->middleware('can_access_admin_dashboard')
+            // ->middleware('can:course.edit')
+            // ->group(function() {
+            // });
         });
         Route::namespace('Api')
         ->prefix('api')

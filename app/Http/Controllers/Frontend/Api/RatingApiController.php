@@ -32,7 +32,6 @@ class RatingApiController extends Controller
             $query->select('id', 'name', 'avatar');
         }))->where('type', $type)
         ->where('object_id', $object_id)
-        ->where('visible', true)
         ->orderBy('star', 'DESC')
         ->orderBy('updated_at', 'DESC')
         ->paginate(5);
@@ -139,6 +138,25 @@ class RatingApiController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    /**
+     * Ẩn hiện đánh giá
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function toggleVisible(Request $request, $id)
+    {
+        $rating = Rating::find($id);
+        if ($rating) {
+            $rating->visible = !$rating->visible;
+            $rating->save();
+            return response(['msg' => 'Toggle rating', 'data' => $rating, 'status' => 'success'], 200);
+        } else {
+            return response(['msg' => 'Not found item', 'status' => 'error'], 404);
+        }
     }
 
     /**

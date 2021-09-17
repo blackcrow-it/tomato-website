@@ -349,7 +349,7 @@
                                 <div class="commentbox">
                                     <div class="commentList">
                                         <ul class="commentList__item">
-                                            <li v-for="item in listRating" :key="item.id">
+                                            <li v-for="(item, index) in listRating" :key="item.id" v-if="item.visible || 'true' == @if(Gate::check('admin') || Gate::check('course.edit'))'true'@else'false'@endif">
                                                 <div class="commentList__inner">
                                                     <div class="commentList__avatar">
                                                         <img :src="item.user.avatar" alt="">
@@ -360,6 +360,15 @@
                                                         <div class="commentList__meta">
                                                             <span class="meta-date"><i class="fa fa-clock-o"></i>@{{ datetimeFormat(item.updated_at) }}</span>
                                                         </div>
+                                                        @if(Gate::check('admin') || Gate::check('course.edit'))
+                                                        <div>
+                                                            <br/>
+                                                            <button @click="toggleVisible(item.id, index)" class="btn--sm" :disabled="loadingToggle">
+                                                                <span v-if="item.visible">Ẩn</span>
+                                                                <span v-else>Hiện</span>
+                                                            </button>
+                                                        </div>
+                                                        @endif
                                                         <div class="commentList__star">
                                                             <i class="fa fa-star" v-if="item.star >= 1"></i>
                                                             <i class="fa fa-star-o" v-else></i>
@@ -404,17 +413,21 @@
                                         </div>
                                     </div>
                                     @if(auth()->check())
-                                    <form class="form-wrap">
-                                        <div class="input-item">
-                                            <label>Nội dung</label>
-                                            <div class="input-item__inner">
-                                                <textarea type="text" name="comment" class="form-control" v-model="comment"></textarea>
+                                        @if($is_owned)
+                                        <form class="form-wrap">
+                                            <div class="input-item">
+                                                <label>Nội dung</label>
+                                                <div class="input-item__inner">
+                                                    <textarea type="text" name="comment" class="form-control" v-model="comment"></textarea>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-actions">
-                                            <button type="button" class="btn" @click="sendRating" id="sendRating">Gửi đánh giá</button>
-                                        </div>
-                                    </form>
+                                            <div class="form-actions">
+                                                <button type="button" class="btn" @click="sendRating" id="sendRating">Gửi đánh giá</button>
+                                            </div>
+                                        </form>
+                                        @else
+                                        <div><i>Vui lòng sở hữu khoá học để có thể đánh giá khoá học này.</i></div>
+                                        @endif
                                     @else
                                     <br/>
                                         <a href="{{ route('login') }}" class="btn">Đăng nhập để đánh giá</a>
@@ -543,6 +556,7 @@
             loadMore: true,
             loadingMore: false,
             totalRating: 0,
+            loadingToggle: false,
         },
         mounted() {
             this.getData();
@@ -595,6 +609,18 @@
             datetimeFormat(str) {
                 return moment(str).format('YYYY-MM-DD HH:mm:ss');
             },
+            toggleVisible(id, index) {
+                this.loadingToggle = true;
+                axios.patch(
+                    "api/rating/toggle/" + id,
+                ).then(res => {
+                    if(res.status == 'success') {
+                        this.listRating[index].visible = res.data.visible;
+                    }
+                }).finally(() => {
+                    this.loadingToggle = false;
+                })
+            }
         },
     });
 </script>
