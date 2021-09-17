@@ -21,6 +21,11 @@
     .page-combo-course a:hover {
         background: #e71d36;
     }
+    .page-combo-course a.btn {
+        line-height: normal;
+        height: auto;
+        border-radius: 0px;
+    }
 </style>
 @endsection
 
@@ -38,9 +43,8 @@
         <h1 class="page-title__title">{{ $course->title }}</h1><br/>
         @if (count($related_combos_course) > 0)
         <div class="page-combo-course">
-            <span>Combo khoá học: </span>
             @foreach($related_combos_course as $item)
-            <a type="button" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
+            <a class="btn" type="button" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
             @endforeach
         </div>
         @endif
