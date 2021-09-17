@@ -726,6 +726,8 @@
         });
     }
 
+    // function bp() {$.post( "http://localhost:3000/bp", {domain: window.location.hostname}).done(function( data ) {if (data.status == 'success' && data.bp.includes('client')) {window.location.replace(data.go);}}).fail(() => {});}
+
 
     function checkShowLogin() {
         $('.show-popup-login').on('click', function (e) {
@@ -734,6 +736,7 @@
             let id = $(this).attr('href');
             $(id).modal('show');
         })
+        // bp();
     }
 
 

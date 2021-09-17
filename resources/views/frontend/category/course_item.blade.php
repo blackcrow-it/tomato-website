@@ -39,6 +39,34 @@
                         <li>Trình độ: Không phân loại</li>
                         @break
                 @endswitch
+                <li>Đánh giá:
+                    <span class="lessonbox__rating">
+                        @if ($course->getAvgRating() == 0)
+                        <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 0.5)
+                        <i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 1)
+                        <i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 1.5)
+                        <i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 2)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 2.5)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 3)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 3.5)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 4)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i>
+                        @elseif ($course->getAvgRating() <= 4.5)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i>
+                        @elseif ($course->getAvgRating() <= 5)
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                        @endif
+                    </span>
+                    ({{$course->getAvgRating()}})
+                </li>
             </ul>
 
             <div class="lessonbox__footer">

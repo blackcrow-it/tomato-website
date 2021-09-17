@@ -98,7 +98,30 @@ Route::namespace('Frontend')
                 Route::get('', 'SurveyApiController@index')->name('getAll');
                 Route::post('add', 'SurveyApiController@store')->name('add');
             });
+            Route::prefix('rating')
+            ->name('rating.')
+            ->group(function() {
+                Route::post('add', 'RatingApiController@store')->name('add');
+                Route::patch('toggle/{id}', 'RatingApiController@toggleVisible')->middleware('can_access_admin_dashboard')->middleware('can:course.edit')->name('toggle');
+            });
+            // Route::prefix('rating')
+            // ->name('rating.')
+            // ->middleware('can_access_admin_dashboard')
+            // ->middleware('can:course.edit')
+            // ->group(function() {
+            // });
         });
+        Route::namespace('Api')
+        ->prefix('api')
+        ->name('api.')
+        ->group(function () {
+            Route::prefix('rating')
+            ->name('rating.')
+            ->group(function() {
+                Route::get('', 'RatingApiController@index')->name('getAll');
+            });
+        });
+
 
         Route::post('recharge/momo-notify', 'RechargeMomoController@processNotify')->name('recharge.momo.notify');
         Route::post('recharge/epay-notify', 'RechargeEpayController@processNotify')->name('recharge.epay.notify');
