@@ -19,11 +19,13 @@ class BookController extends Controller
         $category = new Category();
         $category->title = 'Tất cả tài liệu';
         $category->link = route('book.all');
+        $consultationFormBg = Setting::where('key', 'consultation_background')->first();
 
         return view('frontend.category.book', [
             'category' => $category,
             'list' => get_books(null, null, true),
-            'breadcrumb' => []
+            'breadcrumb' => [],
+            'consultation_background' => $consultationFormBg->value,
         ]);
     }
 
