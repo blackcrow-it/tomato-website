@@ -73,7 +73,14 @@
                                             </a>
                                             <div class="lessonbox__body">
                                                 <div class="lessonbox__cat">
-                                                    <a href="giaotrinhhanngu.html">Combo 1</a>
+                                                    @if($item->category)
+                                                    <div class="lessonbox__cat">
+                                                        <a href="">{{ $item->category->title }}</a>
+                                                    </div>
+                                                    @else
+                                                    <div class="lessonbox__cat">
+                                                    </div>
+                                                    @endif
                                                 </div>
                                                 <h3 class="lessonbox__title"><a href="{{$item->url}}">{{$item->title}}</a></h3>
                                                 <ul class="lessonbox__info">
@@ -94,8 +101,10 @@
                                                 <div class="lessonbox__footer">
                                                     <div class="lessonbox__price">
 
-                                                    {{-- {{ dd($item)}} --}}
                                                         <ins>{{ currency($item->price) }}</ins>
+                                                        @if ($item->price < $price_origin)
+                                                            <del>{{ currency($price_origin) }}</del>
+                                                        @endif
                                                     </div>
                                                     <a href="{{$item->url}}" class="btn btn--sm btn--outline">Chi tiết</a>
                                                 </div>
