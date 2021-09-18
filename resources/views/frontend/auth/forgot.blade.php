@@ -74,14 +74,18 @@
                                                                                 {{ session()->get('danger') }}
                                                                             </div>
                                                                         @endif
+                                                                        @if(!session()->has('success'))
                                                                         <label for="email-for-pass">Nhập địa chỉ email của bạn</label>
                                                                         <input type="email" name="email" placeholder="Nhập địa chỉ email" class="form-control" value="{{ old('email') }}">
                                                                         @error('email')
                                                                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                                                                         @enderror
+                                                                        @endif
                                                                     </div>
                                                                 </div>
+                                                                @if(!session()->has('success'))
                                                                 <div class="card-footer"> <button class="btn btn-success" type="submit">Lấy mật khẩu mới</button></div>
+                                                                @endif
                                                             </form>
                                                         </div>
                                                     </div>
