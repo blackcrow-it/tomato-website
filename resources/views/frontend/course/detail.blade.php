@@ -51,7 +51,7 @@
     </div>
 </section>
 
-<section class="section">
+<section class="section" id="course-js">
     <div class="container">
         @include('frontend.session_alert')
         @if($status && $is_owned)
@@ -144,6 +144,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Bình luận</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -238,6 +241,184 @@
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
                                 <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab-danhgia" role="tabpanel">
+                            <div class="courses-review">
+                                <h3 class="title-fz-22">Điểm đánh giá</h3>
+                                <div class="r-header">
+                                    <div class="r-point">
+                                        <div class="r-point__inner">
+                                            <h3 class="r-1">4.93</h3>
+                                            <h4 class="r-2">Course rating</h4>
+                                            <p class="r-3"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></p>
+                                        </div>
+                                    </div>
+                                    <div class="r-progress">
+                                        <ul class="r-progress__ul">
+                                            <li class="r-progress__li">
+                                                <div class="r-progress__step">
+                                                    <span style="width: 90%"></span>
+                                                </div>
+                                                <p class="r-progress__star">
+                                                    <span>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </span>
+                                                    4132
+                                                </p>
+                                            </li>
+                                            <li class="r-progress__li">
+                                                <div class="r-progress__step">
+                                                    <span style="width: 50%"></span>
+                                                </div>
+                                                <p class="r-progress__star">
+                                                    <span>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </span>
+                                                    12
+                                                </p>
+                                            </li>
+                                            <li class="r-progress__li">
+                                                <div class="r-progress__step">
+                                                    <span style="width: 30%"></span>
+                                                </div>
+                                                <p class="r-progress__star">
+                                                    <span>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </span>
+                                                    5
+                                                </p>
+                                            </li>
+                                            <li class="r-progress__li">
+                                                <div class="r-progress__step">
+                                                    <span style="width: 20%"></span>
+                                                </div>
+                                                <p class="r-progress__star">
+                                                    <span>
+                                                        <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </span>
+                                                    2
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="commentbox">
+                                    <div class="commentList">
+                                        <ul class="commentList__item">
+                                            <li>
+                                                <div class="commentList__inner">
+                                                    <div class="commentList__avatar">
+                                                        <img src="assets/img/icon/icon-avatar-comment.jpg" alt="">
+                                                    </div>
+                                                    <div class="commentList__body">
+                                                        <h3 class="commentList__name">Nguyễn Quốc Khánh</h3>
+                                                        <p class="commentList__text">Thầy ơi!! Tư vấn khóa combo N4-3, và bộ giáo trình kèm theo với ạ! cảm ơn ạ!!</p>
+                                                        <div class="commentList__meta">
+                                                            <span class="meta-date"><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                                        </div>
+                                                        <div class="commentList__star">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="commentList__inner">
+                                                    <div class="commentList__avatar">
+                                                        <img src="assets/img/icon/icon-avatar-comment.jpg" alt="">
+                                                    </div>
+                                                    <div class="commentList__body">
+                                                        <h3 class="commentList__name">Nguyễn Quốc Khánh</h3>
+                                                        <p class="commentList__text">Thầy ơi!! Tư vấn khóa combo N4-3, và bộ giáo trình kèm theo với ạ! cảm ơn ạ!!</p>
+                                                        <div class="commentList__meta">
+                                                            <span class="meta-date"><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                                        </div>
+                                                        <div class="commentList__star">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="commentList__inner">
+                                                    <div class="commentList__avatar">
+                                                        <img src="assets/img/icon/icon-avatar-comment.jpg" alt="">
+                                                    </div>
+                                                    <div class="commentList__body">
+                                                        <h3 class="commentList__name">Nguyễn Quốc Khánh</h3>
+                                                        <p class="commentList__text">Thầy ơi!! Tư vấn khóa combo N4-3, và bộ giáo trình kèm theo với ạ! cảm ơn ạ!!</p>
+                                                        <div class="commentList__meta">
+                                                            <span class="meta-date"><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                                        </div>
+                                                        <div class="commentList__star">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="addReviewBox">
+                                    <div class="f-header">
+                                        <h3 class="title-fz-22">Thêm đánh giá</h3>
+                                        <p class="f-header__text">Cảm nhận của bạn về khoá học này?</p>
+                                        <div class="f-header__star">
+                                            <input id="radio1" type="radio" name="star" value="5" v-model="star">
+                                            <label for="radio1"></label>
+                                            <input id="radio2" type="radio" name="star" value="4" v-model="star">
+                                            <label for="radio2"></label>
+                                            <input id="radio3" type="radio" name="star" value="3" v-model="star">
+                                            <label for="radio3"></label>
+                                            <input id="radio4" type="radio" name="star" value="2" v-model="star">
+                                            <label for="radio4"></label>
+                                            <input id="radio5" type="radio" name="star" value="1" v-model="star">
+                                            <label for="radio5"></label>
+                                        </div>
+                                    </div>
+                                    <form class="form-wrap">
+                                        <div class="input-item">
+                                            <label>Nội dung</label>
+                                            <div class="input-item__inner">
+                                                <textarea type="text" name="comment" class="form-control" v-model="comment"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <button type="button" class="btn" @click="sendRating">Gửi đánh giá</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -340,7 +521,25 @@
             }
         });
     });
-
+    new Vue({
+        el: '#course-js',
+        data: {
+            star: 0,
+            comment: ''
+        },
+        mounted() {
+        },
+        methods: {
+            sendRating() {
+                axios.post(
+                    "{{ route('api.rating.add') }}",
+                    { object_id: {{ $course->id }}, type: '{{ \App\Constants\ObjectType::COURSE }}', star: this.star, comment: this.comment }
+                ).then(function (response) {
+                    console.log(response);
+                });
+            }
+        },
+    });
 </script>
 <script>
     $('.entry-detail img').css('height', 'auto');
