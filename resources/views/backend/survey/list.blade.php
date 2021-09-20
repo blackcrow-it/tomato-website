@@ -72,6 +72,7 @@ Khảo sát
                     <td>{{ $item->created_at }}</td>
                     <td class="text-nowrap">
                         <a href="{{ route('admin.survey.detail', [ 'id' => $item->id ]) }}" class="btn btn-sm btn-info">Chi tiết</a>
+                        <a href="{{ route('admin.survey.statistic', [ 'partId' => $item->part_id ]) }}" class="btn btn-sm btn-info"><i class="fas fa-chart-pie"></i> Thống kê</a>
                     </td>
                 </tr>
             @endforeach

@@ -189,6 +189,7 @@ Route::prefix('admin')
                 Route::get('list', 'SurveyController@list')->name('list');
                 Route::get('detail/{id}', 'SurveyController@detail')->name('detail');
                 Route::post('received/{id}', 'SurveyController@received')->name('received');
+                Route::get('statistic/{partId}', 'SurveyController@statistic')->name('statistic');
             });
 
             Route::prefix('combo_courses')->name('combo_courses.')->group(function () {
