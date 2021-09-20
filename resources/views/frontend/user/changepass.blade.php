@@ -34,6 +34,7 @@
                 </div>
             @endif
 
+            @if(!session('success'))
             <form class="form-input" action="" method="POST">
                 @csrf
                 <div class="input-item">
@@ -61,6 +62,7 @@
                     <button type="submit" class="btn">Thay đổi mật khẩu</button>
                 </div>
             </form>
+            @endif
         </div>
     </div>
 </div>
