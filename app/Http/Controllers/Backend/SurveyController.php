@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Part;
 use App\Repositories\SurveyRepo;
 use App\Survey;
 use Exception;
@@ -57,6 +58,50 @@ class SurveyController extends Controller
                 ->route('admin.survey.list')
                 ->withErrors('Duyệt Phiếu khảo sát #'.$survey->id.' thất bại.');
         }
+    }
+
+    public function statistic($partId)
+    {
+        $partSurvey = Part::find($partId);
+        $surveys = Survey::where('part_id', $partId)->get();
+        $questions = $partSurvey->part_survey->data;
+        $index = 0;
+        foreach ($questions as $question) {
+            if ($question['type'] == 'radio') {
+                $questions[$index]['answers'] = array_fill(0, count($question['options']), 0);
+                $questions[$index]['comments'] = array();
+            } elseif ($question['type'] == 'textarea') {
+                $questions[$index]['answers'] = array();
+            }
+            $questions[$index]['totalAnswer'] = 0;
+            $index++;
+        }
+        foreach ($surveys as $survey) {
+            error_log($survey->id);
+            $index = 0;
+            foreach ($survey->data as $answer) {
+                if ($answer['type'] == 'radio') {
+                    if (array_key_exists('answer', $answer)) {
+                        $questions[$index]['answers'][$answer['answer']] += 1;
+                        $questions[$index]['totalAnswer'] += 1;
+                    }
+                    if (array_key_exists('comment', $answer) && $answer['comment'] != null) {
+                        array_push($questions[$index]['comments'], $answer['comment']);
+                    }
+                } elseif ($answer['type'] == 'textarea') {
+                    if (array_key_exists('answer', $answer) && $answer['answer'] != null) {
+                        array_push($questions[$index]['answers'], $answer['answer']);
+                        $questions[$index]['totalAnswer'] += 1;
+                    }
+                }
+                $index++;
+            }
+        }
+        return view('backend.survey.statistic', [
+            'part_survey' => $partSurvey,
+            'surveys' => $surveys,
+            'questions' => $questions
+        ]);
     }
 
     /**

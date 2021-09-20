@@ -81,7 +81,7 @@
                         </div>
 
                         <div class="text-center pt-10">
-                            <a href="/huong-dan-nap-tien-p6.html" class="btn-link">Hướng dẫn chi tiết nạp tiền <i class="fa fa-angle-right"></i></a>
+                            <a href="/huong-dan-dang-ky-va-nap-tien-p58.html" class="btn-link">Hướng dẫn chi tiết nạp tiền <i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
                     <div class="form-moneyCard__text">

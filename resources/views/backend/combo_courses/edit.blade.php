@@ -101,9 +101,9 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Ảnh bìa (cover)</label>
+                        <label>Ảnh vuông (Hiển thị phần combo liên quan)</label>
                         <div class="input-group">
-                            <input type="text" name="cover" placeholder="Ảnh bìa" value="{{ old('cover') ?? $data->cover ?? null }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
+                            <input type="text" name="cover" placeholder="Ảnh vuông" value="{{ old('cover') ?? $data->cover ?? null }}" class="form-control @error('cover') is-invalid @enderror" id="ck-cover">
                             @error('cover')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror

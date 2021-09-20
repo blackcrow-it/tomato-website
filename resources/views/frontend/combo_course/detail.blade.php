@@ -470,33 +470,50 @@
                                 <div class="title__title">Combo khoá học liên quan</div>
                             </div>
 
-
                             @if (count($related_combos_course) > 0)
-                            <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
-                                @foreach($related_combos_course as $item)
-                                <div class="lessonbox">
-                                    <div class="lessonbox__inner">
-                                        <div class="lessonbox__body">
-                                            <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
-                                            <div class="lessonbox__footer">
-                                                <div class="lessonbox__price">
-                                                    <?php
-                                                        $price_origin = 0;
-                                                        foreach ($item->items as $c_course) {
-                                                            $price_origin += $c_course->course->price;
-                                                        }
-                                                    ?>
-                                                    <ins>{{ currency($item->price) }}</ins>
-                                                    @if ($item->price < $price_origin)
-                                                        <del>{{ currency($price_origin) }}</del>
+                            <div class="lessonbox-wrap-min">
+                                <div class="row">
+                                    @foreach($related_combos_course as $item)
+                                    <div class="col-md-6">
+                                        <div class="lessonbox style-combo">
+                                            <div class="lessonbox__inner">
+                                                @if ($item->cover)
+                                                    <div class="lessonbox__img"><img src="{{ $item->cover }}" alt="{{ $item->title }}"></div>
+                                                @endif
+                                                <div class="lessonbox__body">
+                                                    @if($item->category)
+                                                    <div class="lessonbox__cat">
+                                                        <a href="">{{ $item->category->title }}</a>
+                                                    </div>
+                                                    @else
+                                                    <div class="lessonbox__cat">
+                                                    </div>
                                                     @endif
+                                                    <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
+                                                    <div class="lessonbox__footer">
+                                                        <div class="lessonbox__price">
+                                                            <?php
+                                                                $price_origin = 0;
+                                                                foreach ($item->items as $c_course) {
+                                                                    $price_origin += $c_course->course->price;
+                                                                }
+                                                            ?>
+                                                            <ins>{{ currency($item->price) }}</ins>
+                                                            @if ($item->price < $price_origin)
+                                                                <del>{{ currency($price_origin) }}</del>
+                                                            @endif
+                                                        </div>
+                                                        <div class="lessonbox__btn">
+                                                            <a href="{{ $item->url }}" class="btn btn--secondary btn--sm">Mua ngay</a>
+                                                            <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
                             </div>
                             @else
                             <div>Đang cập nhật ...</div>
