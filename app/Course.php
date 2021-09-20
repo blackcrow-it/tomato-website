@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Constants\ObjectType;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use DB;
@@ -114,5 +115,18 @@ class Course extends BaseModel
         if ($complete == 0) return 0;
         $percent = round((100 / $total) * $complete);
         return $percent;
+    }
+
+    public function getAvgRating() {
+        $totalStar = 0;
+        $ratingsOverview = Rating::query()->where('type', ObjectType::COURSE)->where('object_id', $this->id)->get();
+        foreach ($ratingsOverview as $rate) {
+            $totalStar += $rate->star;
+        }
+        if (count($ratingsOverview) > 0) {
+            return $totalStar / count($ratingsOverview);
+        } else {
+            return 0;
+        }
     }
 }
