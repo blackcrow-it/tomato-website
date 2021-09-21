@@ -51,7 +51,7 @@
     </div>
 </section>
 
-<section class="section" id="course__js">
+<section class="section">
     <div class="container">
         @include('frontend.session_alert')
         @if($status && $is_owned)
@@ -205,39 +205,8 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div style="margin-top: 50px;">
-                                @if (count($related_combos_course) > 0)
-                                <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
-                                    @foreach($related_combos_course as $item)
-                                    <div class="lessonbox">
-                                        <div class="lessonbox__inner">
-                                            <div class="lessonbox__body">
-                                                <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
-                                                <div class="lessonbox__footer">
-                                                    <div class="lessonbox__price">
-                                                        <?php
-                                                            $price_origin = 0;
-                                                            foreach ($item->items as $c_course) {
-                                                                $price_origin += $c_course->course->price;
-                                                            }
-                                                        ?>
-                                                        <ins>{{ currency($item->price) }}</ins>
-                                                        @if ($item->price < $price_origin)
-                                                            <del>{{ currency($price_origin) }}</del>
-                                                        @endif
-                                                    </div>
-                                                    <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                @else
-                                <div>Đang cập nhật ...</div>
-                                @endif
-                            </div>
                         </div>
+
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
                                 <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
@@ -541,7 +510,7 @@
 </script>
 <script>
     const vueCourse = new Vue({
-        el: '#course__js',
+        el: '#tab-danhgia',
         data:{
             star: 5,
             comment: '',
@@ -569,6 +538,7 @@
                     { object_id: {{ $course->id }}, type: '{{ \App\Constants\ObjectType::COURSE }}', star: this.star, comment: this.comment }
                 ).then(() => {
                     $("#sendRating").text("Đánh giá đã được gửi");
+                    this.comment = '';
                     this.currentPage = 1;
                     this.listRating = [];
                 }).then(() => {
