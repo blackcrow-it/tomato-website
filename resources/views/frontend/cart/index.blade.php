@@ -438,7 +438,9 @@
                             location.href = '{{ route("cart.complete") }}';
                         }).catch(err => {
                             const msg = Object.values(err.errors).map(x => x.join("\n")).join("\n");
-                            bootbox.alert(msg);
+                            bootbox.alert(msg, function(){
+                                window.location.href = "{{ route('user.recharge') }}"
+                            });
                             this.loading = false;
                         });
                     }

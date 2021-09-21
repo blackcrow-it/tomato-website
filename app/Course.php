@@ -124,7 +124,7 @@ class Course extends BaseModel
             $totalStar += $rate->star;
         }
         if (count($ratingsOverview) > 0) {
-            return $totalStar / count($ratingsOverview);
+            return round($totalStar / count($ratingsOverview), 1);
         } else {
             return 0;
         }

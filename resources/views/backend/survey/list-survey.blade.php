@@ -9,29 +9,6 @@ Phiếu khảo sát
 @endsection
 
 @section('content')
-{{-- @if($errors->any())
-    <div class="callout callout-danger">
-        <ul class="mb-0">
-            @foreach($errors->all() as $msg)
-                <li>{{ $msg }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif --}}
-
-{{-- @if(session('success'))
-    <div class="callout callout-success">
-        @if(is_array(session('success')))
-            <ul class="mb-0">
-                @foreach(session('success') as $msg)
-                    <li>{{ $msg }}</li>
-                @endforeach
-            </ul>
-        @else
-            {{ session('success') }}
-        @endif
-    </div>
-@endif --}}
 <div class="table-responsive">
     <table class="table table-hover table-light">
         <thead class="bg-lightblue">
@@ -47,7 +24,7 @@ Phiếu khảo sát
             @foreach($list as $item)
                 <tr>
                     <td>{{ $item->id }}</td>
-                    <td><a href="{{ route('admin.part.list', [ 'lesson_id' => $item->lesson->id ]) }}">{{ $item->title }}</a></td>
+                    <td><a href="{{ route('admin.part.list', [ 'lesson_id' => $item->lesson->id ]) }}">{{ $item->title }}</a> ({{ $item->lesson->title }})</td>
                     <td><a href="{{ route('admin.lesson.list', [ 'course_id' => $item->lesson->course->id ]) }}" target="_blank">{{ $item->lesson->course->title }}</a></td>
                     <td>{{ $item->created_at }}</td>
                     <td class="text-nowrap">
