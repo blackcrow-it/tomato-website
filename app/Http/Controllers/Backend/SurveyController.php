@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Constants\PartType;
 use App\Http\Controllers\Controller;
 use App\Part;
 use App\Repositories\SurveyRepo;
@@ -27,6 +28,14 @@ class SurveyController extends Controller
     {
         $list = Survey::orderBy('created_at', 'DESC')->paginate();
         return view('backend.survey.list', [
+            'list' => $list
+        ]);
+    }
+
+    public function listSurvey(Request $request)
+    {
+        $list = Part::where('type', PartType::SURVEY)->orderBy('created_at', 'DESC')->paginate();
+        return view('backend.survey.list-survey', [
             'list' => $list
         ]);
     }
@@ -66,6 +75,9 @@ class SurveyController extends Controller
         $surveys = Survey::where('part_id', $partId)->get();
         $questions = $partSurvey->part_survey->data;
         $index = 0;
+        if ($questions == null) {
+            $questions = array();
+        }
         foreach ($questions as $question) {
             if ($question['type'] == 'radio') {
                 $questions[$index]['answers'] = array_fill(0, count($question['options']), 0);
