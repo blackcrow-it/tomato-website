@@ -143,10 +143,10 @@
                             <a class="nav-link" data-toggle="tab" href="#tab-tailieu" role="tab" aria-controls="tab-tailieu" aria-selected="false">Tài liệu liên quan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Bình luận</a>
+                            <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá khoá học</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá</a>
+                            <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Bình luận</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -325,6 +325,7 @@
                                                     </div>
                                                     <div class="commentList__body">
                                                         <h3 class="commentList__name">@{{ item.user.name }}</h3>
+                                                        <p style="color: rgb(0, 171, 86);"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Đã mua khoá học</p>
                                                         <p class="commentList__text">@{{ item.comment }}</p>
                                                         <div class="commentList__meta">
                                                             <span class="meta-date"><i class="fa fa-clock-o"></i>@{{ datetimeFormat(item.updated_at) }}</span>
