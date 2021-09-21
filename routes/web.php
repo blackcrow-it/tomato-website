@@ -210,6 +210,7 @@ Route::prefix('admin')
             });
             Route::prefix('survey')->name('survey.')->group(function () {
                 Route::get('list', 'SurveyController@list')->name('list');
+                Route::get('list-survey', 'SurveyController@listSurvey')->name('list_survey');
                 Route::get('detail/{id}', 'SurveyController@detail')->name('detail');
                 Route::post('received/{id}', 'SurveyController@received')->name('received');
                 Route::get('statistic/{partId}', 'SurveyController@statistic')->name('statistic');

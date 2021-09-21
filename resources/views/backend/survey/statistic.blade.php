@@ -61,6 +61,7 @@ Thống kê phiếu khảo sát
 @section('content')
 <div class="row mb-2">
     <div class="offset-sm-2 col-sm-8">
+        @if ($questions)
             @foreach ($questions as $question)
             <div class="card">
                 <div class="card-body" style="padding: 12px 12px 24px 24px;">
@@ -88,6 +89,9 @@ Thống kê phiếu khảo sát
                 </div>
             </div>
             @endforeach
+        @else
+        <h4 style="text-align: center">Chưa có câu hỏi trong phiếu khảo sát</h4>
+        @endif
     </div>
 </div>
 @endsection

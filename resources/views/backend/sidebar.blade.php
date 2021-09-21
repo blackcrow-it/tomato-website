@@ -57,11 +57,24 @@
         </a>
     </li>
 @endcan
-<li class="nav-item">
-    <a href="{{ route('admin.survey.list') }}" class="nav-link {{ request()->routeIs('admin.survey.list') ? 'active' : '' }}">
+<li class="nav-item has-treeview {{ request()->routeIs('admin.survey.*') ? 'menu-open' : '' }}">
+    <a href="#" class="nav-link {{ request()->routeIs('admin.survey.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-chart-area"></i>
         <p>Phiếu khảo sát</p>
+        <i class="fas fa-angle-left right"></i>
     </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a href="{{ route('admin.survey.list') }}" class="nav-link {{ request()->routeIs('admin.survey.list') ? 'active' : '' }}">
+                <p>Các phiếu trả lời</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('admin.survey.list_survey') }}" class="nav-link {{ request()->routeIs('admin.survey.list_survey') ? 'active' : '' }}">
+                <p>Danh sách phiếu</p>
+            </a>
+        </li>
+    </ul>
 </li>
 @can('teacher.list')
     <li class="nav-item">
