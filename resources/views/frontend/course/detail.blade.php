@@ -44,7 +44,7 @@
         @if (count($related_combos_course) > 0)
         <div class="page-combo-course">
             @foreach($related_combos_course as $item)
-            <a class="btn" type="button" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
+            <a class="btn" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
             @endforeach
         </div>
         @endif
