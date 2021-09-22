@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Constants\ObjectType;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -49,5 +50,18 @@ class ComboCourses extends Model
     public function category()
     {
         return $this->belongsTo('App\Category', 'category_id', 'id');
+    }
+
+    public function getAvgRating() {
+        $totalStar = 0;
+        $ratingsOverview = Rating::query()->where('type', ObjectType::COMBO_COURSE)->where('object_id', $this->id)->get();
+        foreach ($ratingsOverview as $rate) {
+            $totalStar += $rate->star;
+        }
+        if (count($ratingsOverview) > 0) {
+            return round($totalStar / count($ratingsOverview), 1);
+        } else {
+            return 0;
+        }
     }
 }

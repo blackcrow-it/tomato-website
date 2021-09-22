@@ -87,14 +87,31 @@
                                                     <li>Khoá học: {{ $item->items()->count() }} khoá</li>
                                                     <li>Đánh giá:
                                                         <span class="lessonbox__rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            {{-- <i class="fa fa-star-o"></i> --}}
+                                                            @if ($item->getAvgRating() == 0)
+                                                            <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 0.5)
+                                                            <i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 1)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 1.5)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 2)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 2.5)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 3)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 3.5)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 4)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 4.5)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i>
+                                                            @elseif ($item->getAvgRating() <= 5)
+                                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                                            @endif
                                                         </span>
-                                                        (5)
+                                                        ({{$item->getAvgRating()}})
                                                     </li>
                                                 </ul>
 

@@ -44,14 +44,14 @@
         @if (count($related_combos_course) > 0)
         <div class="page-combo-course">
             @foreach($related_combos_course as $item)
-            <a class="btn" type="button" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
+            <a class="btn" href="{{$item->url}}" title="{{count($item->items)}} khoá ({{currency($item->price)}})">{{$item->title}}</a>
             @endforeach
         </div>
         @endif
     </div>
 </section>
 
-<section class="section" id="course__js">
+<section class="section">
     <div class="container">
         @include('frontend.session_alert')
         @if($status && $is_owned)
@@ -143,10 +143,10 @@
                             <a class="nav-link" data-toggle="tab" href="#tab-tailieu" role="tab" aria-controls="tab-tailieu" aria-selected="false">Tài liệu liên quan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Bình luận</a>
+                            <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá khoá học</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá</a>
+                            <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Bình luận</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -205,39 +205,8 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div style="margin-top: 50px;">
-                                @if (count($related_combos_course) > 0)
-                                <div class="owl-carousel lessonbox-wrap-min combo-ralete-slide">
-                                    @foreach($related_combos_course as $item)
-                                    <div class="lessonbox">
-                                        <div class="lessonbox__inner">
-                                            <div class="lessonbox__body">
-                                                <h3 class="lessonbox__title"><a href="{{ $item->url }}">{{ $item->title }}</a></h3>
-                                                <div class="lessonbox__footer">
-                                                    <div class="lessonbox__price">
-                                                        <?php
-                                                            $price_origin = 0;
-                                                            foreach ($item->items as $c_course) {
-                                                                $price_origin += $c_course->course->price;
-                                                            }
-                                                        ?>
-                                                        <ins>{{ currency($item->price) }}</ins>
-                                                        @if ($item->price < $price_origin)
-                                                            <del>{{ currency($price_origin) }}</del>
-                                                        @endif
-                                                    </div>
-                                                    <a href="{{ $item->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                @else
-                                <div>Đang cập nhật ...</div>
-                                @endif
-                            </div>
                         </div>
+
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
                                 <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
@@ -356,6 +325,7 @@
                                                     </div>
                                                     <div class="commentList__body">
                                                         <h3 class="commentList__name">@{{ item.user.name }}</h3>
+                                                        <p style="color: rgb(0, 171, 86);"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Đã mua khoá học</p>
                                                         <p class="commentList__text">@{{ item.comment }}</p>
                                                         <div class="commentList__meta">
                                                             <span class="meta-date"><i class="fa fa-clock-o"></i>@{{ datetimeFormat(item.updated_at) }}</span>
@@ -462,7 +432,7 @@
                     <div class="consultationForm__content">
                         <div class="consultationForm__fix">
                             <div class="consultationForm__title">Đăng ký nhận tin</div>
-                            <form class="consultationForm__form">
+                            {{-- <form class="consultationForm__form">
                                 <div class="input-item">
                                     <div class="input-item__inner">
                                         <input type="text" name="name" placeholder="Họ và tên" class="form-control">
@@ -496,7 +466,9 @@
                                 <div class="button-item">
                                     <button type="submit" class="btn">Nhận tư vấn</button>
                                 </div>
-                            </form>
+                            </form> --}}
+                            <div id="getfly-optin-form-iframe-1632304410038"></div> <script type="text/javascript"> (function(){ var r = window.document.referrer != ""? window.document.referrer: window.location.origin; var regex = /(https?:\/\/.*?)\//g; var furl = regex.exec(r); r = furl ? furl[0] : r; var f = document.createElement("iframe"); const url_string = new URLSearchParams(window.location.search); var utm_source, utm_campaign, utm_medium, utm_content, utm_term; if((!url_string.has('utm_source') || url_string.get('utm_source') == '') && document.cookie.match(new RegExp('utm_source' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_source' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_source') != null ? "&utm_source=" + url_string.get('utm_source') : "";} if((!url_string.has('utm_campaign') || url_string.get('utm_campaign') == '') && document.cookie.match(new RegExp('utm_campaign' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_campaign' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_campaign') != null ? "&utm_campaign=" + url_string.get('utm_campaign') : "";} if((!url_string.has('utm_medium') || url_string.get('utm_medium') == '') && document.cookie.match(new RegExp('utm_medium' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_medium' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_medium') != null ? "&utm_medium=" + url_string.get('utm_medium') : "";} if((!url_string.has('utm_content') || url_string.get('utm_content') == '') && document.cookie.match(new RegExp('utm_content' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_content' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_content') != null ? "&utm_content=" + url_string.get('utm_content') : "";} if((!url_string.has('utm_term') || url_string.get('utm_term') == '') && document.cookie.match(new RegExp('utm_term' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_term' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_term') != null ? "&utm_term=" + url_string.get('utm_term') : "";} if((!url_string.has('utm_user') || url_string.get('utm_user') == '') && document.cookie.match(new RegExp('utm_user' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_user' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_user') != null ? "&utm_user=" + url_string.get('utm_user') : "";} if((!url_string.has('utm_account') || url_string.get('utm_account') == '') && document.cookie.match(new RegExp('utm_account' + '=([^;]+)')) != null){ r+= "&" +document.cookie.match(new RegExp('utm_account' + '=([^;]+)'))[0]; } else { r+= url_string.get('utm_account') != null ?
+"&utm_account=" + url_string.get('utm_account') : "";} r+="&full_url="+encodeURIComponent(window.location.href); f.setAttribute("src", "https://tomato.getflycrm.com/api/forms/viewform/?key=w8shkJjELRuKUXebItqDJKecwtfK42jJfmp9VgkcLThAKkuO9I&referrer="+r); f.style.width = "100%";f.style.height = "700px";f.setAttribute("frameborder","0");f.setAttribute("marginheight","0"); f.setAttribute("marginwidth","0");var s = document.getElementById("getfly-optin-form-iframe-1632304410038");s.appendChild(f); })(); </script>
                         </div>
                     </div>
                 </div>
@@ -541,7 +513,7 @@
 </script>
 <script>
     const vueCourse = new Vue({
-        el: '#course__js',
+        el: '#tab-danhgia',
         data:{
             star: 5,
             comment: '',
@@ -569,6 +541,7 @@
                     { object_id: {{ $course->id }}, type: '{{ \App\Constants\ObjectType::COURSE }}', star: this.star, comment: this.comment }
                 ).then(() => {
                     $("#sendRating").text("Đánh giá đã được gửi");
+                    this.comment = '';
                     this.currentPage = 1;
                     this.listRating = [];
                 }).then(() => {

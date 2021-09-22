@@ -6,6 +6,7 @@ use App\UserCourse;
 use App\Category;
 use App\Constants\PartType;
 use App\CourseRelatedBook;
+use App\CourseRelatedCourse;
 use App\Http\Controllers\Controller;
 use App\Part;
 use App\ProcessPart;
@@ -58,6 +59,16 @@ class PartController extends Controller
             ->orderBy('id', 'asc')
             ->get()
             ->pluck('related_book');
+
+        $relatedCourses = CourseRelatedCourse::query()
+            ->with('related_course')
+            ->whereHas('related_course', function (Builder $query) {
+                $query->where('enabled', true);
+            })
+            ->where('course_id', $course->id)
+            ->orderBy('id', 'asc')
+            ->get()
+            ->pluck('related_course');
 
         $lessons = $course->lessons()
             ->where('enabled', true)
@@ -119,6 +130,7 @@ class PartController extends Controller
             'is_owned' => $isUserOwnedThisCourse,
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
             'related_books' => $relatedBooks,
+            'related_courses' => $relatedCourses,
             'test_result' => $testResults
         ]);
     }
