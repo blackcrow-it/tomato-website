@@ -112,60 +112,11 @@
                         <div class="row spacing-custom lessonbox-wrap-style">
                             @if ($combo_course->items->count() > 0)
                                 @foreach ($combo_course->items as $item)
+                                @php
+                                    $course = $item->course;
+                                @endphp
                                 <div class="col-6 col-lg-4">
-                                    <div class="lessonbox">
-                                        <div class="lessonbox__inner">
-                                            <a href="{{ $item->course->url }}" class="lessonbox__img">
-                                                <img src="{{ $item->course->thumbnail }}">
-                                            </a>
-                                            <div class="lessonbox__body">
-                                                @if($item->course->category)
-                                                    <div class="lessonbox__cat">
-                                                        <a href="{{ $item->course->category->url }}">{{ $item->course->category->title }}</a>
-                                                    </div>
-                                                @endif
-                                                <h3 class="lessonbox__title"><a href="{{ $item->course->url }}">{{ $item->course->title }}</a></h3>
-                                                <ul class="lessonbox__info">
-                                                    <li>Bài học: {{ $item->course->lessons()->count() }} bài</li>
-                                                    <li>Giảng viên: <a href="#">{{$item->course->teacher->name}}</a></li>
-                                                    @switch($item->course->level)
-                                                        @case(\App\Constants\CourseLevel::ELEMENTARY)
-                                                            <li>Trình độ: Sơ cấp</li>
-                                                            @break
-                                                        @case(\App\Constants\CourseLevel::INTERMEDIATE)
-                                                            <li>Trình độ: Trung cấp</li>
-                                                            @break
-                                                        @case(\App\Constants\CourseLevel::ADVANCED)
-                                                            <li>Trình độ: Cao cấp</li>
-                                                            @break
-                                                        @default
-                                                            <li>Trình độ: Không phân loại</li>
-                                                            @break
-                                                    @endswitch
-                                                    {{-- <li>Đánh giá:
-                                                        <span class="lessonbox__rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                        </span>
-                                                        (4.5)
-                                                    </li> --}}
-                                                </ul>
-
-                                                <div class="lessonbox__footer">
-                                                    <div class="lessonbox__price">
-                                                        <ins>{{ currency($item->course->price) }}</ins>
-                                                        @if($item->course->original_price)
-                                                            <del>{{ currency($item->course->original_price) }}</del>
-                                                        @endif
-                                                    </div>
-                                                    <a href="{{ $item->course->url }}" class="btn btn--sm btn--outline">Chi tiết</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('frontend.category.course_item', [ 'course' => $course ])
                                 </div>
                                 @endforeach
                             @else
@@ -188,9 +139,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tab-binhluan" role="tab" aria-controls="tab-binhluan" aria-selected="false">Bình luận</a>
                                     </li>
-                                    {{-- <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tab-danhgia" role="tab" aria-controls="tab-giaotrinh" aria-selected="false">Đánh giá</a>
-                                    </li> --}}
+                                    </li>
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade" id="tabgioithieu" role="tabpanel">
@@ -283,16 +234,27 @@
                                             <div class="r-header">
                                                 <div class="r-point">
                                                     <div class="r-point__inner">
-                                                        <h3 class="r-1">4.93</h3>
+                                                        <h3 class="r-1">@{{ avgStar }}</h3>
                                                         <h4 class="r-2">Course rating</h4>
-                                                        <p class="r-3"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></p>
+                                                        <p class="r-3">
+                                                            <i class="fa fa-star" v-if="avgStar >= 0.5"></i>
+                                                            <i class="fa fa-star-o" v-else></i>
+                                                            <i class="fa fa-star" v-if="avgStar >= 1.5"></i>
+                                                            <i class="fa fa-star-o" v-else></i>
+                                                            <i class="fa fa-star" v-if="avgStar >= 2.5"></i>
+                                                            <i class="fa fa-star-o" v-else></i>
+                                                            <i class="fa fa-star" v-if="avgStar >= 3.5"></i>
+                                                            <i class="fa fa-star-o" v-else></i>
+                                                            <i class="fa fa-star" v-if="avgStar >= 4.5"></i>
+                                                            <i class="fa fa-star-o" v-else></i>
+                                                        </p>
                                                     </div>
                                                 </div>
                                                 <div class="r-progress">
                                                     <ul class="r-progress__ul">
                                                         <li class="r-progress__li">
                                                             <div class="r-progress__step">
-                                                                <span style="width: 90%"></span>
+                                                                <span v-bind:style="{ width: 100 * (countStarFive / totalRating) + '%' }"></span>
                                                             </div>
                                                             <p class="r-progress__star">
                                                                 <span>
@@ -300,44 +262,59 @@
                                                                     <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star"></i>
                                                                 </span>
-                                                                4132
+                                                                @{{ countStarFive }}
                                                             </p>
                                                         </li>
                                                         <li class="r-progress__li">
                                                             <div class="r-progress__step">
-                                                                <span style="width: 50%"></span>
+                                                                <span v-bind:style="{ width: 100 * (countStarFour / totalRating) + '%' }"></span>
                                                             </div>
                                                             <p class="r-progress__star">
                                                                 <span>
                                                                     <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star-o"></i>
                                                                 </span>
-                                                                12
+                                                                @{{countStarFour}}
                                                             </p>
                                                         </li>
                                                         <li class="r-progress__li">
                                                             <div class="r-progress__step">
-                                                                <span style="width: 30%"></span>
+                                                                <span v-bind:style="{ width: 100 * (countStarThree / totalRating) + '%' }"></span>
                                                             </div>
                                                             <p class="r-progress__star">
                                                                 <span>
                                                                     <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star"></i>
-                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star"></i>
                                                                     <i class="fa fa-star-o"></i>
                                                                     <i class="fa fa-star-o"></i>
                                                                 </span>
-                                                                5
+                                                                @{{countStarThree}}
                                                             </p>
                                                         </li>
                                                         <li class="r-progress__li">
                                                             <div class="r-progress__step">
-                                                                <span style="width: 20%"></span>
+                                                                <span v-bind:style="{ width: 100 * (countStarTwo / totalRating) + '%' }"></span>
+                                                            </div>
+                                                            <p class="r-progress__star">
+                                                                <span>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                    <i class="fa fa-star-o"></i>
+                                                                </span>
+                                                                @{{countStarTwo}}
+                                                            </p>
+                                                        </li>
+                                                        <li class="r-progress__li">
+                                                            <div class="r-progress__step">
+                                                                <span v-bind:style="{ width: 100 * (countStarOne / totalRating) + '%' }"></span>
                                                             </div>
                                                             <p class="r-progress__star">
                                                                 <span>
@@ -347,7 +324,7 @@
                                                                     <i class="fa fa-star-o"></i>
                                                                     <i class="fa fa-star-o"></i>
                                                                 </span>
-                                                                2
+                                                                @{{countStarOne}}
                                                             </p>
                                                         </li>
                                                     </ul>
@@ -357,65 +334,38 @@
                                             <div class="commentbox">
                                                 <div class="commentList">
                                                     <ul class="commentList__item">
-                                                        <li>
+                                                        <li v-for="(item, index) in listRating" :key="item.id" v-if="item.visible || 'true' == @if(Gate::check('admin') || Gate::check('course.edit'))'true'@else'false'@endif">
                                                             <div class="commentList__inner">
                                                                 <div class="commentList__avatar">
-                                                                    <img src="assets/img/icon/icon-avatar-comment.jpg" alt="">
+                                                                    <img :src="item.user.avatar" alt="">
                                                                 </div>
                                                                 <div class="commentList__body">
-                                                                    <h3 class="commentList__name">Nguyễn Quốc Khánh</h3>
-                                                                    <p class="commentList__text">Thầy ơi!! Tư vấn khóa combo N4-3, và bộ giáo trình kèm theo với ạ! cảm ơn ạ!!</p>
+                                                                    <h3 class="commentList__name">@{{ item.user.name }}</h3>
+                                                                    <p style="color: rgb(0, 171, 86);"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Đã mua khoá học</p>
+                                                                    <p class="commentList__text">@{{ item.comment }}</p>
                                                                     <div class="commentList__meta">
-                                                                        <span class="meta-date"><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
+                                                                        <span class="meta-date"><i class="fa fa-clock-o"></i>@{{ datetimeFormat(item.updated_at) }}</span>
                                                                     </div>
+                                                                    @if(Gate::check('admin') || Gate::check('course.edit'))
+                                                                    <div>
+                                                                        <br/>
+                                                                        <button @click="toggleVisible(item.id, index)" class="btn--sm" :disabled="loadingToggle">
+                                                                            <span v-if="item.visible">Ẩn</span>
+                                                                            <span v-else>Hiện</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    @endif
                                                                     <div class="commentList__star">
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="commentList__inner">
-                                                                <div class="commentList__avatar">
-                                                                    <img src="assets/img/icon/icon-avatar-comment.jpg" alt="">
-                                                                </div>
-                                                                <div class="commentList__body">
-                                                                    <h3 class="commentList__name">Nguyễn Quốc Khánh</h3>
-                                                                    <p class="commentList__text">Thầy ơi!! Tư vấn khóa combo N4-3, và bộ giáo trình kèm theo với ạ! cảm ơn ạ!!</p>
-                                                                    <div class="commentList__meta">
-                                                                        <span class="meta-date"><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
-                                                                    </div>
-                                                                    <div class="commentList__star">
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div class="commentList__inner">
-                                                                <div class="commentList__avatar">
-                                                                    <img src="assets/img/icon/icon-avatar-comment.jpg" alt="">
-                                                                </div>
-                                                                <div class="commentList__body">
-                                                                    <h3 class="commentList__name">Nguyễn Quốc Khánh</h3>
-                                                                    <p class="commentList__text">Thầy ơi!! Tư vấn khóa combo N4-3, và bộ giáo trình kèm theo với ạ! cảm ơn ạ!!</p>
-                                                                    <div class="commentList__meta">
-                                                                        <span class="meta-date"><i class="fa fa-clock-o"></i>14-05-2020 11:34</span>
-                                                                    </div>
-                                                                    <div class="commentList__star">
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
+                                                                        <i class="fa fa-star" v-if="item.star >= 1"></i>
+                                                                        <i class="fa fa-star-o" v-else></i>
+                                                                        <i class="fa fa-star" v-if="item.star >= 2"></i>
+                                                                        <i class="fa fa-star-o" v-else></i>
+                                                                        <i class="fa fa-star" v-if="item.star >= 3"></i>
+                                                                        <i class="fa fa-star-o" v-else></i>
+                                                                        <i class="fa fa-star" v-if="item.star >= 4"></i>
+                                                                        <i class="fa fa-star-o" v-else></i>
+                                                                        <i class="fa fa-star" v-if="item.star >= 5"></i>
+                                                                        <i class="fa fa-star-o" v-else></i>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -424,40 +374,50 @@
                                                 </div>
                                             </div>
 
+                                            <div style="text-align: center" v-if="loadMore">
+                                                <button class="btn btn--sm btn--outline" @click="getData">
+                                                    <img src="/tomato/assets/img/icon/icon-loading.gif" v-if="loadingMore">
+                                                    <span v-else>Tải thêm đánh giá</span>
+                                                </button>
+                                            </div>
+
                                             <div class="addReviewBox">
                                                 <div class="f-header">
                                                     <h3 class="title-fz-22">Thêm đánh giá</h3>
-                                                    <p class="f-header__text">What is it like to Course?</p>
+                                                    <p class="f-header__text">Cảm nhận của bạn về combo khoá học này?</p>
                                                     <div class="f-header__star">
-                                                        <input id="radio1" type="radio" name="estrellas" value="5">
+                                                        <input id="radio1" type="radio" name="star" value="5" v-model="star">
                                                         <label for="radio1"></label>
-                                                        <input id="radio2" type="radio" name="estrellas" value="4">
+                                                        <input id="radio2" type="radio" name="star" value="4" v-model="star">
                                                         <label for="radio2"></label>
-                                                        <input id="radio3" type="radio" name="estrellas" value="3">
+                                                        <input id="radio3" type="radio" name="star" value="3" v-model="star">
                                                         <label for="radio3"></label>
-                                                        <input id="radio4" type="radio" name="estrellas" value="2">
+                                                        <input id="radio4" type="radio" name="star" value="2" v-model="star">
                                                         <label for="radio4"></label>
-                                                        <input id="radio5" type="radio" name="estrellas" value="1">
+                                                        <input id="radio5" type="radio" name="star" value="1" v-model="star">
                                                         <label for="radio5"></label>
                                                     </div>
                                                 </div>
-                                                <form class="form-wrap">
-                                                    <div class="input-item">
-                                                        <label>Tên bạn</label>
-                                                        <div class="input-item__inner">
-                                                            <input type="text" name="phone" class="form-control">
+                                                @if(auth()->check())
+                                                    @if($is_owned)
+                                                    <form class="form-wrap">
+                                                        <div class="input-item">
+                                                            <label>Nội dung</label>
+                                                            <div class="input-item__inner">
+                                                                <textarea type="text" name="comment" class="form-control" v-model="comment"></textarea>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="input-item">
-                                                        <label>Nội dung</label>
-                                                        <div class="input-item__inner">
-                                                            <textarea type="text" name="name" class="form-control"></textarea>
+                                                        <div class="form-actions">
+                                                            <button type="button" class="btn" @click="sendRating" id="sendRating">Gửi đánh giá</button>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-actions">
-                                                        <button type="submit" class="btn">Gửi đánh giá</button>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                    @else
+                                                    <div><i>Vui lòng sở hữu combo khoá học này để có thể đánh giá.</i></div>
+                                                    @endif
+                                                @else
+                                                <br/>
+                                                    <a href="{{ route('login') }}" class="btn">Đăng nhập để đánh giá</a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -613,5 +573,91 @@
 </script>
 <script>
     $('.entry-detail img').css('height', 'auto');
+</script>
+<script>
+    const vueCourse = new Vue({
+        el: '#tab-danhgia',
+        data:{
+            star: 5,
+            comment: '',
+            listRating: [],
+            avgStar: 0,
+            countStarOne: 0,
+            countStarTwo: 0,
+            countStarThree: 0,
+            countStarFour: 0,
+            countStarFive: 0,
+            currentPage: 1,
+            loadMore: true,
+            loadingMore: false,
+            totalRating: 0,
+            loadingToggle: false,
+        },
+        mounted() {
+            this.getData();
+        },
+        methods: {
+            sendRating() {
+                $("#sendRating").attr("disabled", true);
+                axios.post(
+                    "{{ route('api.rating.add') }}",
+                    { object_id: {{ $combo_course->id }}, type: '{{ \App\Constants\ObjectType::COMBO_COURSE }}', star: this.star, comment: this.comment }
+                ).then(() => {
+                    $("#sendRating").text("Đánh giá đã được gửi");
+                    this.comment = '';
+                    this.currentPage = 1;
+                    this.listRating = [];
+                }).then(() => {
+                    this.getData();
+                }).catch(() => {
+                    $("#sendRating").attr("disabled", false);
+                    $("#sendRating").text("Đánh giá chưa được gửi");
+                });
+            },
+            getData() {
+                this.loadingMore = true;
+                axios.get(
+                    "{{ route('api.rating.getAll') }}",
+                    {
+                        params: { object_id: {{ $combo_course->id }}, type: '{{ \App\Constants\ObjectType::COMBO_COURSE }}', page: this.currentPage }
+                    }
+                ).then(response => {
+                    this.countStarOne = response.rank.starOne;
+                    this.countStarTwo = response.rank.starTwo;
+                    this.countStarThree = response.rank.starThree;
+                    this.countStarFour = response.rank.starFour;
+                    this.countStarFive = response.rank.starFive;
+                    this.avgStar = response.avgStar;
+                    this.totalRating = response.data.total;
+                    response.data.data.forEach(element => {
+                        this.listRating.push(element);
+                    });
+                    if (response.data.last_page > this.currentPage) {
+                        this.currentPage += 1;
+                        this.loadMore = true;
+                    } else {
+                        this.loadMore = false;
+                    }
+                }).finally(() => {
+                    this.loadingMore = false;
+                });
+            },
+            datetimeFormat(str) {
+                return moment(str).format('YYYY-MM-DD HH:mm:ss');
+            },
+            toggleVisible(id, index) {
+                this.loadingToggle = true;
+                axios.patch(
+                    "api/rating/toggle/" + id,
+                ).then(res => {
+                    if(res.status == 'success') {
+                        this.listRating[index].visible = res.data.visible;
+                    }
+                }).finally(() => {
+                    this.loadingToggle = false;
+                })
+            }
+        },
+    });
 </script>
 @endsection
