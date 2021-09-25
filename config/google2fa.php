@@ -57,15 +57,15 @@ return [
     /*
      * One Time Password View.
      */
-    'view' => 'google2fa.index',
+    'view' => 'frontend.auth.2fa',
 
     /*
      * One Time Password error message.
      */
     'error_messages' => [
-        'wrong_otp'       => "The 'One Time Password' typed was wrong.",
-        'cannot_be_empty' => 'One Time Password cannot be empty.',
-        'unknown'         => 'An unknown error has occurred. Please try again.',
+        'wrong_otp'       => "Mã xác thực OTP không chính xác.",
+        'cannot_be_empty' => 'Không được để trống mã xác thực.',
+        'unknown'         => 'Không rõ lỗi. Vui lòng thử lại.',
     ],
 
     /*
