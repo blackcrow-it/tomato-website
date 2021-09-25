@@ -36,4 +36,9 @@ class User extends Authenticatable
     {
         $this->attributes['email'] = mb_strtolower($value);
     }
+
+    public function passwordSecurity()
+    {
+        return $this->hasOne(PasswordSecurity::class)->orderBy('id','DESC');
+    }
 }

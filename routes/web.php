@@ -25,6 +25,13 @@ Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback'
 Route::get('auth/facebook', 'SocialiteController@loginWithFacebook')->name('auth.facebook');
 Route::get('auth/facebook/callback', 'SocialiteController@loginWithFacebookCallback')->name('auth.facebook.callback');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/2fa','PasswordSecurityController@show2faForm');
+    Route::post('/generate2faSecret','PasswordSecurityController@generate2faSecret')->name('generate2faSecret');
+    Route::post('/2fa','PasswordSecurityController@enable2fa')->name('enable2fa');
+    Route::post('/disable2fa','PasswordSecurityController@disable2fa')->name('disable2fa');
+});
+
 Route::namespace('Frontend')
     ->group(function () {
 
@@ -71,6 +78,7 @@ Route::namespace('Frontend')
             Route::get('ca-nhan/lich-su-nap-tien', 'UserController@rechargeHistory')->name('user.recharge_history');
             Route::get('ca-nhan/doi-mat-khau', 'UserController@changepass')->name('user.changepass');
             Route::post('ca-nhan/doi-mat-khau', 'UserController@doChangepass')->name('user.changepass');
+            Route::get('ca-nhan/xac-minh-hai-buoc', 'UserController@twoFactorAuthentication')->name('user.2fa');
         });
 
         Route::middleware('auth')->group(function () {

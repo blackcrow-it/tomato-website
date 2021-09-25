@@ -12,6 +12,7 @@
         "aminyazdanpanah/php-ffmpeg-video-streaming": "^1.2",
         "arcanedev/log-viewer": "~7.0",
         "aws/aws-php-sns-message-validator": "^1.6",
+        "bacon/bacon-qr-code": "^2.0",
         "ckfinder/ckfinder-laravel-package": "v3.5.1.4",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
@@ -25,6 +26,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "league/html-to-markdown": "^5.0",
         "php-http/guzzle6-adapter": "^2.0",
+        "pragmarx/google2fa-laravel": "^2.0",
         "spatie/laravel-analytics": "^3.11",
         "spatie/laravel-permission": "^3.17",
         "spatie/laravel-sluggable": "^2.4"

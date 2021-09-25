@@ -13,9 +13,11 @@ use App\Http\Requests\Frontend\UploadAvatarRequest;
 use App\Http\Requests\Frontend\UserInfoRequest;
 use App\InvoiceItem;
 use App\Recharge;
+use App\User;
 use App\UserCourse;
 use Auth;
 use DB;
+use Google2FA;
 use Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -32,7 +34,7 @@ class UserController extends Controller
 
     public function info_getData()
     {
-        return Auth::user();
+        return User::with('passwordSecurity')->find(Auth::user()->id);
     }
 
     public function info_submitData(UserInfoRequest $request)
@@ -149,5 +151,34 @@ class UserController extends Controller
         Auth::logoutOtherDevices($password);
 
         return redirect()->route('user.changepass')->with('success', 'Thay đổi mật khẩu thành công.');
+    }
+
+    public function twoFactorAuthentication()
+    {
+        $user = Auth::user();
+
+        $google2fa_url = "";
+        if($user->passwordSecurity){
+            $google2fa_img = Google2FA::getQRCodeInline(
+                'Tomato Education Online',
+                $user->email,
+                $user->passwordSecurity->google2fa_secret
+            );
+            $google2fa_url = Google2FA::getQRCodeUrl(
+                'Tomato Education Online',
+                $user->email,
+                $user->passwordSecurity->google2fa_secret
+            );
+            $secret_key = Google2FA::getSecret($user->passwordSecurity->google2fa_secret);
+        }
+        $data = [
+            'user' => $user,
+            'google2fa_img' => $google2fa_img,
+            'google2fa_url' => $google2fa_url,
+            'secret_key' => $secret_key,
+            'enable'=> $user->passwordSecurity->google2fa_enable
+        ];
+
+        return view('frontend.user.2fa')->with('data', $data);
     }
 }
