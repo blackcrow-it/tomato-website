@@ -22,7 +22,7 @@
                 <a href="{{ $combo_course->url }}">{{ $combo_course->title }}</a>
             </div>
             <ul class="lessonbox__info">
-                <li>
+                <li class="meta-course">
                     Khoá học:
                     @if($combo_course->items()->count() > 0)
                         {{ $combo_course->items()->count() }} khoá
@@ -30,7 +30,7 @@
                         Đang cập nhật
                     @endif
                 </li>
-                <li>Đánh giá:
+                <li class="meta-rating">Đánh giá:
                     <span class="lessonbox__rating">
                         @if ($combo_course->getAvgRating() == 0)
                         <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>

@@ -993,6 +993,7 @@
     }
     .lessonbox__info li.meta-rating {
         display: block;
+        padding-bottom: 10px;
     }
     .lessonbox__footer .btn {
         height: 30px;
