@@ -200,234 +200,259 @@
         padding: 30px 20px 20px 40px;
     }
 }
+
 .lessonbox__rating {
     color: #ffa908;
 }
 
-
-.commentForm__avatar,
-.commentList__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
+.commentForm__avatar, .commentList__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .commentForm {
-  position: relative;
-  padding-left: 60px;
+    position: relative;
+    padding-left: 60px;
 }
 
-.commentForm__avatar,
-.commentList__avatar {
-  position: absolute;
-  top: 0;
-  left: 0;
+.commentForm__avatar, .commentList__avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .commentForm__form {
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 }
+
 .commentForm__form textarea {
-  height: 100px;
-  min-height: 100px;
+    height: 100px;
+    min-height: 100px;
 }
+
 .commentForm__form button {
-  background-color: #E71D36;
-  color: #fff;
+    background-color: #E71D36;
+    color: #fff;
 }
 
 .commentList ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
+
 .commentList ul li {
-  padding: 20px 0;
-  border-top: 1px solid #d2cfcf;
+    padding: 20px 0;
+    border-top: 1px solid #d2cfcf;
 }
 
 .commentList__inner {
-  position: relative;
-  min-height: 50px;
-  padding-left: 60px;
+    position: relative;
+    min-height: 50px;
+    padding-left: 60px;
 }
 
 .commentList__name {
-  font-size: 16px;
-  color: #E71D36;
-  margin-bottom: 5px;
+    font-size: 16px;
+    color: #E71D36;
+    margin-bottom: 5px;
 }
 
 .commentList__text {
-  line-height: 1.4;
-  margin-bottom: 8px;
+    line-height: 1.4;
+    margin-bottom: 8px;
 }
 
 .commentList__meta {
-  font-family: "Nunito", sans-serif;
-  font-size: 12px;
+    font-family: "Nunito", sans-serif;
+    font-size: 12px;
 }
+
 .commentList__meta i {
-  margin-right: 3px;
+    margin-right: 3px;
 }
+
 .commentList__meta a {
-  color: #77AF41;
+    color: #77AF41;
 }
-.commentList__meta > span:not(:last-child):after {
-  content: "|";
-  color: #707070;
-  margin: 0 6px;
+
+.commentList__meta>span:not(:last-child):after {
+    content: "|";
+    color: #707070;
+    margin: 0 6px;
 }
 
 .commentList__submenu {
-  border-top: 1px solid #d2cfcf;
-  padding-left: 40px !important;
-  margin-top: 20px !important;
+    border-top: 1px solid #d2cfcf;
+    padding-left: 40px !important;
+    margin-top: 20px !important;
 }
+
 .commentList__submenu li {
-  padding: 20px 0;
-  border-top: 1px solid #d2cfcf;
+    padding: 20px 0;
+    border-top: 1px solid #d2cfcf;
 }
+
 .commentList__submenu li:first-child {
-  border-top: 0;
+    border-top: 0;
 }
+
 .commentList__submenu li:last-child {
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
+
 .commentList__submenu .commentList__inner {
-  padding-top: 0;
-  padding-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
+
 .commentList__submenu .commentForm__form {
-  position: relative;
-  margin-bottom: 0;
-}
-.commentList__submenu .commentForm__form textarea {
-  height: 60px;
-  min-height: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-@media (max-width: 767.98px) {
-  .commentList__submenu .commentForm__form button {
-    padding: 7px 20px;
-    font-size: 12px;
-  }
-}
-@media (min-width: 768px) {
-  .commentList__submenu .commentForm__form {
-    padding-right: 100px;
-  }
-  .commentList__submenu .commentForm__form textarea {
+    position: relative;
     margin-bottom: 0;
-  }
-  .commentList__submenu .commentForm__form button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    max-width: 81px;
-  }
+}
+
+.commentList__submenu .commentForm__form textarea {
+    height: 60px;
+    min-height: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 767.98px) {
+    .commentList__submenu .commentForm__form button {
+        padding: 7px 20px;
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .commentList__submenu .commentForm__form {
+        padding-right: 100px;
+    }
+    .commentList__submenu .commentForm__form textarea {
+        margin-bottom: 0;
+    }
+    .commentList__submenu .commentForm__form button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        max-width: 81px;
+    }
 }
 
 .btn-load-comment span {
-  display: inline-block;
-  max-width: 10px;
+    display: inline-block;
+    max-width: 10px;
 }
 
 .commentList__star {
-  color: #ffa908;
-  line-height: 1;
-  margin-top: 10px;
+    color: #ffa908;
+    line-height: 1;
+    margin-top: 10px;
 }
-@media (min-width: 768px) {
-    .courses-review .commentList__body {
-      position: relative;
-      padding-right: 100px;
-    }
-    .courses-review .commentList__body .commentList__star {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
-  }
 
 @media (min-width: 768px) {
-  .commentList__submenu {
-    padding-left: 70px !important;
-  }
+    .courses-review .commentList__body {
+        position: relative;
+        padding-right: 100px;
+    }
+    .courses-review .commentList__body .commentList__star {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 }
+
+@media (min-width: 768px) {
+    .commentList__submenu {
+        padding-left: 70px !important;
+    }
+}
+
 .courses-review .r-point {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     position: relative;
     border: 1px solid #d2cfcf;
     border-radius: 4px;
     background-color: #fff;
     -webkit-box-shadow: 0px 8px 15px rgba(140, 152, 164, 0.1);
-            box-shadow: 0px 8px 15px rgba(140, 152, 164, 0.1);
+    box-shadow: 0px 8px 15px rgba(140, 152, 164, 0.1);
     margin-bottom: 20px;
-  }
-  .courses-review .r-point:after {
+}
+
+.courses-review .r-point:after {
     content: "";
     display: block;
     padding-top: 50%;
-  }
-  .courses-review .r-point__inner {
+}
+
+.courses-review .r-point__inner {
     position: absolute;
     left: 0;
     right: 0;
     text-align: center;
-  }
-  .courses-review .r-point__inner .r-1 {
+}
+
+.courses-review .r-point__inner .r-1 {
     font-size: 40px;
     font-weight: 500;
     line-height: 1;
     color: #000;
     margin: 0;
-  }
-  .courses-review .r-point__inner .r-2 {
+}
+
+.courses-review .r-point__inner .r-2 {
     font-size: 15px;
-  }
-  .courses-review .r-point__inner .r-3 {
+}
+
+.courses-review .r-point__inner .r-3 {
     margin: 0;
     color: #ffa908;
     letter-spacing: 0;
-  }
-  .courses-review .r-point__inner .r-3 i {
+}
+
+.courses-review .r-point__inner .r-3 i {
     margin: 0 3px;
-  }
-  .courses-review .r-progress__ul {
+}
+
+.courses-review .r-progress__ul {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  .courses-review .r-progress__li {
+}
+
+.courses-review .r-progress__li {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
+    flex-wrap: wrap;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-  }
-  .courses-review .r-progress__li + li {
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.courses-review .r-progress__li+li {
     margin-top: 15px;
-  }
-  .courses-review .r-progress__step {
+}
+
+.courses-review .r-progress__step {
     position: relative;
     width: 45%;
     height: 10px;
     background-color: #d2cfcf;
     border-radius: 10px;
     margin-right: 15px;
-  }
-  .courses-review .r-progress__step span {
+}
+
+.courses-review .r-progress__step span {
     position: absolute;
     top: 0;
     left: 0;
@@ -435,34 +460,40 @@
     height: 100%;
     border-radius: 10px;
     background-color: #E71D36;
-  }
-  .courses-review .r-progress__star {
+}
+
+.courses-review .r-progress__star {
     margin: 0;
-  }
-  .courses-review .r-progress__star span {
+}
+
+.courses-review .r-progress__star span {
     color: #ffa908;
     margin-right: 5px;
-  }
-  .courses-review .addReviewBox {
+}
+
+.courses-review .addReviewBox {
     background-color: #fff;
     -webkit-box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     margin-top: 45px;
     padding: 40px 20px;
-  }
-  @media (min-width: 768px) {
+}
+
+@media (min-width: 768px) {
     .courses-review .addReviewBox {
-      padding: 50px;
+        padding: 50px;
     }
-  }
-  .courses-review .addReviewBox .f-header__star {
+}
+
+.courses-review .addReviewBox .f-header__star {
     direction: rtl;
     unicode-bidi: bidi-override;
     line-height: 1;
     font-size: 0;
-  }
-  .courses-review .addReviewBox .f-header__star input {
+}
+
+.courses-review .addReviewBox .f-header__star input {
     display: none;
 }
 
@@ -681,241 +712,299 @@
         margin-right: 27px;
     }
 }
+
 .commentbox-wrap {
-  margin-top: 60px;
+    margin-top: 60px;
 }
+
 .commentbox-wrap .nav-tabs {
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
 }
 
-
-.commentForm__avatar,
-.commentList__avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
+.commentForm__avatar, .commentList__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .commentForm {
-  position: relative;
-  padding-left: 60px;
+    position: relative;
+    padding-left: 60px;
 }
 
-.commentForm__avatar,
-.commentList__avatar {
-  position: absolute;
-  top: 0;
-  left: 0;
+.commentForm__avatar, .commentList__avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .commentForm__form {
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 }
+
 .commentForm__form textarea {
-  height: 100px;
-  min-height: 100px;
+    height: 100px;
+    min-height: 100px;
 }
+
 .commentForm__form button {
-  background-color: #E71D36;
-  color: #fff;
+    background-color: #E71D36;
+    color: #fff;
 }
 
 .commentList ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
+
 .commentList ul li {
-  padding: 20px 0;
-  border-top: 1px solid #d2cfcf;
+    padding: 20px 0;
+    border-top: 1px solid #d2cfcf;
 }
 
 .commentList__inner {
-  position: relative;
-  min-height: 50px;
-  padding-left: 60px;
+    position: relative;
+    min-height: 50px;
+    padding-left: 60px;
 }
 
 .commentList__name {
-  font-size: 16px;
-  color: #E71D36;
-  margin-bottom: 5px;
+    font-size: 16px;
+    color: #E71D36;
+    margin-bottom: 5px;
 }
 
 .commentList__text {
-  line-height: 1.4;
-  margin-bottom: 8px;
+    line-height: 1.4;
+    margin-bottom: 8px;
 }
 
 .commentList__meta {
-  font-family: "Nunito", sans-serif;
-  font-size: 12px;
+    font-family: "Nunito", sans-serif;
+    font-size: 12px;
 }
+
 .commentList__meta i {
-  margin-right: 3px;
+    margin-right: 3px;
 }
+
 .commentList__meta a {
-  color: #77AF41;
+    color: #77AF41;
 }
-.commentList__meta > span:not(:last-child):after {
-  content: "|";
-  color: #707070;
-  margin: 0 6px;
+
+.commentList__meta>span:not(:last-child):after {
+    content: "|";
+    color: #707070;
+    margin: 0 6px;
 }
 
 .commentList__submenu {
-  border-top: 1px solid #d2cfcf;
-  padding-left: 40px !important;
-  margin-top: 20px !important;
+    border-top: 1px solid #d2cfcf;
+    padding-left: 40px !important;
+    margin-top: 20px !important;
 }
+
 .commentList__submenu li {
-  padding: 20px 0;
-  border-top: 1px solid #d2cfcf;
+    padding: 20px 0;
+    border-top: 1px solid #d2cfcf;
 }
+
 .commentList__submenu li:first-child {
-  border-top: 0;
+    border-top: 0;
 }
+
 .commentList__submenu li:last-child {
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
+
 .commentList__submenu .commentList__inner {
-  padding-top: 0;
-  padding-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
+
 .commentList__submenu .commentForm__form {
-  position: relative;
-  margin-bottom: 0;
-}
-.commentList__submenu .commentForm__form textarea {
-  height: 60px;
-  min-height: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-@media (max-width: 767.98px) {
-  .commentList__submenu .commentForm__form button {
-    padding: 7px 20px;
-    font-size: 12px;
-  }
-}
-@media (min-width: 768px) {
-  .commentList__submenu .commentForm__form {
-    padding-right: 100px;
-  }
-  .commentList__submenu .commentForm__form textarea {
+    position: relative;
     margin-bottom: 0;
-  }
-  .commentList__submenu .commentForm__form button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    max-width: 81px;
-  }
+}
+
+.commentList__submenu .commentForm__form textarea {
+    height: 60px;
+    min-height: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 767.98px) {
+    .commentList__submenu .commentForm__form button {
+        padding: 7px 20px;
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .commentList__submenu .commentForm__form {
+        padding-right: 100px;
+    }
+    .commentList__submenu .commentForm__form textarea {
+        margin-bottom: 0;
+    }
+    .commentList__submenu .commentForm__form button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        max-width: 81px;
+    }
 }
 
 .btn-load-comment span {
-  display: inline-block;
-  max-width: 10px;
+    display: inline-block;
+    max-width: 10px;
 }
 
 .commentList__star {
-  color: #ffa908;
-  line-height: 1;
-  margin-top: 10px;
+    color: #ffa908;
+    line-height: 1;
+    margin-top: 10px;
 }
 
 @media (min-width: 768px) {
-  .commentList__submenu {
-    padding-left: 70px !important;
-  }
-  .courses-review .addReviewBox .f-header__star label {
-    font-size: 18px;
-    color: #ffa908;
-    cursor: pointer;
-    line-height: 1;
-    padding: 10px 3px;
-  }
-  .courses-review .addReviewBox .f-header__star label:after {
-    content: "";
-    font-family: "fontAwesome";
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-  }
-  .courses-review .addReviewBox .f-header__star label:hover:after,
-  .courses-review .addReviewBox .f-header__star label:hover ~ label:after {
-    content: "";
-  }
-  .courses-review .addReviewBox .f-header__star input[type=radio]:checked ~ label:after {
-    content: "";
-  }
-  .courses-review .addReviewBox .form-wrap .input-item label {
-    display: block;
-    font-size: 14px;
-  }
-  .courses-review .commentbox {
-    margin-top: 55px;
-  }
-  @media (min-width: 768px) {
+    .commentList__submenu {
+        padding-left: 70px !important;
+    }
+    .courses-review .addReviewBox .f-header__star label {
+        font-size: 18px;
+        color: #ffa908;
+        cursor: pointer;
+        line-height: 1;
+        padding: 10px 3px;
+    }
+    .courses-review .addReviewBox .f-header__star label:after {
+        content: "";
+        font-family: "fontAwesome";
+        -webkit-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+    .courses-review .addReviewBox .f-header__star label:hover:after, .courses-review .addReviewBox .f-header__star label:hover~label:after {
+        content: "";
+    }
+    .courses-review .addReviewBox .f-header__star input[type=radio]:checked~label:after {
+        content: "";
+    }
+    .courses-review .addReviewBox .form-wrap .input-item label {
+        display: block;
+        font-size: 14px;
+    }
+    .courses-review .commentbox {
+        margin-top: 55px;
+    }
+}
+
+@media (min-width: 768px) {
     .courses-review .r-header {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-align: center;
-          -ms-flex-align: center;
-              align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
     }
     .courses-review .r-point {
-      width: 250px;
-      margin-bottom: 0;
+        width: 250px;
+        margin-bottom: 0;
     }
     .courses-review .r-point:after {
-      content: "";
-      display: block;
-      padding-top: 89%;
+        content: "";
+        display: block;
+        padding-top: 89%;
     }
     .courses-review .r-point__inner .r-1 {
-      font-size: 50px;
+        font-size: 50px;
     }
     .courses-review .r-point__inner .r-2 {
-      font-size: 16px;
+        font-size: 16px;
     }
     .courses-review .r-progress {
-      -webkit-box-flex: 1;
-          -ms-flex-positive: 1;
-              flex-grow: 1;
-      padding-left: 20px;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        padding-left: 20px;
     }
-    .courses-review .r-progress__li + li {
-      margin-top: 35px;
-    }
-    .courses-review .r-progress__step {
-      margin-right: 15px;
-    }
-  }
-  @media (min-width: 1260px) {
-    .courses-review .r-point {
-      width: 270px;
-    }
-    .courses-review .r-point__inner .r-1 {
-      font-size: 60px;
-    }
-    .courses-review .r-point__inner .r-2 {
-      font-size: 18px;
-    }
-    .courses-review .r-progress {
-      padding-left: 30px;
+    .courses-review .r-progress__li+li {
+        margin-top: 35px;
     }
     .courses-review .r-progress__step {
-      width: 52%;
-      margin-right: 27px;
+        margin-right: 15px;
     }
-  }
+}
 
+@media (min-width: 1260px) {
+    .courses-review .r-point {
+        width: 270px;
+    }
+    .courses-review .r-point__inner .r-1 {
+        font-size: 60px;
+    }
+    .courses-review .r-point__inner .r-2 {
+        font-size: 18px;
+    }
+    .courses-review .r-progress {
+        padding-left: 30px;
+    }
+    .courses-review .r-progress__step {
+        width: 52%;
+        margin-right: 27px;
+    }
+}
 
 .lessonbox__rating {
     color: #ffa908;
 }
+
+.lessonbox__info {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.lessonbox__info li {
+    line-height: 1.2;
+}
+
+.lessonbox__info li+li {
+    margin-top: 8px;
+}
+
+.lessonbox__info li a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 767.98px) {
+    .lessonbox__info {
+        display: block;
+    }
+    .lessonbox__info li {
+        display: none;
+        font-size: 10px;
+    }
+    .lessonbox__info li.meta-rating {
+        display: block;
+        padding-bottom: 10px;
+    }
+    .lessonbox__footer .btn {
+        height: 30px;
+        font-size: 12px;
+        line-height: 28px;
+        border-radius: 20px;
+        letter-spacing: 0;
+        padding: 0 13px;
+    }
+}
+
+/* .lessonbox__body {
+    padding-bottom: 55px;
+} */

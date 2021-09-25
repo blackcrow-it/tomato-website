@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'can_access_admin_dashboard' => \App\Http\Middleware\CanAccessAdminDashboard::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        '2fa' => \App\Http\Middleware\Google2FAMiddleware::class,
     ];
 }
