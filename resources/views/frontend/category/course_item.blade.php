@@ -16,7 +16,7 @@
                 <a href="{{ $course->url }}">{{ $course->title }}</a>
             </div>
             <ul class="lessonbox__info">
-                <li>
+                <li class="meta-course">
                     Bài học:
                     @if($course->lessons->count() > 0)
                         {{ $course->lessons->count() }} bài
@@ -24,22 +24,22 @@
                         Đang cập nhật
                     @endif
                 </li>
-                <li>Giảng viên: <span class="text-danger">{{ $course->teacher->name ?? 'Tomato Online' }}</span></li>
+                <li class="meta-teacher">Giảng viên: <span class="text-danger">{{ $course->teacher->name ?? 'Tomato Online' }}</span></li>
                 @switch($course->level)
                     @case(\App\Constants\CourseLevel::ELEMENTARY)
-                        <li>Trình độ: Sơ cấp</li>
+                        <li class="meta-lever">Trình độ: Sơ cấp</li>
                         @break
                     @case(\App\Constants\CourseLevel::INTERMEDIATE)
-                        <li>Trình độ: Trung cấp</li>
+                        <li class="meta-lever">Trình độ: Trung cấp</li>
                         @break
                     @case(\App\Constants\CourseLevel::ADVANCED)
-                        <li>Trình độ: Cao cấp</li>
+                        <li class="meta-lever">Trình độ: Cao cấp</li>
                         @break
                     @default
-                        <li>Trình độ: Không phân loại</li>
+                        <li class="meta-lever">Trình độ: Không phân loại</li>
                         @break
                 @endswitch
-                <li>Đánh giá:
+                <li class="meta-rating">Đánh giá:
                     <span class="lessonbox__rating">
                         @if ($course->getAvgRating() == 0)
                         <i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>
