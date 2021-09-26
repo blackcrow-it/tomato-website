@@ -133,6 +133,11 @@ Route::namespace('Frontend')
             ->group(function() {
                 Route::get('', 'RatingApiController@index')->name('getAll');
             });
+            Route::prefix('comment')
+            ->name('comment.')
+            ->group(function() {
+                Route::get('', 'CommentApiController@index')->name('getAll');
+            });
         });
 
 
