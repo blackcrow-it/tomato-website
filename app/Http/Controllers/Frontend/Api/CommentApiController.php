@@ -89,6 +89,45 @@ class CommentApiController extends Controller
     }
 
     /**
+     * Phê duyệt bình luận.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function approve(Request $request, $id)
+    {
+        $comment = Comment::find($id);
+        if ($comment) {
+            $comment->approved = true;
+            $comment->save();
+            return response(['msg' => 'Approve comment', 'data' => $comment, 'status' => 'success'], 200);
+        } else {
+            return response(['msg' => 'Not found comment', 'status' => 'error'], 404);
+        }
+    }
+
+    /**
+     * Phê duyệt bình luận.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function delete(Request $request, $id)
+    {
+        $comment = Comment::find($id);
+        if ($comment) {
+            $comment->delete();
+            $comments = Comment::where('parent_id', $id)->get();
+            foreach ($comments as $c) {
+                $c->delete();
+            }
+            return response(['msg' => 'Delete comment', 'status' => 'success'], 200);
+        } else {
+            return response(['msg' => 'Not found comment', 'status' => 'error'], 404);
+        }
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id

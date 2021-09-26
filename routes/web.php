@@ -94,40 +94,39 @@ Route::namespace('Frontend')
             Route::get('recharge/epay-callback', 'RechargeEpayController@processCallback')->name('recharge.epay.callback');
         });
 
-        Route::middleware('auth')
-        ->namespace('Api')
-        ->prefix('api')
-        ->name('api.')
-        ->group(function () {
-            Route::prefix('test-result')
-            ->name('test_result.')
-            ->group(function() {
-                Route::get('', 'TestResultApiController@index')->name('getAll');
-                Route::post('add', 'TestResultApiController@store')->name('add');
-            });
-            Route::prefix('survey')
-            ->name('survey.')
-            ->group(function() {
-                Route::get('', 'SurveyApiController@index')->name('getAll');
-                Route::post('add', 'SurveyApiController@store')->name('add');
-            });
-            Route::prefix('rating')
-            ->name('rating.')
-            ->group(function() {
-                Route::post('add', 'RatingApiController@store')->name('add');
-                Route::patch('toggle/{id}', 'RatingApiController@toggleVisible')->middleware('can_access_admin_dashboard')->middleware('can:course.edit')->name('toggle');
-            });
-            // Route::prefix('rating')
-            // ->name('rating.')
-            // ->middleware('can_access_admin_dashboard')
-            // ->middleware('can:course.edit')
-            // ->group(function() {
-            // });
-        });
         Route::namespace('Api')
         ->prefix('api')
         ->name('api.')
         ->group(function () {
+            Route::middleware(['auth'])->group(function () {
+                Route::prefix('test-result')
+                ->name('test_result.')
+                ->group(function() {
+                    Route::get('', 'TestResultApiController@index')->name('getAll');
+                    Route::post('add', 'TestResultApiController@store')->name('add');
+                });
+                Route::prefix('survey')
+                ->name('survey.')
+                ->group(function() {
+                    Route::get('', 'SurveyApiController@index')->name('getAll');
+                    Route::post('add', 'SurveyApiController@store')->name('add');
+                });
+                Route::prefix('rating')
+                ->name('rating.')
+                ->group(function() {
+                    Route::post('add', 'RatingApiController@store')->name('add');
+                    Route::patch('toggle/{id}', 'RatingApiController@toggleVisible')->middleware('can:course.edit')->name('toggle');
+                });
+
+                Route::middleware(['can_access_admin_dashboard'])->group(function () {
+                    Route::prefix('comment')
+                    ->name('comment.')
+                    ->group(function() {
+                        Route::patch('approve/{id}', 'CommentApiController@approve')->name('approve');
+                        Route::delete('delete/{id}', 'CommentApiController@delete')->name('delete');
+                    });
+                });
+            });
             Route::prefix('rating')
             ->name('rating.')
             ->group(function() {
@@ -137,6 +136,7 @@ Route::namespace('Frontend')
             ->name('comment.')
             ->group(function() {
                 Route::get('', 'CommentApiController@index')->name('getAll');
+                Route::post('add', 'CommentApiController@store')->name('add');
             });
         });
 

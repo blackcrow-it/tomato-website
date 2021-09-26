@@ -141,7 +141,11 @@
                         </div>
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
+                                @if (auth()->check())
+                                    @include('frontend.comment.item')
+                                @else
                                 <div class="fb-comments" data-href="{{ $book->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -247,4 +251,5 @@
     });
 
 </script>
+@includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $book->id, 'type_object' => \App\Constants\ObjectType::BOOK ])
 @endsection
