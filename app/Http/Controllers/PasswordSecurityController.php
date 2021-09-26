@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PasswordSecurity;
 use Auth;
+use Debugbar;
 use Hash;
 use Illuminate\Http\Request;
 use Google2FA;
@@ -40,13 +41,12 @@ class PasswordSecurityController extends Controller
     public function generate2faSecret(Request $request){
         $user = Auth::user();
         // Initialise the 2FA class
-        $google2fa = app('pragmarx.google2fa');
 
         // Add the secret key to the registration data
         PasswordSecurity::create([
             'user_id' => $user->id,
             'google2fa_enable' => 0,
-            'google2fa_secret' => $google2fa->generateSecretKey(),
+            'google2fa_secret' => Google2FA::generateSecretKey(),
         ]);
 
         return redirect()
@@ -56,14 +56,17 @@ class PasswordSecurityController extends Controller
 
     public function enable2fa(Request $request){
         $user = Auth::user();
-        $google2fa = app('pragmarx.google2fa');
         $secret = strval($request->input('first'));
         $secret .= strval($request->input('second'));
         $secret .= strval($request->input('third'));
         $secret .= strval($request->input('fourth'));
         $secret .= strval($request->input('fifth'));
         $secret .= strval($request->input('sixth'));
-        $valid = $google2fa->verifyKey($user->passwordSecurity->google2fa_secret, $secret);
+        $valid = Google2FA::verifyKey($user->passwordSecurity->google2fa_secret, $secret);
+        $otp = Google2FA::getCurrentOtp($user->passwordSecurity->google2fa_secret);
+        Debugbar::info('SECRET_KEY: '.$user->passwordSecurity->google2fa_secret);
+        Debugbar::info('CODE: '.$secret);
+        Debugbar::info('OTP: '.$otp);
         if ($valid) {
             $user->passwordSecurity->google2fa_enable = 1;
             $user->passwordSecurity->save();
@@ -82,7 +85,6 @@ class PasswordSecurityController extends Controller
         //     // The passwords matches
         //     return redirect()->back()->with("error","Your  password does not matches with your account password. Please try again.");
         // }
-        $google2fa = app('pragmarx.google2fa');
         $user = Auth::user();
         $secret = strval($request->input('first'));
         $secret .= strval($request->input('second'));
@@ -90,7 +92,7 @@ class PasswordSecurityController extends Controller
         $secret .= strval($request->input('fourth'));
         $secret .= strval($request->input('fifth'));
         $secret .= strval($request->input('sixth'));
-        $valid = $google2fa->verifyKey($user->passwordSecurity->google2fa_secret, $secret);
+        $valid = Google2FA::verifyKey($user->passwordSecurity->google2fa_secret, $secret);
         if ($valid) {
             $user->passwordSecurity->google2fa_enable = 0;
             $user->passwordSecurity->save();
