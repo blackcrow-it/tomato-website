@@ -104,7 +104,7 @@
                                     <div class="input-address__item">
                                         <label>Tỉnh, Thành phố</label>
                                         <select v-model="shipInfo.city" class="form-control">
-                                            <option v-for="item in local" :value="item.name">@{{ item.name }}</option>
+                                            <option v-for="province in provinces" :value="province.PROVINCE_ID">@{{ province.PROVINCE_CODE }} - @{{ province.PROVINCE_NAME }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -305,6 +305,7 @@
         </div>
     </div>
 </section>
+{{$token_viettel}}
 
 @endsection
 
@@ -328,10 +329,23 @@
             loading: false,
             promoCode: undefined,
             promoData: undefined,
+            provinces: [],
+            districts: [],
+            wards: [],
+            settings: {
+                async: true,
+                crossDomain: true,
+                url: "https://partner.viettelpost.vn/v2/user/Login",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            },
         },
         mounted() {
             this.getData();
             this.getLocalData();
+            this.getProvinces();
 
             const oldShipInfo = JSON.parse(`{{ json_encode(old("ship_info")) }}`);
             if (oldShipInfo) {
@@ -339,6 +353,35 @@
             }
         },
         methods: {
+            getProvinces() {
+                var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://partner.viettelpost.vn/v2/user/Login",
+                    "method": "POST",
+                    "headers": {
+                        "Content-Type": "application/json",
+                        "Origin": "https://partner.viettelpost.vn"
+                    },
+                    "data": {
+                        "USERNAME":"0866531360",
+                        "PASSWORD":"hungprotq1"
+                    }
+                }
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                });
+                // axios.get(
+                //     'https://partner.viettelpost.vn/v2/categories/listProvinceById?provinceId=-1',
+                //     {
+                //         headers: {
+                //             'Access-Control-Allow-Origin': '*',
+                //             'Content-Type': 'application/json',
+                //         }
+                //     }).then(res => {
+                //         console.log(res);
+                //     });
+            },
             getLocalData() {
                 axios.get('{{ url("json/vietnam-db.json") }}').then(res => {
                     res.sort((a, b) => a.name.localeCompare(b.name));
