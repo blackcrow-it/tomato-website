@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DB;
 use Analytics;
+use App\ComboCourses;
+use App\Constants\ObjectType;
 use App\Survey;
 use Spatie\Analytics\Period;
 
@@ -47,7 +49,7 @@ class HomeController extends Controller
             ->get();
         foreach ($invoiceItemsToday as $item) {
             $totalInvoicesToday += $item->sum_price;
-            if($item->type == 'course') {
+            if($item->type == ObjectType::COURSE) {
                 $course = Course::where('id', $item->object_id)->first();
                 $categoryTitle = "Khác";
                 if ($course->category) {
@@ -58,8 +60,19 @@ class HomeController extends Controller
                 } else {
                     $listCategories->$categoryTitle = $item->sum_price;
                 }
-            } elseif ($item->type == 'book') {
+            } elseif ($item->type == ObjectType::BOOK) {
                 $categoryTitle = "Sách";
+                if (property_exists($listCategories, $categoryTitle)) {
+                    $listCategories->$categoryTitle += $item->sum_price;
+                } else {
+                    $listCategories->$categoryTitle = $item->sum_price;
+                }
+            } elseif ($item->type == ObjectType::COMBO_COURSE) {
+                $comboCourse = ComboCourses::where('id', $item->object_id)->first();
+                $categoryTitle = "Combo khác";
+                if ($comboCourse->category) {
+                    $categoryTitle = $comboCourse->category->title;
+                }
                 if (property_exists($listCategories, $categoryTitle)) {
                     $listCategories->$categoryTitle += $item->sum_price;
                 } else {
@@ -132,26 +145,36 @@ class HomeController extends Controller
             ->get();
 
         foreach ($topSellerMonth as $item) {
-            if($item->type == 'course') {
+            if($item->type == ObjectType::COURSE) {
                 $course = Course::where('id', $item->object_id)->first();
                 $objCourse = (object) array(
                     'id' => $course->id,
                     'title' => $course->title,
                     'slug' => $course->slug,
-                    'type' => 'course',
+                    'type' => ObjectType::COURSE,
                     'amount' => $item->sum_amount,
                 );
                 array_push($dataTopSellerMonth, $objCourse);
-            } elseif ($item->type == 'book') {
+            } elseif ($item->type == ObjectType::BOOK) {
                 $book = Book::where('id', $item->object_id)->first();
                 $objBook = (object) array(
                     'id' => $book->id,
                     'title' => $book->title,
                     'slug' => $book->slug,
-                    'type' => 'book',
+                    'type' => ObjectType::BOOK,
                     'amount' => $item->sum_amount,
                 );
                 array_push($dataTopSellerMonth, $objBook);
+            } elseif ($item->type == ObjectType::COMBO_COURSE) {
+                $comboCourse = ComboCourses::where('id', $item->object_id)->first();
+                $objComboCourse = (object) array(
+                    'id' => $comboCourse->id,
+                    'title' => $comboCourse->title,
+                    'slug' => $comboCourse->slug,
+                    'type' => ObjectType::COMBO_COURSE,
+                    'amount' => $item->sum_amount,
+                );
+                array_push($dataTopSellerMonth, $objComboCourse);
             }
         }
 
