@@ -209,7 +209,11 @@
 
                         <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                             <div class="commentbox-wrap">
+                                @if (auth()->check())
+                                    @include('frontend.comment.item')
+                                @else
                                 <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
+                                @endif
                             </div>
                         </div>
                         <div class="tab-pane fade" id="tab-danhgia" role="tabpanel">
@@ -597,4 +601,5 @@
         },
     });
 </script>
+@includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $course->id, 'type_object' => \App\Constants\ObjectType::COURSE ])
 @endsection

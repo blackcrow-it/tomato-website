@@ -1005,6 +1005,4 @@
     }
 }
 
-/* .lessonbox__body {
-    padding-bottom: 55px;
-} */
+body.waiting * { cursor: wait; }
