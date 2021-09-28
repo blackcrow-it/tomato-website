@@ -36,7 +36,7 @@ class LoginController extends Controller
 
         $this->setLoginToken();
 
-        return redirect()->intended(route('home'));
+        return redirect()->route('2faVerify');
     }
 
     public function setLoginToken()

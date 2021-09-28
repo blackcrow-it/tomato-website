@@ -5,6 +5,19 @@
 @endsection
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success">
+        @if(is_array(session('success')))
+            <ul class="mb-0">
+                @foreach(session('success') as $msg)
+                    <li>{{ $msg }}</li>
+                @endforeach
+            </ul>
+        @else
+            {{ session('success') }}
+        @endif
+    </div>
+@endif
 <div class="user-page__title">Thông tin cá nhân</div>
 
 <div class="user-page__infoPersonal" id="app">
@@ -163,6 +176,22 @@
                         <span class="t-edit"><i class="fa fa-pencil"></i>chỉnh sửa</span>
                         <span class="t-close"><i class="fa fa-close"></i>đóng</span>
                     </a>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-label">
+                    <p>Xác thực hai yếu tố</p>
+                </td>
+                <td class="td-content">
+                    <i class="fa fa-toggle-on" style="color: #e71d36" v-if="user.password_security && user.password_security.google2fa_enable"></i>
+                    <i class="fa fa-toggle-off" style="color: #b5b1b1" v-else></i>
+                </td>
+                <td class="td-action">
+                    <a href="{{ route('user.2fa') }}" class="btn btn--sm" type="submit" v-if="user.password_security && user.password_security.google2fa_enable">Quản lý</a>
+                    <form action="{{route('generate2faSecret')}}" method="POST" v-else>
+                        @csrf
+                        <button class="btn btn--sm" type="submit"><span class="t-on">Bật</span></button>
+                    </form>
                 </td>
             </tr>
         </tbody>

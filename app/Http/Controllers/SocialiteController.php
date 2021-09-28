@@ -45,7 +45,7 @@ class SocialiteController extends Controller
         Auth::login($user);
         app(LoginController::class)->setLoginToken();
 
-        return redirect()->intended(route('home'));
+        return redirect()->intended(route('2faVerify'));
     }
 
     public function loginWithFacebook()
@@ -78,6 +78,6 @@ class SocialiteController extends Controller
         Auth::login($user);
         app(LoginController::class)->setLoginToken();
 
-        return redirect()->intended(route('home'));
+        return redirect()->intended(route('2faVerify'));
     }
 }

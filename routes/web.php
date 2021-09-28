@@ -25,6 +25,18 @@ Route::get('auth/google/callback', 'SocialiteController@loginWithGoogleCallback'
 Route::get('auth/facebook', 'SocialiteController@loginWithFacebook')->name('auth.facebook');
 Route::get('auth/facebook/callback', 'SocialiteController@loginWithFacebookCallback')->name('auth.facebook.callback');
 
+Route::middleware('auth')->group(function () {
+    Route::post('/generate2faSecret','PasswordSecurityController@generate2faSecret')->name('generate2faSecret');
+    Route::post('/2fa','PasswordSecurityController@enable2fa')->name('enable2fa');
+    Route::post('/disable2fa','PasswordSecurityController@disable2fa')->name('disable2fa');
+});
+Route::get('/2faVerify', function () {
+    return redirect()->route('home');
+})->middleware('2fa');
+Route::post('/2faVerify', function () {
+    return redirect(URL()->previous());
+})->name('2faVerify')->middleware('2fa');
+
 Route::namespace('Frontend')
     ->group(function () {
 
@@ -44,7 +56,7 @@ Route::namespace('Frontend')
         Route::get('combo-khoa-hoc/tat-ca', 'ComboCourseController@all')->name('combo_course.all');
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
-        Route::middleware('auth')->group(function () {
+        Route::middleware(['auth', '2fa'])->group(function () {
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
             Route::get('bai-giang/{id}', 'PartController@index')->name('part');
@@ -71,9 +83,10 @@ Route::namespace('Frontend')
             Route::get('ca-nhan/lich-su-nap-tien', 'UserController@rechargeHistory')->name('user.recharge_history');
             Route::get('ca-nhan/doi-mat-khau', 'UserController@changepass')->name('user.changepass');
             Route::post('ca-nhan/doi-mat-khau', 'UserController@doChangepass')->name('user.changepass');
+            Route::get('ca-nhan/xac-minh-hai-buoc', 'UserController@twoFactorAuthentication')->name('user.2fa');
         });
 
-        Route::middleware('auth')->group(function () {
+        Route::middleware(['auth', '2fa'])->group(function () {
             Route::post('recharge/momo', 'RechargeMomoController@makeRequest')->name('recharge.momo.request');
             Route::get('recharge/momo-callback', 'RechargeMomoController@processCallback')->name('recharge.momo.callback');
 
@@ -148,11 +161,17 @@ Route::namespace('Frontend')
         Route::post('lienhe.html', 'ContactController@submit')->name('contact');
     });
 
+
+Route::middleware('guest')->namespace('Backend')->name('admin.')->group(function () {
+    Route::get('login', 'LoginController@index')->name('login');
+    Route::post('login', 'LoginController@login')->name('login');
+});
+
 Route::prefix('admin')
     ->namespace('Backend')
     ->name('admin.')
     ->group(function () {
-        Route::middleware('can_access_admin_dashboard')->group(function () {
+        Route::middleware(['can_access_admin_dashboard', '2fa'])->group(function () {
             Route::get('/', 'HomeController@index')->name('home');
             Route::get('/analytics', 'AnalyticsController@index')->name('analytics');
             Route::get('get-invoice', 'HomeController@getInvoice')->name('get_invoice');
@@ -350,11 +369,6 @@ Route::prefix('admin')
                 Route::post('edit/{id}', 'PermissionController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'PermissionController@submitDelete')->name('delete');
             });
-        });
-
-        Route::middleware('guest')->group(function () {
-            Route::get('login', 'LoginController@index')->name('login');
-            Route::post('login', 'LoginController@login')->name('login');
         });
 
         Route::post('logout', 'LogoutController@logout')->name('logout');
