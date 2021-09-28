@@ -39,7 +39,11 @@ class CartController extends Controller
 
     public function index()
     {
-        return view('frontend.cart.index');
+        $tokenViettel = 'eyJhbGciOiJFUzI1NiJ9.eyJzdWIiOiIwODY2NTMxMzYwIiwiVXNlcklkIjoxMDE3NTQzNiwiRnJvbVNvdXJjZSI6NSwiVG9rZW4iOiJKMFJKSkROU1RUMktWM0NUSCIsImV4cCI6MTcxOTE1MDUxNiwiUGFydG5lciI6MTAxNzU0MzZ9.Iep93t7xaJ_umlxgLQGvcHKbPTn7oC0UeG4NfLqsH2zjbb9P1uA7c_ygCUhOYbNHXDaxaksPckrnkEq5mOad3w';
+
+        return view('frontend.cart.index', [
+            'token_viettel' => $tokenViettel
+        ]);
     }
 
     public function add(AddToCartRequest $request)
