@@ -39,11 +39,7 @@ class CartController extends Controller
 
     public function index()
     {
-        $tokenViettel = 'eyJhbGciOiJFUzI1NiJ9.eyJzdWIiOiIwODY2NTMxMzYwIiwiVXNlcklkIjoxMDE3NTQzNiwiRnJvbVNvdXJjZSI6NSwiVG9rZW4iOiJKMFJKSkROU1RUMktWM0NUSCIsImV4cCI6MTcxOTE1MDUxNiwiUGFydG5lciI6MTAxNzU0MzZ9.Iep93t7xaJ_umlxgLQGvcHKbPTn7oC0UeG4NfLqsH2zjbb9P1uA7c_ygCUhOYbNHXDaxaksPckrnkEq5mOad3w';
-
-        return view('frontend.cart.index', [
-            'token_viettel' => $tokenViettel
-        ]);
+        return view('frontend.cart.index');
     }
 
     public function add(AddToCartRequest $request)
@@ -342,6 +338,17 @@ class CartController extends Controller
                     $invoiceItem->object_id = $item->object_id;
                     $invoiceItem->amount = $item->amount;
                     $invoiceItem->price = $item->price;
+                    $invoiceItem->save();
+                }
+
+                error_log($request->input('shipment_fee'));
+                if ($request->input('shipment_fee')) {
+                    $invoiceItem = new InvoiceItem();
+                    $invoiceItem->invoice_id = $invoice->id;
+                    $invoiceItem->type = 'shipment_fee';
+                    $invoiceItem->object_id = 0;
+                    $invoiceItem->amount = 1;
+                    $invoiceItem->price = $request->input('shipment_fee');
                     $invoiceItem->save();
                 }
 

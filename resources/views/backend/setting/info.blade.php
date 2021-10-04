@@ -49,6 +49,20 @@ Cài đặt thông tin chung
     <label>Địa chỉ cơ sở 6</label>
     <input type="text" name="address6" value="{{ config('settings.address6') }}" class="form-control" placeholder="Địa chỉ cơ sở 6">
 </div>
+<div class="form-group form-row">
+    <div class="col">
+        <label>Tỉnh, Thành phố (địa chỉ lấy sách)</label>
+        <select v-model="province" name="province_shipment" class="form-control">
+            <option v-for="item in local" :value="item.name">@{{ item.name }}</option>
+        </select>
+    </div>
+    <div class="col">
+        <label>Quận, Huyện</label>
+        <select v-model="district" name="district_shipment" class="form-control" :disabled="!province">
+            <option v-for="item in (province && local.length > 0) ? local.find(x => x.name == province).districts : []" :value="item.name">@{{ item.name }}</option>
+        </select>
+    </div>
+</div>
 <div class="form-group">
     <label>Email</label>
     <input type="text" name="email" value="{{ config('settings.email') }}" class="form-control" placeholder="Email">

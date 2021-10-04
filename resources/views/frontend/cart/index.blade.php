@@ -92,26 +92,27 @@
                             </ul>
                         </div>
                     </li>
+                    @if(config('settings.province_shipment') && config('settings.district_shipment'))
                     <li class="choose-form__item">
                         <label class="checkbox-item">
                             <input type="radio" v-model="shipInfo.shipping" :value="true">
                             <span class="checkbox-item__check"></span>
-                            <p class="checkbox-item__text">Giao hàng đến địa chỉ (<b class="f-price">Tính phí vận chuyển</b>)</p>
+                            <p class="checkbox-item__text">Giao hàng đến địa chỉ (<b class="f-price" v-if="supportShipping">Tính phí vận chuyển: @{{ currency(shipmentFee) }}</b><b class="f-price" v-else>Chưa hỗ trợ giao đến khu vực này</b>)</p>
                         </label>
                         <div class="choose-form__content" :class="{ 'show': shipInfo.shipping }">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input-address__item">
-                                        <label>Tỉnh, Thành phố</label>
-                                        <select v-model="shipInfo.city" class="form-control">
-                                            <option v-for="province in provinces" :value="province.PROVINCE_ID">@{{ province.PROVINCE_CODE }} - @{{ province.PROVINCE_NAME }}</option>
+                                        <label>Tỉnh, Thành phố *</label>
+                                        <select v-model="shipInfo.city" class="form-control" :disabled="loadingShipmentFee">
+                                            <option v-for="item in local" :value="item.name">@{{ item.name }}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input-address__item">
-                                        <label>Quận, Huyện</label>
-                                        <select v-model="shipInfo.district" class="form-control" :disabled="!shipInfo.city">
+                                        <label>Quận, Huyện *</label>
+                                        <select v-model="shipInfo.district" class="form-control" :disabled="!shipInfo.city || loadingShipmentFee">
                                             <option v-for="item in (shipInfo.city && local.length > 0) ? local.find(x => x.name == shipInfo.city).districts : []" :value="item.name">@{{ item.name }}</option>
                                         </select>
                                     </div>
@@ -125,6 +126,7 @@
                             </div>
                         </div>
                     </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -248,7 +250,7 @@
                             </td>
                             <td>
                                 <div class="f-quantity text-center">
-                                    <input type="number" class="form-control" v-model="item.amount" min="1">
+                                    <input type="number" class="form-control" v-model="item.amount" min="1" v-on:keyup="changeAmountBook($event)">
                                 </div>
                             </td>
                             <td>
@@ -260,6 +262,13 @@
                         </tr>
                     </tbody>
                     <tfoot>
+                        <tr v-if="shipInfo.shipping">
+                            <td colspan="4">Phí vận chuyển </td>
+                            <td colspan="2">
+                                <span class="f-price" v-if="shipInfo.shipping">@{{ currency(shipmentFee) }}</span>
+                                <span class="f-price" v-else>Miễn Phí</span>
+                            </td>
+                        </tr>
                         <tr class="bg-light">
                             <td colspan="4">
                                 <b>Mã giảm giá</b><br>
@@ -300,12 +309,11 @@
             </div>
 
             <div class="cart-detail__btn">
-                <button type="button" class="btn" @click="submitCart" :disabled="loading">Thanh toán</button>
+                <button type="button" class="btn" @click="submitCart" :disabled="loading || loadingShipmentFee">Thanh toán</button>
             </div>
         </div>
     </div>
 </section>
-{{$token_viettel}}
 
 @endsection
 
@@ -329,23 +337,16 @@
             loading: false,
             promoCode: undefined,
             promoData: undefined,
-            provinces: [],
-            districts: [],
-            wards: [],
-            settings: {
-                async: true,
-                crossDomain: true,
-                url: "https://partner.viettelpost.vn/v2/user/Login",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            },
+            priceBook: 0,
+            amountBook: 0,
+            shipmentFee: undefined,
+            loadingShipmentFee: false,
+            supportShipping: true,
+            pendingTimer: undefined
         },
         mounted() {
             this.getData();
             this.getLocalData();
-            this.getProvinces();
 
             const oldShipInfo = JSON.parse(`{{ json_encode(old("ship_info")) }}`);
             if (oldShipInfo) {
@@ -353,34 +354,43 @@
             }
         },
         methods: {
-            getProvinces() {
-                var settings = {
-                    "async": true,
-                    "crossDomain": true,
-                    "url": "https://partner.viettelpost.vn/v2/user/Login",
-                    "method": "POST",
-                    "headers": {
-                        "Content-Type": "application/json",
-                        "Origin": "https://partner.viettelpost.vn"
-                    },
-                    "data": {
-                        "USERNAME":"0866531360",
-                        "PASSWORD":"hungprotq1"
-                    }
+            getShipmentFee() {
+                if (this.shipInfo.district && '{{ config('settings.province_shipment') }}' && '{{ config('settings.district_shipment') }}') {
+                    this.loadingShipmentFee = true;
+                    axios.get("{{ route('api.shipping.getShipmentFee') }}", {
+                        params: {
+                            pick_province: '{{ config('settings.province_shipment') }}',
+                            pick_district: '{{ config('settings.district_shipment') }}',
+                            province: this.shipInfo.city,
+                            district: this.shipInfo.district,
+                            weight: this.amountBook * 300,
+                            price: this.priceBook,
+                            transport: "road",
+                            xfast: 0
+                        }
+                    }).then(res => {
+                        this.shipmentFee = res.fee.fee;
+                        this.supportShipping = res.fee.delivery;
+                    }).finally(() => {
+                        this.loadingShipmentFee = false;
+                    });
                 }
-                $.ajax(settings).done(function (response) {
-                    console.log(response);
-                });
-                // axios.get(
-                //     'https://partner.viettelpost.vn/v2/categories/listProvinceById?provinceId=-1',
-                //     {
-                //         headers: {
-                //             'Access-Control-Allow-Origin': '*',
-                //             'Content-Type': 'application/json',
-                //         }
-                //     }).then(res => {
-                //         console.log(res);
-                //     });
+            },
+            changeAmountBook(event) {
+                if (event.target.value) {
+                    this.amountBook = 0;
+                    this.inputData.filter(x => x.type == '{{ \App\Constants\ObjectType::BOOK }}').forEach(element => {
+                        if (element.amount) {
+                            this.amountBook += parseInt(element.amount);
+                        }
+                    });
+                    this.loadingShipmentFee = true;
+                    clearTimeout(this.pendingTimer);
+                    this.pendingTimer = setTimeout(() => {
+                        this.getShipmentFee();
+                        this.loadingShipmentFee = false;
+                    }, 1000);
+                }
             },
             getLocalData() {
                 axios.get('{{ url("json/vietnam-db.json") }}').then(res => {
@@ -393,7 +403,8 @@
                 axios.get("{{ route('cart.get_data') }}").then(res => {
                     this.data = res;
                     this.inputData = _.cloneDeep(this.data);
-
+                    this.priceBook = 0;
+                    this.amountBook = 0;
                     const applyPromo = this.validatePromo();
                     if (!applyPromo) {
                         this.promoData = undefined;
@@ -401,7 +412,14 @@
                     }
 
                     this.inputData = this.inputData.map(item => {
-                        if (item.type != '{{ \App\Constants\ObjectType::COURSE }}') return item;
+                        if (item.type != '{{ \App\Constants\ObjectType::COURSE }}')
+                        {
+                            if (item.type == '{{ \App\Constants\ObjectType::BOOK }}') {
+                                this.priceBook += item.price;
+                                this.amountBook += parseInt(item.amount);
+                            };
+                            return item;
+                        }
                         if (item.price == 0) return item;
                         if (!applyPromo) return item;
 
@@ -427,6 +445,8 @@
                     $('html, body').animate({
                         scrollTop: $('.cart-detail').offset().top - $(window).height() / 5
                     }, 500);
+                }).finally(() => {
+                    this.getShipmentFee();
                 });
             },
             removeCartItem(id) {
@@ -434,12 +454,13 @@
                 axios.post("{{ route('cart.delete') }}", {
                     id
                 }).then(() => {
-                    // nothing
-                }).then(() => {
                     this.getData();
                 });
             },
             currency(x) {
+                if (typeof x === 'undefined') {
+                    return 'Chưa xác định';
+                }
                 return currency(x);
             },
             submitCart() {
@@ -476,7 +497,8 @@
                         axios.post('{{ route("cart.confirm") }}', {
                             cart: this.inputData,
                             ship_info: this.shipInfo,
-                            promo_code: this.promoCode
+                            promo_code: this.promoCode,
+                            shipment_fee: this.shipmentFee
                         }).then(() => {
                             location.href = '{{ route("cart.complete") }}';
                         }).catch(err => {
@@ -519,7 +541,11 @@
             },
             totalPrice() {
                 return this.inputData.reduce((total, item) => {
-                    return total + item.amount * item.price;
+                    if (this.shipmentFee) {
+                        return total + item.amount * item.price + this.shipmentFee;
+                    } else {
+                        return total + item.amount * item.price;
+                    }
                 }, 0);
             },
             validatePromo() {
@@ -535,6 +561,16 @@
                 return false;
             }
         },
+        computed: {
+            getDistrict() {
+                return this.shipInfo.district;
+            }
+        },
+        watch: {
+            getDistrict() {
+                this.getShipmentFee();
+            }
+        }
     });
 
 </script>

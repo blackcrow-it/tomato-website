@@ -60,19 +60,19 @@
                                 @case(\App\Constants\ObjectType::COURSE)
                                     <div>
                                         Khóa học:
-                                        <a href="{{ $item->course->url }}" target="_blank">{{ $item->course->title }}</a>
+                                        <a href="{{ $item->course->url ?? '#' }}" target="_blank">{{ $item->course->title ?? 'Không tìm thấy hoặc đã xoá' }}</a>
                                     </div>
                                     @break
                                 @case(\App\Constants\ObjectType::COMBO_COURSE)
                                     <div>
                                         Combo khóa học:
-                                        <a href="{{ $item->comboCourse->url }}" target="_blank">{{ $item->comboCourse->title }}</a>
+                                        <a href="{{ $item->comboCourse->url ?? '#' }}" target="_blank">{{ $item->comboCourse->title ?? 'Không tìm thấy hoặc đã xoá' }}</a>
                                     </div>
                                     @break
                                 @case(\App\Constants\ObjectType::BOOK)
                                     <div>
                                         Sách:
-                                        <a href="{{ $item->book->url }}" target="_blank">{{ $item->book->title }}</a>
+                                        <a href="{{ $item->book->url ?? '#' }}" target="_blank">{{ $item->book->title ?? 'Không tìm thấy hoặc đã xoá' }}</a>
                                     </div>
                                     @break
                             @endswitch
