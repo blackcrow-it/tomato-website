@@ -363,7 +363,7 @@
                             pick_district: '{{ config('settings.district_shipment') }}',
                             province: this.shipInfo.city,
                             district: this.shipInfo.district,
-                            weight: this.amountBook * 300,
+                            weight: this.amountBook * 500,
                             price: this.priceBook,
                             transport: "road",
                             xfast: 0
