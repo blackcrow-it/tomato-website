@@ -68,6 +68,7 @@
                                 </div>
                             </div>
 
+                            @if (count($related_courses) > 0)
                             <div class="post-detail__relatedCourse">
                                 <div class="title-page-min">Khoá học liên quan</div>
                                 <div class="owl-carousel fixheight lessonbox-wrap-min">
@@ -76,6 +77,8 @@
                                     @endforeach
                                 </div>
                             </div>
+                            @endif
+                            <br/>
                         </div>
                     </div>
                     <div class="col-xl-3 order-xl-1">
@@ -142,13 +145,31 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-9 offset-xl-3">
-                    <div class="commentbox-wrap">
-                        <div class="title-page-min">Bình luận bài viết</div>
-                        <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"
-                             data-order-by="reverse_time"></div>
+                    <div class="tabJs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Ý kiến học viên</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Bình luận Facebook</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                @include('frontend.comment.item')
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="fb-comments" data-href="{{ $post->url }}" data-width="100%" data-numposts="10"
+                                    data-order-by="reverse_time"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+@endsection
+
+@section('footer')
+@includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $post->id, 'type_object' => \App\Constants\ObjectType::POST ])
 @endsection
