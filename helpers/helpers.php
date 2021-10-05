@@ -325,3 +325,29 @@ if (!function_exists('get_next_day')) {
         return  null;
     }
 }
+
+if (!function_exists('find_closest')) {
+    function find_closest($array, $duration)
+    {
+        $result = array();
+        $now = strtotime('now');
+        
+        foreach ($array as &$value) {
+            $start = strtotime($value->start_time);
+            $end = strtotime($value->end_time) + $duration*60;
+            //dd(date('h:i',$now), date("h:i",  $end));
+            if($end >= $now){
+                array_push($result, $value);
+            }
+        };
+        //dd($result);
+        return reset($result);
+        //dd($result);
+        // $result = array_filter($array, function($var) use ($now) {
+        //     $start = strtotime($var->start_time);
+        //     $end = strtotime($var->end_time);
+        //     return $end >= $now;
+        //  });
+        //  dd($result);
+    }
+}
