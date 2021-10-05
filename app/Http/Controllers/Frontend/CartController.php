@@ -341,6 +341,17 @@ class CartController extends Controller
                     $invoiceItem->save();
                 }
 
+                error_log($request->input('shipment_fee'));
+                if ($request->input('shipment_fee')) {
+                    $invoiceItem = new InvoiceItem();
+                    $invoiceItem->invoice_id = $invoice->id;
+                    $invoiceItem->type = 'shipment_fee';
+                    $invoiceItem->object_id = 0;
+                    $invoiceItem->amount = 1;
+                    $invoiceItem->price = $request->input('shipment_fee');
+                    $invoiceItem->save();
+                }
+
                 $notificationInvoices[] = $invoice;
             }
 

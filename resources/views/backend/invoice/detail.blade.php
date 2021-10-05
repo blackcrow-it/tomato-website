@@ -113,12 +113,19 @@ Chi tiết đơn hàng
                 </tr>
             </thead>
             <tbody>
-                <?php $total = 0; ?>
+                <?php
+                    $total = 0;
+                    $shipment_fee = 0;
+                ?>
                 @foreach($invoice->items as $item)
                     <?php
                         $subTotal = $item->price * $item->amount;
                         $total += $subTotal;
+                        if ($item->type == 'shipment_fee') {
+                            $shipment_fee = $item->price;
+                        }
                     ?>
+                    @if ($item->type != 'shipment_fee')
                     <tr>
                         <td>
                             @switch($item->type)
@@ -153,11 +160,12 @@ Chi tiết đơn hàng
                         <td class="text-right">{{ currency($item->price) }}</td>
                         <td class="text-right">{{ currency($subTotal) }}</td>
                     </tr>
+                    @endif
                 @endforeach
                 <?php $total += 0; ?>
                 <tr>
                     <th colspan="4" class="text-right">Phí vận chuyển</th>
-                    <td class="text-right">{{ currency(0) }}</td>
+                    <td class="text-right">{{ currency($shipment_fee) }}</td>
                 </tr>
                 <tr>
                     <th colspan="4" class="text-right">Tổng cộng</th>

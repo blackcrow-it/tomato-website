@@ -114,7 +114,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- {{ dd($list_categories) }} --}}
                         <div class="card-body">
                             <div class="d-flex">
                                 <p class="d-flex flex-column">
@@ -279,6 +278,7 @@
                         </div>
                     </div>
                 </div>
+                {{-- {{dd($top_seller_month)}} --}}
                 <div class="card-body p-0">
                     <table class="table table-striped">
                         <thead>
@@ -304,6 +304,11 @@
                                                 data-toggle="tooltip" title="{{ $item->title }}">
                                                 {{ truncate($item->title) }}
                                             </a>
+                                        @elseif($item->type == 'combo_course')
+                                            <a href="{{ route('combo_course', ['slug' => $item->slug, 'id' => $item->id]) }}"
+                                                data-toggle="tooltip" title="{{ $item->title }}">
+                                                {{ truncate($item->title) }}
+                                            </a>
                                         @endif
                                     </td>
                                     <td>
@@ -311,6 +316,8 @@
                                             Khoá học
                                         @elseif($item->type == 'book')
                                             Sách
+                                        @elseif($item->type == 'combo_course')
+                                            Combo khoá học
                                         @endif
                                     </td>
                                     <td>{{ $item->amount }}</td>
@@ -420,7 +427,7 @@
                     datasets: [{
                         label: '',
                         data: [@foreach ($list_categories as $category => $price){{ $price }},@endforeach],
-                        backgroundColor: [@foreach ($list_categories as $category => $price)getRandomColor(),@endforeach],
+                        backgroundColor: [@foreach ($list_categories as $category => $price)getColor(),@endforeach],
                         hoverOffset: 4
                     }]
                 }
@@ -430,6 +437,11 @@
         function getRandomColor() {
             const randomColor = Math.floor(Math.random() * 16777215).toString(16);
             return "#" + randomColor;
+        }
+        function getColor(){
+            return "hsl(" + 360 * Math.random() + ',' +
+                        (25 + 70 * Math.random()) + '%,' +
+                        (45 + 10 * Math.random()) + '%)'
         }
         var saleOptionChart = undefined;
         $('input[name="daterange"]').daterangepicker({
