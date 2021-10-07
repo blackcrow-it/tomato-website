@@ -34,7 +34,11 @@ class User extends Authenticatable
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = mb_strtolower($value);
+        if ( empty($value) ) { // will check for empty string
+            $this->attributes['email'] = NULL;
+        } else {
+            $this->attributes['email'] = mb_strtolower($value);
+        }
     }
 
     public function passwordSecurity()
