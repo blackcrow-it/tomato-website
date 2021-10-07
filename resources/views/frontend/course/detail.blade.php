@@ -601,5 +601,10 @@
         },
     });
 </script>
+<script>
+    $(document).ready(function(){
+        $('#tabgioithieu .entry-detail a').attr('target', '_blank');
+    });
+</script>
 @includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $course->id, 'type_object' => \App\Constants\ObjectType::COURSE ])
 @endsection
