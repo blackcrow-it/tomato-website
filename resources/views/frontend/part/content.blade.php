@@ -79,9 +79,4 @@
             }
         });
     </script>
-    <script>
-        $(document).ready(function(){
-            $('.learningLesson__footer .card-body a').attr('target', '_blank');
-        });
-    </script>
 @endsection
