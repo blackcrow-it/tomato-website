@@ -49,7 +49,8 @@
             </div>
             <div class="tab-pane fade" id="tab-binhluan" role="tabpanel">
                 <div class="commentbox-wrap">
-                    <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div>
+                    {{-- <div class="fb-comments" data-href="{{ $course->url }}" data-width="100%" data-numposts="10" data-order-by="reverse_time"></div> --}}
+                    @include('frontend.comment.item')
                 </div>
             </div>
         </div>
@@ -110,4 +111,5 @@
             }
         }
       </script>
+@includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $course->id, 'type_object' => \App\Constants\ObjectType::PART ])
 @endsection
