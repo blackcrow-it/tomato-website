@@ -46,12 +46,14 @@ class LoginController extends Controller
             'login_token' =>  $loginToken
         ]);
         Session::put('login_token', $loginToken);
-        $data = [
-            'email' => Auth::user()->email,
-            'name' => Auth::user()->name,
-            'content' => 'Bạn đã đăng nhập từ một thiết bị khác',
-            'phone' => Auth::user()->phone
-        ];
-        Mail::to(Auth::user())->send(new SendMailLogin($data));
+        if (Auth::user()->email) {
+            $data = [
+                'email' => Auth::user()->email,
+                'name' => Auth::user()->name,
+                'content' => 'Bạn đã đăng nhập từ một thiết bị khác',
+                'phone' => Auth::user()->phone
+            ];
+            Mail::to(Auth::user())->send(new SendMailLogin($data));
+        }
     }
 }
