@@ -151,5 +151,10 @@
         bootbox.alert('<h1>Thông báo!</h1><br/>Bạn chưa hoàn thành bài trắc nghiệm trước đó. Vui lòng hoàn thành để tiếp tục khoá học.');
     }
 </script>
+<script>
+    $(document).ready(function(){
+        $('.learningLesson__footer .card-body a').attr('target', '_blank');
+    });
+</script>
 @yield('part_script')
 @endsection
