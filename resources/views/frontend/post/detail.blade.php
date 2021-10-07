@@ -172,4 +172,9 @@
 
 @section('footer')
 @includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $post->id, 'type_object' => \App\Constants\ObjectType::POST ])
+<script>
+    $(document).ready(function(){
+        $('.detailbox__content a').attr('target', '_blank');
+    });
+</script>
 @endsection
