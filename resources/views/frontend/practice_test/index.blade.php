@@ -39,7 +39,7 @@
                             </ul>
                             @if (isset($list))
                                 <div class="exam-wrap-box">
-                                    <div class="exam-alert">
+                                    <div class="exam-al ert">
                                         <p>Thi thử trực tuyến sẽ diễn ra vào thứ 7 hàng tuần với 2 ca thi (<b>giờ Việt
                                                 Nam</b>) <span class="badge badge--primary">Sáng: 9h-11h30</span> <span
                                                 class="badge badge--primary">Tối: 19h-21h30 </span></p>

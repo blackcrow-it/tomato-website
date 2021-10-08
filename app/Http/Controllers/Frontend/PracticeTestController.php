@@ -5,6 +5,8 @@ use DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\PracticeTest;
+use App\PracticeTestQuestion;
+use Carbon\Carbon;
 class PracticeTestController extends Controller
 {
 
@@ -31,5 +33,32 @@ class PracticeTestController extends Controller
     {
         return view('frontend.practice_test.index', ['histories'=> []]);
     }
+
+    private function _group_by($array, $key) {
+        $return = array();
+        foreach($array as $val) {
+            $return[$val[$key]][] = $val;
+        }
+        return $return;
+    }
+
+    public function test(Request $request, $slug, $id)
+    {
+        $currentDay = (int)date('w');
+        $pt = PracticeTest::where([['id', $id], ['enabled', true]])->where(function($query) use ($currentDay){
+            $query->where([['loop', true], ['loop_days', 'like', '%'.$currentDay.'%']])
+            ->orWhere('date', '=', Carbon::today()->toDateString());
+        })->first();
+        if($pt == null) {
+            return redirect()->route('home');
+        }
+        $questions = PracticeTestQuestion::with('session', 'answers')->where([['practice_test_id', $id], ['enabled', true]])->get();
+        //$questions = DB::table('practice_test_questions')->where([['practice_test_id', $id], ['enabled', true]]);
+        $questions = $this->_group_by($questions, 'question_session_id');
+        dd($questions);
+        return view('frontend.practice_test.test', ["pt"=>$pt, 'questions'=>$questions]);
+    }
+
+   
 
 }

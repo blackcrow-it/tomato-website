@@ -16,7 +16,11 @@ class PracticeTestQuestion extends BaseModel
     }
 
     public function answers(){
-        return $this->hasMany('App\PracticeTestAnswer');
+        return $this->hasMany('App\PracticeTestAnswer','question_id', 'id');
+    }
+
+    public function session(){
+        return $this->belongsTo('App\PracticeTestQuestionSession', 'question_session_id', 'id');
     }
 
 }
