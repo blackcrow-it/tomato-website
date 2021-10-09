@@ -43,7 +43,6 @@ Route::namespace('Frontend')
         Route::get('khoa-hoc/tat-ca', 'CourseController@all')->name('course.all');
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
-        Route::get('thi-thu/{slug}-pt{id}.html', 'PracticeTestController@test')->name('practice_test.test')->where(['slug' => '.*', 'id' => '\d+']);;
         Route::get('thi-thu/bai-thi', 'PracticeTestController@list')->name('practice_test.list');
         Route::get('thi-thu/xep-hang', 'PracticeTestController@rank')->name('practice_test.rank');
         Route::get('thi-thu/lich-su', 'PracticeTestController@history')->name('practice_test.history');
@@ -75,6 +74,8 @@ Route::namespace('Frontend')
             Route::get('ca-nhan/lich-su-nap-tien', 'UserController@rechargeHistory')->name('user.recharge_history');
             Route::get('ca-nhan/doi-mat-khau', 'UserController@changepass')->name('user.changepass');
             Route::post('ca-nhan/doi-mat-khau', 'UserController@doChangepass')->name('user.changepass');
+
+            Route::get('thi-thu/{slug}-pt{id}.html', 'PracticeTestController@test')->name('practice_test.test')->where(['slug' => '.*', 'id' => '\d+']);
         });
 
         Route::middleware('auth')->group(function () {

@@ -624,6 +624,7 @@
 
     gtag('config', "{{ env('GOOGLE_ANALYSIS_ID') }}");
     </script>
+    @yield('script')
 </body>
 
 </html>

@@ -1,6 +1,5 @@
 @extends('frontend.master')
 @section('body')
-<div class="page-content">
     <section class="section page-title">
         <div class="container">
             <nav class="breadcrumb-nav">
@@ -9,18 +8,18 @@
                     <li class="breadcrumb-item"><a href="baithi.html">Bài thi</a></li>
                 </ol>
             </nav>
-            <h1 class="page-title__title">Bài thi tiêng Trung trình độ N2</h1>
+            <h1 class="page-title__title">Bài thi {{$language->title}} trình độ {{$pt->level->title}}</h1>
         </div>
     </section>
 
-    <section class="section section-quiz-detail">
+    <section class="section section-quiz-detail" id="section-quiz-detail">
         <div class="container">
             <div class="layout layout--right">
                 <div class="row stickyJs fix-header-top">
                     <div class="col-xl-9">
                         <div class="layout-content">
                             <div class="quiz-wrap show-start">
-                                <div class="quiz-wrap__start">
+                                <div class="quiz-wrap__start" v-if="showStart">
                                     <div class="f-content">
                                         <div class="f-text-wrap">
                                             <div class="f-text">
@@ -32,266 +31,49 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <a href="#" class="btn">Bắt đầu thi</a>
+                                        <a href="javascript:;" @click="start()" class="btn">Bắt đầu thi</a>
                                     </div>
                                 </div>
-                                <div class="quiz-wrap__inner">
+                                <div class="quiz-wrap__inner" v-if="!showStart">
                                     <div class="quiz-wrap__header">
                                         <div class="header-left">
-                                            <p>Họ và tên <span>Nguyễn Quốc Khánh</span></p>
+                                            <p>Họ và tên <span>{{ auth()->user()->name ?? auth()->user()->username }}</span></p>
                                         </div>
                                         <div class="header-right">
                                             <h3 class="header-subtitle">Trung tâm ngoại ngữ Tomato</h3>
-                                            <h2 class="header-title">Bài thi thử tiêng Trung</h2>
-                                            <span class="header-time">Thời gian làm bài: <b>{{$pt->duration}} phút</b></span>
+                                            <h2 class="header-title">Bài thi thử {{$language->title}}</h2>
+                                            <span class="header-time">Thời gian làm bài: <b>{{ $pt->duration }}
+                                                    phút</b></span>
                                         </div>
                                     </div>
                                     <div class="quiz-wrap__content">
                                         <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                                <h2 class="tab-pane__title">Phần 1: Nghe (20 câu)</h2>
+                                            <div v-for="(s, i) in Object.keys(sessions)" :key="i" v-bind:id="'panel-'+ s"
+                                                role="tabpanel" v-bind:aria-labelledby="'tab-'+s" class="tab-pane fade"
+                                                v-bind:class="{'active show': i == 0}">
+                                                <h2 class="tab-pane__title">Phần <span v-text="i+1"></span>: <span
+                                                        v-text="sessionTypes[s]['name']"></span> (<span
+                                                        v-text="sessions[s].length"></span> câu)</h2>
                                                 <ul class="quiz__list">
-                                                    <li class="item">
+                                                    <li class="item" v-for="(q, j) in sessions[s]" :key="j">
                                                         <div class="item__title">
-                                                            <p><b>Câu hỏi 1:</b> Nghe câu thoại và trả lời đáp án</p>
-                                                            <div class="item__control">
-                                                                <audio controls>
-                                                                    <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
-                                                                </audio>
-                                                            </div>
+                                                            <p><b>Câu hỏi <span v-text="j+1"></span>: </b><span
+                                                                    v-text="q.content"></span></p>
+                                                            {{-- <div class="item__control">
+                                                                    <audio controls>
+                                                                        <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
+                                                                    </audio>
+                                                                </div> --}}
                                                         </div>
                                                         <div class="item__choose">
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-1">
+                                                            <label class="choose-label" v-for="(a, ai) in q.answers"
+                                                                :key="ai">
+                                                                <input v-model="q.answered" type="radio" name="quiz-1"
+                                                                    v-bind:value="a.id">
                                                                 <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">A</span>
-                                                                    <p>Đáp án 1</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-1">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">B</span>
-                                                                    <p>Đáp án 2</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-1">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">C</span>
-                                                                    <p>Đáp án 3</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-1">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">D</span>
-                                                                    <p>Đáp án 4</p>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="item__title">
-                                                            <p><b>Câu hỏi 2:</b> Nghe câu thoại và trả lời đáp án</p>
-                                                            <div class="item__control">
-                                                                <audio controls>
-                                                                    <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
-                                                                </audio>
-                                                            </div>
-                                                        </div>
-                                                        <div class="item__choose">
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-2">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">A</span>
-                                                                    <p>Đáp án 1</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-2">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">B</span>
-                                                                    <p>Đáp án 2</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-2">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">C</span>
-                                                                    <p>Đáp án 3</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-2">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">D</span>
-                                                                    <p>Đáp án 4</p>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="item__title">
-                                                            <p><b>Câu hỏi 3:</b> Nghe câu thoại và trả lời đáp án</p>
-                                                            <div class="item__control">
-                                                                <audio controls>
-                                                                    <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
-                                                                </audio>
-                                                            </div>
-                                                        </div>
-                                                        <div class="item__choose">
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-3">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">A</span>
-                                                                    <p>Đáp án 1</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-3">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">B</span>
-                                                                    <p>Đáp án 2</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-3">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">C</span>
-                                                                    <p>Đáp án 3</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-3">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">D</span>
-                                                                    <p>Đáp án 4</p>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                                <h2 class="tab-pane__title">Phần 2: Từ vựng (20 câu)</h2>
-                                                <ul class="quiz__list">
-                                                    <li class="item">
-                                                        <div class="item__title">
-                                                            <p><b>Câu hỏi 1:</b> Nghe câu thoại và trả lời đáp án</p>
-                                                            <div class="item__control">
-                                                                <audio controls>
-                                                                    <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
-                                                                </audio>
-                                                            </div>
-                                                        </div>
-                                                        <div class="item__choose">
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-4">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">A</span>
-                                                                    <p>Đáp án 1</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-4">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">B</span>
-                                                                    <p>Đáp án 2</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-4">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">C</span>
-                                                                    <p>Đáp án 3</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-4">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">D</span>
-                                                                    <p>Đáp án 4</p>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="item__title">
-                                                            <p><b>Câu hỏi 2:</b> Nghe câu thoại và trả lời đáp án</p>
-                                                            <div class="item__control">
-                                                                <audio controls>
-                                                                    <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
-                                                                </audio>
-                                                            </div>
-                                                        </div>
-                                                        <div class="item__choose">
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-5">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">A</span>
-                                                                    <p>Đáp án 1</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-5">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">B</span>
-                                                                    <p>Đáp án 2</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-5">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">C</span>
-                                                                    <p>Đáp án 3</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-5">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">D</span>
-                                                                    <p>Đáp án 4</p>
-                                                                </div>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="item__title">
-                                                            <p><b>Câu hỏi 3:</b> Nghe câu thoại và trả lời đáp án</p>
-                                                            <div class="item__control">
-                                                                <audio controls>
-                                                                    <source src="assets/audio/1-1-1.mp3" type="audio/mpeg">
-                                                                </audio>
-                                                            </div>
-                                                        </div>
-                                                        <div class="item__choose">
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-6">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">A</span>
-                                                                    <p>Đáp án 1</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-6">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">B</span>
-                                                                    <p>Đáp án 2</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-6">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">C</span>
-                                                                    <p>Đáp án 3</p>
-                                                                </div>
-                                                            </label>
-                                                            <label class="choose-label">
-                                                                <input type="radio" name="quiz-6">
-                                                                <div class="choose-label__inner">
-                                                                    <span class="choose-label__check">D</span>
-                                                                    <p>Đáp án 4</p>
+                                                                    <span class="choose-label__check"
+                                                                        v-text="String.fromCharCode(65+ai)"></span>
+                                                                    <p v-text="a.content"></p>
                                                                 </div>
                                                             </label>
                                                         </div>
@@ -301,7 +83,7 @@
                                         </div>
                                         <div class="quiz-wrap__footer">
                                             <!-- btn-diploma -->
-                                            <a href="#" class="btn btn-showResult">Nộp bài</a>
+                                            <a href="javascript:;" class="btn btn-showResult" @click="done()">Nộp bài</a>
                                         </div>
                                     </div>
                                 </div>
@@ -319,7 +101,7 @@
                                                 <li>受験レベル Level: <b>N5</b></li>
                                                 <li>氏名 Name: <b>Nguyễn Quốc Khánh</b></li>
                                             </ul>
-                                            
+
                                             <div class="diploma__tablewrap">
                                                 <table class="diploma__table">
                                                     <tbody>
@@ -336,7 +118,8 @@
                                                                 </div>
                                                             </td>
                                                             <td class="f-right">
-                                                                <p>総合得点</p> <p>Total Score</p>
+                                                                <p>総合得点</p>
+                                                                <p>Total Score</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -355,7 +138,7 @@
                                                 </table>
 
                                                 <div class="diploma__footer">
-                                                    <span class="f-pass-btn">合  格  Passed</span>
+                                                    <span class="f-pass-btn">合 格 Passed</span>
 
                                                     <a href="#" class="f-logo"><img src="assets/img/logo.png"></a>
                                                 </div>
@@ -373,31 +156,38 @@
 
                     <div class="col-xl-3 sticky">
                         <div class="layout-sidebar d-none d-xl-block">
-                            <div class="widget widget--infoQuiz pointerEventsNone">
+                            <div class="widget widget--infoQuiz" v-bind:class="{'pointerEventsNone': showStart}">
                                 <h2 class="widget__title">Thông tin</h2>
-                                
+
                                 <div class="infoQuiz__wrap">
                                     <div class="infoQuiz-content timer-inner">
                                         <div class="timeCounterJs " data-time="1">
                                             <ul>
-                                                <li class="minutes"><span>1</span>phút</li>
-                                                <li class="seconds"><span>00</span>giây</li>
+                                                <li class="minutes"><span v-text="parseInt(countDown/60)"></span>phút</li>
+                                                <li class="seconds"><span v-text="parseInt(countDown%60)"></span>giây</li>
                                             </ul>
-                                            <p class="notify"></p>
+                                            <p class="notify" v-text="notiText"></p>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="infoQuiz__nav infoQuiz-content">
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"> Phần 1: Nghe <span>(Đã làm: 20/20) <i class="fa fa-check"></i></span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Phần 2: Từ vựng <span>( Đã làm: 10/20)</span></a>
-                                            </li>
+                                            <?php $in = 0; ?>
+                                            @foreach ($questions as $key => $question)
+                                                <li class="nav-item">
+                                                    <a class="nav-link @if ($in == 0) active @endif"
+                                                        id="tab-{{ $key }}" data-toggle="tab"
+                                                        href="#panel-{{ $key }}" role="tab"
+                                                        aria-controls="panel-{{ $key }}" aria-selected="true">Phần
+                                                        {{ $in + 1 }}: {{ $sessions[$key]->name }}<span>(Đã làm: <span
+                                                                v-text="getAnswered({{ $key }})"></span>/{{ count($questions[$key]) }})
+                                                            <i class="fa fa-check"></i></span></a>
+                                                </li>
+                                                <?php $in++; ?>
+                                            @endforeach
                                         </ul>
                                     </div>
-                                    
+
                                     <div class="infoQuiz-content infoQuiz__user">
                                         <p>Số người tham gia: <b><i class="fa fa-user"></i>200</b></p>
                                     </div>
@@ -409,5 +199,66 @@
             </div>
         </div>
     </section>
-</div>
+    <div class="modal fade" id="alertbox-popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<p class="f-text">Bạn còn nhiều thời gian!<br>Bạn chắc chắn muốn nộp bài</p>
+				<div class="f-btn">
+					<a href="javascript:;" class="btn btn-agree btn--sm btn--secondary">Đồng ý</i></a>
+					<a href="javascript:;" class="btn btn--sm" data-dismiss="modal">Huỷ bỏ</i></a>
+				</div>
+			</div>
+		</div>
+	</div>
+@endsection
+
+@section('script')
+    <script>
+        new Vue({
+            el: '#section-quiz-detail',
+            data: {
+                sessions: {!! json_encode($questions, JSON_HEX_TAG) !!},
+                sessionTypes: {!! json_encode($sessions, JSON_HEX_TAG) !!},
+                pt: {!! json_encode($pt, JSON_HEX_TAG) !!},
+                showStart: true,
+                countDown: 0,
+                notiText: "",
+                stopTime: false,
+                timer: null,
+            },
+            mounted() {
+                console.log(this.sessions, 'accc');
+                this.countDown = this.pt.duration * 60;
+            },
+            methods: {
+                start: function() {
+                    this.showStart = false;
+                    this.notiText = "Bắt đầu làm bài"
+                    this.checkTime();
+                },
+                done: function() {
+                    $('#alertbox-popup').modal('show');
+                },
+                getAnswered: function(id) {
+                    return this.sessions[id].filter(x => x.answered != null).length;
+                },
+                checkTime: function() {
+                    if (this.stopTime) {
+                        return
+                    }
+                    if (this.countDown < 180) {
+                        this.notiText = "Sắp hết thời gian"
+                    }
+                    if (this.countDown <= 0) {
+                        clearTimeout(this.timer);
+                        this.notiText = 'Đã nộp bài';
+
+                    } else {
+                        this.countDown--;
+                        this.timer = setTimeout(this.checkTime, 1000);
+                    }
+                }
+            },
+        })
+    </script>
 @endsection

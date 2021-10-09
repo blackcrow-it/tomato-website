@@ -18412,9 +18412,6 @@ section {
   height: 200px;
 }
 
-.quiz-wrap.show-start .quiz-wrap__inner {
-  display: none;
-}
 
 .quiz-wrap.show-start .quiz-wrap__start {
   display: flex;

@@ -765,159 +765,159 @@
     }
 
 
-    function quizJs() {
-        var stopTime = false;
+    // function quizJs() {
+    //     var stopTime = false;
 
-        function timedCount() {
-            var wrap = $('.timeCounterJs'),
-                total_seconds = wrap.attr('data-time') * 60,
-                c_minutes = parseInt(total_seconds / 60),
-                c_seconds = parseInt(total_seconds % 60),
-                htmlM = $('.minutes > span', wrap),
-                htmlS = $('.seconds > span', wrap),
-                htmlNotifi = $('.notify', wrap),
-                timer;
+    //     function timedCount() {
+    //         var wrap = $('.timeCounterJs'),
+    //             total_seconds = wrap.attr('data-time') * 60,
+    //             c_minutes = parseInt(total_seconds / 60),
+    //             c_seconds = parseInt(total_seconds % 60),
+    //             htmlM = $('.minutes > span', wrap),
+    //             htmlS = $('.seconds > span', wrap),
+    //             htmlNotifi = $('.notify', wrap),
+    //             timer;
 
-            htmlNotifi.text('Bắt đầu làm bài');
+    //         htmlNotifi.text('Bắt đầu làm bài');
 
-            function CheckTime() {
-                htmlM.html(c_minutes);
-                htmlS.html(c_seconds);
-
-
-                if (stopTime === true) {
-                    clearTimeout(timer);
-                    htmlNotifi.text('Đã nộp bài');
-                    return
-                }
-
-                if (total_seconds <= 180) {
-                    htmlNotifi.text('Sắp hết thời gian');
-                }
-
-                if (total_seconds <= 0) {
-                    clearTimeout(timer);
-                    htmlNotifi.text('Đã nộp bài');
-                    $('.quiz-wrap__footer .btn-showResult').trigger('click');
-
-                } else {
-                    total_seconds = total_seconds - 1;
-                    c_minutes = parseInt(total_seconds / 60);
-                    c_seconds = parseInt(total_seconds % 60);
-                    timer = setTimeout(CheckTime, 1000);
-                }
-            }
-            timer = setTimeout(CheckTime, 1000);
-
-            // https://stackoverflow.com/questions/55150449/javascript-quiz-timer
-        }
-
-        function openMp3() {
-            var playMp3 = null;
-            var linkUrl = 'assets/audio/'
-
-            $('.quiz-wrap__content .quiz__list .item__title .audio').on('click', function (e) {
-                e.preventDefault();
-                var self = $(this),
-                    audio = self.attr('data-link');
-
-                audio = audio.replace(/(<([^>]+)>)/gi, "");
-                audio = audio.replace(/\s+/gi, '');
-                /* console.log("chuỗi sau xóa dấu cách-"+ audio + "-"); */
+    //         function CheckTime() {
+    //             htmlM.html(c_minutes);
+    //             htmlS.html(c_seconds);
 
 
-                if (playMp3 == null) {
-                    playMp3 = new Audio(linkUrl + audio);
-                } else {
-                    playMp3.pause();
-                    playMp3.currentTime = 0;
-                    playMp3 = new Audio(linkUrl + audio);
-                }
-                playMp3.play();
-            })
+    //             if (stopTime === true) {
+    //                 clearTimeout(timer);
+    //                 htmlNotifi.text('Đã nộp bài');
+    //                 return
+    //             }
+
+    //             if (total_seconds <= 180) {
+    //                 htmlNotifi.text('Sắp hết thời gian');
+    //             }
+
+    //             if (total_seconds <= 0) {
+    //                 clearTimeout(timer);
+    //                 htmlNotifi.text('Đã nộp bài');
+    //                 $('.quiz-wrap__footer .btn-showResult').trigger('click');
+
+    //             } else {
+    //                 total_seconds = total_seconds - 1;
+    //                 c_minutes = parseInt(total_seconds / 60);
+    //                 c_seconds = parseInt(total_seconds % 60);
+    //                 timer = setTimeout(CheckTime, 1000);
+    //             }
+    //         }
+    //         timer = setTimeout(CheckTime, 1000);
+
+    //         // https://stackoverflow.com/questions/55150449/javascript-quiz-timer
+    //     }
+
+    //     function openMp3() {
+    //         var playMp3 = null;
+    //         var linkUrl = 'assets/audio/'
+
+    //         $('.quiz-wrap__content .quiz__list .item__title .audio').on('click', function (e) {
+    //             e.preventDefault();
+    //             var self = $(this),
+    //                 audio = self.attr('data-link');
+
+    //             audio = audio.replace(/(<([^>]+)>)/gi, "");
+    //             audio = audio.replace(/\s+/gi, '');
+    //             /* console.log("chuỗi sau xóa dấu cách-"+ audio + "-"); */
 
 
-            // function listenMp3(audio){
-            //     var link = 'assets/audio/';
+    //             if (playMp3 == null) {
+    //                 playMp3 = new Audio(linkUrl + audio);
+    //             } else {
+    //                 playMp3.pause();
+    //                 playMp3.currentTime = 0;
+    //                 playMp3 = new Audio(linkUrl + audio);
+    //             }
+    //             playMp3.play();
+    //         })
 
-            //     audio = audio.replace(/(<([^>]+)>)/gi,"");
-            //     audio = audio.replace(/\s+/gi, '');
-            //     /* console.log("chuỗi sau xóa dấu cách-"+ audio + "-"); */
 
-            //     if(playMp3 == null) playMp3 = new Audio(+ audio);
-            //     else{
-            //         playMp3.pause();
-            //         playMp3.currentTime = 0;
-            //         playMp3 = new Audio(listenMp3+ audio);
-            //     }
-            //     playMp3.play();
-            // }
+    //         // function listenMp3(audio){
+    //         //     var link = 'assets/audio/';
 
-            // //tắt mp3 khi đóng popup đáp án
-            // function turnOffMp3(){
-            //     playMp3.pause();
-            //     playMp3.currentTime = 0;
-            // }
-        }
+    //         //     audio = audio.replace(/(<([^>]+)>)/gi,"");
+    //         //     audio = audio.replace(/\s+/gi, '');
+    //         //     /* console.log("chuỗi sau xóa dấu cách-"+ audio + "-"); */
 
-        function startQuizJs() {
-            $('.quiz-wrap__start .btn').on('click', function (e) {
-                e.preventDefault();
-                $(this).closest('.quiz-wrap').removeClass('show-start');
-                $('.widget--infoQuiz').removeClass('pointerEventsNone');
-                timedCount();
-            });
-        }
+    //         //     if(playMp3 == null) playMp3 = new Audio(+ audio);
+    //         //     else{
+    //         //         playMp3.pause();
+    //         //         playMp3.currentTime = 0;
+    //         //         playMp3 = new Audio(listenMp3+ audio);
+    //         //     }
+    //         //     playMp3.play();
+    //         // }
 
-        function showResult() {
-            $('.quiz-wrap__footer .btn-showResult').on('click', function (e) {
-                e.preventDefault();
-                var self = $(this);
+    //         // //tắt mp3 khi đóng popup đáp án
+    //         // function turnOffMp3(){
+    //         //     playMp3.pause();
+    //         //     playMp3.currentTime = 0;
+    //         // }
+    //     }
 
-                if (!self.hasClass('no-popup')) {
-                    var time = $('.timer-inner .minutes span').text();
+    //     function startQuizJs() {
+    //         $('.quiz-wrap__start .btn').on('click', function (e) {
+    //             e.preventDefault();
+    //             $(this).closest('.quiz-wrap').removeClass('show-start');
+    //             $('.widget--infoQuiz').removeClass('pointerEventsNone');
+    //             timedCount();
+    //         });
+    //     }
 
-                    if (time > (time / 3)) {
-                        $('#alertbox-popup').modal('show');
-                    }
+    //     function showResult() {
+    //         $('.quiz-wrap__footer .btn-showResult').on('click', function (e) {
+    //             e.preventDefault();
+    //             var self = $(this);
 
-                    $('#alertbox-popup .btn-agree').on('click', function (e) {
-                        e.preventDefault();
-                        var self2 = $(this);
-                        console.log('đã chọn đồng ý');
-                        stopTime = true;
-                        $('#alertbox-popup').modal('hide');
-                        self.closest('.layout-content').find('.quiz-wrap__inner').addClass('pointerEventsNone');
-                        setTimeout(function () {
-                            self.closest('.layout-content').find('.quiz-reslut').slideDown();
-                        }, 100);
-                        self.hide();
-                    });
-                } else {
-                    self.closest('.layout-content').find('.quiz-wrap__inner').addClass('pointerEventsNone');
-                    setTimeout(function () {
-                        self.closest('.layout-content').find('.quiz-reslut').slideDown();
-                    }, 100);
-                    self.hide();
-                }
-            });
-        }
+    //             if (!self.hasClass('no-popup')) {
+    //                 var time = $('.timer-inner .minutes span').text();
 
-        function btnViewAnswer() {
-            $('.btn-view-answer').on('click', function (e) {
-                e.preventDefault();
-                var offset = $('.quiz-wrap').offset().top;
-                $('html,body').animate({
-                    scrollTop: offset
-                }, 700);
-            });
-        }
+    //                 if (time > (time / 3)) {
+    //                     $('#alertbox-popup').modal('show');
+    //                 }
 
-        openMp3();
-        startQuizJs();
-        showResult();
-        btnViewAnswer();
-    }
+    //                 $('#alertbox-popup .btn-agree').on('click', function (e) {
+    //                     e.preventDefault();
+    //                     var self2 = $(this);
+    //                     console.log('đã chọn đồng ý');
+    //                     stopTime = true;
+    //                     $('#alertbox-popup').modal('hide');
+    //                     self.closest('.layout-content').find('.quiz-wrap__inner').addClass('pointerEventsNone');
+    //                     setTimeout(function () {
+    //                         self.closest('.layout-content').find('.quiz-reslut').slideDown();
+    //                     }, 100);
+    //                     self.hide();
+    //                 });
+    //             } else {
+    //                 self.closest('.layout-content').find('.quiz-wrap__inner').addClass('pointerEventsNone');
+    //                 setTimeout(function () {
+    //                     self.closest('.layout-content').find('.quiz-reslut').slideDown();
+    //                 }, 100);
+    //                 self.hide();
+    //             }
+    //         });
+    //     }
+
+    //     function btnViewAnswer() {
+    //         $('.btn-view-answer').on('click', function (e) {
+    //             e.preventDefault();
+    //             var offset = $('.quiz-wrap').offset().top;
+    //             $('html,body').animate({
+    //                 scrollTop: offset
+    //             }, 700);
+    //         });
+    //     }
+
+    //     openMp3();
+    //     startQuizJs();
+    //     showResult();
+    //     btnViewAnswer();
+    // }
 
 
     function cartboxJs() {
@@ -1137,7 +1137,7 @@
     lessonboxPlayVideo();
     inputQuantity();
     checkShowLogin();
-    quizJs();
+    //quizJs();
     percentJs();
     cartboxJs();
     mobileCategoryCourse();

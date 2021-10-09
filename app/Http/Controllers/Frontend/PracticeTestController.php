@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\PracticeTest;
 use App\PracticeTestQuestion;
 use Carbon\Carbon;
+use App\PracticeTestQuestionSession;
+use App\PracticeTestCategory;
+use Auth;
 class PracticeTestController extends Controller
 {
 
@@ -45,18 +48,18 @@ class PracticeTestController extends Controller
     public function test(Request $request, $slug, $id)
     {
         $currentDay = (int)date('w');
-        $pt = PracticeTest::where([['id', $id], ['enabled', true]])->where(function($query) use ($currentDay){
+        $pt = PracticeTest::with('level')->where([['id', $id], ['enabled', true]])->where(function($query) use ($currentDay){
             $query->where([['loop', true], ['loop_days', 'like', '%'.$currentDay.'%']])
             ->orWhere('date', '=', Carbon::today()->toDateString());
         })->first();
         if($pt == null) {
             return redirect()->route('home');
         }
-        $questions = PracticeTestQuestion::with('session', 'answers')->where([['practice_test_id', $id], ['enabled', true]])->get();
-        //$questions = DB::table('practice_test_questions')->where([['practice_test_id', $id], ['enabled', true]]);
-        $questions = $this->_group_by($questions, 'question_session_id');
-        dd($questions);
-        return view('frontend.practice_test.test', ["pt"=>$pt, 'questions'=>$questions]);
+        $language = PracticeTestCategory::where('id', $pt->level->parent_id)->first();
+        $sessions = PracticeTestQuestionSession::get()->keyBy('id');
+        $questions = PracticeTestQuestion::with('answers')->where([['practice_test_id', $id], ['enabled', true]])->get();
+        $questionGroup = $this->_group_by($questions, 'question_session_id');
+        return view('frontend.practice_test.test', ["pt"=>$pt, 'questions'=>$questionGroup, 'sessions'=> $sessions, 'language'=> $language]);
     }
 
    
