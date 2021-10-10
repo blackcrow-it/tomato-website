@@ -188,6 +188,7 @@ Route::prefix('admin')
                 Route::get('edit/{id}', 'UserController@edit')->name('edit');
                 Route::post('edit/{id}', 'UserController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'UserController@submitDelete')->name('delete');
+                Route::get('search-user', 'UserController@getSearchUser')->name('search_user');
                 Route::get('get-user-courses/{id}', 'UserController@getUserCourses')->name('get_user_courses');
             });
 
@@ -373,6 +374,16 @@ Route::prefix('admin')
                 Route::get('edit/{id}', 'PermissionController@edit')->name('edit');
                 Route::post('edit/{id}', 'PermissionController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'PermissionController@submitDelete')->name('delete');
+            });
+
+            Route::prefix('zoom')->name('zoom.')->middleware('can:admin')->group(function () {
+                Route::get('', 'ZoomController@index')->name('index');
+                Route::get('show/{id}', 'ZoomController@show')->name('show');
+                Route::get('new', 'ZoomController@new')->name('new');
+                Route::post('store', 'ZoomController@store')->name('store');
+                Route::post('update/{id}', 'ZoomController@edit')->name('update');
+                Route::delete('destroy/{id}', 'ZoomController@destroy')->name('destroy');
+                Route::post('send-email-notify', 'ZoomController@sendEmailNotify')->name('send_email_notify');
             });
         });
 
