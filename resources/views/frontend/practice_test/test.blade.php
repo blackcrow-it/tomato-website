@@ -181,7 +181,7 @@
                                                         aria-controls="panel-{{ $key }}" aria-selected="true">Phần
                                                         {{ $in + 1 }}: {{ $sessions[$key]->name }}<span>(Đã làm: <span
                                                                 v-text="getAnswered({{ $key }})"></span>/{{ count($questions[$key]) }})
-                                                            <i class="fa fa-check"></i></span></a>
+                                                            <i v-if="getAnswered({{ $key }}) == {{ count($questions[$key]) }}" class="fa fa-check"></i></span></a>
                                                 </li>
                                                 <?php $in++; ?>
                                             @endforeach
@@ -211,7 +211,7 @@
 		</div>
 	</div>
 @endsection
-
+    
 @section('script')
     <script>
         new Vue({
