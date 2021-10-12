@@ -18,6 +18,7 @@ use App\InvoiceItem;
 use App\Mail\InvoiceMail;
 use App\Promo;
 use App\Repositories\UserRepo;
+use App\Shipment;
 use App\UserComboCourse;
 use App\UserCourse;
 use Auth;
@@ -279,6 +280,7 @@ class CartController extends Controller
             DB::beginTransaction();
 
             $shipInfo = $request->input('ship_info');
+            $shipmentInfo = $request->input('shipment');
 
             // Process courses
             $coursesInCart = $cart->where('type', ObjectType::COURSE);
@@ -341,15 +343,15 @@ class CartController extends Controller
                     $invoiceItem->save();
                 }
 
-                error_log($request->input('shipment_fee'));
-                if ($request->input('shipment_fee')) {
-                    $invoiceItem = new InvoiceItem();
-                    $invoiceItem->invoice_id = $invoice->id;
-                    $invoiceItem->type = 'shipment_fee';
-                    $invoiceItem->object_id = 0;
-                    $invoiceItem->amount = 1;
-                    $invoiceItem->price = $request->input('shipment_fee');
-                    $invoiceItem->save();
+
+                if ($shipmentInfo && $shipInfo['shipping']) {
+                    $shipment = new Shipment();
+                    $shipment->partner = 'GHTK';
+                    $shipment->ship_money = $shipmentInfo['ship_money'];
+                    $shipment->is_fast = $shipmentInfo['is_fast'];
+                    $shipment->is_ship_cod = $shipmentInfo['is_cod'];
+                    $shipment->invoice_id = $invoice->id;
+                    $shipment->save();
                 }
 
                 $notificationInvoices[] = $invoice;
@@ -401,7 +403,12 @@ class CartController extends Controller
 
             Cart::where('user_id', $user->id)->delete();
 
-            $this->userRepo->removeMoney($user->id, $totalPrice);
+            if ($shipmentInfo && $shipInfo['shipping']) {
+                $totalPrice += $shipmentInfo['ship_money'];
+            }
+            if ($shipmentInfo && !$shipmentInfo['is_cod']) {
+                $this->userRepo->removeMoney($user->id, $totalPrice);
+            }
 
             DB::commit();
 

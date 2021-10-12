@@ -1005,4 +1005,61 @@
     }
 }
 
-body.waiting * { cursor: wait; }
+body.waiting * {
+    cursor: wait;
+}
+
+#form-address-modal .choose-form__content .checkbox-wrap .checkbox-item {
+    display: block;
+}
+
+#form-address-modal .choose-form__item .checkbox-item {
+    font-family: "Open Sans", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#form-address-modal .choose-form__content .checkbox-wrap .checkbox-item .checkbox-item__text {
+    font-weight: normal;
+}
+
+#form-address-modal .choose-form__content p:last-child {
+    margin-bottom: 0;
+}
+
+#form-address-modal .choose-form__content .checkbox-wrap .checkbox-item .checkbox-item__text span {
+    font-weight: bold;
+    color: #E71D36;
+}
+
+#form-address-modal .choose-form__content .checkbox-wrap .checkbox-item .checkbox-item__text small {
+    display: block;
+    color: #767676;
+    font-size: 70%;
+    margin-top: 0.1875rem;
+}
+
+#form-address-modal .choose-form__content .checkbox-wrap .checkbox-item+.checkbox-item {
+    margin-top: 15px;
+}
+
+.cart-detail .input-price .checkbox-item__text small {
+    display: block;
+}
+
+small {
+    font-size: 80%;
+}
+
+.cart-detail .input-price {
+    margin-bottom: 0;
+    margin-top: 30px;
+}
+
+.cart-detail .input-price .checkbox-wrap .checkbox-item+.checkbox-item {
+    margin-top: 20px;
+}
+
+.cart-detail .form-discount .form-control {
+    height: 30px;
+}
