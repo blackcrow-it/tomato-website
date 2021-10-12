@@ -343,6 +343,7 @@ class CartController extends Controller
                     $invoiceItem->save();
                 }
 
+
                 if ($shipmentInfo && $shipInfo['shipping']) {
                     $shipment = new Shipment();
                     $shipment->partner = 'GHTK';

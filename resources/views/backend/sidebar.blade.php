@@ -5,12 +5,14 @@
         <p>Trang chủ</p>
     </a>
 </li>
-<li class="nav-item">
-    <a href="{{ route('admin.analytics') }}" class="nav-link {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-chart-area"></i>
-        <p>Google Analytics</p>
-    </a>
-</li>
+@can('category.list')
+    <li class="nav-item">
+        <a href="{{ route('admin.category.list') }}" class="nav-link {{ request()->routeIs('admin.category.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-list"></i>
+            <p>Danh mục</p>
+        </a>
+    </li>
+@endcan
 @can('course.list')
     <li class="nav-item">
         <a href="{{ route('admin.course.list') }}" class="nav-link {{ request()->routeIs('admin.course.*') ? 'active' : '' }}">
@@ -49,14 +51,6 @@
         </a>
     </li>
 @endcan
-@can('category.list')
-    <li class="nav-item">
-        <a href="{{ route('admin.category.list') }}" class="nav-link {{ request()->routeIs('admin.category.*') ? 'active' : '' }}">
-            <i class="nav-icon fas fa-list"></i>
-            <p>Danh mục</p>
-        </a>
-    </li>
-@endcan
 <li class="nav-item has-treeview {{ request()->routeIs('admin.survey.*') ? 'menu-open' : '' }}">
     <a href="#" class="nav-link {{ request()->routeIs('admin.survey.*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-chart-area"></i>
@@ -92,6 +86,12 @@
         </a>
     </li>
 @endcan
+<li class="nav-item">
+    <a href="{{ route('admin.analytics') }}" class="nav-link {{ request()->routeIs('admin.analytics') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-chart-area"></i>
+        <p>Google Analytics</p>
+    </a>
+</li>
 @can('invoice.list')
     <li class="nav-item">
         <a href="{{ route('admin.invoice.list') }}" class="nav-link {{ request()->routeIs('admin.invoice.*') ? 'active' : '' }}">
@@ -109,6 +109,12 @@
     </li>
 @endcan
 @can('admin')
+    <li class="nav-item">
+        <a href="{{ route('admin.zoom.index') }}" class="nav-link {{ request()->routeIs('admin.zoom.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-video"></i>
+            <p>Lớp học Zoom</p>
+        </a>
+    </li>
     <li class="nav-item">
         <a href="{{ route('admin.user.list') }}" class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-user-friends"></i>

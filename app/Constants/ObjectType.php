@@ -8,4 +8,5 @@ class ObjectType {
     const COMBO_COURSE = 'combo_course';
     const POST = 'post';
     const BOOK = 'book';
+    const PART = 'part';
 }
