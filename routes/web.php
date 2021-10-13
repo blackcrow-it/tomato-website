@@ -76,6 +76,8 @@ Route::namespace('Frontend')
             Route::post('ca-nhan/doi-mat-khau', 'UserController@doChangepass')->name('user.changepass');
 
             Route::get('thi-thu/{slug}-pt{id}.html', 'PracticeTestController@test')->name('practice_test.test')->where(['slug' => '.*', 'id' => '\d+']);
+            Route::post('thi-thu/submitTest', 'PracticeTestController@submitTest')->name('practice_test.submitTest');
+            Route::get('thi-thu/startTest', 'PracticeTestController@startTest')->name('practice_test.startTest');
         });
 
         Route::middleware('auth')->group(function () {

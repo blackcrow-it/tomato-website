@@ -12,7 +12,7 @@
         </div>
     </section>
 
-    <section class="section section-quiz-detail" id="section-quiz-detail">
+    <section class="section section-quiz-detail" id="section-quiz-detail" v-bind:class="{'pointerEventsNone': stopTime}">
         <div class="container">
             <div class="layout layout--right">
                 <div class="row stickyJs fix-header-top">
@@ -189,7 +189,7 @@
                                     </div>
 
                                     <div class="infoQuiz-content infoQuiz__user">
-                                        <p>Số người tham gia: <b><i class="fa fa-user"></i>200</b></p>
+                                        <p>Số người tham gia: <b><i class="fa fa-user"></i>{{count($users)}}</b></p>
                                     </div>
                                 </div>
                             </div>
@@ -199,13 +199,13 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="alertbox-popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="alertbox-popup" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<p class="f-text">Bạn còn nhiều thời gian!<br>Bạn chắc chắn muốn nộp bài</p>
 				<div class="f-btn">
 					<a href="javascript:;" class="btn btn-agree btn--sm btn--secondary">Đồng ý</i></a>
-					<a href="javascript:;" class="btn btn--sm" data-dismiss="modal">Huỷ bỏ</i></a>
+					<a href="javascript:;" class="btn btn--sm" data-dismiss="modal" >Huỷ bỏ</i></a>
 				</div>
 			</div>
 		</div>
@@ -227,14 +227,28 @@
                 timer: null,
             },
             mounted() {
-                console.log(this.sessions, 'accc');
+                var self = this;
                 this.countDown = this.pt.duration * 60;
+                $('#alertbox-popup .btn-agree').on('click', function (e) {
+                    e.preventDefault();
+                    clearTimeout(self.timer);
+                    self.submitTest();
+                    self.stopTime = true;
+                    $('#alertbox-popup').modal('hide');
+                })
             },
             methods: {
                 start: function() {
-                    this.showStart = false;
-                    this.notiText = "Bắt đầu làm bài"
-                    this.checkTime();
+                    axios.get('{{ route('practice_test.startTest')}}', {params:{
+                        pt_id: this.pt.id
+                    }}).then(response => {
+                        console.log('start Success')
+                        this.showStart = false;
+                        this.notiText = "Bắt đầu làm bài"
+                        this.checkTime();
+                    }).catch(e => {
+                        console.log('start Fail')
+                    });
                 },
                 done: function() {
                     $('#alertbox-popup').modal('show');
@@ -250,13 +264,36 @@
                         this.notiText = "Sắp hết thời gian"
                     }
                     if (this.countDown <= 0) {
+                        this.stopTime = true;
                         clearTimeout(this.timer);
                         this.notiText = 'Đã nộp bài';
+                        this.submitTest();
 
                     } else {
                         this.countDown--;
                         this.timer = setTimeout(this.checkTime, 1000);
                     }
+                },
+                submitTest: function(){
+                    let self = this;
+                    let formData = new FormData();
+                    let answers = [];
+                    Object.keys(this.sessions).forEach(function(k){
+                        let temp = self.sessions[k].map(x=> {
+                        let obj = {'questionId': x.id, 'answer': x['answered']??null}
+                        return obj;
+                    })
+                    answers = [...answers, ...temp];
+                    })
+                    
+                    formData.append('data', JSON.stringify(answers))
+                    axios.post('{{ route('practice_test.submitTest')}}',
+                        formData
+                    ).then(response => {
+                        console.log('Submit Success')
+                    }).catch(e => {
+                        console.log('Submit Fail')
+                    });
                 }
             },
         })
