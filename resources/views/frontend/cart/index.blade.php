@@ -657,16 +657,16 @@
                 this.getData();
             },
             totalPrice() {
-                return this.inputData.reduce((total, item) => {
-                    let shipmentFee = this.shipmentFee;
+                let shipmentFee = 0;
+                if (this.shipInfo.shipping) {
                     if (this.isFast) {
                         shipmentFee = this.shipmentFeeFast;
-                    }
-                    if (this.shipInfo.shipping) {
-                        return total + item.amount * item.price + shipmentFee;
                     } else {
-                        return total + item.amount * item.price;
+                        shipmentFee = this.shipmentFee
                     }
+                }
+                return shipmentFee + this.inputData.reduce((total, item) => {
+                    return total + item.amount * item.price;
                 }, 0);
             },
             validatePromo() {
