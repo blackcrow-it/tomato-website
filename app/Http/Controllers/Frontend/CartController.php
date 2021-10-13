@@ -266,7 +266,7 @@ class CartController extends Controller
             $totalPrice += $item->amount * $item->price;
         }
 
-        if ($totalPrice > $user->money) {
+        if (!$request->input('shipment')['is_cod'] && $totalPrice > $user->money) {
             $request->validate([
                 'cart' => [
                     function ($attribute, $value, $fail) {
