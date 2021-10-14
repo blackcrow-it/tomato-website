@@ -362,18 +362,18 @@
                             <div class="input-item" v-if="shipmentFee && shipmentFeeFast">
                                 <label>Chọp phương thức giao hàng:</label>
                                 <div class="checkbox-wrap">
-                                    <label class="checkbox-item">
+                                    {{-- <label class="checkbox-item">
                                         <input type="radio" name="chohinhthuc" v-model="isFast" :value="true" :disabled="!shipmentFeeFast">
                                         <span class="checkbox-item__check"></span>
                                         <p class="checkbox-item__text">Giao hàng nhanh ( <span>@{{ currency(shipmentFeeFast) }}</span> )
-                                            {{-- <small>Dự kiến giao hàng: 6-10-2012 đến 10-10-2021</small> --}}
+                                            <small>Dự kiến giao hàng: 6-10-2012 đến 10-10-2021</small>
                                         </p>
-                                    </label>
+                                    </label> --}}
                                     <label class="checkbox-item">
                                         <input type="radio" name="chohinhthuc" v-model="isFast" :value="false" :disabled="!shipmentFee">
                                         <span class="checkbox-item__check"></span>
                                         <p class="checkbox-item__text">Giao hàng tiết kiệm ( <span>@{{ currency(shipmentFee)}}</span> )
-                                            {{-- <small>Dự kiến giao hàng: 6-10-2012 đến 10-10-2021</small> --}}
+                                            <small>Dự kiến giao hàng khoảng 5 ngày kể từ ngày thanh toán</small>
                                         </p>
                                     </label>
                                 </div>
@@ -421,7 +421,7 @@
             promoData: undefined,
             priceBook: 0,
             amountBook: 0,
-            isFast: true,
+            isFast: false,
             shipmentFee: undefined,
             shipmentFeeFast: undefined,
             supportShipping: true,
