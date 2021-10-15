@@ -286,7 +286,9 @@
                     answers = [...answers, ...temp];
                     })
                     
-                    formData.append('data', JSON.stringify(answers))
+                    let m = {'duration': (this.pt.duration * 60) - this.countDown, 'answers': answers}
+
+                    formData.append('data', JSON.stringify(m))
                     axios.post('{{ route('practice_test.submitTest')}}',
                         formData
                     ).then(response => {

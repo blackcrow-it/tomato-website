@@ -7,7 +7,7 @@ class PracticeTestResult extends BaseModel
     protected $table = 'practice_test_results';
 
     protected $fillable = [
-        'score', 'number_of_correct', 'duration','max_score','pass_score', 'practice_test_id', 'user_id','created_at', 'updated_at'
+        'score', 'number_of_correct', 'duration','test_date','max_score','pass_score', 'practice_test_id', 'user_id','created_at', 'updated_at'
     ];
 
     public function question()

@@ -14,6 +14,8 @@ use App\PracticeTestResult;
 use App\PracticeTestAnswer;
 use Auth;
 use Session;
+use Exception;
+use Log;
 
 class PracticeTestController extends Controller
 {
@@ -78,25 +80,48 @@ class PracticeTestController extends Controller
             $end = $ss['time']->addMinutes($pt->duration + 1);
             if ($now <= $end) {
                 $data = json_decode($request->all()['data']);
-                $questions = PracticeTestQuestion::with(['answers' => function ($query) {
-                    $query->select('id', 'content', 'index', 'question_id', 'enabled')->orderBy('index', 'asc');
-                }])->orderBy('level', 'asc')->where([['practice_test_id', $pt->id], ['enabled', true]])->get();
-                $questionGroup = $this->_group_by($questions, 'question_session_id');
-                // $answers = PracticeTestAnswer::with(['question' => function ($query) use ($pt) {
-                //     $query->where('practice_test_id', $pt->id);
-                // }])->where('correct', true)->get()->all();
-                // $resultList = array();
-                // foreach ($data as $answer) {
-                //     $new = array_filter($answers, function ($var) use ($answer) {
-                //         return $var['correct'] == true && $var['id'] == $answer->answer;
-                //     });
-                //     $resultList = array_merge($resultList, $new);
-                // }
-                // $sum = array_reduce($resultList, function ($carry, $item) {
-                //     return $carry + $item->question->score;
-                // });
+                // $questions = PracticeTestQuestion::with(['answers' => function ($query) {
+                //     $query->select('id', 'question_id','correct')->orderBy('index', 'asc');
+                // }])->orderBy('level', 'asc')->where([['practice_test_id', $pt->id], ['enabled', true]])->get();
+                // $questionGroup = $this->_group_by($questions, 'question_session_id');
+                //dd($questionGroup);
 
-                return response()->json([],200);
+                $answers = PracticeTestAnswer::with(['question' => function ($query) use ($pt) {
+                    $query->select('score', 'id')->where('practice_test_id', $pt->id);
+                }])->select('id', 'question_id','correct')->where('correct', true)->get()->all();
+
+                $score = 0;
+                $correct = 0;
+                foreach ($answers as $answer) {
+                    if(in_array($answer->id, array_map(function ($v){
+                        return $v->answer;
+                    }, $data->answers))){
+                        $score+= $answer->question->score;
+                        $correct++;
+                    }
+                }
+
+                Session::remove('pt_test');
+
+                try {
+                    DB::beginTransaction();
+                    $result = new PracticeTestResult(array('score' => $score,
+                    'number_of_correct'=> $correct,
+                    'duration'=> $data->duration,
+                    'max_score'=> $pt->max_score_override,
+                    'pass_score'=> $pt->pass_score_override,
+                    'practice_test_id' => $pt->id,
+                    'test_date' => Carbon::now(),
+                    'user_id'=> Auth::id()));
+                    $result->save();
+                    DB::commit();
+                } catch (Exception $ex) {
+                    DB::rollBack();
+                    Log::error($ex);
+                    return response()->json(['error' => $ex->getMessage()], 500);
+                }
+                
+                return response()->json(['score'=> $score, 'result'=>$answers],200);
             }
         }
 
@@ -120,10 +145,9 @@ class PracticeTestController extends Controller
     private function getPracticeTest($id)
     {
         $currentDay = (int)date('w');
-        $pt = PracticeTest::where([['id', $id], ['enabled', true]])->where(function ($query) use ($currentDay) {
-            $query->where([['loop', true], ['loop_days', 'like', '%' . $currentDay . '%']])
-                ->orWhere('date', '=', Carbon::today()->toDateString());
-        });
+        $pt = PracticeTest::where([['id', $id], ['enabled', true]])->where('date', '=', Carbon::today()->toDateString())->with(['shifts'=> function ($query){
+            $query->whereTime('start_time','>=', Carbon::parse(Carbon::now()->format('H:i')))->whereTime('end_time','<=', Carbon::parse(Carbon::now()->format('H:i')));
+        }]);
         return $pt;
     }
 }
