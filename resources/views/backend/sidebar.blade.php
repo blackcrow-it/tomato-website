@@ -110,7 +110,7 @@
 @endcan
 @can('admin')
     <li class="nav-item">
-        <a href="{{ route('admin.zoom.index') }}" class="nav-link {{ request()->routeIs('admin.zoom.*') ? 'active' : '' }}">
+        <a href="{{ route('admin.zoom.index_user') }}" class="nav-link {{ request()->routeIs('admin.zoom.*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-video"></i>
             <p>Lớp học Zoom</p>
         </a>

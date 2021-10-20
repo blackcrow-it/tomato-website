@@ -10,7 +10,8 @@ Lịch học Zoom
     </div><!-- /.col -->
     <div class="col-sm-6">
         <div class="float-sm-right">
-            <a href="{{ route('admin.zoom.new') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Lên lịch</a>
+            <a href="{{ route('admin.zoom.index_user') }}" class="btn btn-outline-primary"><i class="fas fa-arrow-alt-circle-left"></i> Tài khoản</a>
+            <a href="{{ route('admin.zoom.new', ['id' => $id]) }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Lên lịch</a>
         </div>
     </div><!-- /.col -->
 </div>
@@ -41,20 +42,20 @@ Lịch học Zoom
     </div>
 @endif
 <div class="row" id="zoom__list">
-    @if(count($data['data']['meetings']) <= 0)
+    @if(count($data) <= 0)
     <div class="col-lg-12">
         <div style="padding-bottom: 10px;">
-            Chưa có phòng học nào được tạo <a href="{{ route('admin.zoom.new') }}"><i class="fas fa-plus"></i> Thêm mới</a>
+            Chưa có phòng học nào được tạo <a href="{{ route('admin.zoom.new', ['id' => $id]) }}"><i class="fas fa-plus"></i> Thêm mới</a>
         </div>
     </div>
     @else
-        @foreach (array_reverse($data['data']['meetings']) as $item)
+        @foreach ($data as $item)
         <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card card-primary" style="width: 100%">
                 <div class="card-header">
-                    <h3 class="card-title">ID cuộc họp: {{ $item['id'] }}</h3>
+                    <h3 class="card-title">ID cuộc họp: {{ $item['meeting_id'] }}</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#modal-delete-{{ $item['id'] }}">
+                        <button type="button" class="btn btn-tool" data-toggle="modal" data-target="#modal-delete-{{ $item['meeting_id'] }}">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
@@ -62,23 +63,44 @@ Lịch học Zoom
                 <div class="card-body text-center">
                     <div class="card-title float-none" style="font-size: 1.5rem;">
                         <div class="topic__zoom">
-                            <a href="{{ route('admin.zoom.show', ['id' => $item['id']]) }}" class="link-primary">{{ $item['topic'] }}</a>
+                            <a href="{{ route('admin.zoom.show', ['id' => $item['meeting_id']]) }}" class="link-primary">{{ $item['topic'] }}</a>
                         </div>
                     </div>
                     <div class="card-text">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Bắt đầu ngày {{ date("d/m/Y", strtotime($item['start_time'])) }}</li>
-                            <li class="list-group-item">{{ date("h:i A", strtotime($item['start_time'])) }} - {{ date("h:i A", strtotime('+'.$item['duration'].' minutes', strtotime($item['start_time']))) }}</li>
-                            <li class="list-group-item">{{ $item['agenda'] ?? 'Không có mô tả ...' }}</li>
+                            @if ($item['type'] == 2)
+                                <li class="list-group-item">Bắt đầu ngày <u>{{ date("d/m/Y", strtotime($item['start_time'])) }}</u></li>
+                                <li class="list-group-item">{{ date("h:i A", strtotime($item['start_time'])) }} - {{ date("h:i A", strtotime('+'.$item['duration'].' minutes', strtotime($item['start_time']))) }}</li>
+                            @elseif ($item['type'] == 8)
+                                @if ($item['occurrences'])
+                                @php
+                                    $occurrences = json_decode($item['occurrences'], true)
+                                @endphp
+                                @if ($occurrences)
+                                <li class="list-group-item">Từ <u>{{ date("d/m/Y", strtotime($occurrences[0]['start_time'])) }}</u> đến <u>{{ date("d/m/Y", strtotime($occurrences[count($occurrences) - 1]['start_time'])) }}</u></li>
+                                <li class="list-group-item">{{ date("h:i A", strtotime($occurrences[0]['start_time'])) }} - {{ date("h:i A", strtotime('+'.$occurrences[0]['duration'].' minutes', strtotime($occurrences[0]['start_time']))) }} ({{ count($occurrences) }} buổi) </li>
+                                @else
+                                <li class="list-group-item">Không có buổi học nào</li>
+                                @endif
+                                @endif
+                            @endif
+                            <li class="list-group-item">{{ ($item['agenda']) ? $item['agenda'] : 'Không có mô tả ...' }}</li>
                         </ul>
                     </div>
                 </div>
                 <div class="card-footer">
                     <small class="text-muted">{{ AppHelper::instance()->nicetime($item['created_at']) }}</small>
-                    <a href="{{ $item['join_url'] }}" target="_blank" class="btn btn-sm btn-primary float-right"><i class="fas fa-door-open"></i> Tham gia</a>
+                    @if ($item['is_start'])
+                    <a href="{{ $item['join_url'] }}" target="_blank" class="btn btn-sm btn-primary float-right" style="margin-left: 10px;"><i class="fas fa-door-open"></i> Tham gia</a>
+                    <a href="#" target="_blank" class="btn btn-sm btn-danger disabled float-right"><i class="fas fa-video"></i> Đang diễn ra</a>
+                    @else
+                    <a href="{{ $item['join_url'] }}" target="_blank" class="btn btn-sm btn-primary disabled float-right" style="margin-left: 10px;"><i class="fas fa-door-open"></i> Tham gia</a>
+                    <a href="{{ $item['start_url'] }}" target="_blank" class="btn btn-sm btn-danger float-right"><i class="fas fa-video"></i> Bắt đầu</a>
+                    @endif
+
                 </div>
             </div>
-            <div class="modal fade" id="modal-delete-{{ $item['id'] }}" aria-hidden="true">
+            <div class="modal fade" id="modal-delete-{{ $item['meeting_id'] }}" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -92,7 +114,7 @@ Lịch học Zoom
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Huỷ</button>
-                        <form id="form__delete_zoom-{{ $item['id'] }}" class="form__delete_zoom" action="{{ route('admin.zoom.destroy', ['id' => $item['id']]) }}" method="post">
+                        <form id="form__delete_zoom-{{ $item['meeting_id'] }}" class="form__delete_zoom" action="{{ route('admin.zoom.destroy', ['id' => $item['meeting_id']]) }}" method="post">
                             @csrf
                             @method('delete')
                             <button type="submit" class="btn btn-outline-danger submit__delete__zoom">Xoá</button>
