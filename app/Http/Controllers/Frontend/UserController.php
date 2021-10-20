@@ -15,6 +15,7 @@ use App\InvoiceItem;
 use App\Recharge;
 use App\User;
 use App\UserCourse;
+use App\UserZoomMeeting;
 use Auth;
 use DB;
 use Google2FA;
@@ -93,6 +94,19 @@ class UserController extends Controller
 
         return view('frontend.user.my_course', [
             'user_courses' => $userCourses
+        ]);
+    }
+
+    public function myZoom()
+    {
+        $userZooms = UserZoomMeeting::query()
+            ->with('zoomMeeting')
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+
+        return view('frontend.user.zoom_meeting', [
+            'user_zooms' => $userZooms
         ]);
     }
 

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Mail\SendMailInviteStudent;
 use App\Traits\ZoomMeetingTrait;
 use App\User;
+use App\UserZoomMeeting;
+use App\ZoomMeeting;
 use Debugbar;
 use Illuminate\Http\Request;
 use Mail;
@@ -25,10 +27,30 @@ class ZoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $data = $this->getList();
-        return view('backend.zoom.index', [
+        try {
+            $data = $this->getList($id);
+            return view('backend.zoom.index', [
+                'data' => $data['data'],
+                'id' => $id
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()
+            ->route('admin.zoom.index_user');
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexUser()
+    {
+        $data = $this->getListUsers();
+        Debugbar::info(json_encode($data));
+        return view('backend.zoom.user', [
             'data' => $data
         ]);
     }
@@ -38,9 +60,11 @@ class ZoomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function new()
+    public function new($id)
     {
-        return view('backend.zoom.create');
+        return view('backend.zoom.create', [
+            'id' => $id
+        ]);
     }
 
     /**
@@ -54,7 +78,7 @@ class ZoomController extends Controller
         $this->create($request->all());
 
         return redirect()
-            ->route('admin.zoom.index')
+            ->route('admin.zoom.meetings', ['id' => $request['id']])
             ->with('success', 'Đã tạo phòng học thành công.');
     }
 
@@ -66,9 +90,8 @@ class ZoomController extends Controller
      */
     public function show($id)
     {
-        $meeting = $this->get($id);
-        Debugbar::info($meeting);
-        return view('backend.zoom.show', compact('meeting'));
+        $data = ZoomMeeting::where('meeting_id', $id)->first();
+        return view('backend.zoom.show', ['meeting' => $data]);
     }
 
     /**
@@ -82,7 +105,7 @@ class ZoomController extends Controller
         $this->update($id, $request->all());
 
         return redirect()
-            ->route('admin.zoom.index')
+            ->route('admin.zoom.show', ['id' => $id])
             ->with('success', 'Đã cập nhật phòng học thành công.');
     }
 
@@ -97,11 +120,11 @@ class ZoomController extends Controller
         $meeting = $this->delete($id);
         if ($meeting['success']) {
             return redirect()
-                ->route('admin.zoom.index')
+                ->route('admin.zoom.meetings', ['id' => $meeting['owner_id']])
                 ->with('success', 'Đã xoá phòng học thành công.');
         } else {
             return redirect()
-                ->route('admin.zoom.index')
+                ->route('admin.zoom.meetings', ['id' => $meeting['owner_id']])
                 ->withErrors('Hệ thống gặp vấn đề chưa xoá được phòng học.');
         }
     }
@@ -114,43 +137,63 @@ class ZoomController extends Controller
      */
     public function sendEmailNotify(Request $request)
     {
-        // $emails = [];
         $users = [];
         $courseIds = $request->input('__invite_courses', []);
         $userIds = $request->input('__invite_users', []);
-        $meeting = $this->get($request->input('id_meeting'));
-        foreach ($courseIds as $courseId) {
-            $course = Course::find($courseId);
-            $listUsers = $course->user_courses;
-            foreach ($listUsers as $user) {
-                if ($user->user && !in_array($user->user, $users))
-                {
-                    array_push($users, $user->user);
+        $meeting = ZoomMeeting::find($request->input('id_meeting'));
+        if ($meeting) {
+            foreach ($courseIds as $courseId) {
+                $course = Course::find($courseId);
+                $listUsers = $course->user_courses;
+                foreach ($listUsers as $user) {
+                    if ($user->user && !in_array($user->user, $users))
+                    {
+                        array_push($users, $user->user);
+                    }
                 }
             }
-        }
-        foreach ($userIds as $userId) {
-            $user = User::find($userId);
-            if ($user && !in_array($user, $users))
-            {
-                array_push($users, $user);
+            foreach ($userIds as $userId) {
+                $user = User::find($userId);
+                if ($user && !in_array($user, $users))
+                {
+                    array_push($users, $user);
+                }
             }
-        }
-        foreach ($users as $user) {
-            if ($meeting['success']) {
+            try {
+                UserZoomMeeting::where('meeting_id', $meeting->id)->delete();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+            foreach ($users as $user) {
                 $data = array(
                     'student_name' => $user->name,
                     'email_student' => $user->email,
-                    'topic' => $meeting['data']['topic'],
-                    'id_zoom' => $meeting['data']['id'],
-                    'start_time' => $meeting['data']['start_time'],
-                    'join_url' => $meeting['data']['join_url'],
+                    'topic' => $meeting->topic,
+                    'id_zoom' => $meeting->meeting_id,
+                    'start_time' => $meeting->start_time,
+                    'join_url' => $meeting->join_url,
                 );
                 Mail::to($user->email)->send(new SendMailInviteStudent($data));
+                $userMeetingZoom = new UserZoomMeeting();
+                $userMeetingZoom->user_id = $user->id;
+                $userMeetingZoom->zoom_meeting_id = $meeting->id;
+                $userMeetingZoom->save();
             }
+            return redirect()
+                ->route('admin.zoom.show', ['id' => $meeting->meeting_id])
+                ->with('success', 'Đã gửi email đến cho học viên.');
+        } else {
+            return redirect()
+                ->route('admin.zoom.meetings', ['id' => $meeting->owner_id])
+                ->withErrors('Phòng học này không tồn tại.');
         }
-        return redirect()
-            ->route('admin.zoom.index')
-            ->with('success', 'Đã gửi email đến cho học viên.');
+    }
+
+    public function getUserMeeting($id) {
+        return UserZoomMeeting::query()
+            ->with('user')
+            ->where('zoom_meeting_id', $id)
+            ->orderBy('created_at', 'asc')
+            ->get();
     }
 }

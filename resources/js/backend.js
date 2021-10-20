@@ -27,6 +27,8 @@ Vue.component('paginate', Paginate);
 
 import moment from 'moment';
 window.moment = moment;
+import Swal from 'sweetalert2';
+window.Swal = Swal;
 
 import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
