@@ -63,7 +63,7 @@
                                                     <td>{{$item->title}}</td>
                                                     <td>{{$item->level->title}}</td>
                                                     <td>{{$item->pass_score_override}}/{{$item->max_score_override}}</td>
-                                                    <td>{{date("h\\hi",strtotime($time->start_time))}}-{{date("h\\hi",strtotime($time->end_time))}}</td>
+                                                    <td>{{date("H\\hi",strtotime($time->start_time))}}-{{date("H\\hi",strtotime($time->end_time))}}</td>
                                                     <td>{{$item->duration}} phút</td>
                                                     <?php 
                                                     $now = strtotime('now');

@@ -145,9 +145,10 @@ class PracticeTestController extends Controller
     private function getPracticeTest($id)
     {
         $currentDay = (int)date('w');
-        $pt = PracticeTest::where([['id', $id], ['enabled', true]])->where('date', '=', Carbon::today()->toDateString())->with(['shifts'=> function ($query){
-            $query->whereTime('start_time','>=', Carbon::parse(Carbon::now()->format('H:i')))->whereTime('end_time','<=', Carbon::parse(Carbon::now()->format('H:i')));
-        }]);
+        $pt = PracticeTest::where([['id', $id], ['enabled', true]])->where(function ($query) use ($currentDay) {
+            $query->where([['loop', true], ['loop_days', 'like', '%' . $currentDay . '%']])
+                ->orWhere('date', '=', Carbon::today()->toDateString());
+        });
         return $pt;
     }
 }
