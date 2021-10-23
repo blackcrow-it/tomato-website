@@ -145,6 +145,7 @@ Route::namespace('Frontend')
             ->group(function() {
                 Route::get('get-signature/{meeting_id}', 'ZoomApiController@getSignature')->name('getSignature');
                 Route::get('action', 'ZoomApiController@eventMeeting')->name('eventMeeting');
+            });
             Route::prefix('shipping')
             ->name('shipping.')
             ->group(function() {
