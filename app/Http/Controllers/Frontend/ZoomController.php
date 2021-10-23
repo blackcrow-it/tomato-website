@@ -30,22 +30,26 @@ class ZoomController extends Controller
             ->exists()
             : false;
         if ($isUserOwnedThisZoom) {
-            $fullName = auth()->user()->name;
-            $email = auth()->user()->email;
-            $signature = $this->generate_signature(
-                env('ZOOM_API_KEY', ''),
-                env('ZOOM_API_SECRET', ''),
-                $meeting_id,
-                $role
-            );
-            return view('frontend.zoom.index', [
-                'meetingId' => $meeting_id,
-                'fullName' => $fullName,
-                'email' => $email,
-                'signature' => $signature,
-                'role' => $role,
-                'password' => $meeting->password,
-            ]);
+            if ($meeting->is_start) {
+                $fullName = auth()->user()->name;
+                $email = auth()->user()->email;
+                $signature = $this->generate_signature(
+                    env('ZOOM_API_KEY', ''),
+                    env('ZOOM_API_SECRET', ''),
+                    $meeting_id,
+                    $role
+                );
+                return view('frontend.zoom.index', [
+                    'meetingId' => $meeting_id,
+                    'fullName' => $fullName,
+                    'email' => $email,
+                    'signature' => $signature,
+                    'role' => $role,
+                    'password' => $meeting->password,
+                ]);
+            } else {
+                return redirect()->route('user.my_zoom')->withErrors('Lớp học chưa bắt đầu');
+            }
         } else {
             return redirect()->route('user.my_zoom')->withErrors('Không có quyền truy cập lớp học');
         }
