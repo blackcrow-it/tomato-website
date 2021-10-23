@@ -588,6 +588,7 @@
     </script>
 
     @yield('footer')
+    @yield('modal')
 
     <!-- Load Facebook SDK for JavaScript -->
     <div id="fb-root"></div>

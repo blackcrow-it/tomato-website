@@ -19,20 +19,20 @@
                         <div class="layout-content">
                             <ul class="nav-page-exam">
                                 <li>
-                                    <a href="/thi-thu/bai-thi" class="@if(isset($list)) current @endif">
-                                        <img src="{{asset('tomato/assets/img/icon/icon-thithu.png') }}">
+                                    <a href="/thi-thu/bai-thi" class="@if (isset($list)) current @endif">
+                                        <img src="{{ asset('tomato/assets/img/icon/icon-thithu.png') }}">
                                         <p>Thi thử</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/thi-thu/xep-hang" class="@if(isset($ranks)) current @endif">
-                                        <img src= "{{asset('tomato/assets/img/icon/icon-xephang.png') }}">
+                                    <a href="/thi-thu/xep-hang" class="@if (isset($ranks)) current @endif">
+                                        <img src="{{ asset('tomato/assets/img/icon/icon-xephang.png') }}">
                                         <p>Xếp hạng</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/thi-thu/lich-su" class="@if(isset($histories)) current @endif">
-                                        <img src="{{asset('tomato/assets/img/icon/icon-lichsu.png') }}">
+                                    <a href="/thi-thu/lich-su" class="@if (isset($histories)) current @endif">
+                                        <img src="{{ asset('tomato/assets/img/icon/icon-lichsu.png') }}">
                                         <p>Lịch sử thi</p>
                                     </a>
                                 </li>
@@ -56,34 +56,37 @@
                                                 <th>Vào thi</th>
                                             </thead>
                                             <tbody>
-                                                @foreach($list as $item)
-                                                <?php $time = find_closest($item->shifts, $item->duration);?>
-                                                @if($time)
-                                                <tr>
-                                                    <td>{{$item->title}}</td>
-                                                    <td>{{$item->level->title}}</td>
-                                                    <td>{{$item->pass_score_override}}/{{$item->max_score_override}}</td>
-                                                    <td>{{date("H\\hi",strtotime($time->start_time))}}-{{date("H\\hi",strtotime($time->end_time))}}</td>
-                                                    <td>{{$item->duration}} phút</td>
-                                                    <?php 
-                                                    $now = strtotime('now');
-                                                    $start = strtotime($time->start_time);
-                                                    $end = strtotime($time->end_time);
-                                                     ?>
-                                                     @if($start <= $now && $end >= $now)
-                                                     <td><a href="#popup-alert-login" class="btn-link show-popup-login">Vào
-                                                        thi</a></td>
-                                                    @elseif($end <= $now && ($end + $item->duration*60) >= $now)
-                                                    <td><span class="f-reward" tabindex="0" data-toggle="tooltip"
-                                                        data-placement="left"
-                                                        title="Bạn đã quá {{date("i", $now - $end)}} phút nên không thể vào thi">Quá giờ
-                                                        thi</span></td>
-                                                     @endif
-                                                    {{-- <td><a href="#popup-alert-login" class="btn-link show-popup-login">Vào
+                                                @foreach ($list as $item)
+                                                    <?php $time = find_closest($item->shifts, $item->duration); ?>
+                                                        <tr>
+                                                            <td>{{ $item->title }}</td>
+                                                            <td>{{ $item->level->title }}</td>
+                                                            <td>{{ $item->pass_score_override }}/{{ $item->max_score_override }}
+                                                            </td>
+                                                            <td>{{ date('H\\hi', strtotime($time->start_time)) }}-{{ date('H\\hi', strtotime($time->end_time)) }}
+                                                            </td>
+                                                            <td>{{ $item->duration }} phút</td>
+                                                            <?php
+                                                            $now = strtotime('now');
+                                                            $start = strtotime($time->start_time);
+                                                            $end = strtotime($time->end_time);
+                                                            ?>
+                                                            @if ($start <= $now && $end >= $now)
+                                                                <td>
+                                                                    <a href="@if(Auth::check()){{ route('practice_test.test', ['slug' => $item->slug, 'id' => $item->id]) }} @else #popup-alert-login @endif"
+                                                                        class="btn-link @if(!Auth::check())show-popup-login @endif">Vào
+                                                                        thi</a>
+                                                                </td>
+                                                            @elseif($end <= $now && ($end + $item->duration*60) >= $now)
+                                                                    <td><span class="f-reward" tabindex="0"
+                                                                            data-toggle="tooltip" data-placement="left"
+                                                                            title="Bạn đã quá {{ date('i', $now - $end) }} phút nên không thể vào thi">Quá
+                                                                            giờ
+                                                                            thi</span></td>
+                                                            @endif
+                                                            {{-- <td><a href="#popup-alert-login" class="btn-link show-popup-login">Vào
                                                             thi</a></td> --}}
-                                                </tr>
-                                                @endif
-                                               
+                                                        </tr>
                                                 @endforeach
                                                 {{-- <tr>
                                                     <td>Bài thi JLPT N2</td>
@@ -138,466 +141,545 @@
 
                             @endif
 
-                            @if(isset($ranks))
-                            <div class="exam-wrap-box">
-                                <h2 class="exam-wrap-box__title">#TOP 100 HỌC VIÊN ĐIỂM CAO</h2>
-                                <form class="exam-filter">
-                                    <div class="row">
-                                        <div class="col-md-5 col-xl-4">
-                                            <div class="row">
-                                                <div class="col-6 col-md-12">
-                                                    <div class="input-item">
-                                                        <div class="input-item__inner">
-                                                            <label>Ngôn ngữ</label>
-                                                            <select class="form-control">
-                                                                <option selected>Tiếng Nhật</option>
-                                                                <option>Tiếng Trung</option>
-                                                                <option>Tiếng Hàn</option>
-                                                            </select>
+                            @if (isset($ranks))
+                                <div class="exam-wrap-box">
+                                    <h2 class="exam-wrap-box__title">#TOP 100 HỌC VIÊN ĐIỂM CAO</h2>
+                                    <form class="exam-filter">
+                                        <div class="row">
+                                            <div class="col-md-5 col-xl-4">
+                                                <div class="row">
+                                                    <div class="col-6 col-md-12">
+                                                        <div class="input-item">
+                                                            <div class="input-item__inner">
+                                                                <label>Ngôn ngữ</label>
+                                                                <select class="form-control">
+                                                                    <option selected>Tiếng Nhật</option>
+                                                                    <option>Tiếng Trung</option>
+                                                                    <option>Tiếng Hàn</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6 col-md-12">
+                                                        <div class="input-item">
+                                                            <div class="input-item__inner">
+                                                                <label>Bài thi</label>
+                                                                <select class="form-control">
+                                                                    <option>Bài thi N2</option>
+                                                                    <option>Bài thi N3</option>
+                                                                    <option>Bài thi N4</option>
+                                                                    <option>Bài thi N5</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-6 col-md-12">
-                                                    <div class="input-item">
-                                                        <div class="input-item__inner">
-                                                            <label>Bài thi</label>
-                                                            <select class="form-control">
-                                                                <option>Bài thi N2</option>
-                                                                <option>Bài thi N3</option>
-                                                                <option>Bài thi N4</option>
-                                                                <option>Bài thi N5</option>
-                                                            </select>
+                                            </div>
+                                            <div class="col-md-7 col-xl-8">
+                                                <div class="row">
+                                                    <div class="col-6 col-xl-6">
+                                                        <div class="input-item">
+                                                            <div class="input-item__inner">
+                                                                <label>Tháng</label>
+                                                                <select class="form-control">
+                                                                    <option>Tháng 1</option>
+                                                                    <option>Tháng 2</option>
+                                                                    <option>Tháng 3</option>
+                                                                    <option>Tháng 4</option>
+                                                                    <option>Tháng 5</option>
+                                                                    <option>Tháng 6</option>
+                                                                    <option>Tháng 7</option>
+                                                                    <option>Tháng 8</option>
+                                                                    <option>Tháng 9</option>
+                                                                    <option>Tháng 10</option>
+                                                                    <option>Tháng 11</option>
+                                                                    <option>Tháng 12</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6 col-xl-6">
+                                                        <div class="input-item">
+                                                            <div class="input-item__inner">
+                                                                <label>Năm</label>
+                                                                <select class="form-control">
+                                                                    <option>Năm 2020</option>
+                                                                    <option>Năm 2019</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-12">
+                                                        <div class="input-item">
+                                                            <div class="input-item__inner">
+                                                                <label>Chọn bài thi</label>
+                                                                <select class="form-control">
+                                                                    <option>Bài thi JLPT N2 30/06/2020</option>
+                                                                    <option>Bài thi JLPT N2 21/06/2020</option>
+                                                                    <option>Bài thi JLPT N2 15/06/2020</option>
+                                                                    <option>Bài thi JLPT N2 7/06/2020</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-7 col-xl-8">
-                                            <div class="row">
-                                                <div class="col-6 col-xl-6">
-                                                    <div class="input-item">
-                                                        <div class="input-item__inner">
-                                                            <label>Tháng</label>
-                                                            <select class="form-control">
-                                                                <option>Tháng 1</option>
-                                                                <option>Tháng 2</option>
-                                                                <option>Tháng 3</option>
-                                                                <option>Tháng 4</option>
-                                                                <option>Tháng 5</option>
-                                                                <option>Tháng 6</option>
-                                                                <option>Tháng 7</option>
-                                                                <option>Tháng 8</option>
-                                                                <option>Tháng 9</option>
-                                                                <option>Tháng 10</option>
-                                                                <option>Tháng 11</option>
-                                                                <option>Tháng 12</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6 col-xl-6">
-                                                    <div class="input-item">
-                                                        <div class="input-item__inner">
-                                                            <label>Năm</label>
-                                                            <select class="form-control">
-                                                                <option>Năm 2020</option>
-                                                                <option>Năm 2019</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-12">
-                                                    <div class="input-item">
-                                                        <div class="input-item__inner">
-                                                            <label>Chọn bài thi</label>
-                                                            <select class="form-control">
-                                                                <option>Bài thi JLPT N2 30/06/2020</option>
-                                                                <option>Bài thi JLPT N2 21/06/2020</option>
-                                                                <option>Bài thi JLPT N2 15/06/2020</option>
-                                                                <option>Bài thi JLPT N2 7/06/2020</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn">Lọc kết quả</button>
                                         </div>
+                                    </form>
+
+                                    <div class="exam-alert">
+                                        <p>Bạn không có trong danh sách này</p>
                                     </div>
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn">Lọc kết quả</button>
+                                    <div class="rankbox-table table-responsive">
+                                        <table>
+                                            <thead>
+                                                <th>#Top</th>
+                                                <th>Học viên</th>
+                                                <th>Chi tiết</th>
+                                                <th>Điểm</th>
+                                                <th>Level</th>
+                                                <th>Đạt</th>
+                                                <th>Phần thưởng</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="top-1">
+                                                    <td><span class="f-top"><img
+                                                                src="assets/img/icon/top1.png"></span></td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                            data-placement="left"
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
+                                                            1 tháng</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="top-2">
+                                                    <td><span class="f-top"><img
+                                                                src="assets/img/icon/top2.png"></span></td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                            data-placement="left"
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
+                                                            15 ngày</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="top-3">
+                                                    <td><span class="f-top"><img
+                                                                src="assets/img/icon/top3.png"></span></td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                            data-placement="left"
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
+                                                            10 ngày</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">04</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">05</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">06</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">07</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">08</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">09</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr class="top-4-10">
+                                                    <td><span class="f-top">10</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="f-top">11</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="f-top">12</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="f-top">13</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="f-top">14</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="f-top">15</td>
+                                                    <td>
+                                                        <div class="f-name">
+                                                            <span class="f-name__avatar"
+                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
+                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                        </div>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>155</td>
+                                                    <td>N3</td>
+                                                    <td><span class="f-icon"><i class="fa fa-close"></i></span>
+                                                    </td>
+                                                    <td>0</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </form>
-
-                                <div class="exam-alert">
-                                    <p>Bạn không có trong danh sách này</p>
                                 </div>
-
-                                <div class="rankbox-table table-responsive">
-                                    <table>
-                                        <thead>
-                                            <th>#Top</th>
-                                            <th>Học viên</th>
-                                            <th>Chi tiết</th>
-                                            <th>Điểm</th>
-                                            <th>Level</th>
-                                            <th>Đạt</th>
-                                            <th>Phần thưởng</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="top-1">
-                                                <td><span class="f-top"><img src="assets/img/icon/top1.png"></span></td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>
-                                                    <span class="f-reward" tabindex="0" data-toggle="tooltip" data-placement="left" title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+ 1 tháng</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="top-2">
-                                                <td><span class="f-top"><img src="assets/img/icon/top2.png"></span></td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>
-                                                    <span class="f-reward" tabindex="0" data-toggle="tooltip" data-placement="left" title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+ 15 ngày</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="top-3">
-                                                <td><span class="f-top"><img src="assets/img/icon/top3.png"></span></td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>
-                                                    <span class="f-reward" tabindex="0" data-toggle="tooltip" data-placement="left" title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+ 10 ngày</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">04</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">05</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">06</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">07</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">08</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">09</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr class="top-4-10">
-                                                <td><span class="f-top">10</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="f-top">11</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="f-top">12</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="f-top">13</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="f-top">14</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="f-top">15</td>
-                                                <td>
-                                                    <div class="f-name">
-                                                        <span class="f-name__avatar" style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                        <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                    </div>
-                                                </td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>155</td>
-                                                <td>N3</td>
-                                                <td><span class="f-icon"><i class="fa fa-close"></i></span></td>
-                                                <td>0</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                             @endif
 
-                            @if(isset($histories))
-                            <div class="exam-wrap-box">
-                                <form class="exam-filter">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="input-item">
-                                                <div class="input-item__inner">
-                                                    <label>Ngôn ngữ</label>
-                                                    <select class="form-control">
-                                                        <option selected>Tiếng Nhật</option>
-                                                        <option>Tiếng Trung</option>
-                                                        <option>Tiếng Hàn</option>
-                                                    </select>
+                            @if (isset($histories))
+                                <div class="exam-wrap-box">
+                                    <form class="exam-filter">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="input-item">
+                                                    <div class="input-item__inner">
+                                                        <label>Ngôn ngữ</label>
+                                                        <select class="form-control">
+                                                            <option selected>Tiếng Nhật</option>
+                                                            <option>Tiếng Trung</option>
+                                                            <option>Tiếng Hàn</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                                <div class="input-item">
+                                                    <div class="input-item__inner">
+                                                        <label>Tháng</label>
+                                                        <select class="form-control">
+                                                            <option>Tháng 1</option>
+                                                            <option>Tháng 2</option>
+                                                            <option>Tháng 3</option>
+                                                            <option>Tháng 4</option>
+                                                            <option>Tháng 5</option>
+                                                            <option selected>Tháng 6</option>
+                                                            <option>Tháng 7</option>
+                                                            <option>Tháng 8</option>
+                                                            <option>Tháng 9</option>
+                                                            <option>Tháng 10</option>
+                                                            <option>Tháng 11</option>
+                                                            <option>Tháng 12</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-4">
+                                                <div class="input-item">
+                                                    <div class="input-item__inner">
+                                                        <label>Năm</label>
+                                                        <select class="form-control">
+                                                            <option>Năm 2020</option>
+                                                            <option>Năm 2019</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-md-4">
-                                            <div class="input-item">
-                                                <div class="input-item__inner">
-                                                    <label>Tháng</label>
-                                                    <select class="form-control">
-                                                        <option>Tháng 1</option>
-                                                        <option>Tháng 2</option>
-                                                        <option>Tháng 3</option>
-                                                        <option>Tháng 4</option>
-                                                        <option>Tháng 5</option>
-                                                        <option selected>Tháng 6</option>
-                                                        <option>Tháng 7</option>
-                                                        <option>Tháng 8</option>
-                                                        <option>Tháng 9</option>
-                                                        <option>Tháng 10</option>
-                                                        <option>Tháng 11</option>
-                                                        <option>Tháng 12</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn">Lọc kết quả</button>
                                         </div>
-                                        <div class="col-6 col-md-4">
-                                            <div class="input-item">
-                                                <div class="input-item__inner">
-                                                    <label>Năm</label>
-                                                    <select class="form-control">
-                                                        <option>Năm 2020</option>
-                                                        <option>Năm 2019</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    </form>
+
+                                    <div class="exam-alert">
+                                        <p>Không có lịch sử thi ( trường hợp không có sẽ hiện box này )</p>
                                     </div>
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn">Lọc kết quả</button>
+                                    <div class="table-historyExam table-responsive">
+                                        <table>
+                                            <thead>
+                                                <th>Stt</th>
+                                                <th>Bài thi</th>
+                                                <th>Ngày thi</th>
+                                                <th>Điểm</th>
+                                                <th>Top</th>
+                                                <th>Đạt</th>
+                                                <th>Chi tiết</th>
+                                                <th>Phần thưởng</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td class="f-name">Bài thi JLPT <b>N2</b></td>
+                                                    <td>30/06/2020</td>
+                                                    <td>155</td>
+                                                    <td><span class="f-top"><img
+                                                                src="assets/img/icon/top1.png"></span></td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>
+                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                            data-placement="left"
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
+                                                            1 tháng</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td class="f-name">Bài thi JLPT <b>N2</b></td>
+                                                    <td>21/06/2020</td>
+                                                    <td>155</td>
+                                                    <td><span class="f-top"><img
+                                                                src="assets/img/icon/top2.png"></span></td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>
+                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                            data-placement="left"
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
+                                                            15 ngày</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td class="f-name">Bài thi JLPT <b>N2</b></td>
+                                                    <td>15/06/2020</td>
+                                                    <td>155</td>
+                                                    <td><span class="f-top"><img
+                                                                src="assets/img/icon/top3.png"></span></td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>
+                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                            data-placement="left"
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
+                                                            10 ngày</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4</td>
+                                                    <td class="f-name">Bài thi JLPT <b>N2</b></td>
+                                                    <td>7/06/2020</td>
+                                                    <td>155</td>
+                                                    <td>50</td>
+                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>0</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5</td>
+                                                    <td class="f-name">Bài thi JLPT <b>N2</b></td>
+                                                    <td>1/06/2020</td>
+                                                    <td>30</td>
+                                                    <td>Không</td>
+                                                    <td><span class="f-icon"><i class="fa fa-close"></i></span>
+                                                    </td>
+                                                    <td><a href="#" class="f-btn" data-toggle="modal"
+                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td>0</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                </form>
-
-                                <div class="exam-alert">
-                                    <p>Không có lịch sử thi ( trường hợp không có sẽ hiện box này )</p>
                                 </div>
-
-                                <div class="table-historyExam table-responsive">
-                                    <table>
-                                        <thead>
-                                            <th>Stt</th>
-                                            <th>Bài thi</th>
-                                            <th>Ngày thi</th>
-                                            <th>Điểm</th>
-                                            <th>Top</th>
-                                            <th>Đạt</th>
-                                            <th>Chi tiết</th>
-                                            <th>Phần thưởng</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td class="f-name">Bài thi JLPT <b>N2</b></td>
-                                                <td>30/06/2020</td>
-                                                <td>155</td>
-                                                <td><span class="f-top"><img src="assets/img/icon/top1.png"></span></td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>
-                                                    <span class="f-reward" tabindex="0" data-toggle="tooltip" data-placement="left" title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+ 1 tháng</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td class="f-name">Bài thi JLPT <b>N2</b></td>
-                                                <td>21/06/2020</td>
-                                                <td>155</td>
-                                                <td><span class="f-top"><img src="assets/img/icon/top2.png"></span></td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>
-                                                    <span class="f-reward" tabindex="0" data-toggle="tooltip" data-placement="left" title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+ 15 ngày</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td class="f-name">Bài thi JLPT <b>N2</b></td>
-                                                <td>15/06/2020</td>
-                                                <td>155</td>
-                                                <td><span class="f-top"><img src="assets/img/icon/top3.png"></span></td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>
-                                                    <span class="f-reward" tabindex="0" data-toggle="tooltip" data-placement="left" title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+ 10 ngày</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td class="f-name">Bài thi JLPT <b>N2</b></td>
-                                                <td>7/06/2020</td>
-                                                <td>155</td>
-                                                <td>50</td>
-                                                <td><span class="f-icon"><i class="fa fa-check"></i></span></td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>0</td>
-                                            </tr>
-                                            <tr>
-                                                <td>5</td>
-                                                <td class="f-name">Bài thi JLPT <b>N2</b></td>
-                                                <td>1/06/2020</td>
-                                                <td>30</td>
-                                                <td>Không</td>
-                                                <td><span class="f-icon"><i class="fa fa-close"></i></span></td>
-                                                <td><a href="#" class="f-btn" data-toggle="modal" data-target="#diploma-popup">Xem kết quả</a></td>
-                                                <td>0</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                             @endif
 
                         </div>
@@ -721,4 +803,23 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('modal')
+@if(!Auth::check())
+<div class="modal fade" id="popup-alert-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="modal-close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+
+            <h2 class="popup-alert-login__title">Bạn cần phải đăng nhập để thi thử</h2>
+
+            <div class="popup-alert-login__btn">
+                <a href="baithi-test.html" class="btn">Đăng nhập</a>
+                <a href="login.html" class="btn btn--secondary">Đăng ký tài khoản</a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 @endsection

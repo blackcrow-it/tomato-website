@@ -7,7 +7,7 @@ class PracticeTest extends BaseModel
     protected $table = 'practice_tests';
 
     protected $fillable = [
-        'title', 'description', 'duration', 'start_time', 'end_time','loop','loop_days','date', 'enabled','max_score_override','pass_score_override','created_at', 'updated_at', 'category_id'
+        'title', 'description','slug', 'duration', 'start_time', 'end_time','loop','loop_days','date', 'enabled','max_score_override','pass_score_override','created_at', 'updated_at', 'category_id'
     ];
 
     public function level()

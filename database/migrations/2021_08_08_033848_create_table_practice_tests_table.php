@@ -16,6 +16,7 @@ class CreateTablePracticeTestsTable extends Migration
         Schema::create('practice_tests', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->integer('duration')->default(0);
             $table->timestamp('date')->nullable();
