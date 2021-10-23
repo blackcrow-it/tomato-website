@@ -23,7 +23,7 @@
                         <ul class="user-page__page">
                             <li class="{{ request()->routeIs('user.info') ? 'current' : '' }}"><a href="{{ route('user.info') }}"><i class="fa fa-vcard-o"></i>Trang cá nhân</a></li>
                             <li class=""><a href=""><i class="fa fa-bell-o"></i>Thông báo <small>(3)</small></a></li>
-                            <li class="{{ request()->routeIs('user.my_zoom') ? 'current' : '' }}"><a href="{{ route('user.my_zoom') }}"><i class="fa fa-video"></i>Lớp học Zoom</a></li>
+                            <li class="{{ request()->routeIs('user.my_zoom') ? 'current' : '' }}"><a href="{{ route('user.my_zoom') }}"><i class="fa fa-video"></i>Lớp học trực tuyến</a></li>
                             <li class="{{ request()->routeIs('user.invoice') ? 'current' : '' }}"><a href="{{ route('user.invoice') }}"><i class="fa fa-cart-arrow-down"></i>Lịch sử mua hàng</a></li>
                             <li class="{{ request()->routeIs('user.my_course') ? 'current' : '' }}"><a href="{{ route('user.my_course') }}"><i class="fa fa-server"></i>Khoá học của tôi</a></li>
                             <li class="{{ request()->routeIs('user.recharge') ? 'current' : '' }}"><a href="{{ route('user.recharge') }}"><i class="fa fa-credit-card"></i>Nạp tiền</a></li>

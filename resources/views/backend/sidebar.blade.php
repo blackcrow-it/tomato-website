@@ -112,7 +112,7 @@
     <li class="nav-item">
         <a href="{{ route('admin.zoom.index_user') }}" class="nav-link {{ request()->routeIs('admin.zoom.*') ? 'active' : '' }}">
             <i class="nav-icon fas fa-video"></i>
-            <p>Lớp học Zoom</p>
+            <p>Lớp học trực tuyến</p>
         </a>
     </li>
     <li class="nav-item">

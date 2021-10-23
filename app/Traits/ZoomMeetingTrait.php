@@ -100,14 +100,16 @@ trait ZoomMeetingTrait
                 'settings'   => [
                     // 'host_video'        => ($data['host_video'] == "1") ? true : false,
                     'host_video'        => true,
+                    'participant_video'        => true,
                     // 'participant_video' => ($data['participant_video'] == "1") ? true : false,
                     // 'waiting_room'      => true,
                     // 'auto_recording'      => 'local',
                     'join_before_host'      => true,
                     'jbh'               => 5,
-                    'approval_type'      => 0,
+                    'approval_type'      => 2,
                     'alternative_hosts'      => '',
-                    'meeting_authentication'      => true,
+                    // 'meeting_authentication'      => true,
+                    'audio' => 'voip'
                 ],
             ]),
         ];
@@ -185,14 +187,16 @@ trait ZoomMeetingTrait
                 'settings'   => [
                     // 'host_video'        => ($data['host_video'] == "1") ? true : false,
                     'host_video'        => true,
+                    'participant_video'        => true,
                     // 'participant_video' => ($data['participant_video'] == "1") ? true : false,
                     // 'waiting_room'      => true,
                     // 'auto_recording'      => 'local',
                     'join_before_host'      => true,
                     'jbh'               => 5,
-                    'approval_type'      => 0,
+                    'approval_type'      => 2,
                     'alternative_hosts'      => '',
-                    'meeting_authentication'      => true,
+                    // 'meeting_authentication'      => true,
+                    'audio' => 'voip'
                 ],
             ]),
         ];

@@ -46,6 +46,7 @@ class LoginController extends Controller
             'login_token' =>  $loginToken
         ]);
         Session::put('login_token', $loginToken);
+        Session::put('user_id', Auth::user()->id);
         if (Auth::user()->email) {
             $data = [
                 'email' => Auth::user()->email,
