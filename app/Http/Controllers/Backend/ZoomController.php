@@ -160,7 +160,7 @@ class ZoomController extends Controller
                 }
             }
             try {
-                UserZoomMeeting::where('meeting_id', $meeting->id)->delete();
+                UserZoomMeeting::where('meeting_id', $meeting->meeting_id)->delete();
             } catch (\Throwable $th) {
                 //throw $th;
             }
@@ -171,7 +171,7 @@ class ZoomController extends Controller
                     'topic' => $meeting->topic,
                     'id_zoom' => $meeting->meeting_id,
                     'start_time' => $meeting->start_time,
-                    'join_url' => $meeting->join_url,
+                    'join_url' => route('zoom', ['meeting_id' => $meeting->meeting_id]),
                 );
                 Mail::to($user->email)->send(new SendMailInviteStudent($data));
                 $userMeetingZoom = new UserZoomMeeting();
