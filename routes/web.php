@@ -140,12 +140,15 @@ Route::namespace('Frontend')
                 Route::get('', 'CommentApiController@index')->name('getAll');
                 Route::post('add', 'CommentApiController@store')->name('add');
             });
-
             Route::prefix('zoom')
             ->name('zoom.')
             ->group(function() {
                 Route::get('get-signature/{meeting_id}', 'ZoomApiController@getSignature')->name('getSignature');
                 Route::get('action', 'ZoomApiController@eventMeeting')->name('eventMeeting');
+            Route::prefix('shipping')
+            ->name('shipping.')
+            ->group(function() {
+                Route::get('get-shipment-fee', 'ShippingApiController@getShipmentFee')->name('getShipmentFee');
             });
         });
 

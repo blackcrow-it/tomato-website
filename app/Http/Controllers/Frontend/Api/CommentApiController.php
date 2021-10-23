@@ -8,6 +8,7 @@ use App\Comment;
 use App\Constants\ObjectType;
 use App\Course;
 use App\Http\Controllers\Controller;
+use App\Part;
 use App\Post;
 use Illuminate\Http\Request;
 
@@ -60,6 +61,9 @@ class CommentApiController extends Controller
                 break;
             case ObjectType::POST:
                 $item = Post::find($object_id);
+                break;
+            case ObjectType::PART:
+                $item = Part::find($object_id);
                 break;
             default:
                 return response(['msg' => 'Missing data', 'status' => 'error'], 401);
