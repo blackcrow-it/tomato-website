@@ -135,6 +135,10 @@ class ZoomApiController extends Controller
                     'msg' => 'Not Found'
                 ], 404);
             }
+        } else {
+            return response([
+                'msg' => 'Bad request'
+            ], 403);
         }
         return response([
             'msg' => 'Success'
