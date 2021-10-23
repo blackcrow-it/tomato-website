@@ -135,7 +135,7 @@ class ZoomApiController extends Controller
             if ($meeting) {
                 if ($bodyContent['event'] == 'meeting.started') {
                     $meeting->is_start = true;
-                } else if ($bodyContent['event'] == 'meeting.started') {
+                } else if ($bodyContent['event'] == 'meeting.ended') {
                     $meeting->is_start = false;
                 }
                 $meeting->save();
