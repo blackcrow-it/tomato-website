@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\ZoomMeeting;
 use Illuminate\Http\Request;
+use Log;
 
 class ZoomApiController extends Controller
 {
@@ -121,7 +122,14 @@ class ZoomApiController extends Controller
 
     public function eventMeeting(Request $request)
     {
-        $bodyContent = $request->getContent();
+        $bodyContent = json_decode($request->getContent(), true);
+        $token = $request->header('Authorization');
+        if (!($token == env('ZOOM_VERIFICATION_TOKEN', '')))
+        {
+            return response([
+                'msg' => 'Authorization'
+            ], 401);
+        }
         if ($bodyContent) {
             $meeting = ZoomMeeting::where('meeting_id', $bodyContent['payload']['object']['id'])->first();
             if ($meeting) {
@@ -130,7 +138,9 @@ class ZoomApiController extends Controller
                 } else if ($bodyContent['event'] == 'meeting.started') {
                     $meeting->is_start = false;
                 }
+                $meeting->save();
             } else {
+                error_log("Not Found Zoom");
                 return response([
                     'msg' => 'Not Found'
                 ], 404);
@@ -138,7 +148,7 @@ class ZoomApiController extends Controller
         } else {
             return response([
                 'msg' => 'Bad request'
-            ], 403);
+            ], 400);
         }
         return response([
             'msg' => 'Success'
