@@ -21,6 +21,7 @@ class CreateTablePracticeTestCategoriesTable extends Migration
             $table->string('type', 30);
             $table->integer('max_score')->default(0);
             $table->integer('pass_score')->default(0);
+            $table->string('system_key')->nullable();
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('practice_test_categories')->onDelete('cascade');

@@ -8,7 +8,7 @@ class PracticeTestCategory extends BaseModel
     protected $table = 'practice_test_categories';
 
     protected $fillable = [
-        'title', 'description', 'parent_id','enabled','type', 'max_score', 'pass_score'
+        'title', 'description', 'parent_id','enabled','type', 'max_score', 'pass_score','system_key'
     ];
 
     public function practice_tests(){

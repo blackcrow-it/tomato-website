@@ -340,8 +340,11 @@ if (!function_exists('find_closest')) {
                 array_push($result, $value);
             }
         };
-        //dd($result);
-        return reset($result);
+        if(count($result)> 0){
+            return reset($result);
+        }
+
+        return $array->first();
         //dd($result);
         // $result = array_filter($array, function($var) use ($now) {
         //     $start = strtotime($var->start_time);

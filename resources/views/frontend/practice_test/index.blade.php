@@ -83,6 +83,8 @@
                                                                             title="Bạn đã quá {{ date('i', $now - $end) }} phút nên không thể vào thi">Quá
                                                                             giờ
                                                                             thi</span></td>
+                                                            @else
+                                                            <td><span>Chưa đến giờ thi</span></td>
                                                             @endif
                                                             {{-- <td><a href="#popup-alert-login" class="btn-link show-popup-login">Vào
                                                             thi</a></td> --}}
@@ -815,8 +817,8 @@
             <h2 class="popup-alert-login__title">Bạn cần phải đăng nhập để thi thử</h2>
 
             <div class="popup-alert-login__btn">
-                <a href="baithi-test.html" class="btn">Đăng nhập</a>
-                <a href="login.html" class="btn btn--secondary">Đăng ký tài khoản</a>
+                <a href="{{route('login')}}" class="btn">Đăng nhập</a>
+                <a href="{{route('register')}}" class="btn btn--secondary">Đăng ký tài khoản</a>
             </div>
         </div>
     </div>

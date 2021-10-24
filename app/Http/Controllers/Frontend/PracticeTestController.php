@@ -89,9 +89,9 @@ class PracticeTestController extends Controller
                 // $questionGroup = $this->_group_by($questions, 'question_session_id');
                 //dd($questionGroup);
 
-                // $answers = PracticeTestAnswer::with(['question' => function ($query) use ($pt) {
-                //     $query->select('score', 'id')->where('practice_test_id', $pt->id);
-                // }])->select('id', 'question_id','correct')->where('correct', true)->get()->all();
+                $answers = PracticeTestAnswer::with(['question' => function ($query) use ($pt) {
+                    $query->select('score', 'id')->where('practice_test_id', $pt->id);
+                }])->select('id', 'question_id','correct')->where('correct', true)->get()->all();
 
 
 
