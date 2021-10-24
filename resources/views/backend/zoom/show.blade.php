@@ -64,9 +64,9 @@ Quản lý Meeting
                                         $occurrences = json_decode($meeting['occurrences'], true);
                                         $recurrence = json_decode($meeting['recurrence'], true);
                                     @endphp
-                                <input type="datetime-local" class="form-control form-control-sm" name="start_time" value="{{ date("Y-m-d\TH:i:s", strtotime($occurrences[0]['start_time'])) }}">
+                                <input type="datetime-local" class="form-control form-control-sm" name="start_time" value="{{ date("Y-m-d\TH:i", strtotime($occurrences[0]['start_time'].' UTC')) }}">
                                 @else
-                                <input type="datetime-local" class="form-control form-control-sm" name="start_time" value="{{ date("Y-m-d\TH:i:s", strtotime($meeting['start_time'])) }}">
+                                <input type="datetime-local" class="form-control form-control-sm" name="start_time" value="{{ date("Y-m-d\TH:i", strtotime($meeting['start_time'].' UTC')) }}">
                                 @endif
                             </td>
                         </tr>
