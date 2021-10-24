@@ -35,7 +35,10 @@ class PracticeTestController extends Controller
         $currentDay = (int)date('w');
         // $practices = DB::table('practice_tests')->select()->with()->where('loop_days', 'like', '%'.$currentDay.'%')
         // ->join('practice_test_shifts','practice_tests.id', '=', 'practice_test_id')->where();
-        $practices = PracticeTest::with("shifts", "level")->where('loop_days', 'like', '%' . $currentDay . '%')->get();
+        $practices = PracticeTest::with(["shifts"=>function($query){
+            $query->orderBy('start_time','asc')->orderBy('end_time', 'asc');
+        }], "level")->where('loop_days', 'like', '%' . $currentDay . '%')->get();
+        
         return view('frontend.practice_test.index', ['list' =>  $practices]);
     }
 
@@ -86,9 +89,11 @@ class PracticeTestController extends Controller
                 // $questionGroup = $this->_group_by($questions, 'question_session_id');
                 //dd($questionGroup);
 
-                $answers = PracticeTestAnswer::with(['question' => function ($query) use ($pt) {
-                    $query->select('score', 'id')->where('practice_test_id', $pt->id);
-                }])->select('id', 'question_id','correct')->where('correct', true)->get()->all();
+                // $answers = PracticeTestAnswer::with(['question' => function ($query) use ($pt) {
+                //     $query->select('score', 'id')->where('practice_test_id', $pt->id);
+                // }])->select('id', 'question_id','correct')->where('correct', true)->get()->all();
+
+
 
                 $score = 0;
                 $correct = 0;
