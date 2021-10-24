@@ -63,10 +63,10 @@
                                     </td>
                                     @if ($item->zoomMeeting->type == 2)
                                     <td>
-                                        <p class="f-time"><b>{{ date("d/m/Y", strtotime($item->zoomMeeting->start_time)) }}</b></p>
+                                        <p class="f-time"><b>{{ date("d/m/Y", strtotime($item->zoomMeeting->start_time.' UTC')) }}</b></p>
                                     </td>
                                     <td>
-                                        <p class="f-time"><b>{{ date("h:i A", strtotime($item->zoomMeeting->start_time)) }} - {{ date("h:i A", strtotime('+'.$item->zoomMeeting->duration.' minutes', strtotime($item->zoomMeeting->start_time))) }}</b></p>
+                                        <p class="f-time"><b>{{ date("h:i A", strtotime($item->zoomMeeting->start_time.' UTC')) }} - {{ date("h:i A", strtotime('+'.$item->zoomMeeting->duration.' minutes', strtotime($item->zoomMeeting->start_time.' UTC'))) }}</b></p>
                                     </td>
                                     @else
                                         @php
@@ -74,10 +74,10 @@
                                         @endphp
                                         @if ($occurrences)
                                         <td>
-                                            <p class="f-time"><b>{{ date("d/m/Y", strtotime($occurrences[0]['start_time'])) }} - {{ date("d/m/Y", strtotime($occurrences[count($occurrences) - 1]['start_time'])) }}</b><br/>({{ count($occurrences) }} buổi)</p>
+                                            <p class="f-time"><b>{{ date("d/m/Y", strtotime($occurrences[0]['start_time'].' UTC')) }} - {{ date("d/m/Y", strtotime($occurrences[count($occurrences) - 1]['start_time'].' UTC')) }}</b><br/>({{ count($occurrences) }} buổi)</p>
                                         </td>
                                         <td>
-                                            <p class="f-time"><b>{{ date("h:i A", strtotime($occurrences[0]['start_time'])) }} - {{ date("h:i A", strtotime('+'.$occurrences[0]['duration'].' minutes', strtotime($occurrences[0]['start_time']))) }}</b></p>
+                                            <p class="f-time"><b>{{ date("h:i A", strtotime($occurrences[0]['start_time'].' UTC')) }} - {{ date("h:i A", strtotime('+'.$occurrences[0]['duration'].' minutes', strtotime($occurrences[0]['start_time'].' UTC'))) }}</b></p>
                                         </td>
                                         @endif
                                     @endif

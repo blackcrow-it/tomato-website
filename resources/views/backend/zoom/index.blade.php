@@ -69,16 +69,16 @@ Lịch học Zoom
                     <div class="card-text">
                         <ul class="list-group list-group-flush">
                             @if ($item['type'] == 2)
-                                <li class="list-group-item">Bắt đầu ngày <u>{{ date("d/m/Y", strtotime($item['start_time'])) }}</u></li>
-                                <li class="list-group-item">{{ date("h:i A", strtotime($item['start_time'])) }} - {{ date("h:i A", strtotime('+'.$item['duration'].' minutes', strtotime($item['start_time']))) }}</li>
+                                <li class="list-group-item">Bắt đầu ngày <u>{{ date("d/m/Y", strtotime($item['start_time'].' UTC')) }}</u></li>
+                                <li class="list-group-item">{{ date("h:i A", strtotime($item['start_time'].' UTC')) }} - {{ date("h:i A", strtotime('+'.$item['duration'].' minutes', strtotime($item['start_time'].' UTC'))) }}</li>
                             @elseif ($item['type'] == 8)
                                 @if ($item['occurrences'])
                                 @php
                                     $occurrences = json_decode($item['occurrences'], true)
                                 @endphp
                                 @if ($occurrences)
-                                <li class="list-group-item">Từ <u>{{ date("d/m/Y", strtotime($occurrences[0]['start_time'])) }}</u> đến <u>{{ date("d/m/Y", strtotime($occurrences[count($occurrences) - 1]['start_time'])) }}</u></li>
-                                <li class="list-group-item">{{ date("h:i A", strtotime($occurrences[0]['start_time'])) }} - {{ date("h:i A", strtotime('+'.$occurrences[0]['duration'].' minutes', strtotime($occurrences[0]['start_time']))) }} ({{ count($occurrences) }} buổi) </li>
+                                <li class="list-group-item">Từ <u>{{ date("d/m/Y", strtotime($occurrences[0]['start_time'].' UTC')) }}</u> đến <u>{{ date("d/m/Y", strtotime($occurrences[count($occurrences) - 1]['start_time'].' UTC')) }}</u></li>
+                                <li class="list-group-item">{{ date("h:i A", strtotime($occurrences[0]['start_time'].' UTC')) }} - {{ date("h:i A", strtotime('+'.$occurrences[0]['duration'].' minutes', strtotime($occurrences[0]['start_time'].' UTC'))) }} ({{ count($occurrences) }} buổi) </li>
                                 @else
                                 <li class="list-group-item">Không có buổi học nào</li>
                                 @endif
