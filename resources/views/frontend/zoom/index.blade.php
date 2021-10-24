@@ -26,7 +26,7 @@
 </head>
 <body>
     <!-- added on import -->
-    <div style="position: fixed; top: 0; left: 0; z-index: 1; width: 180px;">
+    <div style="position: fixed; top: 0; left: 0; z-index: 1; width: 100px;">
         <a href="{{ route('home') }}">
             <img src="{{ config('settings.logo') ?? asset('tomato/assets/img/logo.png') }}" style="width: 100%">
         </a>

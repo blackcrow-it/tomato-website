@@ -194,6 +194,7 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdownUserHeader">
                                         <a class="dropdown-item" href="{{ route('user.info') }}"><i class="fa fa-vcard-o"></i>Trang cá nhân</a>
                                         <a class="dropdown-item" href=""><i class="fa fa-bell-o"></i>Thông báo <small>(3)</small></a>
+                                        <a class="dropdown-item" href="{{ route('user.my_zoom') }}"><i class="fa fa-video"></i>Lớp học trực tuyến</a>
                                         <a class="dropdown-item" href="{{ route('user.invoice') }}"><i class="fa fa-cart-arrow-down"></i>Lịch sử mua hàng</a>
                                         <a class="dropdown-item" href="{{ route('user.my_course') }}"><i class="fa fa-server"></i>Khoá học của tôi</a>
                                         <a class="dropdown-item" href="{{ route('user.recharge') }}"><i class="fa fa-credit-card"></i>Nạp tiền</a>
