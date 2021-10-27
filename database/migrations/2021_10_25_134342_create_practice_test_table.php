@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablePracticeTestsTable extends Migration
+class CreatePracticeTestTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,6 +13,7 @@ class CreateTablePracticeTestsTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('practice_tests', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
@@ -25,6 +26,7 @@ class CreateTablePracticeTestsTable extends Migration
             $table->integer('max_score_override')->nullable();
             $table->integer('pass_score_override')->nullable();
             $table->string('loop_days')->nullable();
+            $table->boolean('is_delete')->default(false);
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('category_id')->constrained('practice_test_categories')->onDelete('cascade');
@@ -38,6 +40,6 @@ class CreateTablePracticeTestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practice_tests');
+        Schema::dropIfExists('practice_test');
     }
 }

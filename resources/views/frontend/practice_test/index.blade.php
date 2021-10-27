@@ -1,4 +1,16 @@
 @extends('frontend.master')
+@section('header')
+    <?php $title = '';
+    if (isset($ranks)) {
+        $title = 'Top điểm cao';
+    } elseif (isset($list)) {
+        $title = 'Bài thi';
+    } elseif (isset($histories)) {
+        $title = 'Lịch sử thi';
+    }
+    ?>
+    <title>{{ $title }}</title>
+@endsection
 @section('body')
     <section class="section page-title">
         <div class="container">
@@ -58,37 +70,37 @@
                                             <tbody>
                                                 @foreach ($list as $item)
                                                     <?php $time = find_closest($item->shifts, $item->duration); ?>
-                                                        <tr>
-                                                            <td>{{ $item->title }}</td>
-                                                            <td>{{ $item->level->title }}</td>
-                                                            <td>{{ $item->pass_score_override }}/{{ $item->max_score_override }}
+                                                    <tr>
+                                                        <td>{{ $item->title }}</td>
+                                                        <td>{{ $item->level->title }}</td>
+                                                        <td>{{ $item->pass_score_override }}/{{ $item->max_score_override }}
+                                                        </td>
+                                                        <td>{{ date('H\\hi', strtotime($time->start_time)) }}-{{ date('H\\hi', strtotime($time->end_time)) }}
+                                                        </td>
+                                                        <td>{{ $item->duration }} phút</td>
+                                                        <?php
+                                                        $now = strtotime('now');
+                                                        $start = strtotime($time->start_time);
+                                                        $end = strtotime($time->end_time);
+                                                        ?>
+                                                        @if ($start <= $now && $end >= $now)
+                                                            <td>
+                                                                <a href="@if (Auth::check()){{ route('practice_test.test', ['slug' => $item->slug, 'id' => $item->id]) }} @else #popup-alert-login @endif"
+                                                                    class="btn-link @if (!Auth::check())show-popup-login @endif">Vào
+                                                                    thi</a>
                                                             </td>
-                                                            <td>{{ date('H\\hi', strtotime($time->start_time)) }}-{{ date('H\\hi', strtotime($time->end_time)) }}
-                                                            </td>
-                                                            <td>{{ $item->duration }} phút</td>
-                                                            <?php
-                                                            $now = strtotime('now');
-                                                            $start = strtotime($time->start_time);
-                                                            $end = strtotime($time->end_time);
-                                                            ?>
-                                                            @if ($start <= $now && $end >= $now)
-                                                                <td>
-                                                                    <a href="@if(Auth::check()){{ route('practice_test.test', ['slug' => $item->slug, 'id' => $item->id]) }} @else #popup-alert-login @endif"
-                                                                        class="btn-link @if(!Auth::check())show-popup-login @endif">Vào
-                                                                        thi</a>
-                                                                </td>
-                                                            @elseif($end <= $now && ($end + $item->duration*60) >= $now)
-                                                                    <td><span class="f-reward" tabindex="0"
-                                                                            data-toggle="tooltip" data-placement="left"
-                                                                            title="Bạn đã quá {{ date('i', $now - $end) }} phút nên không thể vào thi">Quá
-                                                                            giờ
-                                                                            thi</span></td>
+                                                        @elseif($end <= $now && ($end + $item->duration*60) >= $now)
+                                                                <td><span class="f-reward" tabindex="0"
+                                                                        data-toggle="tooltip" data-placement="left"
+                                                                        title="Bạn đã quá {{ date('i', $now - $end) }} phút nên không thể vào thi">Quá
+                                                                        giờ
+                                                                        thi</span></td>
                                                             @else
-                                                            <td><span>Chưa đến giờ thi</span></td>
-                                                            @endif
-                                                            {{-- <td><a href="#popup-alert-login" class="btn-link show-popup-login">Vào
+                                                                <td><span>Chưa đến giờ thi</span></td>
+                                                        @endif
+                                                        {{-- <td><a href="#popup-alert-login" class="btn-link show-popup-login">Vào
                                                             thi</a></td> --}}
-                                                        </tr>
+                                                    </tr>
                                                 @endforeach
                                                 {{-- <tr>
                                                     <td>Bài thi JLPT N2</td>
@@ -808,20 +820,22 @@
 @endsection
 
 @section('modal')
-@if(!Auth::check())
-<div class="modal fade" id="popup-alert-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <button type="button" class="modal-close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+    @if (!Auth::check())
+        <div class="modal fade" id="popup-alert-login" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="modal-close" data-dismiss="modal"><i
+                            class="fa fa-close"></i></button>
 
-            <h2 class="popup-alert-login__title">Bạn cần phải đăng nhập để thi thử</h2>
+                    <h2 class="popup-alert-login__title">Bạn cần phải đăng nhập để thi thử</h2>
 
-            <div class="popup-alert-login__btn">
-                <a href="{{route('login')}}" class="btn">Đăng nhập</a>
-                <a href="{{route('register')}}" class="btn btn--secondary">Đăng ký tài khoản</a>
+                    <div class="popup-alert-login__btn">
+                        <a href="{{ route('login') }}" class="btn">Đăng nhập</a>
+                        <a href="{{ route('register') }}" class="btn btn--secondary">Đăng ký tài khoản</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-@endif
+    @endif
 @endsection

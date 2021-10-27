@@ -168,7 +168,7 @@
                                     @endif
                                 </li>
                             @endforeach
-                            <li><a href="{{ route('practice_test.list') }}">Thi thử</a></li>
+                            <li><a href="{{ route('practice_test.rank') }}">Thi thử</a></li>
                             <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                         </ul>
                     </nav>

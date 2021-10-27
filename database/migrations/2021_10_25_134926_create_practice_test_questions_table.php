@@ -23,7 +23,7 @@ class CreatePracticeTestQuestionsTable extends Migration
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('practice_test_id')->constrained('practice_tests')->onDelete('cascade');
-            $table->foreignId('question_session_id')->constrained('practice_test_question_session')->onDelete('cascade');
+            $table->foreignId('question_session_id')->constrained('practice_test_question_session')->onDelete('cascade');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
         });
     }
 

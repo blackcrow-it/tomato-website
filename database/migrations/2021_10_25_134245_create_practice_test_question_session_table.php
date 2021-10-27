@@ -16,6 +16,7 @@ class CreatePracticeTestQuestionSessionTable extends Migration
         Schema::create('practice_test_question_session', function (Blueprint $table) {
             $table->id();
             $table->string('name', 256);
+            $table->boolean('is_delete')->default(false);
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablePracticeTestCategoriesTable extends Migration
+class CreatePracticeTestCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -35,6 +35,6 @@ class CreateTablePracticeTestCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practice_test_categories.');
+        Schema::dropIfExists('practice_test_categories');
     }
 }

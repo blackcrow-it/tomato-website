@@ -18653,7 +18653,7 @@ section {
   margin-top: 50px;
 }
 
-.quiz-wrap__inner.pointerEventsNone .quiz__list .item__choose .choose-label:not(.true) input:checked ~ .choose-label__inner {
+.quiz-wrap__inner.pointerEventsNone.loaded-result .quiz__list .item__choose .choose-label:not(.true) input:checked ~ .choose-label__inner {
   text-decoration: line-through;
 }
 
