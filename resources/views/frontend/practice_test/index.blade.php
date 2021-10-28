@@ -23,7 +23,7 @@
         </div>
     </section>
 
-    <section class="section wow">
+    <section class="section wow" id="">
         <div class="container">
             <div class="layout layout--right">
                 <div class="row">
@@ -156,7 +156,7 @@
                             @endif
 
                             @if (isset($ranks))
-                                <div class="exam-wrap-box">
+                                <div class="exam-wrap-box" id="rank-content">
                                     <h2 class="exam-wrap-box__title">#TOP 100 HỌC VIÊN ĐIỂM CAO</h2>
                                     <form class="exam-filter">
                                         <div class="row">
@@ -166,10 +166,14 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Ngôn ngữ</label>
-                                                                <select class="form-control">
-                                                                    <option selected>Tiếng Nhật</option>
+                                                                <select class="form-control" v-model="language">
+                                                                    {{-- <option selected>Tiếng Nhật</option>
                                                                     <option>Tiếng Trung</option>
-                                                                    <option>Tiếng Hàn</option>
+                                                                    <option>Tiếng Hàn</option> --}}
+                                                                    @foreach ($languages as $key => $value)
+                                                                        <option @if ($key === 0) selected @endif v-bind:value="{{$value->id}}">
+                                                                            {{ $value->title }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -549,9 +553,13 @@
                                                     <div class="input-item__inner">
                                                         <label>Ngôn ngữ</label>
                                                         <select class="form-control">
-                                                            <option selected>Tiếng Nhật</option>
+                                                            @foreach ($languages as $key => $value)
+                                                                <option @if ($key === 0) selected @endif>{{ $value->title }}
+                                                                </option>
+                                                            @endforeach
+                                                            {{-- <option selected>Tiếng Nhật</option>
                                                             <option>Tiếng Trung</option>
-                                                            <option>Tiếng Hàn</option>
+                                                            <option>Tiếng Hàn</option> --}}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -838,4 +846,23 @@
             </div>
         </div>
     @endif
+@endsection
+
+@section('script')
+    <script>
+        @if(isset($ranks))
+        new Vue({
+            el: '#rank-content',
+            data: {
+               language: null
+            },
+            mounted() {
+                console.log('adkadakdk')
+            },
+            methods: {
+                
+            },
+        })
+        @endif
+    </script>
 @endsection

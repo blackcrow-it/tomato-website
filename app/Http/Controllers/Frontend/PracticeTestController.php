@@ -29,7 +29,8 @@ class PracticeTestController extends Controller
 
     public function rank(Request $request)
     {
-        return view('frontend.practice_test.index', ['ranks' => []]);
+        $languages = PracticeTestCategory::where('type','language')->get();
+        return view('frontend.practice_test.index', ['ranks' => [], 'languages' => $languages]);
     }
 
     public function list(Request $request)
@@ -207,5 +208,14 @@ class PracticeTestController extends Controller
                 ->orWhere('date', '=', Carbon::today()->toDateString());
         });
         return $pt;
+    }
+
+    public function rankGetLevelDropdown(Request $request){
+        if($request->has('id')){
+            $id = $request->get('id');
+            $level = PracticeTestCategory::where(['type','level'], ['parent_id', $id])->select('id', 'title')->get();
+            return response()->json(['levels'=>$level], 200);
+        }
+        return response()->json([], 500);
     }
 }
