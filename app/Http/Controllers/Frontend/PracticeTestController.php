@@ -35,31 +35,7 @@ class PracticeTestController extends Controller
         $levelId = null;
         $languagesId = null;
         $languages = PracticeTestCategory::where('type', 'language');
-        if ($languages->first() != null) {
-            $languagesId = $languages->first()->id;
-        }
-
-        $levels = PracticeTestCategory::where('type', 'level')->where('parent_id', $languagesId);
-        if ($levels->first() != null) {
-            $levelId = $levels->first()->id;
-        }
-       
-        $pt = PracticeTest::where('category_id', $levelId)->select('id', 'title', 'loop_days', 'date', 'loop', 'created_at')->get();
-        $allPt = array();
-        foreach ($pt as $p) {
-            $period = new DatePeriod(
-                new DateTime($p->created_at),
-                new DateInterval('P1D'),
-                new DateTime(strtotime('now'))
-            );
-            foreach ($period as $key => $value) {
-                if(stripos(date('w', strtotime($value->format('Y-m-d'))), $p->loop_days)){
-                    array_push($p);
-                }
-            }
-        }
-        dd($allPt);
-        return view('frontend.practice_test.index', ['ranks' => [], 'languages' => $languages->get(), 'levels' => $levels->get(), 'pt'=> $pt]);
+        return view('frontend.practice_test.index', ['ranks' => [], 'languages' => $languages->get()]);
     }
 
     public function list(Request $request)
@@ -189,7 +165,8 @@ class PracticeTestController extends Controller
                         'pass_score' => $pt->pass_score_override,
                         'practice_test_id' => $pt->id,
                         'test_date' => Carbon::now(),
-                        'user_id' => Auth::id()
+                        'user_id' => Auth::id(),
+                        'is_pass'=> $total_score>= $pt->pass_score_override
                     ));
                     $db_result->save();
                     foreach ($result as $key => $value) {
@@ -262,6 +239,30 @@ class PracticeTestController extends Controller
                 ->get();
             return response()->json(['pts' => $pt], 200);
         }
+        return response()->json([], 500);
+    }
+
+    public function listRanks(Request $request){
+        if ($request->has('id')&& $request->has('date')) {
+            $id = $request->get('id');
+            $date = $request->get('date');
+            $us = false;
+            //dd(Carbon::parse(date('d-m-Y', strtotime($date)))->toDateString());
+            $results = PracticeTestResult::with('section_results', 'user')->with(['practiceTest'=>function($query){
+                $query->with(['level'=>function($query){
+                    $query->select('id','title');
+                }])->select('id','category_id');
+            }])->where('practice_test_id', $id)->whereDate('test_date', '=', Carbon::parse(date('d-m-Y', strtotime($date)))->toDateString())->orderBy('score', 'desc')->orderBy('test_date', 'asc')->take(15);
+            if(Auth::check()){
+                $uss = clone $results;
+                $exist = $uss->where('user_id', Auth::id())->get()->first();
+                if($exist != null){
+                    $us = true;
+                }
+            }
+            return response()->json(['list' => $results->get(), 'us'=>$us], 200);
+        }
+
         return response()->json([], 500);
     }
 }

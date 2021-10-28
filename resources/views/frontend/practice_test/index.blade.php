@@ -167,12 +167,16 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Ngôn ngữ</label>
-                                                                <select class="form-control">
+                                                                <select class="form-control" v-model="params.languageId">
                                                                     {{-- <option selected>Tiếng Nhật</option>
                                                                     <option>Tiếng Trung</option>
                                                                     <option>Tiếng Hàn</option> --}}
                                                                     @foreach ($languages as $key => $value)
-                                                                        <option>{{ $value->title }}</option>
+                                                                    <?php if ($key == 0){
+                                                                        $defaultLanguage = $value->id;
+                                                                    }?>
+                                                                        <option v-bind:value="{{$value->id}}">
+                                                                            {{ $value->title }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -182,11 +186,8 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Bài thi</label>
-                                                                <select class="form-control">
-                                                                    @foreach ($levels as $key => $value)
-                                                                    <option>{{ $value->title }}</option>
-                                                                    @endforeach
-                                                                    {{-- <option v-for="(item, i) in levels" :key="i" v-text="item.title" v-bind:value="item.id"></option> --}}
+                                                                <select class="form-control" v-model="params.levelId" @change="changeType($event)">
+                                                                    <option v-for="(item, i) in levels" :key="i" v-text="item.title" v-bind:value="item.id"></option>
                                                                     {{-- <option>Bài thi N3</option>
                                                                     <option>Bài thi N4</option>
                                                                     <option>Bài thi N5</option> --}}
@@ -202,19 +203,8 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Tháng</label>
-                                                                <select class="form-control">
-                                                                    <option>Tháng 1</option>
-                                                                    <option>Tháng 2</option>
-                                                                    <option>Tháng 3</option>
-                                                                    <option>Tháng 4</option>
-                                                                    <option>Tháng 5</option>
-                                                                    <option>Tháng 6</option>
-                                                                    <option>Tháng 7</option>
-                                                                    <option>Tháng 8</option>
-                                                                    <option>Tháng 9</option>
-                                                                    <option>Tháng 10</option>
-                                                                    <option>Tháng 11</option>
-                                                                    <option>Tháng 12</option>
+                                                                <select class="form-control" v-model="params.month" @change="onChangeTime($event)">
+                                                                    <option v-bind:value="index" v-for="index in 12" :key="index" v-text="'Tháng '+ index"></option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -223,9 +213,9 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Năm</label>  
-                                                                <select class="form-control">
-                                                                    <option>Năm 2020</option>
-                                                                    <option>Năm 2019</option>
+                                                                <select class="form-control"  @change="onChangeTime($event)"  v-model="params.year">
+                                                                    <option v-bind:value="item" v-for="(item, i) in years" :key="i" v-text="'Năm '+item"></option>
+                                                                    {{-- <option>Năm 2019</option> --}}
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -234,14 +224,11 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Chọn bài thi</label>
-                                                                <select class="form-control">
-                                                                    {{-- <option v-for="(item, i) in pts" :key="i" v-text="'Bài thi '+item.title +' '+ item.date.format('DD/MM/YYYY')" v-bind:value="i"></option> --}}
+                                                                <select class="form-control" v-model="params.pt">
+                                                                    <option v-for="(item, i) in pts" :key="i" v-text="'Bài thi '+item.title +' '+ item.date.format('DD/MM/YYYY')" v-bind:value="i"></option>
                                                                     {{-- <option>Bài thi JLPT N2 21/06/2020</option>
                                                                     <option>Bài thi JLPT N2 15/06/2020</option>
                                                                     <option>Bài thi JLPT N2 7/06/2020</option> --}}
-                                                                    @foreach ($pt as $key => $value)
-                                                                    <option>{{ $value->title }}</option>
-                                                                @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -251,11 +238,11 @@
                                         </div>
 
                                         <div class="text-center">
-                                            <button type="submit" class="btn">Lọc kết quả</button>
+                                            <button type="button" @click="getRanks()" class="btn">Lọc kết quả</button>
                                         </div>
                                     </form>
 
-                                    <div class="exam-alert">
+                                    <div class="exam-alert" v-if="!notInList">
                                         <p>Bạn không có trong danh sách này</p>
                                     </div>
 
@@ -271,31 +258,38 @@
                                                 <th>Phần thưởng</th>
                                             </thead>
                                             <tbody>
-                                                <tr class="top-1">
-                                                    <td><span class="f-top"><img
-                                                                src="assets/img/icon/top1.png"></span></td>
+                                                <tr v-for="(item, i) in ranks" :key="i" class="top-1">
+                                                    <td>
+                                                        <span class="f-top"  v-if="i <= 2" >
+                                                            <img v-if="i == 0" src="{{asset('tomato/assets/img/icon/top1.png')}}" />
+                                                            <img v-if="i == 1" src="{{asset('tomato/assets/img/icon/top2.png')}}" />
+                                                            <img v-if="i == 2" src="{{asset('tomato/assets/img/icon/top3.png')}}" />
+                                                        </span>
+                                                        <span class="f-top" v-if="i > 2" v-text="i+1">
+                                                        </span>
+                                                    </td>
                                                     <td>
                                                         <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
+                                                            <span class="f-name__avatar" v-bind:style="{backgroundImage: 'url(' + item.user.avatar +')'}"></span>
+                                                            <h4 class="f-name__name" v-text="item.user.name"></h4>
                                                         </div>
                                                     </td>
                                                     <td><a href="#" class="f-btn" data-toggle="modal"
                                                             data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    <td v-text="item.score"></td>
+                                                    <td v-text="item['practice_test']['level']['title']"></td>
+                                                    <td><span v class="f-icon"><i class="fa" v-bind:class="[item.is_pass?'fa-check':'fa-close']"></i></span>
                                                     </td>
                                                     <td>
-                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                        <span v-if="i>2">0</span>
+                                                        <span v-if="i<3" class="f-reward" tabindex="0" data-toggle="tooltip"
                                                             data-placement="left"
-                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
-                                                            1 tháng</span>
+                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học" v-text="'+ '+getPrize(i)"></span>
                                                     </td>
                                                 </tr>
-                                                <tr class="top-2">
-                                                    <td><span class="f-top"><img
+                                                {{-- <tr class="top-2">
+                                                    <td>
+                                                        <span class="f-top"><img
                                                                 src="assets/img/icon/top2.png"></span></td>
                                                     <td>
                                                         <div class="f-name">
@@ -543,7 +537,7 @@
                                                     <td><span class="f-icon"><i class="fa fa-close"></i></span>
                                                     </td>
                                                     <td>0</td>
-                                                </tr>
+                                                </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -860,33 +854,39 @@
     new Vue({
         el: '#rank-content',
             data: {
-               languageId: "{{ isset($defaultLanguage) ? $defaultLanguage : 'undefined' }}",
                levels:[],
-               levelId: null,
-               params: {levelId: null, year: null, month: null, pt: 0},
-               pts:[]
+               params: {levelId: null, year: moment().year(), month: moment().month()+1, pt: 0, languageId: "{{ isset($defaultLanguage) ? $defaultLanguage : 'undefined' }}"},
+               pts:[],
+               years:[],
+               originalPts:[],
+               ranks:[],
+               notInList: false,
             },
             mounted() {
-                // console.log('acascc')
-                // let self = this;
-                // self.getLevel(this.languageId)
-                // .then((e)=>{
-                //     self.getPracticeTests(self.params.levelId).then((x)=>{
-                //         let result =[];
-                //         x.pts.forEach(function(s){
-                //             let dates = self.getDates(new Date(s.created_at), new Date())
-                //             if(s.loop){
-                //                 let tempD = dates.filter((d)=> s.loop_days.includes(moment(d).isoWeekday(d.day()+1).day()))
-                //                 tempD.forEach(function(dd){
-                //                     result.push({'title': s.title, id: s.id, date: dd})
-                //                 })
-                //             }
-                //         })
-                //         self.pts = result.sort((a,b) => moment(a).valueOf() - moment(b).valueOf()).reverse();;
-                //     })
-                // });    
+                console.log('acascc')
+                let self = this;
+                self.years = self.getYears(2019).reverse();
+                self.getLevel(this.params.languageId)
+                .then((e)=>{
+                    self.getPracticeTests(self.params.levelId).then((x)=>{
+                        self.getRanks();
+                    })
+                });    
             },
             methods: {
+                getMonthDateRange: function(year, month) {
+                    var startDate = moment([year, month - 1]);
+                    var endDate = moment(startDate).endOf('month');
+                    return { start: startDate, end: endDate };
+                },
+                getYears: function(startYear) {
+                    var currentYear = new Date().getFullYear(), years = [];
+                    startYear = startYear || 1980;
+                    while ( startYear <= currentYear ) {
+                        years.push(startYear++);
+                    }   
+                    return years;
+                },
                 getDates: function (startDate, endDate) {
                     let dateArr = [];
                     var start = new Date(startDate);
@@ -915,13 +915,69 @@
                     });
                 });
             },
+            changeInput:function(){
+                
+            },
 
+            onChangeTime:function(event){
+                this.pts = this.changeTime(this.originalPts).sort((a,b) => moment(a).valueOf() - moment(b).valueOf()).reverse();
+            },
+            changeType: function(event){
+                let self = this;
+                this.getPracticeTests(this.params.levelId)
+            },
+            changeTime: function(arr){
+                let self = this;
+                let result =[];
+                arr.forEach(function(s){
+                            let dd = self.getMonthDateRange(self.params.year, self.params.month);
+                            let dates = self.getDates(dd.start, dd.end)
+                            if(s.loop){
+                                let tempD = dates.filter((d)=> s.loop_days.includes(moment(d).isoWeekday(d.day()+1).day()))
+                                tempD.forEach(function(dd){
+                                    result.push({'title': s.title, id: s.id, date: dd})
+                                })
+                            }
+                        })
+                        return result;
+            },
+             
             getPracticeTests: function(id){
                     let self = this;
                     return new Promise((resolve, reject) =>{
                         axios.get('{{ route('practice_test.rank.pt') }}', {params: {id: id}}).then((response)=>{
-
-                        resolve(response);
+                            let result = self.changeTime(response.pts);
+                            self.originalPts = response.pts;
+                            self.pts = result.sort((a,b) => moment(a).valueOf() - moment(b).valueOf()).reverse();
+                            resolve(response);
+                    }).catch(e => {
+                        console.log('Fail')
+                        reject(e);
+                    });
+                })
+            },
+            getPrize: function(i){
+                switch (i){
+                    case 0: return "1 tháng";
+                    case 1: return "15 ngày";
+                    case 2: return "10 ngày";
+                }
+                return 0;
+            },
+            getRanks: function(){
+                let self = this;
+                let item = self.pts[self.params.pt];
+                if(!item){
+                    self.ranks = []
+                    return
+                }
+                let id = item.id;
+                let date = item.date.format('DD-MM-YYYY');
+                    return new Promise((resolve, reject) =>{
+                        axios.get('{{ route('practice_test.rank.listRanks') }}', {params: {id: id, date: date}}).then((response)=>{
+                            self.ranks = response.list;
+                            self.notInList = response.us;
+                            resolve(response);
                     }).catch(e => {
                         console.log('Fail')
                         reject(e);

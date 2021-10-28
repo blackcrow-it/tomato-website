@@ -21,6 +21,7 @@ class CreatePracticeTestResultsTable extends Migration
             $table->integer('max_score')->default(0);
             $table->integer('pass_score')->default(0);
             $table->timestamp('test_date');
+            $table->boolean('is_pass')->default(false);
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
             $table->foreignId('practice_test_id')->constrained('practice_tests')->onDelete('cascade');
