@@ -15,6 +15,9 @@ use App\PracticeTestAnswer;
 use App\PracticeTestCategorySession;
 use App\PracticeTestSessionResult;
 use Auth;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Session;
 use Exception;
 use Log;
@@ -29,13 +32,40 @@ class PracticeTestController extends Controller
 
     public function rank(Request $request)
     {
-        $languages = PracticeTestCategory::where('type','language')->get();
-        return view('frontend.practice_test.index', ['ranks' => [], 'languages' => $languages]);
+        $levelId = null;
+        $languagesId = null;
+        $languages = PracticeTestCategory::where('type', 'language');
+        if ($languages->first() != null) {
+            $languagesId = $languages->first()->id;
+        }
+
+        $levels = PracticeTestCategory::where('type', 'level')->where('parent_id', $languagesId);
+        if ($levels->first() != null) {
+            $levelId = $levels->first()->id;
+        }
+       
+        $pt = PracticeTest::where('category_id', $levelId)->select('id', 'title', 'loop_days', 'date', 'loop', 'created_at')->get();
+        $allPt = array();
+        foreach ($pt as $p) {
+            $period = new DatePeriod(
+                new DateTime($p->created_at),
+                new DateInterval('P1D'),
+                new DateTime(strtotime('now'))
+            );
+            foreach ($period as $key => $value) {
+                if(stripos(date('w', strtotime($value->format('Y-m-d'))), $p->loop_days)){
+                    array_push($p);
+                }
+            }
+        }
+        dd($allPt);
+        return view('frontend.practice_test.index', ['ranks' => [], 'languages' => $languages->get(), 'levels' => $levels->get(), 'pt'=> $pt]);
     }
 
     public function list(Request $request)
     {
         $currentDay = (int)date('w');
+        // dd($currentDay);
         // $practices = DB::table('practice_tests')->select()->with()->where('loop_days', 'like', '%'.$currentDay.'%')
         // ->join('practice_test_shifts','practice_tests.id', '=', 'practice_test_id')->where();
         $practices = PracticeTest::with(["shifts" => function ($query) {
@@ -102,15 +132,15 @@ class PracticeTestController extends Controller
                     $score1 = 0;
                     $max_score = 0;
                     foreach ($listQuestions as $question) {
-                        $max_score+= $question['score'];
+                        $max_score += $question['score'];
                         foreach ($question['answers'] as $answer) {
-                           
+
                             if (in_array($answer['id'], array_map(function ($v) {
                                 return $v->answer;
                             }, $data->answers))) {
                                 $score1 += $question['score'];
-                                $total_score+=$question['score'];
-                                $correct+=1;
+                                $total_score += $question['score'];
+                                $correct += 1;
                                 array_push($correct_answers, $answer);
                             }
                         }
@@ -118,7 +148,7 @@ class PracticeTestController extends Controller
                     $result[$key]['section_score'] = $score1;
                     $result[$key]['answers'] = $correct_answers;
                     $result[$key]['max_score'] = $max_score;
-                   
+
                     // foreach ($question->answers as $answer) {
                     //     if (in_array($answer->id, array_map(function ($v) {
                     //         return $v->answer;
@@ -162,13 +192,13 @@ class PracticeTestController extends Controller
                         'user_id' => Auth::id()
                     ));
                     $db_result->save();
-                    foreach ($result as $key=> $value){
+                    foreach ($result as $key => $value) {
                         $s = new PracticeTestSessionResult(array(
-                            'practice_test_results_id'=> $db_result->id,
-                            'practice_test_session_id'=>$key, 
-                            'score'=>$value['section_score'],
-                            'max_score'=>$value['max_score'],
-                            'created_at'=>Carbon::now()
+                            'practice_test_results_id' => $db_result->id,
+                            'practice_test_session_id' => $key,
+                            'score' => $value['section_score'],
+                            'max_score' => $value['max_score'],
+                            'created_at' => Carbon::now()
                         ));
                         $s->save();
                     }
@@ -179,7 +209,7 @@ class PracticeTestController extends Controller
                     return response()->json(['error' => $ex->getMessage()], 500);
                 }
 
-                return response()->json(['result'=>$result], 200);
+                return response()->json(['result' => $result], 200);
             }
         }
 
@@ -210,11 +240,27 @@ class PracticeTestController extends Controller
         return $pt;
     }
 
-    public function rankGetLevelDropdown(Request $request){
-        if($request->has('id')){
+    public function rankGetLevelDropdown(Request $request)
+    {
+        if ($request->has('id')) {
             $id = $request->get('id');
-            $level = PracticeTestCategory::where(['type','level'], ['parent_id', $id])->select('id', 'title')->get();
-            return response()->json(['levels'=>$level], 200);
+            $level = PracticeTestCategory::where('type', 'level')
+                ->where('parent_id', $id)
+                ->select('id', 'title')
+                ->get();
+            return response()->json(['levels' => $level], 200);
+        }
+        return response()->json([], 500);
+    }
+
+    public function rankPracticeTestRankDropdown(Request $request)
+    {
+        if ($request->has('id')) {
+            $id = $request->get('id');
+            $pt = PracticeTest::where('category_id', $id)
+                ->select('id', 'title', 'loop_days', 'date', 'loop', 'created_at')
+                ->get();
+            return response()->json(['pts' => $pt], 200);
         }
         return response()->json([], 500);
     }

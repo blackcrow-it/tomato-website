@@ -156,6 +156,7 @@
                             @endif
 
                             @if (isset($ranks))
+                            <?php $defaultLanguage = null; ?>
                                 <div class="exam-wrap-box" id="rank-content">
                                     <h2 class="exam-wrap-box__title">#TOP 100 HỌC VIÊN ĐIỂM CAO</h2>
                                     <form class="exam-filter">
@@ -166,13 +167,12 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Ngôn ngữ</label>
-                                                                <select class="form-control" v-model="language">
+                                                                <select class="form-control">
                                                                     {{-- <option selected>Tiếng Nhật</option>
                                                                     <option>Tiếng Trung</option>
                                                                     <option>Tiếng Hàn</option> --}}
                                                                     @foreach ($languages as $key => $value)
-                                                                        <option @if ($key === 0) selected @endif v-bind:value="{{$value->id}}">
-                                                                            {{ $value->title }}</option>
+                                                                        <option>{{ $value->title }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -183,10 +183,13 @@
                                                             <div class="input-item__inner">
                                                                 <label>Bài thi</label>
                                                                 <select class="form-control">
-                                                                    <option>Bài thi N2</option>
-                                                                    <option>Bài thi N3</option>
+                                                                    @foreach ($levels as $key => $value)
+                                                                    <option>{{ $value->title }}</option>
+                                                                    @endforeach
+                                                                    {{-- <option v-for="(item, i) in levels" :key="i" v-text="item.title" v-bind:value="item.id"></option> --}}
+                                                                    {{-- <option>Bài thi N3</option>
                                                                     <option>Bài thi N4</option>
-                                                                    <option>Bài thi N5</option>
+                                                                    <option>Bài thi N5</option> --}}
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -219,7 +222,7 @@
                                                     <div class="col-6 col-xl-6">
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
-                                                                <label>Năm</label>
+                                                                <label>Năm</label>  
                                                                 <select class="form-control">
                                                                     <option>Năm 2020</option>
                                                                     <option>Năm 2019</option>
@@ -232,10 +235,13 @@
                                                             <div class="input-item__inner">
                                                                 <label>Chọn bài thi</label>
                                                                 <select class="form-control">
-                                                                    <option>Bài thi JLPT N2 30/06/2020</option>
-                                                                    <option>Bài thi JLPT N2 21/06/2020</option>
+                                                                    {{-- <option v-for="(item, i) in pts" :key="i" v-text="'Bài thi '+item.title +' '+ item.date.format('DD/MM/YYYY')" v-bind:value="i"></option> --}}
+                                                                    {{-- <option>Bài thi JLPT N2 21/06/2020</option>
                                                                     <option>Bài thi JLPT N2 15/06/2020</option>
-                                                                    <option>Bài thi JLPT N2 7/06/2020</option>
+                                                                    <option>Bài thi JLPT N2 7/06/2020</option> --}}
+                                                                    @foreach ($pt as $key => $value)
+                                                                    <option>{{ $value->title }}</option>
+                                                                @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -850,19 +856,80 @@
 
 @section('script')
     <script>
-        @if(isset($ranks))
-        new Vue({
-            el: '#rank-content',
+    @if(isset($ranks))
+    new Vue({
+        el: '#rank-content',
             data: {
-               language: null
+               languageId: "{{ isset($defaultLanguage) ? $defaultLanguage : 'undefined' }}",
+               levels:[],
+               levelId: null,
+               params: {levelId: null, year: null, month: null, pt: 0},
+               pts:[]
             },
             mounted() {
-                console.log('adkadakdk')
+                // console.log('acascc')
+                // let self = this;
+                // self.getLevel(this.languageId)
+                // .then((e)=>{
+                //     self.getPracticeTests(self.params.levelId).then((x)=>{
+                //         let result =[];
+                //         x.pts.forEach(function(s){
+                //             let dates = self.getDates(new Date(s.created_at), new Date())
+                //             if(s.loop){
+                //                 let tempD = dates.filter((d)=> s.loop_days.includes(moment(d).isoWeekday(d.day()+1).day()))
+                //                 tempD.forEach(function(dd){
+                //                     result.push({'title': s.title, id: s.id, date: dd})
+                //                 })
+                //             }
+                //         })
+                //         self.pts = result.sort((a,b) => moment(a).valueOf() - moment(b).valueOf()).reverse();;
+                //     })
+                // });    
             },
             methods: {
-                
+                getDates: function (startDate, endDate) {
+                    let dateArr = [];
+                    var start = new Date(startDate);
+                    var end = new Date(endDate);
+                    while(start < end){
+                        dateArr.push(moment(start));
+                        var newDate = start.setDate(start.getDate() + 1);
+                        start = new Date(newDate); 
+                    }
+                    return dateArr;
+                },
+
+                getLevel:function(id){
+                    let self = this;
+                    return new Promise((resolve, reject) =>{
+                        axios.get('{{ route('practice_test.rank.level') }}', {params: {id: id}}).then((response)=>{
+                        console.log(response)
+                        self.levels = response.levels;
+                        if(self.levels[0]){
+                            self.params.levelId = self.levels[0]['id']
+                        }
+                        resolve(response);
+                    }).catch(e => {
+                        console.log('Fail')
+                        reject(e);
+                    });
+                });
             },
-        })
-        @endif
+
+            getPracticeTests: function(id){
+                    let self = this;
+                    return new Promise((resolve, reject) =>{
+                        axios.get('{{ route('practice_test.rank.pt') }}', {params: {id: id}}).then((response)=>{
+
+                        resolve(response);
+                    }).catch(e => {
+                        console.log('Fail')
+                        reject(e);
+                    });
+                })
+            }
+        },
+    })
+    @endif
     </script>
 @endsection
