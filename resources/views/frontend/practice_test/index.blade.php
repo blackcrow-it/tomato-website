@@ -167,7 +167,7 @@
                                                         <div class="input-item">
                                                             <div class="input-item__inner">
                                                                 <label>Ngôn ngữ</label>
-                                                                <select class="form-control" v-model="params.languageId">
+                                                                <select class="form-control" v-model="params.languageId" @change="changeLanguage()">
                                                                     {{-- <option selected>Tiếng Nhật</option>
                                                                     <option>Tiếng Trung</option>
                                                                     <option>Tiếng Hàn</option> --}}
@@ -258,7 +258,7 @@
                                                 <th>Phần thưởng</th>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(item, i) in ranks" :key="i" class="top-1">
+                                                <tr v-for="(item, i) in ranks" :key="i" v-bind:class="getPrizeClass(i)">
                                                     <td>
                                                         <span class="f-top"  v-if="i <= 2" >
                                                             <img v-if="i == 0" src="{{asset('tomato/assets/img/icon/top1.png')}}" />
@@ -287,257 +287,6 @@
                                                             title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học" v-text="'+ '+getPrize(i)"></span>
                                                     </td>
                                                 </tr>
-                                                {{-- <tr class="top-2">
-                                                    <td>
-                                                        <span class="f-top"><img
-                                                                src="assets/img/icon/top2.png"></span></td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
-                                                            data-placement="left"
-                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
-                                                            15 ngày</span>
-                                                    </td>
-                                                </tr>
-                                                <tr class="top-3">
-                                                    <td><span class="f-top"><img
-                                                                src="assets/img/icon/top3.png"></span></td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
-                                                            data-placement="left"
-                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
-                                                            10 ngày</span>
-                                                    </td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">04</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">05</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">06</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">07</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">08</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">09</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr class="top-4-10">
-                                                    <td><span class="f-top">10</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><span class="f-top">11</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><span class="f-top">12</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><span class="f-top">13</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><span class="f-top">14</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><span class="f-top">15</td>
-                                                    <td>
-                                                        <div class="f-name">
-                                                            <span class="f-name__avatar"
-                                                                style="background-image: url(assets/img/image/avatar.png);"></span>
-                                                            <h4 class="f-name__name">Nguyễn Quốc Khánh</h4>
-                                                        </div>
-                                                    </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
-                                                    <td>155</td>
-                                                    <td>N3</td>
-                                                    <td><span class="f-icon"><i class="fa fa-close"></i></span>
-                                                    </td>
-                                                    <td>0</td>
-                                                </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -866,14 +615,22 @@
                 console.log('acascc')
                 let self = this;
                 self.years = self.getYears(2019).reverse();
-                self.getLevel(this.params.languageId)
-                .then((e)=>{
-                    self.getPracticeTests(self.params.levelId).then((x)=>{
-                        self.getRanks();
-                    })
-                });    
+                this.changeLanguage().then((x)=>{
+                    self.getRanks();
+                })
             },
             methods: {
+                changeLanguage: function(){
+                    let self = this;
+                    return new Promise((resolve, reject)=>{
+                        self.getLevel(self.params.languageId)
+                        .then((e)=>{
+                    self.getPracticeTests(self.params.levelId).then((x)=>{
+                        resolve(x);
+                    })
+                });    
+            })
+        },
                 getMonthDateRange: function(year, month) {
                     var startDate = moment([year, month - 1]);
                     var endDate = moment(startDate).endOf('month');
@@ -898,7 +655,10 @@
                     }
                     return dateArr;
                 },
-
+                reset:function(){
+                    this.pts = [];
+                    this.originalPts = []
+                },
                 getLevel:function(id){
                     let self = this;
                     return new Promise((resolve, reject) =>{
@@ -907,10 +667,13 @@
                         self.levels = response.levels;
                         if(self.levels[0]){
                             self.params.levelId = self.levels[0]['id']
+                        }else{
+                            self.params.levelId = null
                         }
                         resolve(response);
                     }).catch(e => {
                         console.log('Fail')
+                        self.reset()
                         reject(e);
                     });
                 });
@@ -933,7 +696,7 @@
                             let dd = self.getMonthDateRange(self.params.year, self.params.month);
                             let dates = self.getDates(dd.start, dd.end)
                             if(s.loop){
-                                let tempD = dates.filter((d)=> s.loop_days.includes(moment(d).isoWeekday(d.day()+1).day()))
+                                let tempD = dates.filter((d)=> s.loop_days.includes(moment(d).isoWeekday(d.day()).day()))
                                 tempD.forEach(function(dd){
                                     result.push({'title': s.title, id: s.id, date: dd})
                                 })
@@ -952,6 +715,7 @@
                             resolve(response);
                     }).catch(e => {
                         console.log('Fail')
+                        self.reset()
                         reject(e);
                     });
                 })
@@ -963,6 +727,17 @@
                     case 2: return "10 ngày";
                 }
                 return 0;
+            },
+            getPrizeClass: function(i){
+                if(i>2 && i<11){
+                    return "top-4-10"
+                }
+                switch (i){
+                    case 0: return "top-1";
+                    case 1: return "top-2";
+                    case 2: return "top-3";
+                }
+                return "";
             },
             getRanks: function(){
                 let self = this;

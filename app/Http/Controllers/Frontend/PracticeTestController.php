@@ -248,7 +248,11 @@ class PracticeTestController extends Controller
             $date = $request->get('date');
             $us = false;
             //dd(Carbon::parse(date('d-m-Y', strtotime($date)))->toDateString());
-            $results = PracticeTestResult::with('section_results', 'user')->with(['practiceTest'=>function($query){
+            $results = PracticeTestResult::with('section_results')
+            ->with(['user'=>function($query){
+                $query->select('id', 'name', 'avatar');
+            }])
+            ->with(['practiceTest'=>function($query){
                 $query->with(['level'=>function($query){
                     $query->select('id','title');
                 }])->select('id','category_id');
