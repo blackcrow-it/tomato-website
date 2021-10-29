@@ -49,6 +49,7 @@ Route::namespace('Frontend')
         Route::get('thi-thu/rank/getLevel', 'PracticeTestController@rankGetLevelDropdown')->name('practice_test.rank.level');
         Route::get('thi-thu/rank/getPt', 'PracticeTestController@rankPracticeTestRankDropdown')->name('practice_test.rank.pt');
         Route::get('thi-thu/rank/getRanks', 'PracticeTestController@listRanks')->name('practice_test.rank.listRanks');
+        Route::get('thi-thu/getSections', 'PracticeTestController@getSections')->name('practice_test.getSections');
 
         Route::middleware('auth')->group(function () {
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');

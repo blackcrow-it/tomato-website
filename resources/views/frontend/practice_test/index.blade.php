@@ -274,8 +274,7 @@
                                                             <h4 class="f-name__name" v-text="item.user.name"></h4>
                                                         </div>
                                                     </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td><a href="javascript:;" class="f-btn" @click="openDetails(i)">Xem kết quả</a></td>
                                                     <td v-text="item.score"></td>
                                                     <td v-text="item['practice_test']['level']['title']"></td>
                                                     <td><span v class="f-icon"><i class="fa" v-bind:class="[item.is_pass?'fa-check':'fa-close']"></i></span>
@@ -290,7 +289,70 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div v-if="openInfo" class="modal fade" id="diploma-popup-temp" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="diploma" v-if="openInfo['practice_test']['level']['parent']['system_key']==='pt_japan'">
+                                                    <div class="diploma__inner">
+                                                        <div class="diploma__header">
+                                                            <h2 class="f-title">日本語 能力試験　合否結果通知書</h2>
+                                                            <h3 class="f-title-en">Japanese Language Proficiency Test</h3>
+                                                        </div>
+                                                        <div class="diploma__content">
+                                                            <ul class="diploma__list">
+                                                                <li>受験日: <b v-text="toDate(openInfo.test_date)"></b></li>
+                                                                <li>受験レベル Level: <b v-text="openInfo['practice_test']['level']['title']"></b></li>
+                                                                <li>氏名 Name: <b v-text="openInfo['user']['name']"></b></li>
+                                                            </ul>
+                                                            
+                                                            <div class="diploma__tablewrap">
+                                                                <table class="diploma__table">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="f-left">
+                                                                                <div class="f-left__header">
+                                                                                    <p>得点区分別得点</p>
+                                                                                    <p>Scores by Scoring Section</p>
+                                                                                </div>
+                                                                                <div class="f-left__title">
+                                                                                    <span class="item" v-for="(item, i) in Object.keys(openInfo['sections'])" :key="i" v-text="openInfo['sections'][item]['session']['name']"></span>
+                                                                                    {{-- <span class="item">Từ vựng (聴解)</span>
+                                                                                    <span class="item">聴解</span> --}}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="f-right">
+                                                                                <p>総合得点</p> <p>Total Score</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="f-left result">
+                                                                                <div class="f-left__title">
+                                                                                    <span class="item" v-for="(item, i) in Object.keys(openInfo['sections'])" :key="i"  v-text="getSectionScore(item)"></span>
+                                                                                   
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="f-right result">
+                                                                                <span v-text="openInfo['score']"></span> /  <span v-text="openInfo['max_score']"></span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                    
+                                                                <div class="diploma__footer">
+                                                                    <span class="f-pass-btn"><span v-if="openInfo['is_pass']">合  格  Passed</span></span>
+                                    
+                                                                    <a href="#" class="f-logo"><img src="{{ asset('tomato/assets/img/logo.png') }}"></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn-close" data-dismiss="modal"><i class="pe-icon-close"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                              
                             @endif
 
                             @if (isset($histories))
@@ -577,6 +639,7 @@
 @endsection
 
 @section('modal')
+@if(isset($ranks))
     @if (!Auth::check())
         <div class="modal fade" id="popup-alert-login" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -595,6 +658,7 @@
             </div>
         </div>
     @endif
+    @endif
 @endsection
 
 @section('script')
@@ -610,6 +674,7 @@
                originalPts:[],
                ranks:[],
                notInList: false,
+               openInfo: null,
             },
             mounted() {
                 console.log('acascc')
@@ -635,6 +700,25 @@
                     var startDate = moment([year, month - 1]);
                     var endDate = moment(startDate).endOf('month');
                     return { start: startDate, end: endDate };
+                },
+                openDetails: function(i){
+                    let self = this;
+                    let rank = this.ranks[i];
+                    $('#diploma-popup').remove()
+                    if(rank){
+                        let parentId= rank['practice_test']['level']['parent_id'];
+                        if(parentId){
+                            self.getSection(parentId).then((response)=>{
+                                rank['sections'] = response['list']
+                                self.openInfo = rank;
+                                setTimeout(function() {
+                                    var modal = $('#diploma-popup-temp').clone().attr('id', 'diploma-popup');
+                                modal.appendTo('body');
+                                $('#diploma-popup').modal('show')}, 100)
+                              
+                            })
+                        }
+                    }
                 },
                 getYears: function(startYear) {
                     var currentYear = new Date().getFullYear(), years = [];
@@ -662,22 +746,23 @@
                 getLevel:function(id){
                     let self = this;
                     return new Promise((resolve, reject) =>{
-                        axios.get('{{ route('practice_test.rank.level') }}', {params: {id: id}}).then((response)=>{
-                        console.log(response)
+                        this.getLevelBase(id).then(function(response){
                         self.levels = response.levels;
                         if(self.levels[0]){
                             self.params.levelId = self.levels[0]['id']
                         }else{
                             self.params.levelId = null
                         }
-                        resolve(response);
+                        resolve(response)
                     }).catch(e => {
-                        console.log('Fail')
+                        reject(e)
                         self.reset()
-                        reject(e);
-                    });
-                });
-            },
+                    })
+                    })
+                }, 
+                getLevelBase:function(id){
+                    return axios.get('{{ route('practice_test.rank.level') }}', {params: {id: id}})
+                },
             changeInput:function(){
                 
             },
@@ -704,7 +789,9 @@
                         })
                         return result;
             },
-             
+             getSection:function(id){
+                return axios.get('{{ route('practice_test.getSections') }}', {params: {id: id}});
+             },
             getPracticeTests: function(id){
                     let self = this;
                     return new Promise((resolve, reject) =>{
@@ -739,6 +826,18 @@
                 }
                 return "";
             },
+            toDate: function(d){
+                return moment(d).format('YYYY年 MM月 DD日');
+            },
+            getSectionScore: function(key) {
+                    let r = _.find(this.openInfo['section_results'], function(o) {
+                        return o.practice_test_session_id == key;
+                    });
+                    if (!r) {
+                        return "0/0";
+                    }
+                    return r['score'] + " / " + r['max_score'];
+                },
             getRanks: function(){
                 let self = this;
                 let item = self.pts[self.params.pt];

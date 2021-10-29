@@ -166,7 +166,7 @@ class PracticeTestController extends Controller
                         'practice_test_id' => $pt->id,
                         'test_date' => Carbon::now(),
                         'user_id' => Auth::id(),
-                        'is_pass'=> $total_score>= $pt->pass_score_override
+                        'is_pass' => $total_score >= $pt->pass_score_override
                     ));
                     $db_result->save();
                     foreach ($result as $key => $value) {
@@ -242,31 +242,49 @@ class PracticeTestController extends Controller
         return response()->json([], 500);
     }
 
-    public function listRanks(Request $request){
-        if ($request->has('id')&& $request->has('date')) {
+    public function listRanks(Request $request)
+    {
+        if ($request->has('id') && $request->has('date')) {
             $id = $request->get('id');
             $date = $request->get('date');
             $us = false;
-            //dd(Carbon::parse(date('d-m-Y', strtotime($date)))->toDateString());
             $results = PracticeTestResult::with('section_results')
-            ->with(['user'=>function($query){
-                $query->select('id', 'name', 'avatar');
-            }])
-            ->with(['practiceTest'=>function($query){
-                $query->with(['level'=>function($query){
-                    $query->select('id','title');
-                }])->select('id','category_id');
-            }])->where('practice_test_id', $id)->whereDate('test_date', '=', Carbon::parse(date('d-m-Y', strtotime($date)))->toDateString())->orderBy('score', 'desc')->orderBy('test_date', 'asc')->take(15);
-            if(Auth::check()){
+                ->with(['user' => function ($query) {
+                    $query->select('id', 'name', 'avatar');
+                }])
+                ->with(['practiceTest' => function ($query) {
+                    $query->with(['level' => function ($query) {
+                        $query->select('id', 'title','parent_id')->with(['parent' => function ($query) {
+                            $query->select('title', 'id','system_key');
+                        }]);
+                    }])->select('id', 'category_id');
+                }])
+                ->where('practice_test_id', $id)
+                ->whereDate('test_date', '=', Carbon::parse(date('d-m-Y', strtotime($date)))->toDateString())
+                ->orderBy('score', 'desc')
+                ->orderBy('test_date', 'asc')
+                ->take(15);
+            if (Auth::check()) {
                 $uss = clone $results;
                 $exist = $uss->where('user_id', Auth::id())->get()->first();
-                if($exist != null){
+                if ($exist != null) {
                     $us = true;
                 }
             }
-            return response()->json(['list' => $results->get(), 'us'=>$us], 200);
+            return response()->json(['list' => $results->get(), 'us' => $us], 200);
         }
 
+        return response()->json([], 500);
+    }
+
+    public function getSections(Request $request){
+        if ($request->has('id')){
+            $id = $request->get('id');
+            $sections = PracticeTestCategorySession::with(['session' => function ($query) {
+                $query->where('is_delete', false)->select('id', 'name');
+            }])->where('category_id', $id)->get()->keyBy('question_session_id');
+            return response()->json(['list' => $sections], 200);
+        }
         return response()->json([], 500);
     }
 }

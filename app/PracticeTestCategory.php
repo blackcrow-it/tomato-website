@@ -15,6 +15,11 @@ class PracticeTestCategory extends BaseModel
         return $this->hasMany('App\PracticeTest');
     }
 
+    public function sessions(){
+        return $this->hasMany('App\PracticeTestCategorySession','category_id', 'id');
+    }
+
+
     public function parent(){
         return $this->belongsTo('App\PracticeTestCategory','parent_id', 'id');
     }
