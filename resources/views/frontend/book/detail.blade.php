@@ -238,17 +238,17 @@
         $('.detail-images img').attr('src', $(this).find('img').attr('src'));
     });
 
-    new Drift(document.querySelector('.detail-images img'), {
-        sourceAttribute: 'src',
-        paneContainer: document.querySelector('.detail-images-preview'),
-        zoomFactor: 2,
-        onShow: function() {
-            $('.detail-images-preview').show();
-        },
-        onHide: function() {
-            $('.detail-images-preview').hide();
-        }
-    });
+    // new Drift(document.querySelector('.detail-images img'), {
+    //     sourceAttribute: 'src',
+    //     paneContainer: document.querySelector('.detail-images-preview'),
+    //     zoomFactor: 2,
+    //     onShow: function() {
+    //         $('.detail-images-preview').show();
+    //     },
+    //     onHide: function() {
+    //         $('.detail-images-preview').hide();
+    //     }
+    // });
 
 </script>
 @includeWhen(auth()->check(), 'frontend.comment.script', [ 'id_object' => $book->id, 'type_object' => \App\Constants\ObjectType::BOOK ])

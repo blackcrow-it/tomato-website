@@ -129,4 +129,20 @@ class Course extends BaseModel
             return 0;
         }
     }
+
+    public function next(){
+        return Course::where('id', '>', $this->id)
+            ->where('enabled', true)
+            ->orderBy('order_in_category','asc')
+            ->orderBy('id','asc')
+            ->first();
+    }
+    public function previous(){
+        return Course::where('id', '<', $this->id)
+            ->where('enabled', true)
+            ->orderBy('order_in_category','desc')
+            ->orderBy('id','desc')
+            ->first();
+
+    }
 }

@@ -84,9 +84,14 @@ class PartController extends Controller
                 ->get();
         });
 
+        $idLastTest = '';
+        $indexBeforeFirstTest = 0;
+        $parts = array();
+
         // Thêm trạng thái bài học đã được mở khi làm qua bài trắc nghiệm
         foreach ($lessons as $lesson) {
             foreach ($lesson->parts as $key_part) {
+                array_push($parts, $key_part);
                 $key_part->is_open = $is_open;
                 // Lấy bài học tiếp theo
                 if ($is_next) {
@@ -101,7 +106,16 @@ class PartController extends Controller
                 // Lấy trạng thái của bài test cho những bài sau
                 if ($key_part->type == 'test') {
                     $is_open = $key_part->isProcessedWithThisUser();
+                    $idLastTest = $key_part->id;
                 }
+            }
+        }
+
+        $isLastPart = false;
+        foreach ($parts as $index => $value) {
+            if ($value->type == 'test' && $indexBeforeFirstTest == 0 && $index != (count($parts) - 1)) {
+                $indexBeforeFirstTest = $index + 1;
+                break;
             }
         }
         if ($isUserOwnedThisCourse && !$this_open) return redirect()->route('home');
@@ -125,13 +139,17 @@ class PartController extends Controller
             'breadcrumb' => Category::ancestorsAndSelf($course->category_id),
             'lessons' => $lessons,
             'part' => $part,
+            'parts' => $parts,
             'next_part' => $nextPart,
             'data' => $data,
             'is_owned' => $isUserOwnedThisCourse,
             'stream_url' => $part->type == PartType::VIDEO ? Storage::disk('s3')->url($data->s3_path . '/hls/playlist.m3u8') : null,
             'related_books' => $relatedBooks,
             'related_courses' => $relatedCourses,
-            'test_result' => $testResults
+            'test_result' => $testResults,
+            'id_last_test' => $idLastTest,
+            'index_before_first_test' => $indexBeforeFirstTest,
+            'is_last_part' => ($part->id == end($parts)->id),
         ]);
     }
 
