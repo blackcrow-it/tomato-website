@@ -201,4 +201,18 @@ class UserController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
     }
+
+    public function getSearchUser(Request $request)
+    {
+        $keyword = $request->input('keyword');
+        // if (empty($keyword)) return [];
+
+        $query = User::where('username', 'ilike', "%$keyword%")
+            ->orWhere('email', 'ilike', "%$keyword%")
+            ->orWhere('name', 'ilike', "%$keyword%")
+            ->orderBy('username', 'asc')
+            ->orderBy('email', 'asc');
+
+        return $query->get();
+    }
 }

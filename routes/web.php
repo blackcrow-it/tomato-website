@@ -57,6 +57,7 @@ Route::namespace('Frontend')
         Route::get('tai-lieu/tat-ca', 'BookController@all')->name('book.all');
 
         Route::middleware(['auth', '2fa'])->group(function () {
+            Route::get('zoom/{meeting_id}', 'ZoomController@index')->name('zoom');
             Route::get('khoa-hoc/bat-dau/{id}', 'CourseController@start')->name('course.start');
 
             Route::get('bai-giang/{id}', 'PartController@index')->name('part');
@@ -78,6 +79,7 @@ Route::namespace('Frontend')
             Route::post('ca-nhan/thong-tin/submit-data', 'UserController@info_submitData')->name('user.info.submit_data');
             Route::get('ca-nhan/lich-su-mua-hang', 'UserController@invoice')->name('user.invoice');
             Route::get('ca-nhan/khoa-hoc-cua-toi', 'UserController@myCourse')->name('user.my_course');
+            Route::get('ca-nhan/lop-hoc-cua-toi', 'UserController@myZoom')->name('user.my_zoom');
             Route::post('ca-nhan/upload-avatar', 'UserController@uploadAvatar')->name('user.upload_avatar');
             Route::get('ca-nhan/nap-tien', 'UserController@recharge')->name('user.recharge');
             Route::get('ca-nhan/lich-su-nap-tien', 'UserController@rechargeHistory')->name('user.recharge_history');
@@ -138,6 +140,17 @@ Route::namespace('Frontend')
                 Route::get('', 'CommentApiController@index')->name('getAll');
                 Route::post('add', 'CommentApiController@store')->name('add');
             });
+            Route::prefix('zoom')
+            ->name('zoom.')
+            ->group(function() {
+                Route::get('get-signature/{meeting_id}', 'ZoomApiController@getSignature')->name('getSignature');
+                Route::post('action', 'ZoomApiController@eventMeeting')->name('eventMeeting');
+            });
+            Route::prefix('shipping')
+            ->name('shipping.')
+            ->group(function() {
+                Route::get('get-shipment-fee', 'ShippingApiController@getShipmentFee')->name('getShipmentFee');
+            });
         });
 
 
@@ -188,6 +201,7 @@ Route::prefix('admin')
                 Route::get('edit/{id}', 'UserController@edit')->name('edit');
                 Route::post('edit/{id}', 'UserController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'UserController@submitDelete')->name('delete');
+                Route::get('search-user', 'UserController@getSearchUser')->name('search_user');
                 Route::get('get-user-courses/{id}', 'UserController@getUserCourses')->name('get_user_courses');
             });
 
@@ -373,6 +387,19 @@ Route::prefix('admin')
                 Route::get('edit/{id}', 'PermissionController@edit')->name('edit');
                 Route::post('edit/{id}', 'PermissionController@submitEdit')->name('edit');
                 Route::post('delete/{id}', 'PermissionController@submitDelete')->name('delete');
+            });
+
+            Route::prefix('zoom')->name('zoom.')->middleware('can:admin')->group(function () {
+                Route::get('', 'ZoomController@index')->name('index');
+                Route::get('meetings/{id}', 'ZoomController@index')->name('meetings');
+                Route::get('users', 'ZoomController@indexUser')->name('index_user');
+                Route::get('show/{id}', 'ZoomController@show')->name('show');
+                Route::get('new/{id}', 'ZoomController@new')->name('new');
+                Route::post('store', 'ZoomController@store')->name('store');
+                Route::post('update/{id}', 'ZoomController@edit')->name('update');
+                Route::delete('destroy/{id}', 'ZoomController@destroy')->name('destroy');
+                Route::post('send-email-notify', 'ZoomController@sendEmailNotify')->name('send_email_notify');
+                Route::get('get-user-meeting-zoom/{id}', 'ZoomController@getUserMeeting')->name('get_user_meeting_zoom');
             });
         });
 

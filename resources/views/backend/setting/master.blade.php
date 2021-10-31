@@ -53,6 +53,12 @@
         el: '#settings',
         data: {
             settings: {},
+            local: [],
+            province: '{{ config('settings.province_shipment') }}',
+            district: '{{ config('settings.district_shipment') }}'
+        },
+        mounted() {
+            this.getLocalData();
         },
         methods: {
             getValue(key, defaultValue) {
@@ -80,7 +86,13 @@
                     });
                 });
                 $(input).trigger('click');
-            }
+            },
+            getLocalData() {
+                axios.get('{{ url("json/vietnam-db.json") }}').then(res => {
+                    res.sort((a, b) => a.name.localeCompare(b.name));
+                    this.local = res;
+                });
+            },
         },
     });
 

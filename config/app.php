@@ -236,6 +236,8 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
 
+        'AppHelper' => App\Helpers\AppHelper::class,
+
     ],
 
 ];

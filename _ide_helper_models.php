@@ -381,6 +381,36 @@ namespace App{
 
 namespace App{
 /**
+ * App\Comment
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $user_id
+ * @property string $type
+ * @property int $object_id
+ * @property int|null $parent_id
+ * @property string|null $content
+ * @property bool $approved
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereApproved($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereObjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUserId($value)
+ */
+	class Comment extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\Course
  *
  * @property int $id
@@ -788,6 +818,30 @@ namespace App{
 
 namespace App{
 /**
+ * App\PasswordSecurity
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property bool $google2fa_enable
+ * @property string|null $google2fa_secret
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity whereGoogle2faEnable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity whereGoogle2faSecret($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PasswordSecurity whereUserId($value)
+ */
+	class PasswordSecurity extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\Post
  *
  * @property int $id
@@ -1174,6 +1228,7 @@ namespace App{
  * @property string|null $time_code_forgot_password_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
+ * @property-read \App\PasswordSecurity|null $passwordSecurity
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles

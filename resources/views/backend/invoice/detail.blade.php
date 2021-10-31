@@ -60,6 +60,25 @@ Chi tiết đơn hàng
                     @endif
                 </div>
                 @if($invoice->shipping)
+                    @if($invoice->shipment)
+                        <div>Đơn vị vận chuyển:
+                            <b>{{ $invoice->shipment->partner }}</b>
+                        </div>
+                        <div>PT giao hàng:
+                            @if($invoice->shipment->is_fast)
+                            <b>Giao hàng nhanh</b>
+                            @else
+                            <b>Giao hàng tiết kiệm</b>
+                            @endif
+                        </div>
+                        <div>PT thanh toán:<br/>
+                            @if($invoice->shipment->is_ship_cod)
+                            <b>Nhận hàng rồi trả tiền (COD)</b>
+                            @else
+                            <b>Sử dụng số dư tài khoản (Đã thanh toán)</b>
+                            @endif
+                        </div>
+                    @endif
                     <div>Địa chỉ: <b>{{ $invoice->address }}</b></div>
                     <div>Quận, huyện: <b>{{ $invoice->district }}</b></div>
                     <div>Tỉnh, thành phố: <b>{{ $invoice->city }}</b></div>
@@ -113,12 +132,19 @@ Chi tiết đơn hàng
                 </tr>
             </thead>
             <tbody>
-                <?php $total = 0; ?>
+                <?php
+                    $total = 0;
+                    $shipment_fee = 0;
+                ?>
                 @foreach($invoice->items as $item)
                     <?php
                         $subTotal = $item->price * $item->amount;
                         $total += $subTotal;
+                        if ($item->type == 'shipment_fee') {
+                            $shipment_fee = $item->price;
+                        }
                     ?>
+                    @if ($item->type != 'shipment_fee')
                     <tr>
                         <td>
                             @switch($item->type)
@@ -153,15 +179,22 @@ Chi tiết đơn hàng
                         <td class="text-right">{{ currency($item->price) }}</td>
                         <td class="text-right">{{ currency($subTotal) }}</td>
                     </tr>
+                    @endif
                 @endforeach
                 <?php $total += 0; ?>
+                @if ($invoice->shipment)
                 <tr>
                     <th colspan="4" class="text-right">Phí vận chuyển</th>
-                    <td class="text-right">{{ currency(0) }}</td>
+                    <td class="text-right">{{ currency($invoice->shipment->ship_money) }}</td>
                 </tr>
+                @endif
                 <tr>
                     <th colspan="4" class="text-right">Tổng cộng</th>
+                    @if ($invoice->shipment)
+                    <td class="text-right">{{ currency($total + $invoice->shipment->ship_money, '0 ₫') }}</td>
+                    @else
                     <td class="text-right">{{ currency($total, '0 ₫') }}</td>
+                    @endif
                 </tr>
             </tbody>
         </table>

@@ -198,7 +198,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label>Vị trí hiển thị</label>Meta Title
+                <label>Vị trí hiển thị</label>
                 <div>
                     @foreach(get_template_position(\App\Constants\ObjectType::COURSE) as $item)
                         <div class="form-check">

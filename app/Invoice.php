@@ -24,4 +24,9 @@ class Invoice extends BaseModel
     {
         return $this->belongsTo(Promo::class, 'promo_id', 'id');
     }
+
+    public function shipment()
+    {
+        return $this->hasOne(Shipment::class, 'invoice_id', 'id');
+    }
 }
