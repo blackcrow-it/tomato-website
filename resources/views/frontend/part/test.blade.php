@@ -149,7 +149,9 @@
         </div>
     </div>
     <br/>
+    @if (!$is_last_part)
     <button v-if="show_next" type="button" class="btn" @click="skipTest" style="float: right"><i class="fa fa-forward" aria-hidden="true"></i> Bài học tiếp theo</button>
+    @endif
     @if(count($test_result) > 0)
     <div class="quiz-history">
         <h3>Kết quả bài làm trước đó</h3>
@@ -296,16 +298,39 @@
                 if(lenHistory >= 3) {
                     this.show_next = await true;
                 }
-                if (passed) {
-                    this.show_next = true;
-                    axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
-                    .then(function (response) {
-                        bootbox.alert('<h1>Chúc mừng!</h1>Bạn đã hoàn thành bài trắc nghiệm, ấn nút <b>Bài học tiếp theo</b> để học tiếp khoá học.');
-                    })
-                    .catch(function (error) {
-                        bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không hoàn thành được bài trắc nghiệm.");
-                    })
-                }
+                @if($id_last_test == $part->id)
+                    if (this.totalPointCorrectAnswer() < 5) {
+                        @if ($course->next())
+                        bootbox.alert('<h1>Thông báo!</h1><div style="text-align: center;"><img width=200 src="{{ asset("images/failed.svg") }}"/><br/><br/>Bạn chưa đạt đủ điểm khoá học,<br/>Hệ thống sẽ chuyển bạn về bài trước để ôn lại kiến thức.</div>', function(){
+                            window.location.replace('{{ $parts[$index_before_first_test]->url }}');
+                        });
+                        @else
+                        bootbox.alert('<h1>Thông báo!</h1><div style="text-align: center;"><img width=200 src="{{ asset("images/failed.svg") }}"/><br/><br/>Bạn chưa đạt đủ điểm khoá học<br/></div>');
+                        @endif
+                    } else {
+                        if (passed) {
+                            this.show_next = true;
+                            axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+                            .catch(function (error) {
+                                bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không hoàn thành được bài trắc nghiệm.");
+                            })
+                        }
+                        bootbox.alert('<h1>Chúc mừng!</h1><div style="text-align: center;"><img width=200 src="{{ asset("images/congratulation.svg") }}"/><br/><br/>Bạn đã hoàn thành xuất sắc khoá học,<br/>ấn nút <b>OK</b> để học khoá tiếp theo.</div>', function(){
+                            window.location.replace('{{ $course->next()->url }}');
+                        });
+                    }
+                @else
+                    if (passed) {
+                        this.show_next = true;
+                        axios.post("{{ route('part.set_complete') }}", { part_id: {{$part->id}} })
+                        .then(function (response) {
+                            bootbox.alert('<h1>Chúc mừng!</h1>Bạn đã hoàn thành bài trắc nghiệm, ấn nút <b>Bài học tiếp theo</b> để học tiếp khoá học.');
+                        })
+                        .catch(function (error) {
+                            bootbox.alert("<h1>Cảnh báo!</h1>Lỗi không hoàn thành được bài trắc nghiệm.");
+                        })
+                    }
+                @endif
             },
             scrollToQuiz() {
                 $('html,body').animate({
