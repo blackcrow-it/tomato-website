@@ -12,9 +12,9 @@
                     <a href="{{ $course->category->url }}">{{ $course->category->title }}</a>
                 </div>
             @endif
-            <div class="lessonbox__title">
+            <h3 class="lessonbox__title">
                 <a href="{{ $course->url }}">{{ $course->title }}</a>
-            </div>
+            </h3>
             <ul class="lessonbox__info">
                 <li class="meta-course">
                     Bài học:

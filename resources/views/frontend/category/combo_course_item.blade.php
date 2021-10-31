@@ -18,9 +18,9 @@
                     <a href="{{ $combo_course->category->url }}">{{ $combo_course->category->title }}</a>
                 </div>
             @endif
-            <div class="lessonbox__title">
+            <h3 class="lessonbox__title">
                 <a href="{{ $combo_course->url }}">{{ $combo_course->title }}</a>
-            </div>
+            </h3>
             <ul class="lessonbox__info">
                 <li class="meta-course">
                     Khoá học:
