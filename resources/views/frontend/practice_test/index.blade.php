@@ -379,19 +379,22 @@
                                                 <div class="input-item">
                                                     <div class="input-item__inner">
                                                         <label>Tháng</label>
-                                                        <select class="form-control">
-                                                            <option>Tháng 1</option>
+                                                        <select class="form-control" id="year" name="year">
+                                                            @for ($i = 1; $i <= 12; $i++)
+                                                                <option @if($month == $i) selected @endif value="{{ $i }}">Tháng {{ $i }}</option>
+                                                            @endfor
+                                                            {{-- <option>Tháng 1</option>
                                                             <option>Tháng 2</option>
                                                             <option>Tháng 3</option>
                                                             <option>Tháng 4</option>
                                                             <option>Tháng 5</option>
-                                                            <option selected>Tháng 6</option>
+                                                            <option>Tháng 6</option>
                                                             <option>Tháng 7</option>
                                                             <option>Tháng 8</option>
                                                             <option>Tháng 9</option>
                                                             <option>Tháng 10</option>
                                                             <option>Tháng 11</option>
-                                                            <option>Tháng 12</option>
+                                                            <option>Tháng 12</option> --}}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -413,11 +416,11 @@
                                             <button type="submit" class="btn">Lọc kết quả</button>
                                         </div>
                                     </form>
-
+                                    @if(count($histories)<=0)
                                     <div class="exam-alert">
                                         <p>Không có lịch sử thi ( trường hợp không có sẽ hiện box này )</p>
                                     </div>
-
+                                    @endif 
                                     <div class="table-historyExam table-responsive">
                                         <table>
                                             <thead>
@@ -431,14 +434,30 @@
                                                 <th>Phần thưởng</th>
                                             </thead>
                                             <tbody>
+                                                <?php $index = 1; ?>
+                                                @foreach ($histories as $key => $h)
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td class="f-name">Bài thi JLPT <b>N2</b></td>
-                                                    <td>30/06/2020</td>
-                                                    <td>155</td>
-                                                    <td><span class="f-top"><img
-                                                                src="assets/img/icon/top1.png"></span></td>
-                                                    <td><span class="f-icon"><i class="fa fa-check"></i></span>
+                                                    <td>{{$index}}</td>
+                                                    <td class="f-name">{{$h->practiceTest->title}} <b>{{$h->practiceTest->level->title}}</b></td>
+                                                    <td>{{date('d/m/Y', strtotime($h->test_date))}}</td>
+                                                    <td>{{$h->score}}</td>
+                                                    
+                                                    <td>@if($h->top > 0 && $h->is_pass)<span class="f-top">
+                                                        @switch($h->top)
+                                                        @case(1)
+                                                        <img src="{{asset('tomato/assets/img/icon/top1.png')}}">
+                                                        @break
+                                                        @case(2)
+                                                        <img src="{{asset('tomato/assets/img/icon/top2.png')}}">
+                                                        @break
+                                                        @case(3)
+                                                        <img src="{{asset('tomato/assets/img/icon/top3.png')}}">
+                                                        @break
+                                                        @default
+                                                        {{$top}}
+                                                        @endswitch
+                                                        </span>@else Không @endif</td>
+                                                    <td><span class="f-icon"><i class="fa @if($h->is_pass) fa-check @else fa-close @endif"></i></span>
                                                     </td>
                                                     <td><a href="#" class="f-btn" data-toggle="modal"
                                                             data-target="#diploma-popup">Xem kết quả</a></td>
@@ -449,7 +468,9 @@
                                                             1 tháng</span>
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <?php $index++; ?>
+                                                @endforeach
+                                                {{-- <tr>
                                                     <td>2</td>
                                                     <td class="f-name">Bài thi JLPT <b>N2</b></td>
                                                     <td>21/06/2020</td>
@@ -508,7 +529,7 @@
                                                     <td><a href="#" class="f-btn" data-toggle="modal"
                                                             data-target="#diploma-popup">Xem kết quả</a></td>
                                                     <td>0</td>
-                                                </tr>
+                                                </tr> --}}
                                             </tbody>
                                         </table>
                                     </div>

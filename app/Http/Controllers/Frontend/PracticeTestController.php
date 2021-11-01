@@ -53,7 +53,36 @@ class PracticeTestController extends Controller
 
     public function history(Request $request)
     {
-        return view('frontend.practice_test.index', ['histories' => []]);
+        $languages = PracticeTestCategory::where('type', 'language')->get();
+        $month = $request->has('month')?$request->get('month'):date("m");
+        $year = $request->has('year')?$request->get('year'):date("Y");
+        $results = PracticeTestResult::with('section_results')
+        ->with(['practiceTest' => function ($query) {
+            $query->with(['level' => function ($query) {
+                $query->select('id', 'title','parent_id')->with(['parent' => function ($query) {
+                    $query->select('title', 'id','system_key');
+                }]);
+            }])->select('id', 'category_id','title');
+        }])
+        ->where('user_id', Auth::user()->id)
+        ->whereMonth('test_date', '=', $month)
+        ->whereYear('test_date', '=', $year)
+        ->orderBy('score', 'desc')
+        ->orderBy('test_date', 'asc')
+        ->take(15)->get();
+
+        $results->each(function ($item, $key) use ($month, $year){
+            $query = DB::select('select * from (select id, row_number() OVER (ORDER BY score desc) from practice_test_results where extract(month from "test_date") = :month and extract(year from "test_date") = :year and practice_test_id = :practice_test_id order by "score" asc) as temp where id = :id',
+            ['id'=>$item->id, 'month'=> $month, 'year'=>$year,'practice_test_id'=>$item->practice_test_id]);
+            $top = 0;
+            if(count($query)>0){
+                $top = $query[0]->row_number;
+                $item->setAttribute('top', $top);
+            }
+        });
+        
+        //dd($results->sortBy('top')->toArray());
+        return view('frontend.practice_test.index', ['histories' => $results->sortBy('top'),'languages'=> $languages, 'month'=> $month, 'year'=> $year]);
     }
 
     private function _group_by($array, $key)
@@ -280,11 +309,15 @@ class PracticeTestController extends Controller
     public function getSections(Request $request){
         if ($request->has('id')){
             $id = $request->get('id');
-            $sections = PracticeTestCategorySession::with(['session' => function ($query) {
-                $query->where('is_delete', false)->select('id', 'name');
-            }])->where('category_id', $id)->get()->keyBy('question_session_id');
+            $sections = $this->getSectionsBase($id);
             return response()->json(['list' => $sections], 200);
         }
         return response()->json([], 500);
+    }
+
+    private function getSectionsBase($id){
+        return PracticeTestCategorySession::with(['session' => function ($query) {
+            $query->where('is_delete', false)->select('id', 'name');
+        }])->where('category_id', $id)->get()->keyBy('question_session_id');
     }
 }

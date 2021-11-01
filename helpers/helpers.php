@@ -8,6 +8,7 @@ use App\Repositories\BookRepo;
 use App\Repositories\CategoryRepo;
 use App\Repositories\CourseRepo;
 use App\Repositories\PostRepo;
+use App\Repositories\PracticeTestRepo;
 use App\Teacher;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -354,3 +355,18 @@ if (!function_exists('find_closest')) {
         //  dd($result);
     }
 }
+
+if (!function_exists('get_top_practice_test')) {
+    function get_top_practice_test($id, $month, $year)
+    {
+        $ptRepo = new PracticeTestRepo();
+        $pt = $ptRepo->getResultById($id);
+        if($pt != null){
+            Auth::user()->id = Auth::user()->id;
+            $query = DB::select('select * from (select id, row_number() OVER (ORDER BY score desc) from practice_test_results where extract(month from "test_date") = :month and extract(year from "test_date") = :year and practice_test_id = :practice_test_id order by "score" asc) as temp where id = :id',
+            ['id'=>$id, 'month'=> $month, 'year'=>$year,'practice_test_id'=>$pt->practice_test_id]);
+            return $query;
+        }
+    }
+}
+
