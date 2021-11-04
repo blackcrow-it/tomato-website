@@ -462,10 +462,22 @@
                                                     <td><a href="#" class="f-btn" data-toggle="modal"
                                                             data-target="#diploma-popup">Xem kết quả</a></td>
                                                     <td>
-                                                        <span class="f-reward" tabindex="0" data-toggle="tooltip"
-                                                            data-placement="left"
-                                                            title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học">+
-                                                            1 tháng</span>
+                                                        @if($h->top > 0 && $h->is_pass)<span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                        data-placement="left"
+                                                        title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học"> @switch($h->top)
+                                                        @case(1)
+                                                        + 1 tháng
+                                                        @break
+                                                        @case(2)
+                                                      + 15 ngày
+                                                        @break
+                                                        @case(3)
+                                                       + 1 ngáy
+                                                        @break
+                                                        @default
+                                                        {{$top}}
+                                                        @endswitch</span>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 <?php $index++; ?>
