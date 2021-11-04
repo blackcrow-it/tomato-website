@@ -56,7 +56,20 @@ class PracticeTestController extends Controller
         $languages = PracticeTestCategory::where('type', 'language')->get();
         $month = $request->has('month')?$request->get('month'):date("m");
         $year = $request->has('year')?$request->get('year'):date("Y");
-        $results = PracticeTestResult::with('section_results')
+
+        $language =$request->get('language');
+        
+        if($language==null && $languages[0]!=null){
+            $language = $languages[0]->id;
+        }
+
+        $results = PracticeTestResult::whereHas('practiceTest',function($query) use ($language){
+            $query->whereHas('level',function($query) use ($language){
+                $query->where('parent_id', $language);
+            });
+        })->with('section_results')->with(['user' => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }])
         ->with(['practiceTest' => function ($query) {
             $query->with(['level' => function ($query) {
                 $query->select('id', 'title','parent_id')->with(['parent' => function ($query) {
@@ -71,18 +84,20 @@ class PracticeTestController extends Controller
         ->orderBy('test_date', 'asc')
         ->take(15)->get();
 
+        
+
         $results->each(function ($item, $key) use ($month, $year){
-            $query = DB::select('select * from (select id, row_number() OVER (ORDER BY score desc) from practice_test_results where extract(month from "test_date") = :month and extract(year from "test_date") = :year and practice_test_id = :practice_test_id order by "score" asc) as temp where id = :id',
-            ['id'=>$item->id, 'month'=> $month, 'year'=>$year,'practice_test_id'=>$item->practice_test_id]);
+            $query = DB::select('select * from (select id, row_number() OVER (ORDER BY score desc) from practice_test_results where "test_date"::date = :date and practice_test_id = :practice_test_id order by "score" asc) as temp where id = :id',
+            ['id'=>$item->id, 'date'=> $item->test_date,'practice_test_id'=>$item->practice_test_id]);
             $top = 0;
             if(count($query)>0){
                 $top = $query[0]->row_number;
                 $item->setAttribute('top', $top);
             }
         });
-        
-        //dd($results->sortBy('top')->toArray());
-        return view('frontend.practice_test.index', ['histories' => $results->sortBy('top'),'languages'=> $languages, 'month'=> $month, 'year'=> $year]);
+        //dd($results);
+        //dd($languages->toArray());
+        return view('frontend.practice_test.index', ['histories' => $results->sortBy('top'),'languages'=> $languages,'language'=>$language ,'month'=> $month, 'current_year'=> $year]);
     }
 
     private function _group_by($array, $key)

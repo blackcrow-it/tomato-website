@@ -280,8 +280,8 @@
                                                     <td><span v class="f-icon"><i class="fa" v-bind:class="[item.is_pass?'fa-check':'fa-close']"></i></span>
                                                     </td>
                                                     <td>
-                                                        <span v-if="i>2">0</span>
-                                                        <span v-if="i<3" class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                        <span v-if="i>2 || !item.is_pass">0</span>
+                                                        <span v-if="i<3 && item.is_pass" class="f-reward" tabindex="0" data-toggle="tooltip"
                                                             data-placement="left"
                                                             title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học" v-text="'+ '+getPrize(i)"></span>
                                                     </td>
@@ -356,16 +356,16 @@
                             @endif
 
                             @if (isset($histories))
-                                <div class="exam-wrap-box">
-                                    <form class="exam-filter">
+                                <div class="exam-wrap-box" id="history-content">
+                                    <form class="exam-filter" action="{{route('practice_test.history')}}" method="get">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="input-item">
                                                     <div class="input-item__inner">
                                                         <label>Ngôn ngữ</label>
-                                                        <select class="form-control">
+                                                        <select class="form-control" name="language">
                                                             @foreach ($languages as $key => $value)
-                                                                <option @if ($key === 0) selected @endif>{{ $value->title }}
+                                                                <option value="{{$value->id}}" @if ($value->id === (int)$language) selected @endif>{{ $value->title }}
                                                                 </option>
                                                             @endforeach
                                                             {{-- <option selected>Tiếng Nhật</option>
@@ -379,22 +379,10 @@
                                                 <div class="input-item">
                                                     <div class="input-item__inner">
                                                         <label>Tháng</label>
-                                                        <select class="form-control" id="year" name="year">
+                                                        <select class="form-control" id="month" name="month">
                                                             @for ($i = 1; $i <= 12; $i++)
                                                                 <option @if($month == $i) selected @endif value="{{ $i }}">Tháng {{ $i }}</option>
                                                             @endfor
-                                                            {{-- <option>Tháng 1</option>
-                                                            <option>Tháng 2</option>
-                                                            <option>Tháng 3</option>
-                                                            <option>Tháng 4</option>
-                                                            <option>Tháng 5</option>
-                                                            <option>Tháng 6</option>
-                                                            <option>Tháng 7</option>
-                                                            <option>Tháng 8</option>
-                                                            <option>Tháng 9</option>
-                                                            <option>Tháng 10</option>
-                                                            <option>Tháng 11</option>
-                                                            <option>Tháng 12</option> --}}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -403,9 +391,11 @@
                                                 <div class="input-item">
                                                     <div class="input-item__inner">
                                                         <label>Năm</label>
-                                                        <select class="form-control">
-                                                            <option>Năm 2020</option>
-                                                            <option>Năm 2019</option>
+                                                        <?php $years = range(date('Y'), 2019); ?>
+                                                        <select class="form-control" name="year" id="year">
+                                                            @foreach($years as $y)
+                                                            <option @if($current_year == $y) selected @endif  value="{{ $y }}">{{ $y }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -418,9 +408,10 @@
                                     </form>
                                     @if(count($histories)<=0)
                                     <div class="exam-alert">
-                                        <p>Không có lịch sử thi ( trường hợp không có sẽ hiện box này )</p>
+                                        <p>Không có lịch sử thi</p>
                                     </div>
                                     @endif 
+                                    @if(count($histories)>0)
                                     <div class="table-historyExam table-responsive">
                                         <table>
                                             <thead>
@@ -459,10 +450,9 @@
                                                         </span>@else Không @endif</td>
                                                     <td><span class="f-icon"><i class="fa @if($h->is_pass) fa-check @else fa-close @endif"></i></span>
                                                     </td>
-                                                    <td><a href="#" class="f-btn" data-toggle="modal"
-                                                            data-target="#diploma-popup">Xem kết quả</a></td>
+                                                    <td><a href="javascript:;" class="f-btn" @click="openDetails({{$key}})">Xem kết quả</a></td>
                                                     <td>
-                                                        @if($h->top > 0 && $h->is_pass)<span class="f-reward" tabindex="0" data-toggle="tooltip"
+                                                        @if($h->top > 0 && $h->top < 4 && $h->is_pass)<span class="f-reward" tabindex="0" data-toggle="tooltip"
                                                         data-placement="left"
                                                         title="Liên hệ với bên quản lý để quy đổi sang thời gian sử dụng khoá học"> @switch($h->top)
                                                         @case(1)
@@ -474,9 +464,9 @@
                                                         @case(3)
                                                        + 1 ngáy
                                                         @break
-                                                        @default
-                                                        {{$top}}
                                                         @endswitch</span>
+                                                        @else
+                                                        0
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -544,6 +534,69 @@
                                                 </tr> --}}
                                             </tbody>
                                         </table>
+                                    </div>
+                                    @endif
+                                    <div v-if="openInfo" class="modal fade" id="diploma-popup-temp" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="diploma" v-if="openInfo['practice_test']['level']['parent']['system_key']==='pt_japan'">
+                                                    <div class="diploma__inner">
+                                                        <div class="diploma__header">
+                                                            <h2 class="f-title">日本語 能力試験　合否結果通知書</h2>
+                                                            <h3 class="f-title-en">Japanese Language Proficiency Test</h3>
+                                                        </div>
+                                                        <div class="diploma__content">
+                                                            <ul class="diploma__list">
+                                                                <li>受験日: <b v-text="toDate(openInfo.test_date)"></b></li>
+                                                                <li>受験レベル Level: <b v-text="openInfo['practice_test']['level']['title']"></b></li>
+                                                                <li>氏名 Name: <b v-text="openInfo['user']['name']"></b></li>
+                                                            </ul>
+                                                            
+                                                            <div class="diploma__tablewrap">
+                                                                <table class="diploma__table">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="f-left">
+                                                                                <div class="f-left__header">
+                                                                                    <p>得点区分別得点</p>
+                                                                                    <p>Scores by Scoring Section</p>
+                                                                                </div>
+                                                                                <div class="f-left__title">
+                                                                                    <span class="item" v-for="(item, i) in Object.keys(openInfo['sections'])" :key="i" v-text="openInfo['sections'][item]['session']['name']"></span>
+                                                                                    {{-- <span class="item">Từ vựng (聴解)</span>
+                                                                                    <span class="item">聴解</span> --}}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="f-right">
+                                                                                <p>総合得点</p> <p>Total Score</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="f-left result">
+                                                                                <div class="f-left__title">
+                                                                                    <span class="item" v-for="(item, i) in Object.keys(openInfo['sections'])" :key="i"  v-text="getSectionScore(item)"></span>
+                                                                                   
+                                                                                </div>
+                                                                            </td>
+                                                                            <td class="f-right result">
+                                                                                <span v-text="openInfo['score']"></span> /  <span v-text="openInfo['max_score']"></span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                    
+                                                                <div class="diploma__footer">
+                                                                    <span class="f-pass-btn"><span v-if="openInfo['is_pass']">合  格  Passed</span></span>
+                                    
+                                                                    <a href="#" class="f-logo"><img src="{{ asset('tomato/assets/img/logo.png') }}"></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn-close" data-dismiss="modal"><i class="pe-icon-close"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             @endif
@@ -892,6 +945,53 @@
                 })
             }
         },
+    })
+    @endif
+    @if(isset($histories))
+    new Vue({
+        el: '#history-content',
+        data: {
+            histories: {!! json_encode($histories, JSON_HEX_TAG) !!},
+            openInfo:null
+        },
+        mounted() {
+        },
+        methods:{
+            getSectionScore: function(key) {
+                    let r = _.find(this.openInfo['section_results'], function(o) {
+                        return o.practice_test_session_id == key;
+                    });
+                    if (!r) {
+                        return "0/0";
+                    }
+                    return r['score'] + " / " + r['max_score'];
+                },
+            getSection:function(id){
+                return axios.get('{{ route('practice_test.getSections') }}', {params: {id: id}});
+             },
+             toDate: function(d){
+                return moment(d).format('YYYY年 MM月 DD日');
+            },
+            openDetails: function(i){
+                    let self = this;
+                    let history = this.histories[i];
+                    $('#diploma-popup').remove()
+                    if(history){
+                        let parentId= history['practice_test']['level']['parent_id'];
+                        if(parentId){
+                            self.getSection(parentId).then((response)=>{
+                                history['sections'] = response['list']
+                                self.openInfo = history;
+                                setTimeout(function() {
+                                var modal = $('#diploma-popup-temp').clone().attr('id', 'diploma-popup');
+                                modal.appendTo('body');
+                                $('#diploma-popup').modal('show')}, 100)
+                              
+                            })
+                        }
+                    }
+                },
+        }
     })
     @endif
     </script>
