@@ -149,6 +149,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('admin.setting.edit', [ 'view' => 'bio' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'bio' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-info-circle"></i>
+                    <p>Landing Page Bio</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('admin.setting.edit', [ 'view' => 'display' ]) }}" class="nav-link {{ request()->routeIs('admin.setting.edit') && request()->route('view') == 'display' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-tv"></i>
                     <p>Hiển thị</p>

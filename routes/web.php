@@ -418,5 +418,6 @@ Route::prefix('admin')
                         Route::get('get-summary', 'AnalyticsController@getSummary')->name('get_summary');
                         Route::get('get-devices', 'AnalyticsController@getDevices')->name('get_devices');
                     });
+                Route::get('bio-info', 'SettingsController@getInfoBio')->name('get_bio_info');
             });
     });
