@@ -55,9 +55,15 @@
             settings: {},
             local: [],
             province: '{{ config('settings.province_shipment') }}',
-            district: '{{ config('settings.district_shipment') }}'
+            district: '{{ config('settings.district_shipment') }}',
+            @if (config('settings.bio_item'))
+            bioItems: {!! html_entity_decode(config('settings.bio_item'), ENT_QUOTES, 'UTF-8') !!}
+            @else
+            bioItems: []
+            @endif
         },
         mounted() {
+            console.log(this.bioItems);
             this.getLocalData();
         },
         methods: {
@@ -93,7 +99,21 @@
                     this.local = res;
                 });
             },
+            addLinkBio() {
+                this.bioItems.push({'linkIcon': null, 'title': null, 'link': null, 'type': 'link'});
+            },
+            deleteLinkBio(index) {
+                this.bioItems.splice(index, 1);
+            }
         },
+        watch: {
+            bioItems: {
+                handler: function (val, oldVal) {
+                    document.getElementById("bio-item").value = JSON.stringify(val);
+                },
+                deep: true
+            }
+        }
     });
 
 </script>
