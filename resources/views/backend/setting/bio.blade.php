@@ -64,7 +64,6 @@ Cài đặt thông tin Landing Bio
         </div>
         <div class="col">
             <label>Loại</label>
-            <input type="text" v-model="item.type" class="form-control" >
             <select v-model="item.type" class="form-control">
                 <option value="link">Đường dẫn</option>
                 <option value="phone">Số điện thoại</option>
