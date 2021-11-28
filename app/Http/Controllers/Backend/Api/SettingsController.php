@@ -73,24 +73,23 @@ class SettingsController extends Controller
     public function getInfoBio()
     {
         $data = [
-            'bio-title-youtube-1' => null,
-            'bio-link-youtube-1' => '#',
-            'bio-title-youtube-2' => null,
-            'bio-link-youtube-2' => '#',
-            'bio-link-fanpage' => '#',
-            'bio-gmail' => null,
-            'bio-link-zalo' => '#',
-            'bio-link-podcast' => '#',
-            'bio-link-skype' => '#',
-            'bio-link-telegram' => '#',
-            'bio-link-linkedin' => '#',
-            'bio-hotline' => null,
             'bio-avatar' => null,
+            'bio-background' => null,
+            'bio-title-header' => null,
+            'bio-email' => null,
+            'bio-hotline' => null,
+            'bio_item' => null,
         ];
-        $info = Setting::where('key', 'like', 'bio-%')->get();
+        $info = Setting::where('key', 'like', 'bio%')->get();
         foreach ($info as $key => $value) {
+            error_log($key);
+            error_log($value);
             if (array_key_exists($value['key'], $data) && $value['value']) {
-                $data[$value['key']] = $value['value'];
+                if ($value['key'] == 'bio_item') {
+                    $data[$value['key']] = json_decode($value['value'], true);
+                } else {
+                    $data[$value['key']] = $value['value'];
+                }
             }
         }
         return response([

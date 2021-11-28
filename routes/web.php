@@ -334,6 +334,7 @@ Route::prefix('admin')
 
             Route::prefix('setting')->name('setting.')->middleware('can:admin')->group(function () {
                 Route::get('edit/{view}', 'SettingController@edit')->name('edit');
+                Route::get('editBio', 'SettingController@editBio')->name('editBio');
                 Route::post('submit', 'SettingController@submit')->name('submit');
                 Route::post('upload-image', 'SettingController@uploadImage')->name('upload_image');
                 Route::get('drive/redirect', 'SettingController@redirectAuthGoogleDriveApi')->name('drive.redirect');

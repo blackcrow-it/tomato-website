@@ -20,6 +20,11 @@ class SettingController extends Controller
         return view('backend.setting.' . $view);
     }
 
+    public function editBio()
+    {
+        return view('backend.setting.bio');
+    }
+
     public function submit(Request $request)
     {
         try {
