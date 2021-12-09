@@ -523,7 +523,6 @@
                         if (item.type != '{{ \App\Constants\ObjectType::COURSE }}')
                         {
                             if (item.type == '{{ \App\Constants\ObjectType::BOOK }}') {
-                                console.log(item.price)
                                 this.priceBook += item.price * parseInt(item.amount);
                                 this.amountBook += parseInt(item.amount);
                             };
@@ -629,7 +628,9 @@
                 });
             },
             updateShowShipInfo() {
-                this.showShipInfo = this.inputData.filter(x => x.type != '{{ \App\Constants\ObjectType::COURSE }}').length > 0;
+                this.showShipInfo = this.inputData.filter(x => {
+                    x.type != '{{ \App\Constants\ObjectType::COURSE }}' || x.type != '{{ \App\Constants\ObjectType::COMBO_COURSE }}';
+                }).length > 0;
             },
             getPromo() {
                 axios.post("{{ route('cart.get_promo') }}", {
