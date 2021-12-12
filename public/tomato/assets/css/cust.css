@@ -1074,3 +1074,34 @@ small {
     width: 100%;
     height: 100%;
 }
+
+.lessonbox__total_sell {
+    text-align: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    bottom: 44px;
+    right: 0;
+    padding: 0 10px;
+    font-size: 10px;
+}
+
+.lessonbox__total_sell .img__icon {
+    filter: invert(64%) sepia(50%) saturate(521%) hue-rotate(48deg) brightness(88%) contrast(84%);
+    width: 15px!important;
+    height: 15px;
+    display: inline-block!important;
+}
+
+@media (min-width:768px) {
+    .lessonbox__total_sell {
+        bottom: 75px;
+        padding: 0 25px;
+        font-size: 14px;
+    }
+
+    .lessonbox__total_sell .img__icon {
+        width: 20px!important;
+        height: 20px;
+    }
+}

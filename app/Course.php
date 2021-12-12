@@ -137,6 +137,7 @@ class Course extends BaseModel
             ->orderBy('id','asc')
             ->first();
     }
+
     public function previous(){
         return Course::where('id', '<', $this->id)
             ->where('enabled', true)
@@ -144,5 +145,12 @@ class Course extends BaseModel
             ->orderBy('id','desc')
             ->first();
 
+    }
+
+    public function totalSell() {
+        return InvoiceItem::where('object_id', $this->id)
+            ->where('type', ObjectType::COURSE)
+            ->orderBy('id','desc')
+            ->get();
     }
 }
