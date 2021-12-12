@@ -64,4 +64,11 @@ class ComboCourses extends Model
             return 0;
         }
     }
+
+    public function totalSell() {
+        return InvoiceItem::where('object_id', $this->id)
+            ->where('type', ObjectType::COMBO_COURSE)
+            ->orderBy('id','desc')
+            ->get();
+    }
 }

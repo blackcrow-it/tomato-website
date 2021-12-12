@@ -59,7 +59,8 @@
                     ({{$combo_course->getAvgRating()}})
                 </li>
             </ul>
-
+            <br/>
+            <div class="lessonbox__total_sell"><img class="img__icon" src="{{ asset('images/icon-sell.svg') }}" alt=""> Đã bán: <b>{{ count($combo_course->totalSell()) }}</b></div>
             <div class="lessonbox__footer">
                 <div class="lessonbox__price">
                     <ins>{{ currency($combo_course->price) }}</ins>
