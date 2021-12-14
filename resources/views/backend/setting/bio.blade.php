@@ -48,9 +48,9 @@ Cài đặt thông tin Landing Bio
             <label>Icon @{{ index + 1 }}</label>
             <div class="input-group">
                 <img class="input-group-prepend" style="border-radius: 50%;" width="38px" height="38px" :src="item.linkIcon">
-                <input type="text" v-model="item.linkIcon" class="form-control">
+                <input type="text" :name="'bio-link-icon-' + index" v-model="item.linkIcon" class="form-control">
                 <div class="input-group-append">
-                    <button type="button" class="input-group-text" @click="uploadImage('bio-link-icon-' + index)">Chọn file</button>
+                    <button type="button" class="input-group-text" @click="uploadImageIconBio(index)">Chọn file</button>
                 </div>
             </div>
         </div>

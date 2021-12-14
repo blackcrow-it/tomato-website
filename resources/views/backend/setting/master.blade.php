@@ -71,6 +71,7 @@
                 return this.settings[key] || defaultValue;
             },
             uploadImage(key) {
+                console.log(key);
                 const input = $('<input type="file">');
                 $(input).on('change', e => {
                     const files = $(e.target).prop('files');
@@ -88,6 +89,29 @@
                         this.$forceUpdate();
                     }).catch(() => {
                         this.settings[key] = undefined;
+                        this.$forceUpdate();
+                    });
+                });
+                $(input).trigger('click');
+            },
+            uploadImageIconBio(index) {
+                const input = $('<input type="file">');
+                $(input).on('change', e => {
+                    const files = $(e.target).prop('files');
+                    if (files.length == 0) return;
+
+                    const formData = new FormData();
+                    formData.append('image', files[0]);
+                    formData.append('key', 'bio-icon-' + index);
+
+                    this.bioItems[index].linkIcon = '{{ asset("images/progress.gif") }}';
+                    this.$forceUpdate();
+
+                    axios.post('{{ route("admin.setting.upload_image") }}', formData).then(res => {
+                        this.bioItems[index].linkIcon = res.src;
+                        this.$forceUpdate();
+                    }).catch(() => {
+                        this.bioItems[index].linkIcon = undefined;
                         this.$forceUpdate();
                     });
                 });
